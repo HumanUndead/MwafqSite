@@ -1,8 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import { cn } from '@/shared/lib/cn'
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider'
 import { getLocalizedRoute } from '@/i18n/routing'
+import { buttonVariants } from '@/shared/lib/variants'
 import { ROUTES } from '@/shared/constants/routes'
 
 export function CtaSection() {
@@ -16,7 +18,7 @@ export function CtaSection() {
         <p className="mx-auto mt-4 max-w-xl text-lg text-blue-100">{t.description}</p>
         <Link
           href={getLocalizedRoute(locale, ROUTES.REGISTER)}
-          className="mt-8 inline-block rounded-xl bg-white px-8 py-3.5 text-base font-semibold text-blue-600 shadow-sm transition-colors hover:bg-blue-50"
+          className={cn(buttonVariants({ variant: 'secondary', size: 'lg' }), 'mt-8')}
         >
           {t.button}
         </Link>

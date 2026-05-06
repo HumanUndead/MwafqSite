@@ -1,12 +1,13 @@
 import { cn } from '@/shared/lib/cn'
+import { cardVariants } from '@/shared/lib/variants'
+import type { VariantProps } from 'class-variance-authority'
 import type { HTMLAttributes } from 'react'
 
-export function Card({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
+interface CardProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {}
+
+export function Card({ variant, className, children, ...props }: CardProps) {
   return (
-    <div
-      className={cn('rounded-2xl border border-gray-100 bg-white p-6 shadow-sm', className)}
-      {...props}
-    >
+    <div className={cn(cardVariants({ variant }), className)} {...props}>
       {children}
     </div>
   )

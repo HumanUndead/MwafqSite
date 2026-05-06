@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from '@/i18n/DictionaryProvider'
-import { useSectionScrollCapture } from './useSectionScrollCapture'
 
 const INITIAL_OFFSET = 200
 const END_HOLD = 500
@@ -15,45 +14,95 @@ export function StepsSection() {
   const viewportRef = useRef<HTMLDivElement>(null)
   const [isDesktop, setIsDesktop] = useState(false)
   const [sceneDistance, setSceneDistance] = useState(0)
-  const [endTranslate, setEndTranslate] = useState(0)
-  const { progress } = useSectionScrollCapture(stageRef, {
-    enabled: isDesktop && sceneDistance > 0,
-    distance: sceneDistance,
-  })
 
   useEffect(() => {
-    function measure() {
-      const list = listRef.current
-      const viewport = viewportRef.current
-      if (!list || !viewport) return
-
-      const desktop = window.innerWidth > 980
-      setIsDesktop(desktop)
-
-      if (!desktop) {
-        setSceneDistance(0)
-        setEndTranslate(0)
-        return
-      }
-
-      const needed = Math.max(list.scrollHeight - viewport.offsetHeight, 0) + EXTRA_LIFT
-      setEndTranslate(-needed)
-      setSceneDistance(INITIAL_OFFSET + needed + END_HOLD)
+    function syncViewport() {
+      setIsDesktop(window.innerWidth > 980)
     }
 
-    measure()
-    window.addEventListener('resize', measure)
-    const timeoutId = window.setTimeout(measure, 800)
-
+    syncViewport()
+    window.addEventListener('resize', syncViewport)
     return () => {
-      window.removeEventListener('resize', measure)
-      window.clearTimeout(timeoutId)
+      window.removeEventListener('resize', syncViewport)
     }
   }, [])
 
-  const translateY = !isDesktop
-    ? 0
-    : Math.max(INITIAL_OFFSET - progress, endTranslate)
+  useEffect(() => {
+    let sectionTop = 0
+    let scrollDistance = 0
+    let endTranslate = 0
+    let frameId = 0
+    let timeoutId = 0
+
+    function measure() {
+      const stage = stageRef.current
+      const list = listRef.current
+      const viewport = viewportRef.current
+      if (!stage || !list || !viewport) return
+
+      const desktop = window.innerWidth > 980
+      list.style.transform = ''
+      stage.style.height = ''
+
+      if (!desktop) {
+        setSceneDistance(0)
+        return
+      }
+
+      const viewportHeight = window.innerHeight
+      const needed = Math.max(list.scrollHeight - viewport.offsetHeight, 0) + EXTRA_LIFT
+      endTranslate = -needed
+      scrollDistance = INITIAL_OFFSET + needed + END_HOLD
+      stage.style.height = `${viewportHeight + scrollDistance}px`
+      sectionTop = stage.getBoundingClientRect().top + window.scrollY
+      setSceneDistance(scrollDistance)
+    }
+
+    function update() {
+      const list = listRef.current
+      if (!list) return
+
+      if (window.innerWidth <= 980) {
+        list.style.transform = ''
+        return
+      }
+
+      const scrolled = Math.min(Math.max(window.scrollY - sectionTop, 0), scrollDistance)
+      const translate = Math.max(INITIAL_OFFSET - scrolled, endTranslate)
+      list.style.transform = `translate3d(0, ${translate}px, 0)`
+    }
+
+    function requestUpdate() {
+      if (frameId) return
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0
+        update()
+      })
+    }
+
+    function handleResize() {
+      measure()
+      update()
+    }
+
+    measure()
+    update()
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', handleResize)
+    timeoutId = window.setTimeout(() => {
+      measure()
+      update()
+    }, 800)
+
+    return () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId)
+      }
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', handleResize)
+      window.clearTimeout(timeoutId)
+    }
+  }, [])
 
   const steps = content.steps.items.map((step, index) => ({
     num: String(index + 1).padStart(2, '0'),
@@ -92,7 +141,6 @@ export function StepsSection() {
                   <div
                     ref={listRef}
                     className="flex flex-col gap-[18px] [will-change:transform]"
-                    style={{ transform: `translate3d(0, ${translateY}px, 0)` }}
                   >
                     {steps.map((step) => (
                       <div

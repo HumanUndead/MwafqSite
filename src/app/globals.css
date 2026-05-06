@@ -172,3 +172,29 @@ body {
     rotate: 0deg;
   }
 }
+
+.svg-ic {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background-image: url('/demo-assets/icons%20and%20vector%20visuals.svg');
+  background-repeat: no-repeat;
+  background-size: 736px auto;
+}
+
+.ic-listdoc {
+  background-position: -202px -755px;
+}
+
+.ic-briefcase {
+  background-position: -249px -755px;
+}
+
+.ic-shield {
+  background-position: -294px -624px;
+}
+
+.ic-refresh {
+  background-position: -294px -713px;
+}

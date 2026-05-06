@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider'
 import { getLocalizedRoute } from '@/i18n/routing'
+import { buttonVariants } from '@/shared/lib/variants'
 import { ROUTES } from '@/shared/constants/routes'
 
 export function HeroSection() {
@@ -19,13 +20,13 @@ export function HeroSection() {
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Link
             href={getLocalizedRoute(locale, ROUTES.REGISTER)}
-            className="rounded-xl bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-sm transition-colors hover:bg-blue-700"
+            className={buttonVariants({ variant: 'primary', size: 'lg', shape: 'default' })}
           >
             {t.primaryCta}
           </Link>
           <Link
             href={getLocalizedRoute(locale, ROUTES.ABOUT)}
-            className="rounded-xl border border-gray-300 px-8 py-3.5 text-base font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+            className={buttonVariants({ variant: 'outline', size: 'lg', shape: 'default' })}
           >
             {t.secondaryCta}
           </Link>

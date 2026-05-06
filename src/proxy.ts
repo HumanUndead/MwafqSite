@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { defaultLocale, hasLocale, localeCookieName } from '@/i18n/config'
 import { getLocaleFromPathname, getPathnameWithoutLocale, localizePathname } from '@/i18n/routing'
+import { authSessionCookieName, authTokenCookieName } from '@/modules/auth/session.shared'
 import { ROUTES } from '@/shared/constants/routes'
 
 const PROTECTED_PREFIXES = [ROUTES.DASHBOARD]
@@ -9,7 +10,9 @@ const AUTH_PATHS = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD]
 const PUBLIC_FILE = /\.[^/]+$/
 
 export function proxy(request: NextRequest) {
-  const token = request.cookies.get('token')?.value
+  const token = request.cookies.get(authTokenCookieName)?.value
+  const authSession = request.cookies.get(authSessionCookieName)?.value
+  const isAuthenticated = Boolean(authSession || token)
   const { pathname } = request.nextUrl
   const localeFromPath = getLocaleFromPathname(pathname)
 
@@ -29,13 +32,13 @@ export function proxy(request: NextRequest) {
   const isProtected = PROTECTED_PREFIXES.some(prefix => appPathname.startsWith(prefix))
   const isAuthPath = AUTH_PATHS.includes(appPathname as (typeof AUTH_PATHS)[number])
 
-  if (isProtected && !token) {
+  if (isProtected && !isAuthenticated) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = localizePathname(ROUTES.LOGIN, localeFromPath)
     return NextResponse.redirect(redirectUrl)
   }
 
-  if (isAuthPath && token) {
+  if (isAuthPath && isAuthenticated) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = localizePathname(ROUTES.DASHBOARD, localeFromPath)
     return NextResponse.redirect(redirectUrl)

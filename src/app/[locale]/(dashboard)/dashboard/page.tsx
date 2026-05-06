@@ -1,14 +1,17 @@
-'use client'
+import { getTranslations } from '@/i18n/server'
+import { getCurrentUser } from '@/modules/auth/server/authSession'
 
-import { useTranslations } from '@/i18n/DictionaryProvider'
-
-export default function DashboardPage() {
-  const t = useTranslations('dashboard')
+export default async function DashboardPage() {
+  const t = await getTranslations('dashboard')
+  const currentUser = await getCurrentUser()
+  const greeting = currentUser
+    ? t.greeting.replace('{{name}}', currentUser.name)
+    : t.welcome
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-      <p className="mt-2 text-gray-600">{t.welcome}</p>
+      <p className="mt-2 text-gray-600">{greeting}</p>
     </div>
   )
 }

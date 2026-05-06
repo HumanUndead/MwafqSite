@@ -1,29 +1,19 @@
 import { cn } from '@/shared/lib/cn'
+import { buttonVariants } from '@/shared/lib/variants'
+import type { VariantProps } from 'class-variance-authority'
 import type { ButtonHTMLAttributes } from 'react'
 
-const variants = {
-  primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-  secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-400',
-  outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-400',
-  ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-400',
-  danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-} as const
+export type { VariantProps }
+export { buttonVariants }
 
-const sizes = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-base',
-} as const
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: keyof typeof variants
-  size?: keyof typeof sizes
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   loading?: boolean
 }
 
 export function Button({
-  variant = 'primary',
-  size = 'md',
+  variant,
+  size,
+  shape,
   loading = false,
   className,
   children,
@@ -32,14 +22,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-lg font-medium',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2',
-        'transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50',
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      className={cn(buttonVariants({ variant, size, shape }), className)}
       disabled={disabled || loading}
       {...props}
     >

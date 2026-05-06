@@ -176,6 +176,7 @@ const en = {
     academy: {
       eyebrow: 'Mwafq Academy',
       title: 'Keep your skills sharp.',
+      cta: 'Enroll →',
       items: [
         {
           title: 'Advanced First Aid',
@@ -464,6 +465,7 @@ const en = {
   },
   dashboard: {
     title: 'Dashboard',
+    greeting: 'Hello {{name}}',
     welcome: 'Welcome back!',
   },
 } as const

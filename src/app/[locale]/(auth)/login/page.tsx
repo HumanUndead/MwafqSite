@@ -1,10 +1,20 @@
-'use client'
-
-import { useTranslations } from '@/i18n/DictionaryProvider'
+import { notFound } from 'next/navigation'
+import { getDictionary } from '@/i18n/dictionaries'
+import { hasLocale } from '@/i18n/config'
 import { LoginForm } from '@/modules/auth'
 
-export default function LoginPage() {
-  const auth = useTranslations('auth')
+interface LoginPageProps {
+  params: Promise<{ locale: string }>
+}
+
+export default async function LoginPage({ params }: LoginPageProps) {
+  const { locale } = await params
+
+  if (!hasLocale(locale)) {
+    notFound()
+  }
+
+  const { auth } = await getDictionary(locale)
 
   return (
     <div>
