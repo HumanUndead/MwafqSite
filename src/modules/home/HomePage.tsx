@@ -1,40 +1,44 @@
-import { GetLocale, getTranslations } from '@/i18n/server'
-import { WhySection } from './components/WhySection'
-import { StepsSection } from './components/StepsSection'
-import { BookingSection } from './components/BookingSection'
-import { HeroSection } from './components/HeroSection'
-import { TickerSection } from './components/TickerSection'
-import { ServicesSection } from './components/ServicesSection'
-import { AppShowcaseSection } from './components/AppShowcaseSection'
+import { isRtl, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 import { AcademySection } from './components/AcademySection'
-import { StatsSection } from './components/StatsSection'
+import { AppShowcaseSection } from './components/AppShowcaseSection'
 import { B2BSection } from './components/B2BSection'
-import { TestimonialSection } from './components/TestimonialSection'
+import { BookingSection } from './components/BookingSection'
 import { CtaSection } from './components/CtaSection'
-import { FooterSection } from './components/FooterSection'
+import { HeroSection } from './components/HeroSection'
+import { ServicesSection } from './components/ServicesSection'
+import { StatsSection } from './components/StatsSection'
+import { StepsSection } from './components/StepsSection'
+import { TestimonialSection } from './components/TestimonialSection'
+import { TickerSection } from './components/TickerSection'
+import { WhySection } from './components/WhySection'
+import { getHomePageContent } from './server/homeContentService'
 
-export async function HomePage() {
-  const locale = await GetLocale()
-  const content = await getTranslations('home')
-  const isRtl = locale === 'ar'
+interface Props {
+  locale: Locale
+}
+
+export async function HomePage({ locale }: Props) {
+  const dictionary = await getDictionary(locale)
+  const content = await getHomePageContent(locale, dictionary)
+  const rtl = isRtl(locale)
 
   return (
     <main className="bg-[#eeeeef] text-[#1e2364]">
-      <HeroSection content={content.hero} isRtl={isRtl} />
+      <HeroSection content={content.hero} isRtl={rtl} locale={locale} />
       <TickerSection />
-      <ServicesSection content={content.services} />
-      <WhySection />
-      <BookingSection />
-      <StepsSection />
+      <ServicesSection locale={locale} content={content.services} />
+      <WhySection content={content.why} isRtl={rtl} />
+      <BookingSection locale={locale} content={content.booking} />
+      <StepsSection locale={locale} content={content.steps} />
       <div>
-        <AppShowcaseSection content={content.app} />
-        <AcademySection content={content.academy} />
+        <AppShowcaseSection locale={locale} content={content.app} />
+        <AcademySection locale={locale} content={content.academy} />
         <StatsSection content={content.stats} />
       </div>
-      <B2BSection content={content.business} />
+      <B2BSection locale={locale} content={content.business} />
       <TestimonialSection content={content.testimonial} />
-      <CtaSection content={content.finalCta} />
-      <FooterSection content={content.footer} />
+      <CtaSection locale={locale} content={content.finalCta} />
     </main>
   )
 }

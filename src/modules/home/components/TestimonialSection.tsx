@@ -1,7 +1,7 @@
-import type { Dictionary } from '@/locales/types'
+import type { HomeTestimonialContent } from '../home.types'
 
 interface Props {
-  content: Dictionary['home']['testimonial']
+  content: HomeTestimonialContent
 }
 
 export function TestimonialSection({ content }: Props) {

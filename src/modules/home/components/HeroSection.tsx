@@ -1,10 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 
+import type { Locale } from '@/i18n/config'
 import { buttonVariants } from '@/shared/lib/variants'
-import type { Dictionary } from '@/locales/types'
+import type { HomeHeroContent } from '../home.types'
+import { CmsLink } from './CmsLink'
 import { CountUp } from './CountingUp'
+import {
+  ArrowIcon,
+  SearchIcon,
+  CarIcon,
+  getServiceIconByKey,
+} from './Icons'
 import { RotatingWord } from './RotatingWord'
-import { ArrowIcon, SearchIcon, CarIcon, BuildingIcon, CertificateIcon, BriefcaseIcon } from './Icons'
 
 const phoneTileStyles = [
   { card: 'bg-[#dff5ff]', icon: 'bg-white text-[#27a7e7]' },
@@ -12,7 +19,6 @@ const phoneTileStyles = [
   { card: 'bg-[#e8fbf7]', icon: 'bg-white text-[#12b7a2]' },
   { card: 'bg-[#edf1ff]', icon: 'bg-white text-[#5d75d6]' },
 ]
-const phoneTileIcons = [CarIcon, BuildingIcon, CertificateIcon, BriefcaseIcon]
 
 const floatingCardMeta = [
   {
@@ -32,11 +38,22 @@ const floatingCardMeta = [
 const floatingCardSprite = '/demo-assets/icons%20and%20vector%20visuals.svg'
 
 interface Props {
-  content: Dictionary['home']['hero']
+  locale: Locale
+  content: HomeHeroContent
   isRtl: boolean
 }
 
-export function HeroSection({ content, isRtl }: Props) {
+export function HeroSection({ locale, content, isRtl }: Props) {
+  const hasRotatingWords = content.rotatingWords.length > 0
+  const hasSecondLine = Boolean(content.titleMiddle || hasRotatingWords)
+  const badgeImages = content.badgeImages.length > 0
+    ? content.badgeImages
+    : [
+        { src: '/demo-assets/img1.jpg', alt: content.badge },
+        { src: '/demo-assets/img2.jpg', alt: content.badge },
+        { src: '/demo-assets/img3.jpg', alt: content.badge },
+      ]
+
   return (
     <section
       id="home"
@@ -44,26 +61,40 @@ export function HeroSection({ content, isRtl }: Props) {
     >
       <div className="pointer-events-none absolute inset-0 opacity-55 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:24px_24px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]" aria-hidden="true" />
       <div className="relative mx-auto grid max-w-[1320px] items-center gap-[60px] lg:grid-cols-[1.05fr_1fr]">
-
-        {/* Left content */}
         <div className="-translate-y-10">
           <span className="mb-6 inline-flex items-center gap-2.5 rounded-full border-2 border-[#e5e7f0] bg-white px-4 py-2 text-[13px] font-semibold tracking-[0.4px] text-[#1e2364]">
             <span className={`flex items-center ${isRtl ? 'flex-row-reverse' : ''}`}>
-              <img src="/demo-assets/img1.jpg" alt="" className="h-[22px] w-[22px] rounded-full border-2 border-[#00a8f1] object-cover" />
-              <img src="/demo-assets/img2.jpg" alt="" className="-mx-[11px] h-[22px] w-[22px] rounded-full border-2 border-[#742f88] object-cover" />
-              <img src="/demo-assets/img3.jpg" alt="" className="h-[22px] w-[22px] rounded-full border-2 border-[#00dec9] object-cover" />
+              {badgeImages.slice(0, 3).map((image, index) => (
+                <img
+                  key={`${image.src}-${index}`}
+                  src={image.src}
+                  alt=""
+                  className={`${index === 1 ? '-mx-[11px]' : ''} h-[22px] w-[22px] rounded-full border-2 object-cover ${
+                    index === 0
+                      ? 'border-[#00a8f1]'
+                      : index === 1
+                        ? 'border-[#742f88]'
+                        : 'border-[#00dec9]'
+                  }`}
+                />
+              ))}
             </span>
             <span>{content.badge}</span>
           </span>
 
           <h1 className="mb-7 text-[clamp(44px,6.5vw,92px)] font-extrabold leading-[1.05] tracking-[-2.6px] text-[#1e2364]">
-            <span className="block whitespace-nowrap">
-              {content.titleLead}
-            </span>
-            <span className="block">
-              {content.titleMiddle}{' '}
-              <RotatingWord />
-            </span>
+            <span className="block whitespace-nowrap">{content.titleLead}</span>
+            {hasSecondLine ? (
+              <span className="block">
+                {content.titleMiddle ? (
+                  <>
+                    {content.titleMiddle}
+                    {hasRotatingWords ? ' ' : null}
+                  </>
+                ) : null}
+                {hasRotatingWords ? <RotatingWord words={content.rotatingWords} /> : null}
+              </span>
+            ) : null}
           </h1>
 
           <p className="mb-9 max-w-[540px] text-[17.5px] leading-[1.45] text-[#6b7196]">
@@ -71,24 +102,28 @@ export function HeroSection({ content, isRtl }: Props) {
           </p>
 
           <div className="mb-11 flex flex-wrap gap-3.5">
-            <a href="#booking" className={buttonVariants({ variant: 'brand', size: 'hero', shape: 'pill' })}>
-              {content.primaryCta}
+            <CmsLink
+              locale={locale}
+              href={content.primaryAction.path}
+              className={buttonVariants({ variant: 'brand', size: 'hero', shape: 'pill' })}
+            >
+              {content.primaryAction.label}
               <ArrowIcon />
-            </a>
-            <a href="#app" className={buttonVariants({ variant: 'brandOutline', size: 'hero', shape: 'pill' })}>
-              {content.secondaryCta}
-            </a>
+            </CmsLink>
+            <CmsLink
+              locale={locale}
+              href={content.secondaryAction.path}
+              className={buttonVariants({ variant: 'brandOutline', size: 'hero', shape: 'pill' })}
+            >
+              {content.secondaryAction.label}
+            </CmsLink>
           </div>
 
           <div className="grid max-w-[560px] gap-[30px] border-t-2 border-[#e5e7f0] pt-9 sm:grid-cols-3">
             {content.stats.map(stat => (
               <div key={stat.label}>
-                <div className="inline-flex items-baseline gap-0.5 text-[30px] font-extrabold leading-none tracking-[-1px] whitespace-nowrap text-[#1e2364]">
-                  <CountUp
-                    value={stat.value}
-                    suffix={'suffix' in stat ? stat.suffix : undefined}
-                    decimals={'decimals' in stat ? stat.decimals : undefined}
-                  />
+                <div className="inline-flex items-baseline gap-0.5 whitespace-nowrap text-[30px] font-extrabold leading-none tracking-[-1px] text-[#1e2364]">
+                  <CountUp value={stat.value} suffix={stat.suffix} decimals={stat.decimals} />
                 </div>
                 <p className="mt-1.5 text-[12.5px] font-medium tracking-[0.4px] text-[#6b7196]">{stat.label}</p>
               </div>
@@ -96,11 +131,10 @@ export function HeroSection({ content, isRtl }: Props) {
           </div>
         </div>
 
-        {/* Right phone mockup */}
         <div className="relative mx-auto h-[560px] w-full max-w-[560px]">
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
-              key={card?.title ?? index}
+              key={card.title || index}
               className={`absolute z-[5] hidden items-center gap-[14px] rounded-[18px] border-2 border-[#1e2364] bg-white md:flex ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
               style={{ padding: '12px 18px 12px 12px' }}
             >
@@ -116,22 +150,16 @@ export function HeroSection({ content, isRtl }: Props) {
               />
               <div className={isRtl ? 'text-right' : ''}>
                 <strong className="mt-1 block text-[17px] font-extrabold leading-[1.15] tracking-[-0.3px] text-[#1e2364]">
-                  {card?.title}
+                  {card.title}
                 </strong>
-                <span className="block text-[11px] text-[#6b7196]">
-                  {card?.detail}
-                </span>
+                <span className="block text-[11px] text-[#6b7196]">{card.detail}</span>
               </div>
             </div>
           ))}
 
-          {/* Phone frame */}
           <div className="absolute left-1/2 top-1/2 h-[540px] w-[260px] animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]">
-            {/* Notch */}
             <div className="absolute left-1/2 top-[18px] z-10 h-[22px] w-[84px] -translate-x-1/2 rounded-[14px] bg-[#1e2364]" />
-            {/* Screen */}
             <div className="absolute inset-[14px] flex flex-col gap-[10px] overflow-hidden rounded-[36px] border-2 border-[#e5e7f0] bg-white px-[13px] pb-[14px] pt-6">
-              {/* Header */}
               <div className="mt-3.5 flex items-center justify-between">
                 <div>
                   <p className="text-[11.5px] font-medium leading-none text-[#6b7196]">{content.phoneGreeting}</p>
@@ -139,34 +167,32 @@ export function HeroSection({ content, isRtl }: Props) {
                 </div>
                 <div className="relative flex h-9 w-9 items-center justify-center rounded-[11px] border-2 border-[#1e2364] bg-white text-[#1e2364]">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-4 w-4">
-                    <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                   </svg>
                   <span className="absolute right-[-3px] top-[-3px] h-2 w-2 rounded-full border-2 border-white bg-[#ff6b2b]" />
                 </div>
               </div>
 
-              {/* Search */}
               <div className="flex items-center gap-2.5 rounded-[12px] border-2 border-[#eef0f7] bg-[#f2f2f2] px-3.5 py-[11px] text-[12px] font-medium text-[#6b7196]">
                 <SearchIcon />
                 <span>{content.phoneSearchPlaceholder}</span>
               </div>
 
-              {/* Section header */}
               <div className="flex items-center justify-between px-0.5">
                 <span className="text-[11.5px] font-extrabold tracking-[-0.1px] text-[#1e2364]">{content.servicesTitle}</span>
                 <span className="text-[10px] font-semibold text-[#00a8f1]">{content.servicesLink}</span>
               </div>
 
-              {/* Tile grid */}
               <div className="grid grid-cols-2 gap-2.5">
                 {content.phoneTiles.map((tile, index) => (
                   <div
-                    key={tile.title}
+                    key={`${tile.title}-${index}`}
                     className={`min-h-[96px] rounded-[18px] border-2 border-[#1e2364] p-3 pb-[11px] ${phoneTileStyles[index]?.card ?? 'bg-white'}`}
                   >
-                    <div className={`mb-2 h-10 w-10 overflow-hidden rounded-[14px] flex items-center justify-center ${phoneTileStyles[index]?.icon ?? 'bg-white text-[#1e2364]'}`}>
+                    <div className={`mb-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-[14px] ${phoneTileStyles[index]?.icon ?? 'bg-white text-[#1e2364]'}`}>
                       <div className="[transform:scale(0.78)]">
-                        {(() => { const TileIcon = phoneTileIcons[index] ?? CarIcon; return <TileIcon /> })()}
+                        {getServiceIconByKey(tile.iconKey) ?? <CarIcon />}
                       </div>
                     </div>
                     <p className="text-[11.5px] font-extrabold leading-[1.15] tracking-[-0.2px] text-[#1e2364]">{tile.title}</p>
@@ -175,9 +201,8 @@ export function HeroSection({ content, isRtl }: Props) {
                 ))}
               </div>
 
-              {/* Live strip */}
               <div className="mt-auto flex items-center gap-2.5 rounded-[14px] bg-[#1e2364] px-3.5 py-[11px] text-white">
-                <span className="h-2 w-2 flex-shrink-0 rounded-full bg-[#00a8f1] animate-[phLivePulse_1.6s_ease-in-out_infinite] shadow-[0_0_0_3px_rgba(0,168,241,0.25)]" aria-hidden="true" />
+                <span className="h-2 w-2 flex-shrink-0 rounded-full bg-[#00a8f1] shadow-[0_0_0_3px_rgba(0,168,241,0.25)] animate-[phLivePulse_1.6s_ease-in-out_infinite]" aria-hidden="true" />
                 <span className="flex flex-1 items-baseline gap-1.5">
                   <strong className="text-[14px] font-extrabold tracking-[-0.3px] text-[#00a8f1]">{content.liveBookings}</strong>
                   <span className="text-[10.5px] opacity-85">{content.liveBookingsLabel}</span>

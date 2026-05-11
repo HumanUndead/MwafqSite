@@ -1,27 +1,41 @@
 'use client'
-  
-import { useLocale, useTranslations } from "@/i18n/DictionaryProvider"
-import { useEffect, useState } from "react"
 
+import { useEffect, useState } from 'react'
 
-export function RotatingWord() {
+interface Props {
+  words: readonly string[]
+}
+
+export function RotatingWord({ words }: Props) {
   const [wordIndex, setWordIndex] = useState(0)
-  const content = useTranslations('home')
-  const locale = useLocale()
-  
 
   useEffect(() => {
+    if (words.length < 2) {
+      return
+    }
+
     const timer = window.setInterval(() => {
-      setWordIndex(current => (current + 1) % content.hero.rotatingWords.length)
+      setWordIndex(current => (current + 1) % words.length)
     }, 1900)
 
     return () => window.clearInterval(timer)
-  }, [content.hero.rotatingWords.length])
+  }, [words])
 
-  return <span className="relative inline-flex min-w-[4.4ch] text-sky-500">
-                  <span key={`${locale}-${wordIndex}`} className="animate-[fadeWord_1.9s_ease-in-out_infinite] font-normal italic">
-                    {content.hero.rotatingWords[wordIndex]}
-                  </span>
-                  <span className="ml-1 inline-block h-[0.9em] w-[0.08em] animate-[blink_0.8s_ease-in-out_infinite] rounded-full bg-sky-500" />
-                </span>;
+  const activeWord = words[wordIndex] ?? words[0]
+
+  if (!activeWord) {
+    return null
+  }
+
+  return (
+    <span className="relative inline-flex min-w-[4.4ch] text-sky-500">
+      <span
+        key={`${activeWord}-${wordIndex}`}
+        className="animate-[fadeWord_1.9s_ease-in-out_infinite] font-normal italic"
+      >
+        {activeWord}
+      </span>
+      <span className="ml-1 inline-block h-[0.9em] w-[0.08em] animate-[blink_0.8s_ease-in-out_infinite] rounded-full bg-sky-500" />
+    </span>
+  )
 }

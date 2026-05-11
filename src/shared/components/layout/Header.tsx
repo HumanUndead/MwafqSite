@@ -2,32 +2,26 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { cn } from '@/shared/lib/cn'
+import type { Locale } from '@/i18n/config'
 import { LanguageSwitcher } from '@/i18n/LanguageSwitcher'
-import { useLocale, useTranslations } from '@/i18n/DictionaryProvider'
-import { getLocalizedRoute } from '@/i18n/routing'
-import { ROUTES } from '@/shared/constants/routes'
+import type { HomeHeaderContent } from '@/modules/home/home.types'
+import { CmsLink } from '@/modules/home/components/CmsLink'
+import { cn } from '@/shared/lib/cn'
 
-export function Header() {
-  const locale = useLocale()
-  const home = useTranslations('home')
-  const navTranslation = useTranslations('navigation')
+interface HeaderProps {
+  locale: Locale
+  content: HomeHeaderContent
+}
+
+export function Header({ locale, content }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false)
-  const homeHref = getLocalizedRoute(locale, ROUTES.HOME)
-  const navLabels = [
-    { href: '#home', label: home.nav.home },
-    { href: '#app', label: home.nav.app },
-    { href: '#contact', label: home.nav.contact },
-    { href: '#about', label: home.nav.about },
-    { href: '#b2b', label: home.nav.businesses },
-  ]
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 30)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
+
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -38,29 +32,39 @@ export function Header() {
         'transition-[background,border-color,backdrop-filter] duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
         'max-[980px]:w-[calc(100%-24px)] max-[980px]:pl-4 max-[980px]:pr-[10px]',
         'max-[560px]:top-[10px] max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3 max-[560px]:pr-2',
-        isScrolled && 'border-white/70 bg-white/[0.62] backdrop-blur-[12px] backdrop-saturate-150'
+        isScrolled && 'border-white/70 bg-white/[0.62] backdrop-blur-[12px] backdrop-saturate-150',
       )}
     >
-      <Link href={`${homeHref}#home`} className="flex flex-shrink-0 items-center" aria-label="Mwafq home">
+      <CmsLink
+        locale={locale}
+        href={content.brandPath}
+        className="flex flex-shrink-0 items-center"
+        aria-label={content.brandLabel}
+      >
         <img
-          src="/demo-assets/logo.svg"
-          alt="Mwafq"
+          src={content.brandImageSrc ?? '/demo-assets/logo.svg'}
+          alt={content.brandLabel}
           className={cn(
             'block w-auto transition-[height] duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
             isScrolled
               ? 'h-14 max-[980px]:h-[52px] max-[560px]:h-[46px]'
-              : 'h-[88px] max-[980px]:h-16 max-[560px]:h-[52px]'
+              : 'h-[88px] max-[980px]:h-16 max-[560px]:h-[52px]',
           )}
         />
-      </Link>
+      </CmsLink>
 
       <nav className="flex items-center gap-1 max-[980px]:hidden" aria-label="Main navigation">
-        {navLabels.map(item => (
-          <Link key={item.href} href={`${homeHref}${item.href}`} className="group inline-block px-4 py-2.5">
+        {content.navLinks.map(item => (
+          <CmsLink
+            key={`${item.label}-${item.path ?? 'no-path'}`}
+            locale={locale}
+            href={item.path}
+            className="group inline-block px-4 py-2.5"
+          >
             <span className="inline-block origin-center scale-[0.909] text-[17.6px] font-bold text-[#1e2364] transition-[transform,color] duration-[280ms] ease-out group-hover:scale-100 group-hover:text-[#00a8f1] [backface-visibility:hidden] [will-change:transform]">
               {item.label}
             </span>
-          </Link>
+          </CmsLink>
         ))}
       </nav>
 
@@ -76,19 +80,34 @@ export function Header() {
           </svg>
         </button>
 
-        <LanguageSwitcher
-          className="flex gap-1 rounded-[30px] border-0 bg-[#f2f2f2] p-1.5"
-          optionClassName="min-w-12 max-[560px]:min-w-[42px] rounded-full min-h-10 max-[560px]:min-h-9 px-4 max-[560px]:px-3 text-[13.5px] max-[560px]:text-xs font-semibold"
-          activeOptionClassName="bg-[#1e2364] text-[#f2f2f2]"
-          inactiveOptionClassName="text-[#1e2364] hover:bg-[rgba(30,35,100,0.12)]"
-        />
+        <div title={content.localeSwitchLabel ?? undefined}>
+          <LanguageSwitcher
+            className="flex gap-1 rounded-[30px] border-0 bg-[#f2f2f2] p-1.5"
+            optionClassName="min-w-12 max-[560px]:min-w-[42px] rounded-full min-h-10 max-[560px]:min-h-9 px-4 max-[560px]:px-3 text-[13.5px] max-[560px]:text-xs font-semibold"
+            activeOptionClassName="bg-[#1e2364] text-[#f2f2f2]"
+            inactiveOptionClassName="text-[#1e2364] hover:bg-[rgba(30,35,100,0.12)]"
+          />
+        </div>
 
-        <Link
-          href={getLocalizedRoute(locale, ROUTES.LOGIN)}
-          className="inline-flex h-10 max-[560px]:h-9 items-center justify-center rounded-[50px] bg-[#1e2364] px-[22px] max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background] duration-[350ms] ease-[cubic-bezier(0.59,0.06,0.1,1)] hover:bg-[#233567]"
-        >
-          <span>{navTranslation.signIn}</span>
-        </Link>
+        {content.signInAction ? (
+          <CmsLink
+            locale={locale}
+            href={content.signInAction.path}
+            className="inline-flex h-10 max-[560px]:h-9 items-center justify-center rounded-[50px] bg-[#1e2364] px-[22px] max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background] duration-[350ms] ease-[cubic-bezier(0.59,0.06,0.1,1)] hover:bg-[#233567]"
+          >
+            <span>{content.signInAction.label}</span>
+          </CmsLink>
+        ) : null}
+
+        {content.primaryAction ? (
+          <CmsLink
+            locale={locale}
+            href={content.primaryAction.path}
+            className="hidden h-10 items-center justify-center rounded-[50px] bg-[#00a8f1] px-[22px] text-[14.5px] font-semibold text-white transition hover:bg-[#0094d5] xl:inline-flex"
+          >
+            <span>{content.primaryAction.label}</span>
+          </CmsLink>
+        ) : null}
 
         <button
           className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:inline-flex"

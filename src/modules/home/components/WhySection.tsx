@@ -1,17 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useLocale, useTranslations } from '@/i18n/DictionaryProvider'
-import { isRtl as localeIsRtl } from '@/i18n/config'
+import type { HomeWhyContent } from '../home.types'
+import { getWhySpriteClassName } from './Icons'
 import { useSectionScrollCapture } from './useSectionScrollCapture'
 
-const ICONS = ['ic-refresh', 'ic-listdoc', 'ic-shield', 'ic-briefcase'] as const
 const CARD_W = 96
 const GAP = 26
 const TITLE_W = 268
-const TITLE_TEXT_GAP = 18
 const STEP_SCROLL_DISTANCE = 320
-const ITEM_COUNT = ICONS.length
+const ITEM_COUNT = 4
 const SCENE_DISTANCE = STEP_SCROLL_DISTANCE * ITEM_COUNT
 const ROW_W = 4 * CARD_W + 3 * GAP + TITLE_W
 const TITLE_EXIT_MS = 360
@@ -47,9 +45,12 @@ function getPositions(active: number, isRtl: boolean): RowPositions {
   }
 }
 
-export function WhySection() {
-  const content = useTranslations('home')
-  const locale = useLocale()
+interface WhySectionProps {
+  content: HomeWhyContent
+  isRtl: boolean
+}
+
+export function WhySection({ content, isRtl }: WhySectionProps) {
   const stageRef = useRef<HTMLDivElement>(null)
   const titleResetRef = useRef<number | null>(null)
   const activeStepRef = useRef(0)
@@ -60,7 +61,6 @@ export function WhySection() {
     enabled: isDesktop,
     distance: SCENE_DISTANCE,
   })
-  const isRtl = localeIsRtl(locale)
 
   useEffect(() => {
     function syncViewport() {
@@ -83,9 +83,7 @@ export function WhySection() {
     }
   }, [])
 
-  const normalized = isDesktop
-    ? clamp(progress, 0, SCENE_DISTANCE)
-    : 0
+  const normalized = isDesktop ? clamp(progress, 0, SCENE_DISTANCE) : 0
   const isComplete = normalized >= SCENE_DISTANCE - 1
   const progressValue = isDesktop
     ? isComplete
@@ -125,13 +123,14 @@ export function WhySection() {
     }
 
     titleResetRef.current = window.setTimeout(() => {
-      setLeavingStep(current => current === previousStep ? null : current)
+      setLeavingStep(current => (current === previousStep ? null : current))
       titleResetRef.current = null
     }, TITLE_EXIT_MS)
   }, [isDesktop, nextStep])
 
   const positions = getPositions(activeStep, isRtl)
-  const hiddenTitleX = isRtl ? '120%' : '-120%' 
+  const hiddenTitleX = isRtl ? '120%' : '-120%'
+  const items = content.items.slice(0, ITEM_COUNT)
 
   return (
     <section className="relative border-t-2 border-[#e5e7f0] bg-[#f4f4f6] p-0">
@@ -162,30 +161,35 @@ export function WhySection() {
 
           <div className="relative z-10 mx-auto w-full max-w-[1320px] px-7">
             <h2 className="mb-9 text-center text-[clamp(28px,3.6vw,44px)] font-extrabold uppercase tracking-[-0.5px] text-[#1e2364]">
-              {content.why.eyebrow}
+              {content.eyebrow}
             </h2>
+            {content.title ? (
+              <p className="mx-auto mb-10 max-w-[700px] text-center text-[16px] leading-[1.65] text-[#6b7196]">
+                {content.title}
+              </p>
+            ) : null}
 
             <div className="flex flex-col items-center gap-7 pb-2.5 pt-7">
               <div
                 className="relative max-w-full"
                 style={{ height: CARD_W, width: ROW_W }}
               >
-                {ICONS.map((iconClassName, i) => {
-                  const isActive = i === activeStep
+                {items.map((item, index) => {
+                  const isActive = index === activeStep
 
                   return (
                     <button
-                      key={iconClassName}
+                      key={`${item.title}-${index}`}
                       type="button"
                       role="tab"
                       aria-selected={isActive}
-                      aria-label={content.why.items[i]?.title}
+                      aria-label={item.title}
                       onClick={() => {
                         const stage = stageRef.current
                         if (!isDesktop || !stage) return
 
                         const stageTop = stage.getBoundingClientRect().top + window.scrollY
-                        const target = stageTop + ((i + 0.5) / ITEM_COUNT) * SCENE_DISTANCE
+                        const target = stageTop + ((index + 0.5) / ITEM_COUNT) * SCENE_DISTANCE
 
                         window.scrollTo({
                           top: Math.round(target),
@@ -200,13 +204,17 @@ export function WhySection() {
                           : 'border-[#e5e7f0] hover:border-[#6f8fcf]',
                       ].join(' ')}
                       style={{
-                        transform: `translateX(${positions.cards[i]}px)${isActive ? ' translateY(-6px) scale(1.06)' : ''}`,
+                        transform: `translateX(${positions.cards[index]}px)${isActive ? ' translateY(-6px) scale(1.06)' : ''}`,
                         zIndex: 2,
                       }}
                     >
                       <span
                         aria-hidden="true"
-                        className={['svg-ic', iconClassName, 'h-11 w-11 transition-transform duration-[450ms] ease-in-out'].join(' ')}
+                        className={[
+                          'svg-ic',
+                          getWhySpriteClassName(item.iconKey, index),
+                          'h-11 w-11 transition-transform duration-[450ms] ease-in-out',
+                        ].join(' ')}
                         style={{
                           transform: isActive ? 'scale(1.26)' : 'scale(1.16)',
                         }}
@@ -228,15 +236,15 @@ export function WhySection() {
                   }}
                 >
                   <div className="relative h-9 w-full overflow-hidden">
-                    {content.why.items.map((item, i) => {
-                      const isActive = i === activeStep
-                      const isLeaving = i === leavingStep
+                    {items.map((item, index) => {
+                      const isActive = index === activeStep
+                      const isLeaving = index === leavingStep
 
                       return (
                         <span
-                          key={i}
+                          key={`${item.title}-${index}`}
                           className={[
-                            'absolute top-0 bottom-0 flex items-center whitespace-nowrap text-[22px] leading-none font-extrabold text-[#1e2364]',
+                            'absolute bottom-0 top-0 flex items-center whitespace-nowrap text-[22px] font-extrabold leading-none text-[#1e2364]',
                             isRtl ? 'justify-end text-right' : 'justify-start text-left',
                           ].join(' ')}
                           style={{
@@ -260,17 +268,17 @@ export function WhySection() {
               </div>
 
               <div className="flex w-full max-w-[420px] gap-1.5" dir={isRtl ? 'rtl' : 'ltr'} aria-hidden="true">
-                {ICONS.map((_, i) => {
+                {items.map((_, index) => {
                   const fill = isDesktop
-                    ? i < activeStep
+                    ? index < activeStep
                       ? 1
-                      : i === activeStep
+                      : index === activeStep
                         ? clamp(subProgress, 0, 1)
                         : 0
-                    : i === 0 ? 1 : 0
+                    : index === 0 ? 1 : 0
 
                   return (
-                    <div key={i} className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]">
+                    <div key={index} className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]">
                       <div
                         className={[
                           'absolute inset-0 rounded-full bg-[#1e2364]',

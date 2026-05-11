@@ -1,8 +1,8 @@
-import type { Dictionary } from '@/locales/types'
+import type { HomeStatsContent } from '../home.types'
 import { CountUp } from './CountingUp'
 
 interface Props {
-  content: Dictionary['home']['stats']
+  content: HomeStatsContent
 }
 
 export function StatsSection({ content }: Props) {
@@ -15,10 +15,10 @@ export function StatsSection({ content }: Props) {
           {content.title}
         </h2>
         <div className="relative z-10 grid gap-8 px-7 pt-[60px] sm:grid-cols-2 lg:grid-cols-4">
-          {content.items.map((stat) => (
+          {content.items.map(stat => (
             <div key={stat.label} className="px-6 py-[18px] text-center">
               <div className="text-[60px] font-extrabold leading-none tracking-[-2px] text-[#00a8f1]">
-                <CountUp value={stat.value} suffix={stat.suffix} />
+                <CountUp value={stat.value} suffix={stat.suffix} decimals={stat.decimals} />
               </div>
               <div className="mt-3.5 text-[14.5px] font-bold tracking-[0.5px] text-[#1e2364]">{stat.label}</div>
             </div>

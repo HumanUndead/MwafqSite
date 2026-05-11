@@ -1,14 +1,20 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useTranslations } from '@/i18n/DictionaryProvider'
+import type { Locale } from '@/i18n/config'
+import type { HomeStepsContent } from '../home.types'
+import { CmsLink } from './CmsLink'
 
 const INITIAL_OFFSET = 200
 const END_HOLD = 500
 const EXTRA_LIFT = 100
 
-export function StepsSection() {
-  const content = useTranslations('home')
+interface StepsSectionProps {
+  locale: Locale
+  content: HomeStepsContent
+}
+
+export function StepsSection({ locale, content }: StepsSectionProps) {
   const stageRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const viewportRef = useRef<HTMLDivElement>(null)
@@ -22,6 +28,7 @@ export function StepsSection() {
 
     syncViewport()
     window.addEventListener('resize', syncViewport)
+
     return () => {
       window.removeEventListener('resize', syncViewport)
     }
@@ -104,7 +111,7 @@ export function StepsSection() {
     }
   }, [])
 
-  const steps = content.steps.items.map((step, index) => ({
+  const steps = content.items.map((step, index) => ({
     num: String(index + 1).padStart(2, '0'),
     ...step,
   }))
@@ -121,28 +128,26 @@ export function StepsSection() {
             <div className="mx-auto max-w-[1320px] px-7">
               <div className="grid grid-cols-2 items-center gap-20">
                 <div>
-                  <span className="relative mb-7 inline-block px-[30px] py-3 text-[17px] font-bold uppercase tracking-[2.2px] leading-none text-[#00a8f1] before:absolute before:left-0 before:top-0 before:h-[18px] before:w-[18px] before:border-l-4 before:border-t-4 before:border-current after:absolute after:bottom-0 after:right-0 after:h-[18px] after:w-[18px] after:border-b-4 after:border-r-4 after:border-current">
-                    {content.steps.eyebrow}
+                  <span className="relative mb-7 inline-block px-[30px] py-3 text-[17px] font-bold uppercase leading-none tracking-[2.2px] text-[#00a8f1] before:absolute before:left-0 before:top-0 before:h-[18px] before:w-[18px] before:border-l-4 before:border-t-4 before:border-current after:absolute after:bottom-0 after:right-0 after:h-[18px] after:w-[18px] after:border-b-4 after:border-r-4 after:border-current">
+                    {content.eyebrow}
                   </span>
                   <h2 className="text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]">
-                    {content.steps.title}
+                    {content.title}
                     <br />
-                    <span className="text-[#00a8f1]">{content.steps.highlight}</span>
+                    <span className="text-[#00a8f1]">{content.highlight}</span>
                   </h2>
-                  <a
-                    href="#booking"
+                  <CmsLink
+                    locale={locale}
+                    href={content.cta.path}
                     className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#1e2364] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#233567]"
                   >
-                    {content.steps.cta}
-                  </a>
+                    {content.cta.label}
+                  </CmsLink>
                 </div>
 
                 <div ref={viewportRef} className="relative max-h-[78vh] overflow-hidden">
-                  <div
-                    ref={listRef}
-                    className="flex flex-col gap-[18px] [will-change:transform]"
-                  >
-                    {steps.map((step) => (
+                  <div ref={listRef} className="flex flex-col gap-[18px] [will-change:transform]">
+                    {steps.map(step => (
                       <div
                         key={step.num}
                         className="relative overflow-hidden rounded-[22px] border-2 border-[#e5e7f0] bg-white px-12 py-12 transition-all duration-400 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:origin-top before:scale-y-0 before:bg-[#00a8f1] before:transition-transform before:duration-500 hover:border-[#1e2364] hover:before:scale-y-100"
