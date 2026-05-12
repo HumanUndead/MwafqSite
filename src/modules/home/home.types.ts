@@ -10,8 +10,8 @@ export interface HomeLinkItemContent {
 }
 
 export interface HomeImageContent {
-  src: string
-  alt: string
+  src?: string | null 
+  alt?: string | null 
 }
 
 export interface HomeHeaderContent {

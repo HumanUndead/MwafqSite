@@ -75,8 +75,8 @@ interface RecursiveArticleDto {
   rank: number
   published: boolean
   image: string | null
-  images: string | null
-  path: string | null
+  images: string | null | undefined
+  path: string | null | undefined
   translations: ArticleTranslationDto[]
 }
 
@@ -262,7 +262,7 @@ function parseRatingMeta(extraInfo: string | null): { ratingValue: string; ratin
   }
 }
 
-function splitImageList(images: string | null, alt: string): HomeImageContent[] {
+function splitImageList(images?: string | null , alt?: string): HomeImageContent[] {
   return (images ?? '')
     .split(',')
     .map(value => resolveCmsAssetUrl(value))
