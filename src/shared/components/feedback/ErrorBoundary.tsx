@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback ?? (
-          <div className="flex min-h-[200px] items-center justify-center rounded-xl border border-red-100 bg-red-50 p-8 text-center">
+          <div className="flex min-h-50 items-center justify-center rounded-xl border border-red-100 bg-red-50 p-8 text-center">
             <div>
               <p className="text-lg font-semibold text-red-700">Something went wrong</p>
               <button

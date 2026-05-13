@@ -459,6 +459,15 @@ const ar = {
     greeting: 'مرحباً {{name}}',
     welcome: 'مرحباً بعودتك!',
   },
+  maintenance: {
+    title: 'تحت الصيانة',
+    heading: 'سنعود قريباً',
+    description: 'منصتنا تخضع حالياً للصيانة المقررة. يرجى التحقق لاحقاً.',
+    retry: 'حاول مرة أخرى',
+    retrying: 'جارٍ التحقق\u2026',
+    stillDown: 'الخدمة لا تزال غير متوفرة. يرجى المحاولة لاحقاً.',
+    contact: 'اتصل بالدعم',
+  },
 } satisfies Dictionary
 
 export default ar

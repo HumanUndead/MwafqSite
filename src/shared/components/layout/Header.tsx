@@ -28,40 +28,40 @@ export function Header({ locale, content }: HeaderProps) {
   return (
     <header
       className={cn(
-        'fixed left-1/2 top-[18px] z-[200] flex w-[calc(100%-40px)] max-w-[1280px] -translate-x-1/2 items-center justify-between rounded-[80px] border-2 border-transparent py-2 pl-[22px] pr-[14px]',
-        'transition-[background,border-color,backdrop-filter] duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
-        'max-[980px]:w-[calc(100%-24px)] max-[980px]:pl-4 max-[980px]:pr-[10px]',
-        'max-[560px]:top-[10px] max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3 max-[560px]:pr-2',
-        isScrolled && 'border-white/70 bg-white/[0.62] backdrop-blur-[12px] backdrop-saturate-150',
+        'fixed left-1/2 top-4.5 z-200 flex w-[calc(100%-40px)] max-w-7xl -translate-x-1/2 items-center justify-between rounded-[80px] border-2 border-transparent py-2 pl-5.5 pr-3.5',
+        'transition-[background,border-color,backdrop-filter] duration-250 ease-in-out',
+        'max-[980px]:w-[calc(100%-24px)] max-[980px]:pl-4 max-[980px]:pr-2.5',
+        'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3 max-[560px]:pr-2',
+        isScrolled && 'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150',
       )}
     >
       <CmsLink
         locale={locale}
         href={content.brandPath}
-        className="flex flex-shrink-0 items-center"
+        className="flex shrink-0 items-center"
         aria-label={content.brandLabel}
       >
         <img
           src={content.brandImageSrc ?? '/demo-assets/logo.svg'}
           alt={content.brandLabel}
           className={cn(
-            'block w-auto transition-[height] duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
+            'block w-auto transition-[height] duration-250 ease-in-out',
             isScrolled
-              ? 'h-14 max-[980px]:h-[52px] max-[560px]:h-[46px]'
-              : 'h-[88px] max-[980px]:h-16 max-[560px]:h-[52px]',
+              ? 'h-14 max-[980px]:h-13 max-[560px]:h-11.5'
+              : 'h-22 max-[980px]:h-16 max-[560px]:h-13',
           )}
         />
       </CmsLink>
 
       <nav className="flex items-center gap-1 max-[980px]:hidden" aria-label="Main navigation">
-        {content.navLinks.map(item => (
+        {content.navLinks.map(item => (  
           <CmsLink
             key={`${item.label}-${item.path ?? 'no-path'}`}
             locale={locale}
             href={item.path}
             className="group inline-block px-4 py-2.5"
           >
-            <span className="inline-block origin-center scale-[0.909] text-[17.6px] font-bold text-[#1e2364] transition-[transform,color] duration-[280ms] ease-out group-hover:scale-100 group-hover:text-[#00a8f1] [backface-visibility:hidden] [will-change:transform]">
+            <span className="inline-block origin-center scale-[0.909] text-[17.6px] font-bold text-[#1e2364] transition-[transform,color] duration-280 ease-out group-hover:scale-100 group-hover:text-[#00a8f1] backface-hidden will-change-transform">
               {item.label}
             </span>
           </CmsLink>
@@ -70,7 +70,7 @@ export function Header({ locale, content }: HeaderProps) {
 
       <div className="flex items-center gap-2.5">
         <button
-          className="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:hidden"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:hidden"
           type="button"
           aria-label="Toggle dark mode"
         >
@@ -93,7 +93,7 @@ export function Header({ locale, content }: HeaderProps) {
           <CmsLink
             locale={locale}
             href={content.signInAction.path}
-            className="inline-flex h-10 max-[560px]:h-9 items-center justify-center rounded-[50px] bg-[#1e2364] px-[22px] max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background] duration-[350ms] ease-[cubic-bezier(0.59,0.06,0.1,1)] hover:bg-[#233567]"
+            className="inline-flex h-10 max-[560px]:h-9 items-center justify-center rounded-[50px] bg-[#1e2364] px-5.5 max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background] duration-350 ease-[cubic-bezier(0.59,0.06,0.1,1)] hover:bg-[#233567]"
           >
             <span>{content.signInAction.label}</span>
           </CmsLink>
@@ -103,14 +103,14 @@ export function Header({ locale, content }: HeaderProps) {
           <CmsLink
             locale={locale}
             href={content.primaryAction.path}
-            className="hidden h-10 items-center justify-center rounded-[50px] bg-[#00a8f1] px-[22px] text-[14.5px] font-semibold text-white transition hover:bg-[#0094d5] xl:inline-flex"
+            className="hidden h-10 items-center justify-center rounded-[50px] bg-[#00a8f1] px-5.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0094d5] xl:inline-flex"
           >
             <span>{content.primaryAction.label}</span>
           </CmsLink>
         ) : null}
 
         <button
-          className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:inline-flex"
+          className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:inline-flex"
           type="button"
           aria-label="Open menu"
         >

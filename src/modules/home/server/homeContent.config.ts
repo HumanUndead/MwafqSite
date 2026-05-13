@@ -1,4 +1,4 @@
-const DEFAULT_HOME_CONTENT_API_BASE_URL = 'http://localhost:5080'
+const DEFAULT_HOME_CONTENT_API_BASE_URL = 'https://productionapi.mwafq.com'
 
 export const HOME_CONTENT_API_BASE_URL =
   process.env.MWAFQ_API_BASE_URL ?? DEFAULT_HOME_CONTENT_API_BASE_URL

@@ -468,6 +468,16 @@ const en = {
     greeting: 'Hello {{name}}',
     welcome: 'Welcome back!',
   },
+  maintenance: {
+    title: 'Under Maintenance',
+    heading: 'We\'ll be back soon',
+    description:
+      'Our platform is currently undergoing scheduled maintenance. Please check back later.',
+    retry: 'Try again',
+    retrying: 'Checking\u2026',
+    stillDown: 'Still unavailable. Please try again later.',
+    contact: 'Contact support',
+  },
 } as const
 
 export default en
