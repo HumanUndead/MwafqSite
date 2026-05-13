@@ -22,7 +22,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={cn(buttonVariants({ variant, size, shape }), className)}
+      className={cn(buttonVariants({ variant, size, shape }), 'cursor-pointer disabled:cursor-not-allowed', className)}
       disabled={disabled || loading}
       {...props}
     >

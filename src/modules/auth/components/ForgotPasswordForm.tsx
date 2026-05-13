@@ -32,8 +32,6 @@ export function ForgotPasswordForm({ onSubmit, loading, error }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <p className="text-sm text-gray-600">{auth.forgotPassword.description}</p>
-
       <Input
         label={auth.fields.email}
         type="email"
@@ -46,14 +44,14 @@ export function ForgotPasswordForm({ onSubmit, loading, error }: Props) {
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <Button type="submit" loading={loading} className="w-full">
+      <Button type="submit" loading={loading} variant="brand" className="w-full">
         {auth.forgotPassword.submit}
       </Button>
 
       <p className="text-center text-sm text-gray-600">
         <Link
           href={getLocalizedRoute(locale, ROUTES.LOGIN)}
-          className="font-medium text-blue-600 hover:text-blue-800"
+          className="font-medium text-[#00a8f1] transition hover:text-[#0090d1]"
         >
           {auth.forgotPassword.backToSignIn}
         </Link>

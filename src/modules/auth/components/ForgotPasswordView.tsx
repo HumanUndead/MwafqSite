@@ -37,7 +37,7 @@ export function ForgotPasswordView() {
       <ForgotPasswordForm onSubmit={sendOtp} loading={loading} error={error} />
       <OtpModal
         open={isOtpModalOpen}
-        email={email}
+        destinationLabel={email}
         loading={loading}
         error={error}
         onVerify={verifyOtp}

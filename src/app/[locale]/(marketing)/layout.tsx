@@ -4,6 +4,8 @@ import { hasLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/dictionaries'
 import { FooterSection } from '@/modules/home/components/FooterSection'
 import { getHomePageContent } from '@/modules/home/server/homeContentService'
+import { withAuthenticatedHeaderState } from '@/modules/auth/server/headerAuth'
+import { getCurrentUser } from '@/modules/auth/server/authSession'
 import { Header } from '@/shared/components/layout/Header'
 
 interface MarketingLayoutProps {
@@ -22,11 +24,13 @@ export default async function MarketingLayout({
   }
 
   const dictionary = await getDictionary(locale)
+  const currentUser = await getCurrentUser()
   const content = await getHomePageContent(locale as Locale, dictionary)
+  const headerContent = withAuthenticatedHeaderState(content.header, currentUser, locale as Locale)
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header locale={locale as Locale} content={content.header} />
+      <Header locale={locale as Locale} content={headerContent} />
       <main className="flex-1">{children}</main>
       <FooterSection locale={locale as Locale} content={content.footer} />
     </div>

@@ -1,5 +1,3 @@
-import type { Dictionary } from './types'
-
 const ar = {
   site: {
     title: 'موافق',
@@ -400,18 +398,26 @@ const ar = {
   auth: {
     login: {
       title: 'تسجيل الدخول',
+      welcomeTitle: 'مرحبًا بعودتك',
       submit: 'تسجيل الدخول',
       forgotPassword: 'هل نسيت كلمة المرور؟',
       noAccount: 'ليس لديك حساب؟',
       signUp: 'إنشاء حساب',
-      welcomeBack: 'مرحباً بعودتك!',
+      welcomeBack: 'مرحبًا بعودتك إلى موافق. سجّل الدخول باستخدام رمز التحقق للمتابعة.',
+      otpSent: 'تم إرسال رمز التحقق بنجاح. أدخل الرمز المكوّن من 4 أرقام لتسجيل الدخول.',
     },
     register: {
       title: 'أنشئ حسابك',
+      description: 'أنشئ ملفك في موافق وتحقق من رقم هاتفك للمتابعة.',
       submit: 'إنشاء حساب',
       alreadyHaveAccount: 'لديك حساب بالفعل؟',
       signIn: 'تسجيل الدخول',
-      success: 'تم إنشاء الحساب بنجاح!',
+      success: 'تم إنشاء الحساب بنجاح. أدخل رمز التحقق لتأكيد حسابك.',
+      otpSent: 'اكتمل التسجيل. أرسلنا لك رمزًا من 4 أرقام لمتابعة تسجيل الدخول.',
+      verifiedSuccess: 'تم التحقق من الحساب بنجاح!',
+      invalidOtp: 'رمز التحقق غير صحيح أو منتهي الصلاحية',
+      doneTitle: 'حسابك جاهز',
+      doneDescription: 'تم التحقق من حسابك. يمكنك الآن المتابعة إلى تسجيل الدخول.',
     },
     forgotPassword: {
       title: 'إعادة تعيين كلمة المرور',
@@ -429,17 +435,32 @@ const ar = {
     },
     otp: {
       title: 'أدخل رمز التحقق',
-      description: 'أرسلنا رمزاً مكوّناً من 6 أرقام إلى',
+      description: 'أرسلنا رمزًا مكوّنًا من 4 أرقام إلى',
       verify: 'تأكيد الرمز',
-      resendIn: 'إعادة الإرسال خلال {{seconds}}ث',
+      resendIn: 'إعادة إرسال الرمز خلال {{time}}',
       resend: 'إعادة إرسال الرمز',
     },
     fields: {
       fullName: 'الاسم الكامل',
+      firstName: 'الاسم الأول',
+      lastName: 'اسم العائلة',
+      identityNumber: 'رقم الهوية / الإقامة',
+      phoneNumber: 'رقم الجوال',
+      dateOfBirth: 'تاريخ الميلاد',
+      profileImage: 'الصورة الشخصية',
       email: 'البريد الإلكتروني',
       password: 'كلمة المرور',
       confirmPassword: 'تأكيد كلمة المرور',
       namePlaceholder: 'محمد أحمد',
+      firstNamePlaceholder: 'محمد',
+      lastNamePlaceholder: 'أحمد',
+      identityNumberPlaceholder: 'أدخل رقم الهوية المكوّن من 10 أرقام',
+      phoneNumberPlaceholder: '05X XXX XXXX',
+      dateOfBirthHint: 'اختياري',
+      uploadHint: 'لم يتم اختيار صورة',
+      profileImageHint: 'اختياري. JPG أو PNG أو WEBP.',
+      uploadImage: 'رفع',
+      changeImage: 'تغيير',
       emailPlaceholder: 'you@example.com',
       passwordPlaceholder: '••••••••',
     },
@@ -448,10 +469,42 @@ const ar = {
       passwordMin: 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل',
       nameMin: 'يجب أن يتكون الاسم من حرفين على الأقل',
       passwordMismatch: 'كلمتا المرور غير متطابقتين',
+      identityRequired: 'رقم الهوية / الإقامة مطلوب',
+      identityNumberLength: 'يجب أن يتكون رقم الهوية من 10 أرقام بالضبط',
+      invalidSaudiPhone: 'أدخل رقم جوال سعودي صحيح',
     },
     errors: {
       loginFailed: 'فشل تسجيل الدخول',
       registrationFailed: 'فشل إنشاء الحساب',
+      wrongOtpCode: 'رمز التحقق غير صحيح.',
+      userAlreadyExists: 'هذا المستخدم موجود بالفعل.',
+      invalidIdentityNumber: 'رقم الهوية / الإقامة غير صحيح.',
+    },
+    registerPage: {
+      hero: {
+        titleLead: 'صحتك،',
+        titleAccent: 'في خطوة واحدة.',
+        body: 'انضم إلى "موافق" لإدارة فحوصاتك الطبية وتطوير مهاراتك بسهولة.',
+      },
+      steps: [
+        {
+          title: 'احجز الفحوصات في ثوانٍ',
+          body: 'القيادة والإقامة والفحوصات المهنية وغيرها.',
+        },
+        {
+          title: 'تقاريرك على جوالك',
+          body: 'احصل على شعار "صالح للخدمة" فورًا.',
+        },
+        {
+          title: 'طوّر مهاراتك',
+          body: 'استفد من الدورات المعتمدة داخل التطبيق.',
+        },
+      ],
+      stats: [
+        { value: '50K+', label: 'عضو' },
+        { value: '500+', label: 'شريك' },
+        { value: '4.9★', label: 'متوسط التقييم' },
+      ],
     },
   },
   dashboard: {
@@ -459,6 +512,6 @@ const ar = {
     greeting: 'مرحباً {{name}}',
     welcome: 'مرحباً بعودتك!',
   },
-} satisfies Dictionary
+} as const
 
 export default ar

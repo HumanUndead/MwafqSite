@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from '@/i18n/DictionaryProvider'
 import { toast } from '@/shared/components/feedback/Toast'
+import { getLocalizedAuthErrorMessage } from '../authError'
 import { otpApi } from '../api/otpApi'
 
 type Step = 'email' | 'otp' | 'done'
@@ -25,7 +26,7 @@ export function useForgotPassword() {
       setStep('otp')
       toast.info(auth.forgotPassword.otpSent)
     } catch (err) {
-      const message = err instanceof Error ? err.message : auth.forgotPassword.sendOtpFailed
+      const message = getLocalizedAuthErrorMessage(err, auth, auth.forgotPassword.sendOtpFailed)
       setError(message)
       toast.error(message)
     } finally {
@@ -42,7 +43,7 @@ export function useForgotPassword() {
       setStep('done')
       toast.success(auth.forgotPassword.verifiedToast)
     } catch (err) {
-      const message = err instanceof Error ? err.message : auth.forgotPassword.invalidOtp
+      const message = getLocalizedAuthErrorMessage(err, auth, auth.forgotPassword.invalidOtp)
       setError(message)
       toast.error(message)
     } finally {
