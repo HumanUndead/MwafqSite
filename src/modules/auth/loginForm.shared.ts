@@ -1,10 +1,9 @@
-export type LoginFieldName = 'email' | 'password'
-export type LoginFieldErrorCode = 'invalidEmail' | 'passwordMin'
+export type LoginFieldName = 'userName'
+export type LoginFieldErrorCode = 'identityRequired'
 export type LoginFormErrorCode = 'loginFailed'
 
 export interface LoginValues {
-  email: string
-  password: string
+  userName: string
 }
 
 export interface LoginActionState {
@@ -19,12 +18,8 @@ export const initialLoginActionState: LoginActionState = {
 export function validateLoginValues(values: LoginValues): LoginActionState['fieldErrors'] {
   const fieldErrors: LoginActionState['fieldErrors'] = {}
 
-  if (!values.email.includes('@')) {
-    fieldErrors.email = 'invalidEmail'
-  }
-
-  if (values.password.length < 8) {
-    fieldErrors.password = 'passwordMin'
+  if (!values.userName.trim()) {
+    fieldErrors.userName = 'identityRequired'
   }
 
   return fieldErrors

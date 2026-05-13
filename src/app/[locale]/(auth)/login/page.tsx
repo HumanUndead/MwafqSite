@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getDictionary } from '@/i18n/dictionaries'
 import { hasLocale } from '@/i18n/config'
 import { LoginForm } from '@/modules/auth'
+import { AuthSplitShell } from '@/modules/auth/components/AuthSplitShell'
 
 interface LoginPageProps {
   params: Promise<{ locale: string }>
@@ -14,12 +15,16 @@ export default async function LoginPage({ params }: LoginPageProps) {
     notFound()
   }
 
-  const { auth } = await getDictionary(locale)
+  const dictionary = await getDictionary(locale)
 
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">{auth.login.title}</h1>
+    <AuthSplitShell
+      locale={locale}
+      title={dictionary.auth.login.welcomeTitle}
+      subtitle={dictionary.auth.login.welcomeBack}
+      centered
+    >
       <LoginForm />
-    </div>
+    </AuthSplitShell>
   )
 }

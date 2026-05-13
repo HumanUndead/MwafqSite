@@ -2,20 +2,53 @@ export interface User {
   id: string
   email: string
   name: string
+  username?: string
   role: 'user' | 'admin'
   createdAt: string
 }
 
 export interface LoginDto {
-  email: string
-  password: string
+  userName: string
+}
+
+export interface LoginResponse {
+  userName: string
+  phoneNumber?: string | null
+  raw?: unknown
 }
 
 export interface RegisterDto {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
+  firstName: string
+  lastName: string
+  identityNumber: string
+  phoneNumber: string
+  dateOfBirth: string
+  image: File | null
+}
+
+export interface RegisterRequestDto {
+  phoneNumber: string
+  firstName: string
+  lastName: string
+  countryId: number
+  identityNumber: string
+  relatedTo: string | null
+  dateOfBirth?: string | null
+  id?: string | null
+  image?: File | null
+}
+
+export interface RegisterResponse {
+  phoneNumber: string
+  userName: string
+  registrationId?: string | null
+  raw?: unknown
+}
+
+export interface OtpVerificationResponse {
+  user: User
+  token: string
+  raw?: unknown
 }
 
 export interface AuthResponse {

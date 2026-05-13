@@ -1,27 +1,35 @@
-'use client'
-
 import type { ReactNode } from 'react'
-import Link from 'next/link'
-import { LanguageSwitcher } from '@/i18n/LanguageSwitcher'
-import { useLocale } from '@/i18n/DictionaryProvider'
-import { getLocalizedRoute } from '@/i18n/routing'
-import { config } from '@/shared/constants/config'
-import { ROUTES } from '@/shared/constants/routes'
+import { notFound } from 'next/navigation'
+import { hasLocale, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
+import { withAuthenticatedHeaderState } from '@/modules/auth/server/headerAuth'
+import { getCurrentUser } from '@/modules/auth/server/authSession'
+import { FooterSection } from '@/modules/home/components/FooterSection'
+import { getHomePageContent } from '@/modules/home/server/homeContentService'
+import { Header } from '@/shared/components/layout/Header'
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
-  const locale = useLocale()
+interface AuthLayoutProps {
+  children: ReactNode
+  params: Promise<{ locale: string }>
+}
+
+export default async function AuthLayout({ children, params }: AuthLayoutProps) {
+  const { locale } = await params
+
+  if (!hasLocale(locale)) {
+    notFound()
+  }
+
+  const dictionary = await getDictionary(locale)
+  const currentUser = await getCurrentUser()
+  const content = await getHomePageContent(locale as Locale, dictionary)
+  const headerContent = withAuthenticatedHeaderState(content.header, currentUser, locale as Locale)
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="mb-8 flex w-full max-w-md items-center justify-between">
-        <Link href={getLocalizedRoute(locale, ROUTES.HOME)} className="text-2xl font-bold text-gray-900">
-          {config.appName}
-        </Link>
-        <LanguageSwitcher />
-      </div>
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
-        {children}
-      </div>
+    <div className="flex min-h-screen flex-col bg-[#eeeeef] text-[#1e2364]">
+      <Header locale={locale as Locale} content={headerContent} />
+      <main className="flex-1">{children}</main>
+      <FooterSection locale={locale as Locale} content={content.footer} />
     </div>
   )
 }

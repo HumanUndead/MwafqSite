@@ -3,7 +3,11 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import type { Locale } from '@/i18n/config'
+import { authApi } from '@/modules/auth/api/authApi'
+import { logoutActionPath } from '@/modules/auth/headerActions.shared'
+import { useAuthStore } from '@/modules/auth/store/authStore'
 import { LanguageSwitcher } from '@/i18n/LanguageSwitcher'
 import type { HomeHeaderContent } from '@/modules/home/home.types'
 import { CmsLink } from '@/modules/home/components/CmsLink'
@@ -16,6 +20,10 @@ interface HeaderProps {
 
 export function Header({ locale, content }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const isAuthenticatedGreeting = content.signInAction?.path === null
+  const clearAuth = useAuthStore(s => s.clearAuth)
+  const router = useRouter()
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 30)
@@ -24,6 +32,22 @@ export function Header({ locale, content }: HeaderProps) {
 
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const handleLogout = async () => {
+    if (isLoggingOut) {
+      return
+    }
+
+    setIsLoggingOut(true)
+
+    try {
+      await authApi.logout()
+    } finally {
+      clearAuth()
+      setIsLoggingOut(false)
+      router.refresh()
+    }
+  }
 
   return (
     <header
@@ -42,7 +66,7 @@ export function Header({ locale, content }: HeaderProps) {
         aria-label={content.brandLabel}
       >
         <img
-          src={content.brandImageSrc ?? '/demo-assets/logo.svg'}
+          src={'/demo-assets/logo.svg'}
           alt={content.brandLabel}
           className={cn(
             'block w-auto transition-[height] duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
@@ -59,7 +83,7 @@ export function Header({ locale, content }: HeaderProps) {
             key={`${item.label}-${item.path ?? 'no-path'}`}
             locale={locale}
             href={item.path}
-            className="group inline-block px-4 py-2.5"
+            className="group inline-block whitespace-nowrap px-4 py-2.5"
           >
             <span className="inline-block origin-center scale-[0.909] text-[17.6px] font-bold text-[#1e2364] transition-[transform,color] duration-[280ms] ease-out group-hover:scale-100 group-hover:text-[#00a8f1] [backface-visibility:hidden] [will-change:transform]">
               {item.label}
@@ -68,7 +92,7 @@ export function Header({ locale, content }: HeaderProps) {
         ))}
       </nav>
 
-      <div className="flex items-center gap-2.5">
+      <div className="flex flex-nowrap items-center gap-2.5">
         <button
           className="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:hidden"
           type="button"
@@ -93,20 +117,26 @@ export function Header({ locale, content }: HeaderProps) {
           <CmsLink
             locale={locale}
             href={content.signInAction.path}
-            className="inline-flex h-10 max-[560px]:h-9 items-center justify-center rounded-[50px] bg-[#1e2364] px-[22px] max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background] duration-[350ms] ease-[cubic-bezier(0.59,0.06,0.1,1)] hover:bg-[#233567]"
+            className={cn(
+              'inline-flex h-10 shrink-0 max-[560px]:h-9 items-center justify-center whitespace-nowrap px-[18px] max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold transition-[background,color,border-color] duration-[280ms] ease-out',
+              isAuthenticatedGreeting
+                ? 'rounded-[18px] border border-[#d8e4ff] bg-[#eef4ff] text-[#36538d]'
+                : 'rounded-[50px] bg-[#1e2364] text-white hover:bg-[#233567]',
+            )}
           >
             <span>{content.signInAction.label}</span>
           </CmsLink>
         ) : null}
 
-        {content.primaryAction ? (
-          <CmsLink
-            locale={locale}
-            href={content.primaryAction.path}
-            className="hidden h-10 items-center justify-center rounded-[50px] bg-[#00a8f1] px-[22px] text-[14.5px] font-semibold text-white transition hover:bg-[#0094d5] xl:inline-flex"
+        {content.primaryAction?.path === logoutActionPath ? (
+          <button
+            type="button"
+            onClick={() => void handleLogout()}
+            disabled={isLoggingOut}
+            className="hidden h-10 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-[50px] border border-[#f3c7cf] bg-[#fff5f6] px-[22px] text-[14.5px] font-semibold text-[#c63b52] transition hover:border-[#e59aa7] hover:bg-[#ffe9ec] hover:text-[#b92b43] disabled:cursor-not-allowed disabled:opacity-70 xl:inline-flex"
           >
             <span>{content.primaryAction.label}</span>
-          </CmsLink>
+          </button>
         ) : null}
 
         <button
