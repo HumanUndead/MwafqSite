@@ -30,7 +30,7 @@ const en = {
       businesses: 'B2B Portal',
       contact: 'Contact',
       cta: 'Book Now',
-      switchLabel: 'عربي',
+      switchLabel: 'AR',
     },
     hero: {
       badge: 'Trusted by 500+ healthcare partners across KSA',
@@ -73,19 +73,23 @@ const en = {
       items: [
         {
           title: 'Driving License',
-          description: 'The medical fitness exam you need for your Saudi driving license. Officially recognised, ready in minutes.',
+          description:
+            'The medical fitness exam you need for your Saudi driving license. Officially recognised, ready in minutes.',
         },
         {
           title: 'Residency Exam',
-          description: 'The iqama medical screening, at the clinic nearest you. Recognised by the Ministry of Health across KSA.',
+          description:
+            'The iqama medical screening, at the clinic nearest you. Recognised by the Ministry of Health across KSA.',
         },
         {
           title: 'Municipality',
-          description: 'The health certificate every food handler, public-service worker and municipal licensee needs — sorted in one visit.',
+          description:
+            'The health certificate every food handler, public-service worker and municipal licensee needs — sorted in one visit.',
         },
         {
           title: 'Occupational Health',
-          description: 'Pre-employment and workplace health screenings, trusted by 500+ employers across the Kingdom.',
+          description:
+            'Pre-employment and workplace health screenings, trusted by 500+ employers across the Kingdom.',
         },
       ],
     },
@@ -95,19 +99,23 @@ const en = {
       items: [
         {
           title: 'Real-time tracking',
-          description: 'Watch every status from booking acceptance to final approval without chasing calls.',
+          description:
+            'Watch every status from booking acceptance to final approval without chasing calls.',
         },
         {
           title: 'Reports in pocket',
-          description: 'Download your certified report the moment results are ready.',
+          description:
+            'Download your certified report the moment results are ready.',
         },
         {
           title: 'Certified and reliable',
-          description: 'Built around verified providers and official Saudi exam categories.',
+          description:
+            'Built around verified providers and official Saudi exam categories.',
         },
         {
           title: 'Total flexibility',
-          description: 'Serve individuals and HR teams from the same calm workflow.',
+          description:
+            'Serve individuals and HR teams from the same calm workflow.',
         },
       ],
     },
@@ -163,14 +171,32 @@ const en = {
       title: 'Your medical journey, in your pocket.',
       body: 'Track upcoming appointments, exam progress, and result delivery from one focused dashboard.',
       cards: [
-        { title: "Today's schedule", detail: 'Driving License Exam · 09:00 AM · Riyadh' },
-        { title: 'Live status', detail: 'Booking accepted · Sample collected · Lab review' },
-        { title: 'Reports', detail: 'Fit for Service and approved PDFs ready to download' },
+        {
+          title: "Today's schedule",
+          detail: 'Driving License Exam · 09:00 AM · Riyadh',
+        },
+        {
+          title: 'Live status',
+          detail: 'Booking accepted · Sample collected · Lab review',
+        },
+        {
+          title: 'Reports',
+          detail: 'Fit for Service and approved PDFs ready to download',
+        },
       ],
       points: [
-        { title: 'Real-time exam tracking', detail: 'Watch every status from accepted to completed.' },
-        { title: 'Reports in your pocket', detail: 'One-tap PDF download the moment results are ready.' },
-        { title: '"Fit for Service" badge', detail: 'Official certification delivered straight to your phone.' },
+        {
+          title: 'Real-time exam tracking',
+          detail: 'Watch every status from accepted to completed.',
+        },
+        {
+          title: 'Reports in your pocket',
+          detail: 'One-tap PDF download the moment results are ready.',
+        },
+        {
+          title: '"Fit for Service" badge',
+          detail: 'Official certification delivered straight to your phone.',
+        },
       ],
     },
     academy: {
@@ -180,17 +206,20 @@ const en = {
       items: [
         {
           title: 'Advanced First Aid',
-          detail: 'Practical workplace-first-aid guidance designed for modern teams.',
+          detail:
+            'Practical workplace-first-aid guidance designed for modern teams.',
           meta: '4.8 rating',
         },
         {
           title: 'CPR Basics',
-          detail: 'Lifesaving essentials with a clear, confidence-building format.',
+          detail:
+            'Lifesaving essentials with a clear, confidence-building format.',
           meta: 'Popular course',
         },
         {
           title: 'Safety Officer Bundle',
-          detail: 'First aid, infection control, and risk assessment in one path.',
+          detail:
+            'First aid, infection control, and risk assessment in one path.',
           meta: 'Save 30%',
         },
       ],
@@ -220,15 +249,28 @@ const en = {
         { label: 'Pending', value: '12' },
       ],
       employees: [
-        { name: 'Ahmad K.', exam: 'Pre-Employment Basic · Riyadh', status: 'Completed' },
-        { name: 'Sara M.', exam: 'Residency Exam · Jeddah', status: 'In Progress' },
-        { name: 'Faisal H.', exam: 'Occupational Exam · Dammam', status: 'Scheduled' },
+        {
+          name: 'Ahmad K.',
+          exam: 'Pre-Employment Basic · Riyadh',
+          status: 'Completed',
+        },
+        {
+          name: 'Sara M.',
+          exam: 'Residency Exam · Jeddah',
+          status: 'In Progress',
+        },
+        {
+          name: 'Faisal H.',
+          exam: 'Occupational Exam · Dammam',
+          status: 'Scheduled',
+        },
       ],
       primaryCta: 'Open Corporate Account',
       secondaryCta: 'Book a Demo',
     },
     testimonial: {
-      quote: 'We moved 240 staff through residency screening in a single week. With Mwafq, what used to take a month now takes',
+      quote:
+        'We moved 240 staff through residency screening in a single week. With Mwafq, what used to take a month now takes',
       highlight: 'three days.',
       author: 'Anonymous',
       role: 'HR Director · Riyadh logistics company',
@@ -267,12 +309,14 @@ const en = {
       items: [
         {
           title: 'Smart Analytics',
-          description: 'Get real-time insights into your data with powerful analytics tools.',
+          description:
+            'Get real-time insights into your data with powerful analytics tools.',
           icon: '📊',
         },
         {
           title: 'Secure & Private',
-          description: 'Your data is encrypted and protected with enterprise-grade security.',
+          description:
+            'Your data is encrypted and protected with enterprise-grade security.',
           icon: '🔒',
         },
         {
@@ -287,7 +331,8 @@ const en = {
         },
         {
           title: 'Team Collaboration',
-          description: 'Work together seamlessly with role-based access control.',
+          description:
+            'Work together seamlessly with role-based access control.',
           icon: '👥',
         },
         {
@@ -308,13 +353,15 @@ const en = {
           company: 'TechCorp',
         },
         {
-          quote: 'The analytics features alone are worth every penny. Highly recommended.',
+          quote:
+            'The analytics features alone are worth every penny. Highly recommended.',
           name: 'Mohammed Al-Rashid',
           role: 'CEO',
           company: 'StartupXYZ',
         },
         {
-          quote: 'Onboarding was seamless and the support team is incredibly responsive.',
+          quote:
+            'Onboarding was seamless and the support team is incredibly responsive.',
           name: 'Fatima Al-Zahrawi',
           role: 'Product Lead',
           company: 'InnovateCo',
@@ -352,7 +399,12 @@ const en = {
           name: 'Enterprise',
           price: 'Custom',
           description: 'For large organizations with custom needs.',
-          features: ['Everything in Pro', 'SSO & SAML', 'Dedicated support', 'SLA guarantee'],
+          features: [
+            'Everything in Pro',
+            'SSO & SAML',
+            'Dedicated support',
+            'SLA guarantee',
+          ],
           cta: 'Contact us',
           href: '/contact',
           highlight: false,
@@ -361,7 +413,8 @@ const en = {
     },
     cta: {
       title: 'Ready to get started?',
-      description: 'Join thousands of teams already using Mwafq to grow their business.',
+      description:
+        'Join thousands of teams already using Mwafq to grow their business.',
       button: 'Start for free today',
     },
   },
@@ -425,7 +478,8 @@ const en = {
     },
     forgotPassword: {
       title: 'Reset your password',
-      description: "Enter your email and we'll send you a one-time code to reset your password.",
+      description:
+        "Enter your email and we'll send you a one-time code to reset your password.",
       submit: 'Send reset code',
       backToSignIn: 'Back to sign in',
       otpSent: 'OTP sent to your email',
@@ -470,7 +524,7 @@ const en = {
   },
   maintenance: {
     title: 'Under Maintenance',
-    heading: 'We\'ll be back soon',
+    heading: "We'll be back soon",
     description:
       'Our platform is currently undergoing scheduled maintenance. Please check back later.',
     retry: 'Try again',
@@ -478,6 +532,71 @@ const en = {
     stillDown: 'Still unavailable. Please try again later.',
     contact: 'Contact support',
   },
-} as const
+  profileAcademy: {
+    title: 'My Mwafaq Academy Courses',
+    carouselControls: 'Course carousel controls',
+    previousCourses: 'Previous courses',
+    nextCourses: 'Next courses',
+    keepGoing: 'Keep Going',
+  },
+  profileLayout: {
+    signOut: 'Sign out',
+    avatarAlt: 'Profile photo of {{name}}',
+    nav: {
+      personalInfo: 'Personal Info',
+      academyCourses: 'Mwafaq Academy Courses',
+      myReservations: 'My Reservations',
+    },
+  },
+  profilePersonal: {
+    contact: {
+      title: 'Personal Information',
+      edit: 'Edit',
+      labels: {
+        email: 'Email Address',
+        phone: 'Phone Number',
+        city: 'City',
+        country: 'Country',
+        mailingAddress: 'Mailing Address',
+      },
+    },
+    stats: {
+      reservations: {
+        title: 'Reservations',
+        subtitle: 'Across all services',
+      },
+      coursesOngoing: {
+        title: 'Mwafaq Courses',
+        subtitle: 'Ongoing',
+      },
+      coursesFinished: {
+        title: 'Mwafaq Courses',
+        subtitle: 'Finished',
+      },
+    },
+  },
+  profileReservations: {
+    titleReservations: 'My Reservations',
+    titleResults: 'My Results',
+    subtitle: 'Manage your upcoming appointments and medical results.',
+    searchPlaceholder: 'Search reservations...',
+    tabsListAriaLabel: 'Reservation type',
+    tabExaminations: 'Examinations',
+    tabResults: 'Results',
+    documentTitleExams: 'Mwafq — My Reservations',
+    documentTitleResults: 'Mwafq — My Results',
+    status: {
+      new: 'New',
+      progress: 'In Progress',
+      canceled: 'Canceled',
+    },
+    preparationConditions: 'Preparation Conditions',
+    cancelAppointment: 'Cancel Appointment',
+    reorder: 'Reorder',
+    details: 'Details',
+    viewInformation: 'View Information',
+    download: 'Download',
+  },
+} as const;
 
-export default en
+export default en;

@@ -5,6 +5,10 @@ import { ToastContainer } from '@/shared/components/feedback/Toast'
 import { defaultLocale, hasLocale, isRtl, localeCookieName } from '@/i18n/config'
 import { config } from '@/shared/constants/config'
 import './globals.css'
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const lamaSans = localFont({
   src: [
@@ -36,7 +40,7 @@ export default async function RootLayout({
     ?? defaultLocale
 
   return (
-    <html lang={locale} dir={isRtl(locale) ? 'rtl' : 'ltr'} className={`${lamaSans.variable} h-full antialiased`}>
+    <html lang={locale} dir={isRtl(locale) ? 'rtl' : 'ltr'} className={cn("h-full", "antialiased", lamaSans.variable, "font-sans", geist.variable)}>
       <body className="min-h-full bg-[#f3f4f8] text-[#1e2364]">
         {children}
         <ToastContainer />

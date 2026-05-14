@@ -11,11 +11,11 @@ interface Props {
 function getStatusClassName(status: string) {
   const normalized = status.toLowerCase()
 
-  if (normalized.includes('complete') || normalized.includes('مكتمل')) {
+  if (normalized.includes('complete')) {
     return 'border-transparent bg-[rgba(0,222,201,0.14)] text-[#00867a]'
   }
 
-  if (normalized.includes('progress') || normalized.includes('قيد')) {
+  if (normalized.includes('progress')) {
     return 'border-transparent bg-[rgba(217,116,60,0.14)] text-[#a65528]'
   }
 
