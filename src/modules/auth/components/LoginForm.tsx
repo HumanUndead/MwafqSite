@@ -1,124 +1,101 @@
 'use client'
 
 import Link from 'next/link'
-import { useActionState, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider'
 import { getLocalizedRoute } from '@/i18n/routing'
-import { Button } from '@/shared/components/ui/Button'
-import { Input } from '@/shared/components/ui/Input'
 import { ROUTES } from '@/shared/constants/routes'
-import {
-  initialLoginActionState,
-  type LoginActionState,
-  type LoginFieldName,
-  type LoginValues,
-  validateLoginValues,
-} from '../loginForm.shared'
-import { submitLogin } from '../server/loginAction'
+import { Button } from '@/shared/components/ui/Button'
+import { useLogin } from '../hooks/useLogin'
+import { OtpModal } from './OtpModal'
+import { AuthTextField } from './AuthTextField'
+
+interface LoginValues {
+  userName: string
+}
+
+function UserNameIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="14" rx="2" ry="2" />
+      <circle cx="9" cy="12" r="2.5" />
+      <line x1="14" y1="10" x2="19" y2="10" />
+      <line x1="14" y1="14" x2="17" y2="14" />
+    </svg>
+  )
+}
 
 export function LoginForm() {
   const locale = useLocale()
   const auth = useTranslations('auth')
-  const [state, formAction, pending] = useActionState(submitLogin, initialLoginActionState)
-  const [form, setForm] = useState<LoginValues>({ email: '', password: '' })
-  const [clientFieldErrors, setClientFieldErrors] = useState<LoginActionState['fieldErrors']>({})
-  const [clientFormError, setClientFormError] = useState<LoginActionState['formError']>()
-  const [dismissedServerFieldErrors, setDismissedServerFieldErrors] = useState<
-    Partial<Record<LoginFieldName, true>>
-  >({})
-  const [dismissedServerFormError, setDismissedServerFormError] = useState(false)
+  const { login, loading, error, verifyOtp, closeOtpModal, resendOtp, isOtpModalOpen, otpDestinationLabel } = useLogin()
+  const [form, setForm] = useState<LoginValues>({ userName: '' })
+  const [fieldError, setFieldError] = useState<string>()
 
   const updateField = (key: keyof LoginValues) => (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
+    const value = e.target.value.trimStart()
     setForm(current => ({ ...current, [key]: value }))
-    setClientFieldErrors(current => {
-      if (!current[key]) {
-        return current
-      }
-
-      const next = { ...current }
-      delete next[key]
-      return next
-    })
-    setClientFormError(undefined)
-    setDismissedServerFieldErrors(current => ({ ...current, [key]: true }))
-    setDismissedServerFormError(true)
+    if (key === 'userName' && fieldError) {
+      setFieldError(undefined)
+    }
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    const nextFieldErrors = validateLoginValues(form)
-    setDismissedServerFieldErrors({})
-    setDismissedServerFormError(false)
-
-    if (Object.keys(nextFieldErrors).length === 0) {
-      setClientFieldErrors({})
-      setClientFormError(undefined)
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!form.userName.trim()) {
+      setFieldError(auth.validation.identityRequired)
       return
     }
 
-    e.preventDefault()
-    setClientFieldErrors(nextFieldErrors)
-    setClientFormError(undefined)
+    setFieldError(undefined)
+    await login({ userName: form.userName.trim() })
   }
-
-  const fieldErrors: LoginActionState['fieldErrors'] = {
-    email: clientFieldErrors.email ?? (
-      dismissedServerFieldErrors.email ? undefined : state.fieldErrors.email
-    ),
-    password: clientFieldErrors.password ?? (
-      dismissedServerFieldErrors.password ? undefined : state.fieldErrors.password
-    ),
-  }
-  const formError = clientFormError ?? (dismissedServerFormError ? undefined : state.formError)
 
   return (
-    <form action={formAction} noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <input type="hidden" name="locale" value={locale} />
-      <Input
-        label={auth.fields.email}
-        name="email"
-        type="email"
-        value={form.email}
-        onChange={updateField('email')}
-        error={fieldErrors.email ? auth.validation[fieldErrors.email] : undefined}
-        placeholder={auth.fields.emailPlaceholder}
-        autoComplete="email"
-      />
-      <Input
-        label={auth.fields.password}
-        name="password"
-        type="password"
-        value={form.password}
-        onChange={updateField('password')}
-        error={fieldErrors.password ? auth.validation[fieldErrors.password] : undefined}
-        placeholder={auth.fields.passwordPlaceholder}
-        autoComplete="current-password"
-      />
+    <>
+      <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <AuthTextField
+          label={auth.fields.identityNumber}
+          value={form.userName}
+          onChange={updateField('userName')}
+          error={fieldError}
+          placeholder={auth.fields.identityNumberPlaceholder}
+          autoComplete="username"
+          icon={<UserNameIcon />}
+        />
 
-      <div className="flex justify-end">
-        <Link
-          href={getLocalizedRoute(locale, ROUTES.FORGOT_PASSWORD)}
-          className="text-sm text-blue-600 hover:text-blue-800"
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
+        <Button
+          type="submit"
+          loading={loading}
+          variant="brand"
+          size="lg"
+          className="mt-2 w-full rounded-[14px] py-3 text-[15px]"
         >
-          {auth.login.forgotPassword}
-        </Link>
-      </div>
+          {auth.login.submit}
+        </Button>
 
-      {formError && <p className="text-sm text-red-600">{auth.errors[formError]}</p>}
+        <p className="text-center text-sm text-gray-600">
+          {auth.login.noAccount}{' '}
+          <Link
+            href={getLocalizedRoute(locale, ROUTES.REGISTER)}
+            className="font-medium text-[#00a8f1] transition hover:text-[#0090d1]"
+          >
+            {auth.login.signUp}
+          </Link>
+        </p>
+      </form>
 
-      <Button type="submit" loading={pending} className="w-full">
-        {auth.login.submit}
-      </Button>
-
-      <p className="text-center text-sm text-gray-600">
-        {auth.login.noAccount}{' '}
-        <Link
-          href={getLocalizedRoute(locale, ROUTES.REGISTER)}
-          className="font-medium text-blue-600 hover:text-blue-800"
-        >
-          {auth.login.signUp}
-        </Link>
-      </p>
-    </form>
+      <OtpModal
+        open={isOtpModalOpen}
+        destinationLabel={otpDestinationLabel ?? ''}
+        loading={loading}
+        error={error}
+        onVerify={verifyOtp}
+        onResend={resendOtp}
+        onClose={closeOtpModal}
+      />
+    </>
   )
 }

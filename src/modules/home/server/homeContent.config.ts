@@ -1,7 +1,7 @@
 const DEFAULT_HOME_CONTENT_API_BASE_URL = 'https://productionapi.mwafq.com'
+import { MWAFQ_API_BASE_URL } from '@/shared/constants/config'
 
-export const HOME_CONTENT_API_BASE_URL =
-  process.env.MWAFQ_API_BASE_URL ?? DEFAULT_HOME_CONTENT_API_BASE_URL
+export const HOME_CONTENT_API_BASE_URL = MWAFQ_API_BASE_URL
 
 export const HOME_CONTENT_ROOT_CATEGORY_ID = 101
 export const HOME_CONTENT_REVALIDATE_SECONDS = 60 * 10

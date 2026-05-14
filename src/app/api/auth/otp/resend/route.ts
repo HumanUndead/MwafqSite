@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server'
 import {
   extractUpstreamCode,
   extractUpstreamMessage,
-  extractUpstreamPhoneNumber,
   hasUpstreamFailure,
   normalizeUpstreamStatus,
 } from '@/modules/auth/server/upstreamAuthResult'
@@ -34,7 +33,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const endpoint = new URL('/api/Authenticate/Auth/SendOtp', MWAFQ_API_BASE_URL)
+    const endpoint = new URL('/api/Authenticate/Auth/Resend', MWAFQ_API_BASE_URL)
     endpoint.searchParams.set('UserName', normalizedUserName)
 
     const upstreamResponse = await performUpstreamTextRequest({
@@ -46,13 +45,12 @@ export async function POST(request: NextRequest) {
     const payload = parseJsonSafe(responseText)
 
     const upstreamCode = extractUpstreamCode(payload)
-    const phoneNumber = extractUpstreamPhoneNumber(payload)
 
     if (upstreamResponse.status >= 400 || hasUpstreamFailure(payload)) {
       return NextResponse.json(
         {
           success: false,
-          message: extractUpstreamMessage(payload, 'Failed to send OTP'),
+          message: extractUpstreamMessage(payload, 'Failed to resend OTP'),
           code: upstreamCode,
           data: null,
         },
@@ -62,15 +60,15 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: extractUpstreamMessage(payload, 'OTP sent successfully'),
+      message: extractUpstreamMessage(payload, 'OTP resent successfully'),
       data: {
         userName: normalizedUserName,
-        phoneNumber,
         raw: payload,
       },
     })
   } catch (error) {
-    console.error('[auth/login] SendOtp request failed.', error)
+    console.error('[auth/otp/resend] Resend request failed.', error)
+
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

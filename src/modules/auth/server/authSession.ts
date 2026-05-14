@@ -31,6 +31,7 @@ function isAuthSession(value: unknown): value is AuthSession {
     && typeof user.id === 'string'
     && typeof user.email === 'string'
     && typeof user.name === 'string'
+    && (typeof user.username === 'undefined' || typeof user.username === 'string')
     && (user.role === 'user' || user.role === 'admin')
     && typeof user.createdAt === 'string'
 }
