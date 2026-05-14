@@ -1,3 +1,4 @@
+const DEFAULT_HOME_CONTENT_API_BASE_URL = 'https://productionapi.mwafq.com'
 import { MWAFQ_API_BASE_URL } from '@/shared/constants/config'
 
 export const HOME_CONTENT_API_BASE_URL = MWAFQ_API_BASE_URL

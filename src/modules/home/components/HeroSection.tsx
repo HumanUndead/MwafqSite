@@ -67,7 +67,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
               {badgeImages.slice(0, 3).map((image, index) => (
                 <img
                   key={`${image.src}-${index}`}
-                  src={image.src}
+                  src={image.src ?? ''}
                   alt=""
                   className={`${index === 1 ? '-mx-[11px]' : ''} h-[22px] w-[22px] rounded-full border-2 object-cover ${
                     index === 0

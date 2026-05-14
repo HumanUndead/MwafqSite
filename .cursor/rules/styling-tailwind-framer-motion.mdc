@@ -1,0 +1,12 @@
+---
+description: Use Tailwind for styles and Framer Motion for animation; prefer ScrollReveal for scroll/load reveals.
+alwaysApply: true
+---
+
+# Styling and motion
+
+- **Styles:** Use **Tailwind** utilities for UI (layout, spacing, color, type, borders, flex/grid, responsive). Do not add CSS modules or component `<style>` for the same unless documented in `docs/styling-and-motion.md` under **Documented exceptions**.
+- **Animation:** Use **Framer Motion** for enter/scroll/hover motion and transitions that go beyond simple Tailwind `transition-*`. Do not replicate `ScrollReveal` behavior with CSS `.reveal` / `.in` or a manual `IntersectionObserver` + class toggles for the same effect.
+- **Scroll / load reveal:** Prefer `@/shared/components/motion/ScrollReveal` with `variant` (`y` | `x` | `word`), optional `instant`, optional `revealAfterLoadMs`.
+- **Reduced motion:** Honor `prefers-reduced-motion` (`ScrollReveal` does; custom motion should use `useReducedMotion()`).
+- **Details and examples:** `docs/styling-and-motion.md`.
