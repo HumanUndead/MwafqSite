@@ -1,12 +1,10 @@
 import 'server-only';
 
 import queryString from 'query-string';
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+
+import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import type { PaginatedResponse } from '@/shared/types/api.types';
-import type {
-  CourseCategoryListItem,
-  CourseCategoryListResponse,
-} from '../courseCategory.types';
+import type { CourseCategoryListItem } from '../courseCategory.types';
 
 export type FetchCourseCategoryListParams = {
   pageNumber?: number;
@@ -25,20 +23,11 @@ export async function fetchCourseCategoryList(
     },
     { skipNull: true }
   );
-  const url = new URL(
+  return fetchWithErrorHandling<PaginatedResponse<CourseCategoryListItem>>(
     `/api/Academy/CourseCategory/List?${query}`,
-    MWAFQ_API_BASE_URL
+    {
+      cache: 'force-cache',
+      next: { revalidate: 300, tags: [`course-category-list-${query}`] },
+    }
   );
-
-  const response = await fetch(url.toString(), {
-    cache: 'force-cache',
-    next: { revalidate: 300, tags: [`course-category-list-${query}`] },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch course category list: ${response.status}`);
-  }
-
-  const body = (await response.json()) as CourseCategoryListResponse;
-  return body.value;
 }

@@ -9,23 +9,30 @@ export type CourseCarouselProps = {
   categoryId?: number;
   categoryName: string;
   isFeatured?: boolean;
+  /** Omit this course id from the carousel (e.g. current course on detail page). */
+  excludeCourseId?: number;
 };
 
 export async function CourseCarousel({
   categoryId,
   categoryName,
   isFeatured,
+  excludeCourseId,
 }: CourseCarouselProps) {
   const locale = await GetLocale();
   const langId = localeToLangId[locale];
   const courses = await fetchCourseList({ categoryId, featured: isFeatured });
 
-  if (courses.data?.length === 0) return null;
+  const rows = !excludeCourseId
+    ? courses.data
+    : courses.data.filter((c) => c.id !== excludeCourseId);
+
+  if (rows.length === 0) return null;
 
   return (
     <CourseCarouselClient
       categoryName={categoryName}
-      courses={courses.data}
+      courses={rows}
       langId={langId}
     />
   );
