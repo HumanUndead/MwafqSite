@@ -20,9 +20,9 @@ export default async function ProfileLayout({
   const locale = localeParam as Locale;
 
   return (
-    <div className="mx-auto my-[66px] grid min-h-[500px] max-w-[90%] grid-cols-12 gap-6 py-20">
+    <div className='mx-auto my-[66px] grid min-h-[500px]  grid-cols-12 gap-6 py-20 max-w-[1280px]'>
       <ProfileSidebar locale={locale} />
-      <div className="col-span-9 flex flex-col gap-6">{children}</div>
+      <div className='col-span-9 flex flex-col gap-6'>{children}</div>
     </div>
   );
 }

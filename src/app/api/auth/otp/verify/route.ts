@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import {
   authCookieName,
-  authCookieOptions,
+  authTokenCookieOptions,
   buildAuthResponseFromToken,
 } from '@/modules/auth/server/authService'
 import {
@@ -28,7 +28,9 @@ function parseJsonSafe(value: string): unknown {
   }
 }
 
-function getNestedTokenCandidate(value: unknown, key: 'token' | 'accessToken' | 'jwt'): string | null {
+const TOKEN_KEYS = ['token', 'accessToken', 'jwt'] as const
+
+function getNestedTokenCandidate(value: unknown, key: (typeof TOKEN_KEYS)[number]): string | null {
   if (!value || typeof value !== 'object') {
     return null
   }
@@ -37,6 +39,39 @@ function getNestedTokenCandidate(value: unknown, key: 'token' | 'accessToken' | 
   const candidate = record[key]
 
   return typeof candidate === 'string' && candidate.trim() ? candidate.trim() : null
+}
+
+function extractTokenFromPayload(payload: unknown): string | null {
+  if (typeof payload === 'string') {
+    return payload.trim() || null
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    return null
+  }
+
+  for (const key of TOKEN_KEYS) {
+    const directCandidate = getNestedTokenCandidate(payload, key)
+    if (directCandidate) {
+      return directCandidate
+    }
+  }
+
+  if ('data' in payload) {
+    const nestedData = (payload as Record<string, unknown>).data
+    for (const key of TOKEN_KEYS) {
+      const nestedCandidate = getNestedTokenCandidate(nestedData, key)
+      if (nestedCandidate) {
+        return nestedCandidate
+      }
+    }
+  }
+
+  if ('value' in payload && typeof payload.value === 'string' && payload.value.trim()) {
+    return payload.value.trim()
+  }
+
+  return null
 }
 
 export async function POST(request: NextRequest) {
@@ -117,44 +152,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const token = (() => {
-      if (typeof payload === 'string') {
-        return payload.trim() || null
-      }
-
-      if (!payload || typeof payload !== 'object') {
-        return null
-      }
-
-      const candidates = [
-        'token',
-        'accessToken',
-        'jwt',
-      ] as const
-
-      for (const key of candidates) {
-        const directCandidate = getNestedTokenCandidate(payload, key)
-        if (directCandidate) {
-          return directCandidate
-        }
-      }
-
-      if ('data' in payload) {
-        const nestedData = (payload as Record<string, unknown>).data
-        for (const key of candidates) {
-          const nestedCandidate = getNestedTokenCandidate(nestedData, key)
-          if (nestedCandidate) {
-            return nestedCandidate
-          }
-        }
-      }
-
-      if ('value' in payload && typeof payload.value === 'string' && payload.value.trim()) {
-        return payload.value.trim()
-      }
-
-      return null
-    })()
+    const token = extractTokenFromPayload(payload)
 
     if (!token) {
       if (upstreamCode) {
@@ -185,7 +183,7 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    response.cookies.set(authCookieName, authResponse.token, authCookieOptions)
+    response.cookies.set(authCookieName, authResponse.token, authTokenCookieOptions)
     setAuthSessionCookie(response.cookies, authResponse)
 
     return response

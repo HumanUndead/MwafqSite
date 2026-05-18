@@ -588,6 +588,7 @@ const ar = {
     contact: {
       title: 'المعلومات الشخصية',
       edit: 'تعديل',
+      memberSince: 'عضو منذ',
       labels: {
         email: 'البريد الإلكتروني',
         phone: 'رقم الجوال',
@@ -629,9 +630,30 @@ const ar = {
     preparationConditions: 'شروط التحضير',
     cancelAppointment: 'إلغاء الموعد',
     reorder: 'إعادة الطلب',
-    details: 'التفاصيل',
+    detailsLabel: 'التفاصيل',
     viewInformation: 'عرض المعلومات',
     download: 'تحميل',
+    emptyExams: 'لا توجد حجوزات قادمة.',
+    emptyResults: 'لا توجد نتائج بعد.',
+    detailPage: {
+      backToExaminations: 'العودة إلى الفحوصات',
+      backToResults: 'العودة إلى النتائج',
+      cancelAppointment: 'إلغاء الموعد',
+      orderInformation: 'معلومات الطلب',
+      resultInformation: 'معلومات النتيجة',
+      orderDetails: 'تفاصيل الطلب',
+      orderId: 'رقم الطلب',
+      orderedBy: 'الشركة',
+      price: 'السعر',
+      preparation: 'التحضير',
+      resultDocumentUnavailable: 'وثيقة النتيجة غير متوفرة بعد.',
+      timeline: {
+        new: 'جديد',
+        accepted: 'مقبول',
+        progress: 'قيد التنفيذ',
+        completed: 'مكتمل',
+      },
+    },
   },
 } as const;
 

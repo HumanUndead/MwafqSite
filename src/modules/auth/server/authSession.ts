@@ -26,14 +26,17 @@ function isAuthSession(value: unknown): value is AuthSession {
   const session = value as Partial<AuthSession>
   const user = session.user as Partial<User> | undefined
 
-  return typeof session.token === 'string'
-    && !!user
-    && typeof user.id === 'string'
-    && typeof user.email === 'string'
-    && typeof user.name === 'string'
-    && (typeof user.username === 'undefined' || typeof user.username === 'string')
-    && (user.role === 'user' || user.role === 'admin')
-    && typeof user.createdAt === 'string'
+  return (
+    typeof session.token === 'string' &&
+    !!user &&
+    typeof user.id === 'string' &&
+    typeof user.userName === 'string' &&
+    typeof user.email === 'string' &&
+    typeof user.firstName === 'string' &&
+    typeof user.lastName === 'string' &&
+    typeof user.name === 'string' &&
+    (user.role === 'user' || user.role === 'admin')
+  )
 }
 
 function parseAuthSession(value?: string): AuthSession | null {

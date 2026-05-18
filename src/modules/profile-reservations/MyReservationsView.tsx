@@ -1,9 +1,9 @@
 'use client';
 
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { isRtl, type Locale } from '@/i18n/config';
+import { isRtl } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { ReservationsChartIcon } from '@/shared/components/icons/profile';
@@ -14,8 +14,18 @@ import {
 import { cn } from '@/shared/lib/cn';
 import { ReservationsExamsPanel } from './components/ReservationsExamsPanel';
 import { ReservationsPanelSkeleton } from './components/ReservationsPanelSkeleton';
-import { examCards, resultCards } from './constants';
+import {
+  mapReservationToExamCard,
+  mapReservationToResultCard,
+  partitionReservations,
+} from './mapReservations';
+import type { Reservation } from './types/reservation.types';
 import type { TabValue } from './types';
+
+type MyReservationsViewProps = {
+  reservations?: Reservation[];
+  initialTab?: TabValue;
+};
 
 const ReservationsResultsPanel = lazy(() =>
   import('./components/ReservationsResultsPanel').then((m) => ({
@@ -26,13 +36,24 @@ const ReservationsResultsPanel = lazy(() =>
 const tabTriggerClass =
   'relative gap-2.5 rounded-none border-0 bg-transparent py-3.5 text-[15px] font-bold text-[#6b7196] shadow-none ring-0 outline-none after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:origin-left after:scale-x-0 after:bg-[#00a8f1] after:transition-transform after:duration-350 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[#1e2364] data-active:bg-transparent data-active:text-[#00a8f1] data-active:shadow-none data-active:after:scale-x-100 dark:data-active:bg-transparent rtl:after:origin-right [&_svg]:size-[18px]';
 
-export default function MyReservationsView() {
-  const locale = useLocale() as Locale;
+export default function MyReservationsView({
+  reservations = [],
+  initialTab = 'exams',
+}: MyReservationsViewProps) {
+  const locale = useLocale();
   const rtl = isRtl(locale);
   const chevronShift = rtl ? -4 : 4;
   const t = useTranslations('profileReservations');
 
-  const [tab, setTab] = useState<TabValue>('exams');
+  const [tab, setTab] = useState<TabValue>(initialTab);
+
+  const { examCards, resultCards } = useMemo(() => {
+    const { exams, results } = partitionReservations(reservations);
+    return {
+      examCards: exams.map(mapReservationToExamCard),
+      resultCards: results.map(mapReservationToResultCard),
+    };
+  }, [reservations]);
 
   return (
     <section className='relative pt-2'>
@@ -48,8 +69,7 @@ export default function MyReservationsView() {
       <Tabs
         value={tab}
         onValueChange={(next) => {
-          const v = next as TabValue;
-          setTab(v);
+          setTab(next as TabValue);
         }}
         className='mx-auto w-full max-w-[1200px] gap-0'
       >
@@ -110,6 +130,7 @@ export default function MyReservationsView() {
           <ReservationsExamsPanel
             cards={examCards}
             chevronShift={chevronShift}
+            emptyMessage={t.emptyExams}
           />
         </TabsContent>
 
@@ -118,7 +139,10 @@ export default function MyReservationsView() {
           className='mt-0 min-h-[200px] flex-1 outline-none'
         >
           <Suspense fallback={<ReservationsPanelSkeleton />}>
-            <ReservationsResultsPanel cards={resultCards} />
+            <ReservationsResultsPanel
+              cards={resultCards}
+              emptyMessage={t.emptyResults}
+            />
           </Suspense>
         </TabsContent>
       </Tabs>

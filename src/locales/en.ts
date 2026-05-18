@@ -607,6 +607,7 @@ const en = {
     contact: {
       title: 'Personal Information',
       edit: 'Edit',
+      memberSince: 'Member since',
       labels: {
         email: 'Email Address',
         phone: 'Phone Number',
@@ -648,9 +649,30 @@ const en = {
     preparationConditions: 'Preparation Conditions',
     cancelAppointment: 'Cancel Appointment',
     reorder: 'Reorder',
-    details: 'Details',
+    detailsLabel: 'Details',
     viewInformation: 'View Information',
     download: 'Download',
+    emptyExams: 'No upcoming reservations.',
+    emptyResults: 'No results yet.',
+    detailPage: {
+      backToExaminations: 'Back to Examinations',
+      backToResults: 'Back to Results',
+      cancelAppointment: 'Cancel Appointment',
+      orderInformation: 'Order Information',
+      resultInformation: 'Result Information',
+      orderDetails: 'Order Details',
+      orderId: 'Order ID',
+      orderedBy: 'Company',
+      price: 'Price',
+      preparation: 'Preparation',
+      resultDocumentUnavailable: 'Result document is not available yet.',
+      timeline: {
+        new: 'New',
+        accepted: 'Accepted',
+        progress: 'In Progress',
+        completed: 'Completed',
+      },
+    },
   },
 } as const;
 
