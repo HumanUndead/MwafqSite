@@ -7,22 +7,24 @@ export const localeMetadata = {
     label: 'AR',
     direction: 'rtl',
   },
-} as const
+} as const;
 
-export type Locale = keyof typeof localeMetadata
-export const locales = Object.keys(localeMetadata) as Locale[]
+export type Locale = keyof typeof localeMetadata;
+export const locales = Object.keys(localeMetadata) as Locale[];
 
-export const defaultLocale: Locale = 'en'
-export const localeCookieName = 'mwafq-locale'
+export const defaultLocale: Locale = 'en';
+export const localeCookieName = 'mwafq-locale';
 
 export const localeLabels: Record<Locale, string> = Object.fromEntries(
-  locales.map(locale => [locale, localeMetadata[locale].label]),
-) as Record<Locale, string>
+  locales.map((locale) => [locale, localeMetadata[locale].label])
+) as Record<Locale, string>;
 
 export function isRtl(locale: Locale): boolean {
-  return localeMetadata[locale].direction === 'rtl'
+  return localeMetadata[locale].direction === 'rtl';
 }
 
 export function hasLocale(value: string): value is Locale {
-  return value in localeMetadata
+  return value in localeMetadata;
 }
+
+export const localeToLangId: Record<Locale, number> = { en: 1, ar: 2 };

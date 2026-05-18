@@ -395,6 +395,7 @@ function buildFallbackContent(dict: Dictionary): HomePageContent {
       ],
       primaryAction: { label: home.nav.cta, path: '#booking' },
       signInAction: { label: dict.navigation.signIn, path: '/login' },
+      userMenu: null,
       localeSwitchLabel: home.nav.switchLabel,
     },
     hero: {
@@ -640,6 +641,7 @@ function mapHeaderContent(
     signInAction: signInArticle
       ? toActionContent(signInArticle, langId, fallback.signInAction ?? { label: '', path: null })
       : fallback.signInAction,
+    userMenu: fallback.userMenu,
     localeSwitchLabel:
       trimToNull(localeSwitchArticle ? getArticleTranslation(localeSwitchArticle, langId).name : null) ??
       fallback.localeSwitchLabel,

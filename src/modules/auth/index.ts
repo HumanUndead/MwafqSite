@@ -7,4 +7,10 @@ export { useAuthStore } from './store/authStore'
 export { useLogin } from './hooks/useLogin'
 export { useRegister } from './hooks/useRegister'
 export { useForgotPassword } from './hooks/useForgotPassword'
-export type { User, LoginDto, RegisterDto, AuthResponse } from './types/auth.types'
+export type {
+  User,
+  UserCompanyBranch,
+  LoginDto,
+  RegisterDto,
+  AuthResponse,
+} from './types/auth.types'

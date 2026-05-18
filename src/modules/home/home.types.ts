@@ -14,6 +14,15 @@ export interface HomeImageContent {
   alt?: string | null 
 }
 
+export interface HomeHeaderUserMenuContent {
+  greeting: string
+  avatarSrc: string | null
+  avatarInitials: string
+  profileLabel: string
+  profilePath: string
+  signOutLabel: string
+}
+
 export interface HomeHeaderContent {
   brandLabel: string
   brandDescription: string
@@ -22,6 +31,7 @@ export interface HomeHeaderContent {
   navLinks: HomeLinkItemContent[]
   primaryAction: HomeActionContent | null
   signInAction: HomeActionContent | null
+  userMenu: HomeHeaderUserMenuContent | null
   localeSwitchLabel: string | null
 }
 

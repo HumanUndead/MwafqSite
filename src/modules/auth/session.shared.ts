@@ -1,4 +1,4 @@
-import type { User } from './types/auth.types'
+import type { User } from '@/shared/types/user.types'
 
 export const authTokenCookieName = 'token'
 export const authSessionCookieName = 'mwafq-session'
