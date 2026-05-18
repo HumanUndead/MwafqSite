@@ -586,6 +586,112 @@ const en = {
       secondary: 'Contact Us',
     },
   },
+  b2b: {
+    meta: {
+      title: 'Mwafq for Business — Corporate Solutions',
+      description:
+        "Manage your team's medical exams with bulk bookings, live employee tracking, and certified PDF reports — built for HR managers and corporate teams across KSA.",
+    },
+    hero: {
+      eyebrow: 'B2B Portal',
+      headingLead: 'Corporate',
+      headingAccent: 'Solutions',
+      lead: "Manage your team's medical exams with ease. The Mwafq platform gives HR managers a single tool for bulk bookings, employee tracking, and certified report retrieval.",
+      primaryCta: 'Register Your Company',
+      secondaryCta: 'Contact Sales',
+      phone: {
+        greeting: 'Welcome,',
+        name: 'Acme HR',
+        bulkTitle: 'Bulk Book Exam',
+        bulkSubtitle: 'For your team',
+        sectionTitle: 'Team status',
+        statusDone: 'Done',
+        statusActive: 'Active',
+        statusWait: 'Wait',
+        employees: [
+          { initials: 'AS', name: 'Ahmad S.', type: 'Driving', status: 'done' },
+          { initials: 'FR', name: 'Fatima R.', type: 'Residency', status: 'active' },
+          { initials: 'KM', name: 'Khalid M.', type: 'Municipality', status: 'wait' },
+          { initials: 'NA', name: 'Noura A.', type: 'Occupational', status: 'wait' },
+        ],
+      },
+      floatingCards: [
+        { title: 'Bulk Book', detail: 'One click · 142 emps.' },
+        { title: '247 Employees', detail: 'Tracked live' },
+        { title: 'Reports Ready', detail: 'PDF · 1-click' },
+      ],
+    },
+    why: {
+      titleLead: 'Why Mwafq for',
+      titleAccent: 'Business',
+      items: [
+        {
+          title: 'One-Click Bulk Bookings',
+          body: 'Book medical exams for hundreds of employees in a single flow without paperwork or back-and-forth calls.',
+        },
+        {
+          title: 'Results in Your Pocket',
+          body: 'Download attached medical PDFs the moment they are ready, securely and ready to share.',
+        },
+        {
+          title: 'Certified & Reliable',
+          body: 'Once an employee passes, you receive the "Fit for Service" badge trusted by employers and regulators.',
+        },
+        {
+          title: 'Total Management Flexibility',
+          body: 'Full control with quick reschedule or cancel options directly inside the dashboard.',
+        },
+      ],
+    },
+    services: {
+      titleLead: 'Our',
+      titleAccent: 'Services',
+      body: 'Organise residency exams, work permit renewals, and municipality health certificates for large numbers of employees at the same time.',
+      items: [
+        {
+          title: 'Pre-Employment Checkups',
+          body: 'Run full pre-hire medical checks for new joiners across multiple clinics in one coordinated flow.',
+        },
+        {
+          title: 'Residency Exams',
+          body: 'Iqama medical screenings for your entire workforce, recognised by the Ministry of Health across KSA.',
+        },
+        {
+          title: 'Municipality Certificates',
+          body: 'Renew health certificates for food handlers, public-service workers, and licensees in a single batch.',
+        },
+        {
+          title: 'Occupational Health',
+          body: 'Workplace health screenings and periodic checks trusted by 500+ employers across the Kingdom.',
+        },
+      ],
+    },
+    steps: {
+      titleLead: "Steps to Manage Your",
+      titleAccent: "Team's Exams",
+      items: [
+        {
+          title: 'Add Employees',
+          body: 'Create your company account and upload employee data or integrate with your HR system.',
+        },
+        {
+          title: 'Assign Exams',
+          body: 'Select the exam type (Residency, Municipality, Occupational) for each employee and pick from certified clinics.',
+        },
+        {
+          title: 'Receive Results',
+          body: 'Once the exam is complete, reports are delivered directly to your dashboard to confirm medical fitness.',
+        },
+      ],
+    },
+    finalCta: {
+      titleLead: "Ready to Streamline Your",
+      titleAccent: "Company's Procedures",
+      body: "Join hundreds of companies managing their employees' medical exams with Mwafq.",
+      primary: 'Open Your Corporate Account',
+      secondary: 'Talk to Sales',
+    },
+  },
   contact: {
     title: 'Get in touch',
     description: "Have a question or need help? We'd love to hear from you.",
