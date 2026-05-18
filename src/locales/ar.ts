@@ -568,6 +568,9 @@ const ar = {
     greeting: 'مرحباً {{name}}',
     welcome: 'مرحباً بعودتك!',
   },
+  academyCourseDetails: {
+    relatedCourses: 'دورات ذات صلة',
+  },
   profileAcademy: {
     title: 'دوراتي في أكاديمية موفق',
     carouselControls: 'عناصر التحكم بعرض الدورات',

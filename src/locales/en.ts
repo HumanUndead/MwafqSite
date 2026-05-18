@@ -577,6 +577,9 @@ const en = {
     greeting: 'Hello {{name}}',
     welcome: 'Welcome back!',
   },
+  academyCourseDetails: {
+    relatedCourses: 'Related Courses',
+  },
   maintenance: {
     title: 'Under Maintenance',
     heading: "We'll be back soon",

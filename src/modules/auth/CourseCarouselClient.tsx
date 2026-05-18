@@ -77,17 +77,21 @@ export function CourseCarouselClient({
   langId,
 }: CourseCarouselClientProps) {
   return (
-    <section className='py-[30px] last:pb-[120px]'>
-      <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
-        <div className='mb-[26px] flex flex-wrap items-center justify-between gap-4'>
-          <div className='flex flex-wrap items-center gap-3.5'>
-            <h2 className='text-[clamp(24px,2.4vw,30px)] font-extrabold leading-[1.15] tracking-[-0.6px] text-[#1e2364]'>
-              {categoryName}
-            </h2>
+    <Carousel opts={{ align: 'start' }}>
+      <section className='py-[30px] last:pb-[120px]'>
+        <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
+          <div className='mb-[26px] flex flex-wrap items-center justify-between gap-4'>
+            <div className='flex flex-wrap items-center gap-3.5'>
+              <h2 className='text-[clamp(24px,2.4vw,30px)] font-extrabold leading-[1.15] tracking-[-0.6px] text-[#1e2364]'>
+                {categoryName}
+              </h2>
+            </div>
+            <div className='mt-7 flex items-center justify-center gap-2'>
+              <CarouselPrevious className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] ' />
+              <CarouselNext className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] ' />
+            </div>
           </div>
-        </div>
 
-        <Carousel opts={{ align: 'start' }}>
           <CarouselContent className='ml-[-22px]'>
             {courses?.map((course, i) => (
               <CarouselItem
@@ -98,13 +102,8 @@ export function CourseCarouselClient({
               </CarouselItem>
             ))}
           </CarouselContent>
-
-          <div className='mt-7 flex items-center justify-center gap-2'>
-            <CarouselPrevious className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] disabled:hidden' />
-            <CarouselNext className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] disabled:hidden' />
-          </div>
-        </Carousel>
-      </div>
-    </section>
+        </div>
+      </section>
+    </Carousel>
   );
 }
