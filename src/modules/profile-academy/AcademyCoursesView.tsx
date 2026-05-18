@@ -113,7 +113,7 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
                 <h3 className='text-[17px] font-extrabold leading-[1.3] tracking-[-0.3px] text-[#1e2364]'>
                   {course.title}
                 </h3>
-                <p
+                <div
                   className='text-[13px] leading-[1.55] text-[#6b7196]'
                   dangerouslySetInnerHTML={{ __html: course.description }}
                 />
