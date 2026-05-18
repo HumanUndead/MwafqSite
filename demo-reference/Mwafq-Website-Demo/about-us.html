@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en" id="rootHtml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mwafq, About Us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============== LAMA SANS FONT FAMILY ============== */
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-Thin.otf')           format('opentype');font-weight:100;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-ThinItalic.otf')     format('opentype');font-weight:100;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-ExtraLight.otf')     format('opentype');font-weight:200;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-ExtraLightItalic.otf') format('opentype');font-weight:200;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-Light.otf')          format('opentype');font-weight:300;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-LightItalic.otf')    format('opentype');font-weight:300;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-Regular.otf')        format('opentype');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-RegularItalic.otf')  format('opentype');font-weight:400;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-Medium.otf')         format('opentype');font-weight:500;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-MediumItalic.otf')   format('opentype');font-weight:500;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-SemiBold.otf')       format('opentype');font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-SemiBoldItalic.otf') format('opentype');font-weight:600;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-Bold.otf')           format('opentype');font-weight:700;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-BoldItalic.otf')     format('opentype');font-weight:700;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-ExtraBold.otf')      format('opentype');font-weight:800;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-ExtraBoldItalic.otf')format('opentype');font-weight:800;font-style:italic;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-Black.otf')          format('opentype');font-weight:900;font-style:normal;font-display:swap}
+  @font-face{font-family:'LamaSans';src:url('Fonts/LamaSans-BlackItalic.otf')    format('opentype');font-weight:900;font-style:italic;font-display:swap}
+
+  :root{
+    --c-sapphire:#1e2364;
+    --c-deep:#233567;
+    --c-sky:#00a8f1;
+    --c-sky-deep:#0090d1;
+    --c-sky-soft:#e8f6fd;
+    --c-navy-deep:#0F1340;
+    --c-periwinkle:#6F8FCF;
+    --c-pale-sky:#75C7E8;
+    --c-mint:#00dec9;
+    --c-grey:#f2f2f2;
+    --c-line:#e5e7f0;
+    --c-line-soft:#eef0f7;
+    --c-white:#ffffff;
+    --c-text:#1e2364;
+    --c-muted:#6b7196;
+    --bw: 2px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-organic: cubic-bezier(0.59, 0.06, 0.1, 1);
+    --tx-color-dur: .35s;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'LamaSans','Noto Kufi Arabic',system-ui,-apple-system,sans-serif;
+    background:#eeeeef; color:var(--c-text);
+    overflow-x: clip; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  html[dir="rtl"] body{ font-family:'Noto Kufi Arabic','LamaSans',system-ui,sans-serif; }
+  a{ color:inherit; text-decoration:none }
+  button{ background:none; border:0; cursor:pointer; font:inherit; color:inherit }
+  img{ display:block; max-width:100% }
+  ul{ list-style:none }
+  html[lang="en"] .ar-only{ display:none !important }
+  html[lang="ar"] .en-only{ display:none !important }
+
+  .wrap{ max-width:1320px; margin:0 auto; padding:0 clamp(16px,4vw,28px); }
+  .section{ padding:120px 0; position:relative; }
+
+  /* ============== NAV ============== */
+  .nav{
+    position:fixed; top:18px; left:50%; transform: translateX(-50%);
+    z-index:200; width:calc(100% - 40px); max-width:1280px;
+    border-radius:80px;
+    background: transparent;
+    border: var(--bw) solid transparent;
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    padding:8px 14px 8px 22px;
+    display:flex; align-items:center; justify-content:space-between;
+    transition:
+      background .25s cubic-bezier(0.4,0,0.2,1),
+      border-color .25s cubic-bezier(0.4,0,0.2,1),
+      backdrop-filter .25s cubic-bezier(0.4,0,0.2,1),
+      -webkit-backdrop-filter .25s cubic-bezier(0.4,0,0.2,1);
+  }
+  .nav.scrolled{
+    background: rgba(255,255,255,0.62);
+    border-color: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+  }
+  .logo{ display:flex; align-items:center; font-weight:800 }
+  .logo-img{ height: 88px; width:auto; display:block; transition: height .25s cubic-bezier(0.4,0,0.2,1); }
+  .nav.scrolled .logo-img{ height: 56px; }
+  .nav-links{ display:flex; gap:4px; }
+  .nav-links a{ font-size:16px; font-weight:700; padding:9px 16px; color:var(--c-sapphire); display:inline-block; }
+  .nav-links a span{
+    display:inline-block; font-size:1.1em; transform: scale(0.909);
+    transform-origin:center; transition: transform .28s ease-out;
+    will-change: transform; backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+  .nav-links a:hover span{ transform: scale(1); }
+  .nav-links a.active,
+  .nav-links a.active span{ color: var(--c-sky); }
+  .nav-cta{ display:flex; gap:10px; align-items:center }
+  .nav-cta > .theme-toggle,
+  .nav-cta > .pill,
+  .nav-cta > .btn{
+    height:40px; box-sizing:border-box;
+    display:inline-flex; align-items:center; justify-content:center;
+    padding-top:0; padding-bottom:0; line-height:1;
+  }
+  .pill{
+    padding:9px 14px; border-radius:30px;
+    font-size:13.5px; font-weight:600; color:var(--c-sapphire);
+    background:var(--c-grey);
+    transition: background .25s var(--ease), color .25s var(--ease);
+    border:none; font-family:inherit; 
+  }
+  .pill:hover{ background:var(--c-sapphire); color:var(--c-grey); }
+  .theme-toggle{
+    width:40px; height:40px; border-radius:50%;
+    background:var(--c-grey); color:var(--c-sapphire);
+    display:flex; align-items:center; justify-content:center;
+    border:none; font-family:inherit; flex-shrink:0;
+    transition: background .25s var(--ease), color .25s var(--ease);
+  }
+  .theme-toggle:hover{ background:var(--c-sapphire); color:var(--c-grey); }
+  .theme-toggle .ico-moon{ display:none }
+  .menu-tog{ display:none }
+
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 24px; border-radius:50px;
+    font-weight:600; font-size:14.5px;
+    transition: transform .35s var(--ease), background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
+    border:none; white-space:nowrap; position:relative; font-family:inherit;
+    cursor:pointer;
+  }
+  .btn-primary{ background:var(--c-sapphire); color:#fff; }
+  .btn-primary:hover{ background:var(--c-deep); }
+  .btn-cyan { background:var(--c-sky);      color:#fff; }
+  .btn-cyan:hover { background:var(--c-sky-deep); }
+  .btn-line { background:#fff; color:var(--c-sapphire); border: var(--bw) solid var(--c-sapphire); }
+  .btn-line:hover { background:var(--c-sapphire); color:#fff; }
+  .btn-ghost{ background:transparent; color:var(--c-sapphire); border: var(--bw) solid var(--c-line); }
+  .btn-ghost:hover{ border-color:var(--c-sapphire); }
+  .btn-liquid{
+    position:relative; overflow:hidden; isolation:isolate;
+    background:var(--c-sapphire) !important; color:#fff !important; border:none;
+  }
+  .btn-liquid:hover{ background:var(--c-deep) !important; transition: background .35s var(--ease-organic); }
+  .nav .btn-liquid, .nav .btn-liquid:hover{ box-shadow:none !important; }
+  .btn-liquid::before{
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%);
+    transform: translateX(-120%); pointer-events:none; z-index:1;
+  }
+  .btn-liquid:hover::before{ transform: translateX(120%); transition: transform .9s cubic-bezier(0.45,0,0.55,1); }
+  .btn-liquid > *{ position:relative; z-index:2; }
+
+  /* Eyebrow */
+  .eyebrow{
+    position:relative; display:inline-block;
+    padding:12px 30px; background:transparent; border:none;
+    font-size:17px; font-weight:700; color:var(--c-sky);
+    letter-spacing:2.2px; text-transform:uppercase; line-height:1; margin-bottom:26px;
+  }
+  .eyebrow::before, .eyebrow::after{
+    content:''; position:absolute; width:18px; height:18px;
+    border:4px solid currentColor; background:transparent !important;
+  }
+  .eyebrow::before{ top:0; left:0; border-right:none; border-bottom:none; }
+  .eyebrow::after { bottom:0; right:0; border-left:none; border-top:none; }
+  .eyebrow.sapphire{ color:var(--c-sapphire); }
+
+  /* Section heads */
+  .section-title{
+    font-size: clamp(32px,4.5vw,56px); font-weight:800; color:var(--c-sapphire);
+    letter-spacing:-1.6px; line-height:1.08;
+  }
+  .section-title .cyan{ color:var(--c-sky); }
+  .ital{ font-style:italic; font-weight:400; color:var(--c-sapphire); opacity:0.55 }
+  .section-sub{ font-size:16px; color:var(--c-muted); line-height:1.65; max-width:600px; }
+  .head-center{ text-align:center; max-width:780px; margin:0 auto 60px; }
+  .head-center .section-sub{ margin-left:auto; margin-right:auto; }
+  .head-center .eyebrow{ margin: 0 auto 24px; }
+  .head-flex{ display:flex; justify-content:flex-start; align-items:flex-end; gap:50px; margin-bottom:60px; flex-wrap:wrap; }
+  .head-flex > div{ flex: 0 1 auto; max-width:640px; }
+  .head-flex .section-sub{ flex: 0 1 380px; align-self:flex-end; padding-bottom:22px; margin:0; }
+
+  /* Reveal animations */
+  .reveal{ opacity:0; transform:translateY(40px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-x{ opacity:0; transform:translateX(60px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
+  .reveal-x.in{ opacity:1; transform:translateX(0); }
+  .delay-1{ transition-delay:.12s }
+  .delay-2{ transition-delay:.24s }
+  .delay-3{ transition-delay:.36s }
+  .delay-4{ transition-delay:.48s }
+
+  .word-reveal{ display:inline-block; overflow:hidden; vertical-align:top; }
+  .word-reveal > span{ display:inline-block; transform:translateY(110%); transition: transform .9s var(--ease); }
+  .word-reveal.in > span{ transform: translateY(0); }
+
+  /* Stroke-draw underline (sky) */
+  .draw-path{
+    fill:none; stroke: var(--c-sky); stroke-width:4; stroke-linecap:round;
+    stroke-dasharray:600; stroke-dashoffset:600;
+    transition: stroke-dashoffset 1.6s var(--ease-organic);
+  }
+  .draw-path.in{ stroke-dashoffset:0; }
+
+  /* ============== HERO ============== */
+  .about-hero{
+    position:relative; padding:210px 0 40px; overflow:hidden;
+    border-bottom:var(--bw) solid var(--c-line); background:#f4f4f6;
+  }
+  .about-hero .hero-pattern{
+    position:absolute; inset:0;
+    background-image: radial-gradient(circle, var(--c-line) 1.2px, transparent 1.2px);
+    background-size:24px 24px; opacity:.55; pointer-events:none;
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 75%);
+            mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 75%);
+  }
+  .about-hero .wrap{ position:relative; z-index:2; }
+  /* 2-col hero: stacked title + lead on left, mascot image on right */
+  .about-hero-grid{
+    display:grid; grid-template-columns: 1.2fr 1fr;
+    gap: 60px; align-items:center;
+  }
+  .about-hero-left{
+    position:relative; width:100%;
+    display:flex; flex-direction:column; align-items:flex-start; gap:36px;
+  }
+  .hero-image-wrap{
+    position:relative; display:flex; align-items:center; justify-content:center;
+  }
+  .hero-image-wrap .hero-image{
+    width: 100%; max-width: 552px; height:auto; display:block;
+    animation: heroFloat 7s cubic-bezier(0.45,0,0.55,1) infinite;
+  }
+  @keyframes heroFloat{
+    0%,100%{ transform: translate(20px, -45px); }
+    50%    { transform: translate(20px, -59px); }
+  }
+  .hero-meta{
+    display:inline-flex; align-items:center; gap:14px;
+    margin-bottom:34px; padding-inline-start:0;
+    font-size:13px; font-weight:700; color:var(--c-sky);
+    letter-spacing:2.2px; text-transform:uppercase; line-height:1;
+  }
+  .hero-meta .meta-num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:42px; height:42px; border-radius:50%;
+    border:var(--bw) solid var(--c-sky); color:var(--c-sky);
+    font-size:14px; font-weight:800; letter-spacing:0;
+  }
+  .hero-meta .meta-line{ width:48px; height:2px; background:var(--c-sky); }
+
+  .about-hero h1{
+    font-size: clamp(32px, 4.9vw, 67px); font-weight:800; color:var(--c-sapphire);
+    letter-spacing:-2px; line-height:1.02; margin:-100px 0 0;
+  }
+  .about-hero h1 .hero-row{ display:block; }
+  .about-hero h1 .hero-row + .hero-row{ margin-top: -14px; padding-bottom: 18px; }
+  .about-hero h1 .cyan{ color:var(--c-sky); }
+  .about-hero h1 .ital{
+    font-style:italic; font-weight:400;
+    color: rgba(30, 35, 100, 0.55);
+    font-size: clamp(23px, 3.5vw, 48px);
+    letter-spacing:-1.2px;
+    line-height:1.1;
+  }
+
+  /* Mint stroke-drawn underline anchored under "made simple" only */
+  .underlined-phrase{
+    position: relative;
+    display: inline-block;
+    color: rgba(30, 35, 100, 0.55);
+  }
+  .underlined-phrase .hero-underline{
+    position: absolute;
+    left: 0; right: 0; top: 100%;
+    width: 100%;
+    height: 16px;
+    margin-top: 4px;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .underlined-phrase .hero-underline .draw-path{
+    stroke: var(--c-mint);
+    stroke-width: 4;
+    stroke-linecap: round;
+    fill: none;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    transition: stroke-dashoffset 1.6s var(--ease-organic);
+  }
+  .underlined-phrase .hero-underline .draw-path.in{ stroke-dashoffset: 0; }
+
+  /* Lead block beneath title, indented with thin sky vertical line */
+  .about-hero-right{
+    position:relative; padding-inline-start: 26px;
+    border-inline-start: 2px solid var(--c-sky);
+    max-width: 640px;
+    margin-top: 50px;
+  }
+  .about-hero-right .lead-label{
+    display:inline-block; font-size:12px; font-weight:700;
+    color:var(--c-sky); letter-spacing:2px; text-transform:uppercase;
+    margin-bottom:14px; line-height:1;
+  }
+  .about-hero p.lead{
+    font-size:17.5px; color:var(--c-muted); line-height:1.75; margin:0;
+    max-width:none;
+  }
+
+  /* ============== TESTIMONIAL style (from index20.html), reused for Our Story ============== */
+  .quote-section{
+    padding:160px 0 140px; position:relative; overflow:hidden;
+    background: #ffffff;
+  }
+  /* Two large brand corner-bracket marks framing the content */
+  .quote-section .q-corner{
+    position:absolute;
+    width:90px; height:90px;
+    background-image: url('icons%20and%20vector%20visuals.svg');
+    background-repeat:no-repeat;
+    background-size: 2208px auto;
+    pointer-events:none;
+    opacity:0.85;
+    z-index:1;
+  }
+  .quote-section .q-corner.tl{
+    top:14%; left:10%;
+    background-position: -543px -4098px;
+  }
+  .quote-section .q-corner.br{
+    bottom:14%; right:10%;
+    background-position: -543px -4098px;
+    transform: scaleX(-1) scaleY(-1);
+  }
+  .quote-pat{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--c-line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--c-line-soft) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events:none;
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 70%);
+            mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 70%);
+    opacity:0.7;
+  }
+  .quote-wrap{ max-width:980px; margin:0 auto; text-align:center; position:relative; z-index:2; }
+  .quote-title{
+    margin: 0 0 36px;
+    font-size: clamp(20px, 3vw, 42px);
+    font-weight: 800;
+    color: var(--c-sapphire);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    text-align: center;
+  }
+  .quote-mark{
+    font-size:88px; line-height:0.7;
+    color: var(--c-sky);
+    font-style:italic; font-weight:300; margin-bottom:18px;
+    display:inline-block;
+  }
+  .quote-text{
+    font-size: clamp(26px, 3.5vw, 44px);
+    font-weight:300; font-style:italic;
+    line-height:1.3; color:var(--c-sapphire);
+    letter-spacing:-1px; margin-bottom:36px;
+  }
+  .quote-text em{ color:var(--c-sky); font-weight:600; font-style:normal; }
+  .quote-author{ display:inline-flex; align-items:center; gap:14px; }
+  .qa-info{ text-align:left; }
+  html[dir="rtl"] .qa-info{ text-align:right; }
+  .qa-info strong{ display:block; color:var(--c-sapphire); font-size:14.5px; }
+  .qa-info span{ color:var(--c-muted); font-size:13px; }
+  .qa-dot{
+    width:10px; height:10px; border-radius:50%;
+    background:var(--c-sky);
+    box-shadow: 0 0 0 3px rgba(0,168,241,0.18);
+  }
+
+  /* ============== MISSION & VISION (2-up cards) ============== */
+  .mv-section{ padding:80px 0 60px; background:#eeeeef; }
+  .mv-grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .mv-card{
+    background:#fff; border:var(--bw) solid var(--c-sapphire);
+    border-radius:28px; padding:38px 36px;
+    transition: transform .35s var(--ease);
+  }
+  /* .mv-card hover removed: non-clickable card */
+  .mv-card .mv-head{
+    display:flex; align-items:center; gap:14px; margin-bottom:22px;
+  }
+  .mv-card .mv-ic{
+    display:inline-flex; align-items:center; justify-content:center;
+    color: var(--c-sky);
+    background: transparent;
+    width: auto; height: auto; padding: 0; margin: 0;
+    flex-shrink: 0;
+  }
+  .mv-card.alt .mv-ic{ color: var(--c-periwinkle); background: transparent; }
+  .mv-card .mv-ic svg{ width:34px; height:34px; }
+  .mv-card .mv-label{
+    margin: 0 0 22px; line-height: 1.1;
+    font-size: clamp(22px, 2.2vw, 28px);
+    font-weight: 800;
+    color: var(--c-sapphire);
+    letter-spacing: -0.4px;
+    text-transform: none;
+  }
+  .mv-card.alt .mv-label{ color: var(--c-sapphire); }
+  .mv-card h3{
+    font-size:clamp(22px,2.2vw,28px);
+    font-style: italic; font-weight: 400;
+    color: var(--c-periwinkle);
+    opacity: 0.95;
+    letter-spacing:-0.5px; line-height:1.22; margin-bottom:12px;
+  }
+  .mv-card h3 em{ font-style:italic; font-weight:400; color: var(--c-periwinkle); }
+  .mv-card.alt h3,
+  .mv-card.alt h3 em{ color: var(--c-periwinkle); }
+  .mv-card p{ font-size:15.5px; color:var(--c-muted); line-height:1.7; }
+
+  /* ============== STATS BAND ============== */
+  .stats-band{
+    background:#f4f4f6; border-top:var(--bw) solid var(--c-line);
+    border-bottom:var(--bw) solid var(--c-line);
+    padding:70px 0; margin-top:80px;
+  }
+  .stats-grid{
+    display:grid; grid-template-columns: repeat(4,1fr); gap:0;
+    text-align:center;
+  }
+  .stats-cell{
+    padding:10px 24px;
+    border-inline-end:1px solid var(--c-line);
+  }
+  .stats-cell:last-child{ border-inline-end:none; }
+  .stats-cell .num{
+    display:flex; align-items:baseline; justify-content:center; gap:4px;
+    font-size:clamp(32px,4.2vw,54px); font-weight:800; color:var(--c-sky);
+    letter-spacing:-1.4px; line-height:1; margin-bottom:10px;
+  }
+  .stats-cell .label{
+    font-size:13.5px; font-weight:700; color:var(--c-muted);
+    letter-spacing:1.4px; text-transform:uppercase;
+  }
+
+  /* ============== WHAT WE DO ============== */
+  .what-section{ padding:110px 0; background:#eeeeef; }
+  .what-head{ text-align: start; max-width: 720px; margin: 0 0 50px; }
+  .what-head .eyebrow{ margin-bottom: 24px; }
+  .what-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+  }
+  .feat{
+    position:relative; padding:44px 30px 32px; background:#fff;
+    border: var(--bw) solid var(--c-line);
+    border-radius:4px 28px 4px 28px;
+    transition: background .4s var(--ease), transform .4s var(--ease);
+    overflow:hidden;
+  }
+  /* .feat hover effects removed: non-clickable card */
+  .feat .ic-corner{
+    position:absolute; top:0; left:0; width:30px; height:30px;
+    background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath d='M 0 0 L 30 0 L 30 10 L 10 10 L 10 30 L 0 30 Z' fill='%2300a8f1'/%3E%3C/svg%3E");
+    background-size:100% 100%; pointer-events:none;
+  }
+  .feat-icon{
+    width:64px; height:64px; border-radius:16px 4px 16px 4px;
+    background:var(--c-grey); color:var(--c-sapphire);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:22px; transition: background .4s var(--ease), color .4s var(--ease);
+  }
+  /* .feat-icon hover swap removed: non-clickable card */
+  .feat-icon svg{ width:28px; height:28px; }
+  .feat h3{ font-size:18px; font-weight:800; color:var(--c-sapphire); margin-bottom:10px; letter-spacing:-0.3px; }
+  .feat p { font-size:14px; color:var(--c-muted); line-height:1.6; }
+
+  /* ============== WHY MWAFAK ============== */
+  .why-section{ padding:110px 0; background:#f4f4f6; border-top:var(--bw) solid var(--c-line); border-bottom:var(--bw) solid var(--c-line); }
+  .why-grid{ display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:start; }
+  .why-aside h2{
+    font-size: clamp(30px,3.6vw,46px); font-weight:800; color:var(--c-sapphire);
+    letter-spacing:-1.2px; line-height:1.1; margin-bottom:18px;
+  }
+  .why-aside h2 em{ font-style:italic; font-weight:400; color:var(--c-sky); opacity:0.95; }
+  .why-aside p{ font-size:16px; color:var(--c-muted); line-height:1.7; margin-bottom:18px; }
+  .why-list{ display:flex; flex-direction:column; gap:16px; margin:0; padding:0; list-style:none; }
+  .why-row{
+    background:#fff; border:var(--bw) solid var(--c-line);
+    border-radius:20px; padding:22px 26px;
+    display:flex; align-items:flex-start; gap:18px;
+    transition: border-color .3s var(--ease), transform .3s var(--ease);
+  }
+  /* .why-row hover removed: non-clickable card */
+  .why-row .why-num{
+    width:42px; height:42px; border-radius:50%;
+    background:var(--c-sky-soft); color:var(--c-sky);
+    display:inline-flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:15px; flex-shrink:0;
+    border:var(--bw) solid var(--c-sky);
+  }
+  .why-row .why-body h4{
+    font-size:17px; font-weight:800; color:var(--c-sapphire);
+    letter-spacing:-0.3px; margin-bottom:6px;
+  }
+  .why-row .why-body p{ font-size:14.5px; color:var(--c-muted); line-height:1.6; margin:0; }
+
+  /* ============== VALUES ============== */
+  .values-section{ padding:110px 0; background:#eeeeef; }
+  .values-head{ text-align: center; max-width: 780px; margin: 0 auto 50px; }
+  .values-head .eyebrow{ margin: 0 auto; }
+  .values-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .value-card{
+    background:#fff; border:var(--bw) solid var(--c-sapphire);
+    border-radius:28px; padding:32px 30px;
+    transition: transform .35s var(--ease);
+  }
+  /* .value-card hover removed: non-clickable card */
+  .value-head{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; margin-bottom:14px;
+  }
+  .value-card .v-ic{
+    display:inline-flex; align-items:center; justify-content:center;
+    background: transparent;
+    color: var(--c-sapphire);
+    width:auto; height:auto; padding:0; flex-shrink:0;
+    margin: 0;
+    margin-inline-end: 7px;
+  }
+  .value-card.sky .v-ic,
+  .value-card.periwinkle .v-ic,
+  .value-card.navy .v-ic{ color: var(--c-sapphire); background: transparent; }
+  .value-card .v-ic svg{ width:30px; height:30px; }
+  .value-card h3{
+    font-size:20px; font-weight:800; color:var(--c-sapphire);
+    letter-spacing:-0.3px; margin:0;
+  }
+  .value-card p{ font-size:14.5px; color:var(--c-muted); line-height:1.65; margin:0; }
+
+  /* ============== HOW IT WORKS ============== */
+  .how-section{ padding:110px 0; background:#fff; border-top:var(--bw) solid var(--c-line); border-bottom:var(--bw) solid var(--c-line); }
+  .how-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .step-card{
+    position:relative; padding:42px 38px;
+    border-radius:22px; background:#fff;
+    border: var(--bw) solid var(--c-line);
+    transition: border-color .4s var(--ease);
+    overflow:hidden;
+  }
+  .step-card::before{
+    content:''; position:absolute; top:0; inset-inline-start:0; bottom:0; width:4px;
+    background:var(--c-sky);
+    transform: scaleY(0); transform-origin:top;
+    transition: transform .55s var(--ease);
+  }
+  /* .step-card hover removed: non-clickable card */
+  .step-card .step-num{
+    font-size:56px; font-weight:300; font-style:italic;
+    color: rgba(30,35,100,0.30); line-height:1; margin-bottom:18px;
+    transition: color .4s var(--ease);
+  }
+  /* .step-num hover color swap removed: non-clickable card */
+  .step-card h3{ font-size:22px; font-weight:800; color:var(--c-sky); margin-bottom:12px; letter-spacing:-0.4px; }
+  .step-card h3 em{ font-style: normal; font-weight: 800; color: var(--c-sky); opacity: 1; }
+  .step-card p { font-size:15px; color:var(--c-muted); line-height:1.65; }
+
+  /* ============== MILESTONES TIMELINE ============== */
+  .milestones-section{ padding:110px 0; background:#eeeeef; }
+  .milestones-head{ text-align: center; max-width: 780px; margin: 0 auto 60px; }
+  .milestones-head .eyebrow{ margin: 0 auto 24px; }
+  .milestones-wrap{ position:relative; padding-top:24px; }
+  .milestones-wrap::before{
+    content:''; position:absolute; top:80px; left:0; right:0; height:2px;
+    background:var(--c-line); z-index:1;
+  }
+  .milestones-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:24px;
+    position:relative; z-index:2;
+  }
+  .milestone{
+    background:transparent;
+    text-align:center; padding:0 12px;
+  }
+  .milestone .ms-year{
+    width:78px; height:78px; border-radius:50%;
+    background:#fff; border:var(--bw) solid var(--c-sapphire);
+    color:var(--c-sapphire); font-weight:800;
+    font-size:15px; letter-spacing:0.5px;
+    display:inline-flex; align-items:center; justify-content:center;
+    margin:0 auto 20px; position:relative;
+    transition: background .35s var(--ease), color .35s var(--ease), transform .35s var(--ease-bounce);
+  }
+  /* .milestone year hover removed: non-clickable card */
+  .milestone.is-active .ms-year{ background:var(--c-sky); color:#fff; border-color:var(--c-sky); }
+  .milestone.is-active .ms-year::after{
+    content:''; position:absolute; inset:-6px; border-radius:50%;
+    border:2px solid var(--c-sky); opacity:0.6;
+    animation: milePulse 2s ease-out infinite;
+  }
+  @keyframes milePulse{
+    0%{ transform:scale(1); opacity:0.6; }
+    100%{ transform:scale(1.4); opacity:0; }
+  }
+  .milestone h4{
+    font-size:17px; font-weight:800; color:var(--c-sapphire);
+    margin-bottom:8px; letter-spacing:-0.3px;
+  }
+  .milestone p{ font-size:14px; color:var(--c-muted); line-height:1.55; }
+
+  /* ============== B2B BAND (sapphire fill) ============== */
+  .b2b-band{
+    background:var(--c-sapphire); color:#fff;
+    padding:90px 0; position:relative; overflow:hidden;
+    border-top:var(--bw) solid var(--c-line);
+    border-bottom:var(--bw) solid var(--c-line);
+  }
+  .b2b-grid{
+    display:grid; grid-template-columns: 1.3fr 1fr; gap:50px; align-items:center;
+  }
+  .b2b-band .eyebrow{ color:var(--c-sky); }
+  .b2b-band h2{
+    font-size: clamp(30px,3.6vw,46px); font-weight:800; color:#fff;
+    letter-spacing:-1.2px; line-height:1.1; margin-bottom:18px;
+  }
+  .b2b-band h2 em{ font-style:italic; font-weight:400; color:var(--c-sky); opacity:0.95; }
+  .b2b-band p{ font-size:16px; color:rgba(255,255,255,0.82); line-height:1.7; margin-bottom:26px; max-width:520px; }
+  .b2b-points{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px; }
+  .b2b-points li{
+    position:relative; padding-inline-start:30px;
+    font-size:15px; font-weight:500; color:rgba(255,255,255,0.92); line-height:1.55;
+  }
+  .b2b-points li::before{
+    content:''; position:absolute; left:0; top:5px;
+    width:18px; height:18px; border-radius:50%;
+    background:var(--c-sky);
+    box-sizing:border-box;
+  }
+  .b2b-points li::after{
+    content:''; position:absolute; left:5px; top:10px;
+    width:8px; height:5px;
+    border-inline-start:2px solid #fff;
+    border-bottom:2px solid #fff;
+    transform: rotate(-50deg);
+  }
+  html[dir="rtl"] .b2b-points li::before{ left:auto; right:0; }
+  html[dir="rtl"] .b2b-points li::after{ left:auto; right:5px; transform: scaleX(-1) rotate(-50deg); }
+
+  /* ============== FINAL CTA ============== */
+  .cta-final{
+    padding:100px 30px; text-align:center; position:relative;
+    border-top:var(--bw) solid var(--c-line);
+    background: #fff;
+  }
+  .cta-final h2{
+    font-size: clamp(34px,5vw,60px); font-weight:800;
+    line-height:1.05; letter-spacing:-1.8px;
+    color:var(--c-sapphire); margin-bottom:22px;
+  }
+  .cta-final h2 em{ font-style:italic; font-weight:400; color:var(--c-sky); opacity:0.95; }
+  .cta-final p { color:var(--c-muted); max-width:560px; margin:0 auto 36px; font-size:16.5px; line-height:1.65; }
+  .cta-final .actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  /* ============== FOOTER ============== */
+  footer.footer{
+    background:#eeeeef;
+    color: var(--c-sapphire);
+    padding: 80px 0 28px;
+    position: relative;
+    border-top: var(--bw) solid var(--c-line);
+  }
+  footer.footer .wrap{ max-width:1320px; margin:0 auto; padding:0 28px; }
+  footer.footer .footer-grid{
+    display:grid;
+    grid-template-columns: 2.6fr 1fr 1fr 1.4fr;
+    gap:60px; margin-bottom:50px; align-items: stretch;
+  }
+  footer.footer .footer-grid > div{ display:flex; flex-direction:column; }
+  footer.footer .footer-brand{ display:flex; flex-direction:column; gap:18px; max-width:none; }
+  footer.footer .footer-brand .logo{ display:inline-block; text-decoration:none; width:fit-content; }
+  footer.footer .footer-brand .logo-img{ height:90px; width:auto; margin-top:-10px; display:block; filter:none; }
+  footer.footer .footer-brand p{
+    margin:0; font-size:14.5px; line-height:1.7;
+    color:rgba(30,35,100,0.7);
+    text-wrap: pretty; font-weight:500; max-width:none;
+  }
+  footer.footer h4{
+    margin:0 0 22px;
+    font-size:13px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.14em; color:var(--c-sapphire);
+  }
+  footer.footer ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  footer.footer ul a{
+    font-size:14.5px; color:rgba(30,35,100,0.7);
+    text-decoration:none; transition: color .2s ease;
+    font-weight:500; display:inline-block; white-space:nowrap;
+  }
+  footer.footer ul a:hover{ color:var(--c-sky); }
+  footer.footer .contact-row{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:12px; font-size:14.5px;
+    color:rgba(30,35,100,0.78); font-weight:500; line-height:1.5;
+  }
+  footer.footer .contact-row svg{
+    width:16px; height:16px; flex-shrink:0;
+    color:var(--c-sky); stroke:var(--c-sky);
+  }
+  footer.footer .news-sublabel{
+    margin-top:auto; padding-top:24px; margin-bottom:12px;
+    font-size:11px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.14em; color:rgba(30,35,100,0.5);
+  }
+  footer.footer .news{
+    display:grid; grid-template-columns: 1fr auto;
+    align-items:end; gap:12px; margin:0; max-width:360px;
+    border-bottom:1px solid rgba(30,35,100,0.22);
+    padding:0 0 6px; transition: border-color .25s ease;
+  }
+  footer.footer .news:focus-within{ border-color:var(--c-sky); }
+  footer.footer .news input{
+    width:100%; height:38px; padding:0; border:0; background:transparent;
+    color:var(--c-sapphire); font-size:15px; font-family:inherit; outline:none; min-width:0;
+  }
+  footer.footer .news input::placeholder{ color:rgba(30,35,100,0.42); font-weight:500; }
+  footer.footer .news button{
+    height:38px; padding:0; border:0; background:transparent;
+    color:var(--c-sky); font-weight:700; font-size:0;
+    cursor:pointer; flex-shrink:0; font-family:inherit;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition: color .2s ease, transform .2s ease;
+  }
+  footer.footer .news button::before{ content:"\2192"; font-size:22px; font-weight:700; line-height:1; color:var(--c-sky); transition:transform .2s ease; }
+  footer.footer .news button:hover::before{ transform:translateX(4px); }
+  footer.footer .news button > span{ display:none; }
+  footer.footer .footer-bot{
+    display:flex; justify-content:space-between; align-items:center;
+    gap:16px; padding-top:24px;
+    border-top:1px solid rgba(30,35,100,0.1);
+    flex-wrap:wrap; font-size:13px; color:rgba(30,35,100,0.55);
+  }
+  footer.footer .socials{ display:flex; gap:8px; align-items:center; }
+  footer.footer .socials a{
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid rgba(30,35,100,0.14); background:#fff;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:var(--c-sapphire);
+    transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  footer.footer .socials a:hover{ background:var(--c-sapphire); border-color:var(--c-sapphire); color:#fff; transform:translateY(-2px); }
+  footer.footer .socials svg{ width:14px; height:14px; }
+  footer.footer .footer-grid > div:nth-child(2){ margin-left:150px; }
+  footer.footer .footer-grid > div:nth-child(3){ margin-left:70px; }
+
+  /* ============== RESPONSIVE ============== */
+  @media (max-width:1100px){
+    .about-hero{ padding-top:170px; }
+    .about-hero-grid{ grid-template-columns:1fr; gap:40px; align-items:start; }
+    .about-hero-right{ transform:none; padding-inline-start:22px; }
+    .hero-image-wrap .hero-image{ max-width:408px; margin:0 auto; }
+    .quote-section{ padding: 110px 0 90px; }
+    .quote-section .q-corner.tl{ top: 6%; left: 4%; width: 60px; height: 60px; background-size: 1472px auto; background-position: -362px -2732px; }
+    .quote-section .q-corner.br{ bottom: 6%; right: 4%; width: 60px; height: 60px; background-size: 1472px auto; background-position: -362px -2732px; }
+    .why-grid{ grid-template-columns:1fr; gap:40px; }
+    .mv-grid{ grid-template-columns:1fr; }
+    .what-grid{ grid-template-columns:repeat(2,1fr); }
+    .stats-grid{ grid-template-columns:repeat(2,1fr); }
+    .stats-cell{ padding:18px 24px; }
+    .stats-cell:nth-child(2){ border-inline-end:none; }
+    .stats-cell:nth-child(1),
+    .stats-cell:nth-child(2){ border-bottom:1px solid var(--c-line); padding-bottom:34px; }
+    .stats-cell:nth-child(3),
+    .stats-cell:nth-child(4){ padding-top:34px; }
+    .values-grid{ grid-template-columns:repeat(2,1fr); }
+    .how-grid{ grid-template-columns:1fr; }
+    .milestones-grid{ grid-template-columns:repeat(2,1fr); row-gap:50px; }
+    .milestones-wrap::before{ display:none; }
+    .b2b-grid{ grid-template-columns:1fr; gap:30px; }
+    footer.footer .footer-grid{ grid-template-columns:1fr 1fr; column-gap:40px; row-gap:32px; }
+    footer.footer .footer-brand{ grid-column:1 / -1; }
+    footer.footer .footer-grid > div:nth-child(2),
+    footer.footer .footer-grid > div:nth-child(3){ margin-left:0; }
+  }
+  @media (max-width:1024px){
+    .nav{ width:calc(100% - 28px); padding:8px 12px 8px 18px; }
+    .logo-img{ height:72px; } .nav.scrolled .logo-img{ height:50px; }
+  }
+  @media (max-width:980px){
+    .nav-links{ display:none; }
+    .menu-tog{
+      display:inline-flex; width:42px; height:48px;
+      align-items:center; justify-content:center;
+      border-radius:50%; background:var(--c-grey); border:none;
+      color:var(--c-sapphire); font-family:inherit;
+    }
+  }
+  @media (max-width:720px){
+    .what-grid{ grid-template-columns:1fr; }
+    .values-grid{ grid-template-columns:1fr; }
+    .milestones-grid{ grid-template-columns:1fr; }
+    .quote-text{ font-size: clamp(22px, 5vw, 30px); letter-spacing: -0.6px; }
+    .step-card{ padding:34px 28px; }
+  }
+  @media (max-width:640px){
+    .nav{ top:12px; width:calc(100% - 20px); padding:6px 8px 6px 14px; border-radius:60px; }
+    .logo-img{ height:56px; } .nav.scrolled .logo-img{ height:42px; }
+    .nav-cta{ gap:6px; }
+    .nav-cta > .pill{ padding:7px 10px; font-size:12.5px; }
+    .nav-cta > .btn { padding:8px 14px; font-size:13px; }
+    .about-hero{ padding:160px 0 60px; }
+    .stats-grid{ grid-template-columns:1fr; }
+    .stats-cell{ border-inline-end:none !important; border-bottom:1px solid var(--c-line); padding:22px 0; }
+    .stats-cell:last-child{ border-bottom:none; }
+  }
+  @media (max-width:540px){
+    footer.footer .footer-grid{ grid-template-columns:1fr; gap:28px; }
+    footer.footer .footer-brand{ grid-column:auto; }
+    footer.footer .footer-bot{ flex-direction:column; text-align:center; gap:14px; padding:24px 0 28px; }
+  }
+  @media (max-width:380px){
+    .nav-cta > .theme-toggle{ display:none; }
+    .logo-img{ height:48px; } .nav.scrolled .logo-img{ height:38px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a href="index20.html" class="logo" aria-label="Mwafq home">
+    <img src="logo.svg" alt="Mwafq" class="logo-img" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index20.html#home" data-cursor><span class="en-only">Home</span><span class="ar-only">الرئيسية</span></a></li>
+    <li><a href="index20.html#app" data-cursor><span class="en-only">App</span><span class="ar-only">التطبيق</span></a></li>
+    <li><a href="index20.html#contact" data-cursor><span class="en-only">Contact us</span><span class="ar-only">تواصل معنا</span></a></li>
+    <li><a href="about-us.html" class="active" data-cursor><span class="en-only">About us</span><span class="ar-only">من نحن</span></a></li>
+    <li><a href="index20.html#b2b" data-cursor><span class="en-only">B2B Portal</span><span class="ar-only">بوابة الشركات</span></a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="theme-toggle" id="themeBtn" data-cursor aria-label="Toggle dark mode">
+      <svg class="ico-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="ico-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="pill" id="langBtn" data-cursor aria-label="Switch language">
+      <span class="en-only">عربي</span><span class="ar-only">EN</span>
+    </button>
+    <a href="index20.html#booking" class="btn btn-primary btn-liquid no-magnet" data-cursor style="padding:10px 22px;">
+      <span class="en-only">Book Now</span><span class="ar-only">احجز الآن</span>
+    </a>
+    <button class="menu-tog" data-cursor aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="about-hero" id="about">
+  <div class="hero-pattern" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="about-hero-grid">
+
+      <div class="about-hero-left">
+        <h1>
+          <span class="hero-row word-reveal"><span><span class="en-only">About Mwafak</span><span class="ar-only">عن موافق</span></span></span>
+          <span class="hero-row reveal delay-2"><span class="en-only"><span class="ital">Medical exams <span class="underlined-phrase">made simple<svg class="hero-underline" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path class="draw-path" d="M2 12 Q 50 -2 100 8 T 198 4"></path></svg></span></span></span><span class="ar-only"><span class="ital">الفحوصات الطبية <span class="underlined-phrase">ببساطة<svg class="hero-underline" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path class="draw-path" d="M2 12 Q 50 -2 100 8 T 198 4"></path></svg></span></span></span></span>
+        </h1>
+
+        <div class="about-hero-right reveal delay-2">
+          <span class="lead-label"><span class="en-only">Who we are</span><span class="ar-only">من نحن</span></span>
+          <p class="lead">
+            <span class="en-only">We're a Saudi-built digital platform that brings booking, real-time tracking, and certified medical reports together, so individuals and businesses spend less time on compliance and more time on what matters.</span>
+            <span class="ar-only">منصة رقمية سعودية تجمع الحجز والتتبع اللحظي والتقارير الطبية المعتمدة في مكان واحد، ليُمضي الأفراد والشركات وقتًا أقل على الالتزام ووقتًا أكبر على ما يهم فعلًا.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="hero-image-wrap reveal-x delay-3" aria-hidden="true">
+        <img class="hero-image" src="character%202.svg" alt="" />
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUR STORY (testimonial style from index20.html) ============ -->
+<section class="quote-section" id="story">
+  <div class="quote-pat" aria-hidden="true"></div>
+  <span class="q-corner tl" aria-hidden="true"></span>
+  <span class="q-corner br" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="quote-wrap reveal">
+      <h2 class="quote-title">
+        <span class="en-only">Our Story</span><span class="ar-only">قصتنا</span>
+      </h2>
+      <div class="quote-text">
+        <span class="en-only">We started because medical compliance shouldn't feel like a second job. So we built one platform that connects clinics, labs, and HR teams to a single source of truth, used by thousands of people every month.</span>
+        <span class="ar-only">بدأنا لأن الالتزام الطبي يجب ألا يكون وظيفةً ثانية. فبَنينا منصةً واحدة تربط العيادات والمختبرات وفِرَق الموارد البشرية بمصدرٍ موحَّد للحقيقة، يستخدمها آلاف الأشخاص شهريًا.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MISSION & VISION ============ -->
+<section class="mv-section">
+  <div class="wrap">
+    <div class="mv-grid">
+      <div class="mv-card reveal">
+        <div class="mv-label"><span class="en-only">Our Mission</span><span class="ar-only">مهمتنا</span></div>
+        <h3>
+          <span class="en-only">Turn complex medical paperwork into a <em>two-tap</em> experience.</span>
+          <span class="ar-only">تحويل الأوراق الطبية المعقدة إلى تجربة <em>بنقرتين.</em></span>
+        </h3>
+        <p>
+          <span class="en-only">From booking the right exam at the right clinic to receiving the official "Fit for Service" badge, we handle every step in between, securely and easily.</span>
+          <span class="ar-only">من حجز الفحص المناسب في العيادة المناسبة إلى استلام ختم "لائق للخدمة" المعتمد، نتولى كل خطوة بينهما بأمان وسهولة.</span>
+        </p>
+      </div>
+
+      <div class="mv-card alt reveal delay-1">
+        <div class="mv-label"><span class="en-only">Our Vision</span><span class="ar-only">رؤيتنا</span></div>
+        <h3>
+          <span class="en-only">A region where medical compliance never <em>gets in the way</em> of work, study, or life.</span>
+          <span class="ar-only">منطقةٌ لا يقف فيها الالتزام الطبي <em>عائقًا</em> أمام العمل أو الدراسة أو الحياة.</span>
+        </h3>
+        <p>
+          <span class="en-only">We see a future where every clinic, employer, and citizen reads from one trusted record, and where "wait two weeks for the result" stops being a sentence anyone has to say.</span>
+          <span class="ar-only">نرى مستقبلًا تقرأ فيه كل عيادة وكل صاحب عمل وكل مواطن من سجلٍ موثوقٍ واحد، ولا يضطر أحدٌ لأن يقول "انتظر أسبوعين للنتيجة".</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="stats-band">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stats-cell reveal">
+        <div class="num"><span data-count="50" data-suffix="">0</span><span>K+</span></div>
+        <div class="label"><span class="en-only">Completed Exams</span><span class="ar-only">فحص مكتمل</span></div>
+      </div>
+      <div class="stats-cell reveal delay-1">
+        <div class="num"><span data-count="100" data-suffix="+">0</span></div>
+        <div class="label"><span class="en-only">Clinics &amp; Labs</span><span class="ar-only">عيادات ومختبرات</span></div>
+      </div>
+      <div class="stats-cell reveal delay-2">
+        <div class="num"><span data-count="10" data-suffix="+">0</span></div>
+        <div class="label"><span class="en-only">Certified Partners</span><span class="ar-only">شركاء معتمدون</span></div>
+      </div>
+      <div class="stats-cell reveal delay-3">
+        <div class="num"><span data-count="500" data-suffix="+">0</span></div>
+        <div class="label"><span class="en-only">Corporate Users</span><span class="ar-only">مستخدم مؤسسي</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT WE DO ============ -->
+<section class="what-section" id="what">
+  <div class="wrap">
+    <div class="what-head">
+      <span class="eyebrow reveal"><span class="en-only">What we do</span><span class="ar-only">ماذا نقدّم</span></span>
+      <h2 class="section-title reveal delay-1 what-title">
+        <span class="en-only">Medical compliance<br/>all in one place</span>
+        <span class="ar-only">الالتزام الطبي<br/>في مكان واحد</span>
+      </h2>
+    </div>
+
+    <div class="what-grid">
+      <div class="feat reveal">
+        <span class="ic-corner"></span>
+        <h3><span class="en-only">Real-Time Tracking</span><span class="ar-only">تتبع لحظي</span></h3>
+        <p><span class="en-only">Monitor your exam status step by step, from "Accepted" to "Completed", without a single phone call.</span><span class="ar-only">تابع حالة فحصك خطوةً بخطوة من "مقبول" إلى "مكتمل" دون أي اتصال هاتفي.</span></p>
+      </div>
+
+      <div class="feat reveal delay-1">
+        <span class="ic-corner"></span>
+        <h3><span class="en-only">Results in Your Pocket</span><span class="ar-only">النتائج في جيبك</span></h3>
+        <p><span class="en-only">Download official medical PDFs the moment they're ready, with one tap, securely, on any device.</span><span class="ar-only">حمّل التقارير الرسمية بصيغة PDF فور جاهزيتها بضغطة واحدة وبأمان من أي جهاز.</span></p>
+      </div>
+
+      <div class="feat reveal delay-2">
+        <span class="ic-corner"></span>
+        <h3><span class="en-only">Certified &amp; Reliable</span><span class="ar-only">معتمد وموثوق</span></h3>
+        <p><span class="en-only">Once you pass, you receive the official "Fit for Service" badge, recognized by employers and regulators alike.</span><span class="ar-only">عند اجتيازك للفحص، تحصل على ختم "لائق للخدمة" المعتمد لدى أصحاب العمل والجهات الرسمية.</span></p>
+      </div>
+
+      <div class="feat reveal delay-3">
+        <span class="ic-corner"></span>
+        <h3><span class="en-only">Total Management Flexibility</span><span class="ar-only">إدارة مرنة بالكامل</span></h3>
+        <p><span class="en-only">Reschedule or cancel in a tap. HR teams move people through compliance without spreadsheets.</span><span class="ar-only">إعادة جدولة أو إلغاء بضغطة. فِرَق الموارد البشرية تُدير الالتزام دون جداول.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY MWAFAK ============ -->
+<section class="why-section" id="why">
+  <div class="wrap">
+    <div class="why-grid">
+      <div class="why-aside">
+        <span class="eyebrow reveal"><span class="en-only">Why Mwafak</span><span class="ar-only">لماذا موافق</span></span>
+        <h2 class="reveal delay-1">
+          <span class="en-only">A platform built <em>for the way Saudi Arabia works.</em></span>
+          <span class="ar-only">منصةٌ مبنيّة <em>على الطريقة التي تعمل بها المملكة.</em></span>
+        </h2>
+        <p class="reveal delay-2">
+          <span class="en-only">Mwafak isn't a generic booking tool with a medical skin on top. Every flow, from the bilingual UI to the "Fit for Service" badge to the HR bulk-import, was designed against real Saudi medical-compliance workflows.</span>
+          <span class="ar-only">موافق ليس أداة حجز عامة بقشرة طبية. كل تدفق، من الواجهة ثنائية اللغة إلى ختم "لائق للخدمة" إلى الاستيراد الجماعي للموارد البشرية، صُمِّم بناءً على تدفقات الالتزام الطبي الواقعية في المملكة.</span>
+        </p>
+      </div>
+      <ul class="why-list">
+        <li class="why-row reveal">
+          <span class="why-num">1</span>
+          <div class="why-body">
+            <h4><span class="en-only">Bilingual by default</span><span class="ar-only">ثنائي اللغة افتراضيًا</span></h4>
+            <p><span class="en-only">Every screen, every report, and every email is built Arabic-first and English-first, not translated as an afterthought.</span><span class="ar-only">كل شاشة وكل تقرير وكل بريد إلكتروني مبنيّ بالعربية أولًا وبالإنجليزية أولًا، وليس ترجمة لاحقة.</span></p>
+          </div>
+        </li>
+        <li class="why-row reveal delay-1">
+          <span class="why-num">2</span>
+          <div class="why-body">
+            <h4><span class="en-only">Connected to real clinics</span><span class="ar-only">مرتبط بعيادات حقيقية</span></h4>
+            <p><span class="en-only">Direct integrations with our certified network mean your status updates the moment the clinic does, no phone tag, no chasing.</span><span class="ar-only">تكاملات مباشرة مع شبكتنا المعتمدة تعني أن حالتك تتحدث لحظيًا مع العيادة، دون مكالمات أو متابعات.</span></p>
+          </div>
+        </li>
+        <li class="why-row reveal delay-2">
+          <span class="why-num">3</span>
+          <div class="why-body">
+            <h4><span class="en-only">Designed for individuals and HR alike</span><span class="ar-only">مُصمَّم للأفراد والموارد البشرية معًا</span></h4>
+            <p><span class="en-only">One platform, two muscle memories: a single-tap experience for citizens, a bulk-control dashboard for corporate teams.</span><span class="ar-only">منصة واحدة، تجربتان مختلفتان: تجربة بنقرة واحدة للمواطنين، ولوحة تحكم جماعية لفِرَق الشركات.</span></p>
+          </div>
+        </li>
+        <li class="why-row reveal delay-3">
+          <span class="why-num">4</span>
+          <div class="why-body">
+            <h4><span class="en-only">Secure, encrypted, and yours</span><span class="ar-only">آمن ومشفّر وخاصّ بك</span></h4>
+            <p><span class="en-only">Your medical record stays your medical record. End-to-end encryption, granular consent, and zero data resale, ever.</span><span class="ar-only">سجلّك الطبي يبقى سجلّك أنت. تشفير من الطرف إلى الطرف، وموافقة دقيقة، ولا بيع لبياناتك، أبدًا.</span></p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUES ============ -->
+<section class="values-section">
+  <div class="wrap">
+    <div class="values-head">
+      <span class="eyebrow reveal"><span class="en-only">What we stand for</span><span class="ar-only">قيمنا</span></span>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card sky reveal">
+        <div class="value-head">
+          <h3><span class="en-only">Trust by design</span><span class="ar-only">ثقة بالتصميم</span></h3>
+          <span class="v-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+          </span>
+        </div>
+        <p><span class="en-only">Every clinic, lab, and partner on Mwafak is vetted and certified. Your data is encrypted end-to-end.</span><span class="ar-only">كل عيادة ومختبر وشريك على موافق مُعتمد ومُدقَّق. بياناتك مشفّرة من الطرف إلى الطرف.</span></p>
+      </div>
+      <div class="value-card periwinkle reveal delay-1">
+        <div class="value-head">
+          <h3><span class="en-only">Built for speed</span><span class="ar-only">مصمَّم للسرعة</span></h3>
+          <span class="v-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </span>
+        </div>
+        <p><span class="en-only">Book in under a minute, check status in two taps, receive results without chasing anyone.</span><span class="ar-only">احجز في أقل من دقيقة، تابع الحالة بنقرتين، واستلم النتائج دون متابعات.</span></p>
+      </div>
+      <div class="value-card navy reveal delay-2">
+        <div class="value-head">
+          <h3><span class="en-only">Care, not paperwork</span><span class="ar-only">رعاية لا أوراق</span></h3>
+          <span class="v-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </span>
+        </div>
+        <p><span class="en-only">Behind every exam is a person, a job, a family. We design Mwafak around that, not around the form.</span><span class="ar-only">خلف كل فحص شخصٌ ووظيفةٌ وعائلة. نُصمّم موافق حولهم، لا حول الورقة.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how-section" id="how">
+  <div class="wrap">
+    <div class="head-flex">
+      <div>
+        <span class="eyebrow reveal"><span class="en-only">How it works</span><span class="ar-only">كيف يعمل</span></span>
+        <h2 class="section-title reveal delay-1">
+          <span class="en-only">Your medical journey<br/>in simple steps</span>
+          <span class="ar-only">رحلتك الطبية<br/>بخطوات بسيطة</span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="how-grid">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <h3><span class="en-only">Book your <em>appointment</em></span><span class="ar-only">احجز <em>موعدك</em></span></h3>
+        <p><span class="en-only">Choose your exam type and review the preconditions and requirements right inside the app.</span><span class="ar-only">اختر نوع الفحص وراجع المتطلبات والشروط مباشرةً داخل التطبيق.</span></p>
+      </div>
+      <div class="step-card reveal delay-1">
+        <div class="step-num">02</div>
+        <h3><span class="en-only">Take the <em>exam</em></span><span class="ar-only">أجرِ <em>الفحص</em></span></h3>
+        <p><span class="en-only">Head to the medical center at your scheduled time and follow status updates from your phone in real time.</span><span class="ar-only">توجّه إلى المركز الطبي في موعدك وتابع تحديثات الحالة من هاتفك لحظيًا.</span></p>
+      </div>
+      <div class="step-card reveal delay-2">
+        <div class="step-num">03</div>
+        <h3><span class="en-only">Receive the <em>result</em></span><span class="ar-only">استلم <em>النتيجة</em></span></h3>
+        <p><span class="en-only">Download your medical report and check for your "Fit for Service" badge the moment it's ready.</span><span class="ar-only">حمّل تقريرك الطبي وتحقق من ختم "لائق للخدمة" فور جاهزيته.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MILESTONES ============ -->
+<section class="milestones-section" id="milestones">
+  <div class="wrap">
+    <div class="milestones-head">
+      <span class="eyebrow reveal"><span class="en-only">Our Journey</span><span class="ar-only">مسيرتنا</span></span>
+      <h2 class="section-title reveal delay-1">
+        <span class="en-only">A short timeline of<br/>where we've been</span>
+        <span class="ar-only">جدولٌ زمني قصير<br/>لما عشناه</span>
+      </h2>
+    </div>
+
+    <div class="milestones-wrap">
+      <div class="milestones-grid">
+        <div class="milestone reveal">
+          <div class="ms-year">2023</div>
+          <h4><span class="en-only">The idea</span><span class="ar-only">الفكرة</span></h4>
+          <p><span class="en-only">A small team forms around one belief: medical compliance can be a single experience, not five.</span><span class="ar-only">يتشكّل فريق صغير حول قناعة واحدة: الالتزام الطبي يمكن أن يكون تجربة واحدة، لا خمسًا.</span></p>
+        </div>
+        <div class="milestone reveal delay-1">
+          <div class="ms-year">2024</div>
+          <h4><span class="en-only">First 10K exams</span><span class="ar-only">أول 10 آلاف فحص</span></h4>
+          <p><span class="en-only">Mwafak crosses 10,000 completed exams and welcomes its first corporate partners.</span><span class="ar-only">يتجاوز موافق 10,000 فحص مكتمل ويستقبل أوائل شركائه المؤسسيين.</span></p>
+        </div>
+        <div class="milestone reveal delay-2">
+          <div class="ms-year">2025</div>
+          <h4><span class="en-only">Academy launches</span><span class="ar-only">إطلاق الأكاديمية</span></h4>
+          <p><span class="en-only">Mwafq Academy goes live with certified courses in workplace first aid, infection control, and more.</span><span class="ar-only">تنطلق أكاديمية موافق بدورات معتمدة في الإسعافات الأولية والوقاية من العدوى وغيرها.</span></p>
+        </div>
+        <div class="milestone is-active reveal delay-3">
+          <div class="ms-year">2026</div>
+          <h4><span class="en-only">50K+ &amp; growing</span><span class="ar-only">+50 ألف ومستمر</span></h4>
+          <p><span class="en-only">Mwafak reaches 50K+ completed exams, 100+ clinics, and a growing B2B portal for HR teams.</span><span class="ar-only">يصل موافق إلى أكثر من 50 ألف فحص مكتمل و100+ عيادة وبوابة B2B متنامية لفِرَق الموارد البشرية.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ B2B BAND ============ -->
+<section class="b2b-band">
+  <div class="wrap">
+    <div class="b2b-grid">
+      <div class="reveal">
+        <span class="eyebrow"><span class="en-only">For Business</span><span class="ar-only">للأعمال</span></span>
+        <h2>
+          <span class="en-only">Comprehensive medical solutions <em>for your team.</em></span>
+          <span class="ar-only">حلول طبية متكاملة <em>لفريقك.</em></span>
+        </h2>
+        <p>
+          <span class="en-only">Manage your team's medical exams with ease. Mwafak gives HR managers a single tool for bulk bookings, employee tracking, and certified report retrieval across every clinic in our network.</span>
+          <span class="ar-only">إدارة فحوصات فريقك الطبية بكل سهولة. يمنح موافق مديري الموارد البشرية أداةً واحدة للحجوزات الجماعية وتتبع الموظفين واستلام التقارير المعتمدة عبر شبكتنا كاملة.</span>
+        </p>
+        <a class="btn btn-cyan no-magnet" href="index20.html#b2b">
+          <span class="en-only">Book a Demo</span><span class="ar-only">اطلب عرضًا</span>
+        </a>
+      </div>
+      <ul class="b2b-points reveal delay-2">
+        <li><span class="en-only">Bulk-book exams for hundreds of employees in a single flow.</span><span class="ar-only">احجز الفحوصات لمئات الموظفين في تدفق واحد.</span></li>
+        <li><span class="en-only">Track every employee's status live, from booked to certified.</span><span class="ar-only">تابع حالة كل موظف لحظيًا، من الحجز حتى الاعتماد.</span></li>
+        <li><span class="en-only">Pull certified PDF reports directly into your HR system.</span><span class="ar-only">اسحب التقارير المعتمدة بصيغة PDF مباشرةً إلى نظام الموارد البشرية.</span></li>
+        <li><span class="en-only">A dedicated success manager for every corporate partner.</span><span class="ar-only">مدير نجاح مخصّص لكل شريك مؤسسي.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="cta-final">
+  <div class="wrap">
+    <h2 class="reveal">
+      <span class="en-only">Ready when <em>you are.</em></span>
+      <span class="ar-only">جاهزون <em>متى كنتَ جاهزًا.</em></span>
+    </h2>
+    <p class="reveal delay-1">
+      <span class="en-only">Join thousands of individuals and businesses who trust Mwafak with their medical compliance every day.</span>
+      <span class="ar-only">انضم إلى آلاف الأفراد والشركات الذين يعتمدون على موافق في التزامهم الطبي يوميًا.</span>
+    </p>
+    <div class="actions reveal delay-2">
+      <a class="btn btn-primary no-magnet" href="index20.html#booking">
+        <span class="en-only">Book Your Exam</span><span class="ar-only">احجز فحصك</span>
+      </a>
+      <a class="btn btn-line no-magnet" href="index20.html#contact">
+        <span class="en-only">Contact Us</span><span class="ar-only">تواصل معنا</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER (verbatim from index20.html) ============ -->
+<footer class="footer" id="contact">
+<div class="wrap">
+<div class="footer-grid">
+<div class="footer-brand">
+<a aria-label="Mwafq home" class="logo" href="index20.html"><img alt="Mwafq" class="logo-img" src="logo.svg"/></a>
+<p>
+<span class="en-only">Your trusted digital platform for completing official medical exams and managing healthcare for individuals and businesses securely and easily.</span>
+<span class="ar-only"></span>
+</p>
+</div>
+<div>
+<h4><span class="en-only">Pages</span><span class="ar-only"></span></h4>
+<ul>
+<li><a data-cursor="" href="about-us.html"><span class="en-only">About us</span><span class="ar-only"></span></a></li>
+<li><a data-cursor="" href="index20.html#services"><span class="en-only">Services</span><span class="ar-only"></span></a></li>
+<li><a data-cursor="" href="index20.html#academy"><span class="en-only">Academy</span><span class="ar-only"></span></a></li>
+<li><a data-cursor="" href="index20.html#b2b"><span class="en-only">B2B Solutions</span><span class="ar-only"></span></a></li>
+</ul>
+</div>
+<div>
+<h4><span class="en-only">Help</span><span class="ar-only"></span></h4>
+<ul>
+<li><a data-cursor="" href="#"><span class="en-only">Faqs</span><span class="ar-only"></span></a></li>
+<li><a data-cursor="" href="#"><span class="en-only">Support</span><span class="ar-only"></span></a></li>
+</ul>
+</div>
+<div>
+<h4><span class="en-only">Contact</span><span class="ar-only"></span></h4>
+<div class="contact-row reverse-rtl">
+<svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>info@mwfak.com</div>
+<div class="contact-row reverse-rtl">
+<svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+966 5 400000</div>
+<div class="contact-row">
+<svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<span class="en-only">Riydah - KSA</span><span class="ar-only"></span>
+</div>
+<p class="news-sublabel"><span class="en-only">Get The latest Information</span><span class="ar-only"></span></p><form class="news" id="newsForm">
+<input aria-label="" data-cursor="" placeholder="Your Email" required="" type="email"/>
+<button data-cursor="" type="submit"><span class="en-only">Subscribe</span><span class="ar-only"></span></button>
+</form>
+</div>
+</div>
+<div class="footer-bot">
+<div>&copy; 2026 Mwfak. <span class="en-only">All rights reserved.</span><span class="ar-only"></span></div>
+<div class="socials">
+<a aria-label="Twitter" data-cursor="" href="#"><svg aria-hidden="true" fill="currentColor" height="16" viewBox="0 0 24 24" width="16"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"></path></svg></a>
+<a aria-label="Instagram" data-cursor="" href="#"><svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16"><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></a>
+<a aria-label="LinkedIn" data-cursor="" href="#"><svg aria-hidden="true" fill="currentColor" height="16" viewBox="0 0 24 24" width="16"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 1 1 8.3 6.5a1.78 1.78 0 0 1-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0 0 13 14.19a.66.66 0 0 0 0 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 0 1 2.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path></svg></a>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+/* 1) Nav scroll state */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 30) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+
+/* 2) Reveal observer */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold:0.12, rootMargin:'0px 0px -50px 0px' });
+document.querySelectorAll('.reveal,.reveal-x,.word-reveal,.draw-path').forEach(r=>io.observe(r));
+
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    document.querySelectorAll('.about-hero .word-reveal,.about-hero .reveal,.about-hero .reveal-x').forEach(el=>el.classList.add('in'));
+  }, 200);
+});
+
+/* 3) Number counters */
+const fmt = (n, suf, decimals)=>{
+  const v = decimals ? n.toFixed(decimals) : Math.round(n).toString();
+  return v + (suf||'');
+};
+const counterIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const el = e.target;
+    const target = parseFloat(el.dataset.count);
+    const suf = el.dataset.suffix || '';
+    const decimals = parseInt(el.dataset.decimals || '0', 10);
+    const dur = 1800;
+    const start = performance.now();
+    const tick = (now)=>{
+      const p = Math.min(1, (now - start)/dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(target * eased, suf, decimals);
+      if(p < 1) requestAnimationFrame(tick);
+      else el.textContent = fmt(target, suf, decimals);
+    };
+    requestAnimationFrame(tick);
+    counterIO.unobserve(el);
+  });
+}, { threshold:0.4 });
+document.querySelectorAll('[data-count]').forEach(el=> counterIO.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const id = a.getAttribute('href');
+    if(id.length>1 && document.querySelector(id)){
+      e.preventDefault();
+      window.scrollTo({ top: document.querySelector(id).offsetTop - 90, behavior:'smooth' });
+    }
+  });
+});
+
+const root = document.getElementById('rootHtml');
+document.getElementById('langBtn').addEventListener('click', ()=>{
+  const isAr = root.lang === 'ar';
+  if(isAr){ root.lang = 'en'; root.removeAttribute('dir'); }
+  else    { root.lang = 'ar'; root.setAttribute('dir','rtl'); }
+});
+
+document.querySelectorAll('.btn-primary:not(.no-magnet), .btn-cyan:not(.no-magnet), .btn-line:not(.no-magnet), .btn-ghost:not(.no-magnet)').forEach(b=>{
+  b.addEventListener('mousemove', (e)=>{
+    const r = b.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top  - r.height/2;
+    b.style.transform = 'translate(' + (x*0.18) + 'px, ' + (y*0.25) + 'px)';
+  });
+  b.addEventListener('mouseleave', ()=>{ b.style.transform = ''; });
+});
+</script>
+
+</body>
+</html>
