@@ -81,23 +81,6 @@ export default function ReservationDetailsView({
             </h1>
           ) : null}
 
-          {details.showCancel ? (
-            <Link
-              href='#'
-              data-cursor
-              className='inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-[28px] border border-[#1e2364] bg-white px-[22px] text-sm font-bold text-[#1e2364] transition-colors hover:bg-[#1e2364] hover:text-white'
-            >
-              {t.cancelAppointment}
-              <motion.span
-                className='inline-flex size-4 shrink-0'
-                whileHover={{ rotate: 90 }}
-                transition={{ duration: 0.35, ease: EASE }}
-              >
-                <XMarkIcon className='size-4' />
-              </motion.span>
-            </Link>
-          ) : null}
-
           {details.showReorder ? (
             <ReorderAppointmentLink className='inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-[28px] border border-[#1e2364] bg-white px-[22px] text-sm font-bold text-[#1e2364]' />
           ) : null}
@@ -129,15 +112,7 @@ export default function ReservationDetailsView({
           ) : (
             <>
               <div className='grid grid-cols-1 gap-3.5 sm:grid-cols-2'>
-                <div className='flex flex-col gap-1 ps-1'>
-                  <span className='detail-muted text-[11px] font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
-                    {t.orderId}
-                  </span>
-                  <span className='detail-muted text-[15px] font-bold text-[#1e2364]'>
-                    {details.id}
-                  </span>
-                </div>
-                {details.companyName ? (
+                {details.companyName && (
                   <div className='flex flex-col gap-1'>
                     <span className='detail-muted text-[11px] font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
                       {t.orderedBy}
@@ -146,8 +121,8 @@ export default function ReservationDetailsView({
                       {details.companyName}
                     </span>
                   </div>
-                ) : null}
-                {details.sellPrice != null ? (
+                )}
+                {!!details.sellPrice && (
                   <div className='flex flex-col gap-1'>
                     <span className='detail-muted text-[11px] font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
                       {t.price}
@@ -156,7 +131,7 @@ export default function ReservationDetailsView({
                       {details.sellPrice}
                     </span>
                   </div>
-                ) : null}
+                )}
               </div>
 
               {details.prepItems.length > 0 ? (

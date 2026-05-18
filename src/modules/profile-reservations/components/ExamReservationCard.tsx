@@ -88,7 +88,9 @@ export function ExamReservationCard({
                 {hasLocation ? (
                   <span className='inline-flex min-w-0 items-start gap-2'>
                     <MapPinIcon className='mt-0.5 size-4 shrink-0 text-sky-500' />
-                    <span className='min-w-0 leading-snug'>{card.hospital}</span>
+                    <span className='min-w-0 leading-snug'>
+                      {card.hospital}
+                    </span>
                   </span>
                 ) : null}
                 {hasSchedule ? (
@@ -142,22 +144,14 @@ export function ExamReservationCard({
             showFooterActions && 'max-[380px]:flex-col'
           )}
         >
-          {card.cancelSlot === 'cancel' ? (
-            <Link href='#' data-cursor className={cn(btnOutline, 'min-w-46')}>
-              {t.cancelAppointment}
-              <motion.span
-                className='inline-flex size-4 shrink-0'
-                whileHover={{ rotate: 90 }}
-                transition={{ duration: 0.35, ease: EASE }}
-              >
-                <XMarkIcon className='size-4' />
-              </motion.span>
-            </Link>
-          ) : null}
           {card.cancelSlot === 'reorder' ? (
             <ReorderAppointmentLink className={cn(btnOutline, 'min-w-46')} />
           ) : null}
-          <Link href={detailsHref} data-cursor className={cn(btnPrimary, 'min-w-30')}>
+          <Link
+            href={detailsHref}
+            data-cursor
+            className={cn(btnPrimary, 'min-w-30')}
+          >
             {t.detailsLabel}
             <motion.span
               className='inline-flex size-4 shrink-0'
