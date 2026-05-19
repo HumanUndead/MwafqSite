@@ -1,17 +1,19 @@
-import dynamic from 'next/dynamic';
+import MyReservationsView from '@/modules/profile-reservations/MyReservationsView';
+import { getMyReservations } from '@/modules/profile-reservations/server/reservationsService';
+import type { TabValue } from '@/modules/profile-reservations/types';
 
-const MyReservationsView = dynamic(
-  () => import('@/modules/profile-reservations/MyReservationsView'),
-  {
-    loading: () => (
-      <div
-        className="mx-auto min-h-[48vh] max-w-[1200px] animate-pulse rounded-2xl bg-[#eef0f7]/90"
-        aria-hidden
-      />
-    ),
-  }
-);
+type MyReservationsPageProps = {
+  searchParams: Promise<{ tab?: string }>;
+};
 
-export default function MyReservationsPage() {
-  return <MyReservationsView />;
+export default async function MyReservationsPage({
+  searchParams,
+}: MyReservationsPageProps) {
+  const { tab } = await searchParams;
+  const reservations = await getMyReservations();
+  const initialTab: TabValue = tab === 'results' ? 'results' : 'exams';
+
+  return (
+    <MyReservationsView reservations={reservations} initialTab={initialTab} />
+  );
 }

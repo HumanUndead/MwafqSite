@@ -419,24 +419,277 @@ const en = {
     },
   },
   about: {
-    mission: {
-      title: 'Our mission',
+    meta: {
+      title: 'About Mwafq — Medical exams made simple',
       description:
-        'We believe every business deserves access to tools that drive real growth. Mwafq was built to level the playing field.',
+        'Mwafq is a Saudi-built digital platform that brings booking, real-time tracking, and certified medical reports together for individuals and businesses.',
+    },
+    hero: {
+      leadLabel: 'Who we are',
+      headingTop: 'About Mwafq',
+      headingMidLead: 'Medical exams',
+      headingMidAccent: 'made simple',
+      lead: "We're a Saudi-built digital platform that brings booking, real-time tracking, and certified medical reports together, so individuals and businesses spend less time on compliance and more time on what matters.",
+      imageAlt: 'Mwafq mascot illustration',
+    },
+    story: {
+      title: 'Our Story',
+      body: "We started because medical compliance shouldn't feel like a second job. So we built one platform that connects clinics, labs, and HR teams to a single source of truth, used by thousands of people every month.",
+    },
+    mv: {
+      mission: {
+        label: 'Our Mission',
+        headline: 'Turn complex medical paperwork into a two-tap experience.',
+        body: 'From booking the right exam at the right clinic to receiving the official "Fit for Service" badge, we handle every step in between, securely and easily.',
+      },
+      vision: {
+        label: 'Our Vision',
+        headline:
+          'A region where medical compliance never gets in the way of work, study, or life.',
+        body: 'We see a future where every clinic, employer, and citizen reads from one trusted record, and where "wait two weeks for the result" stops being a sentence anyone has to say.',
+      },
     },
     stats: [
-      { value: '10,000+', label: 'Businesses served' },
-      { value: '99.9%', label: 'Uptime SLA' },
-      { value: '50+', label: 'Countries' },
-      { value: '4.9/5', label: 'Customer rating' },
+      { value: 50000, suffix: 'K+', label: 'Completed Exams' },
+      { value: 100, suffix: '+', label: 'Clinics & Labs' },
+      { value: 10, suffix: '+', label: 'Certified Partners' },
+      { value: 500, suffix: '+', label: 'Corporate Users' },
     ],
-    team: {
-      title: 'The team behind Mwafq',
-      members: [
-        { name: 'Khalid Al-Rashid', role: 'CEO & Co-founder', initials: 'KR' },
-        { name: 'Aisha Mohammed', role: 'CTO & Co-founder', initials: 'AM' },
-        { name: 'Omar Hassan', role: 'Head of Product', initials: 'OH' },
+    what: {
+      eyebrow: 'What we do',
+      titleLead: 'Medical compliance',
+      titleAccent: 'all in one place',
+      items: [
+        {
+          title: 'Real-Time Tracking',
+          body: 'Monitor your exam status step by step, from "Accepted" to "Completed", without a single phone call.',
+        },
+        {
+          title: 'Results in Your Pocket',
+          body: "Download official medical PDFs the moment they're ready, with one tap, securely, on any device.",
+        },
+        {
+          title: 'Certified & Reliable',
+          body: 'Once you pass, you receive the official "Fit for Service" badge, recognized by employers and regulators alike.',
+        },
+        {
+          title: 'Total Management Flexibility',
+          body: 'Reschedule or cancel in a tap. HR teams move people through compliance without spreadsheets.',
+        },
       ],
+    },
+    why: {
+      eyebrow: 'Why Mwafq',
+      titleLead: 'A platform built',
+      titleAccent: 'for the way Saudi Arabia works.',
+      body: 'Mwafq isn\'t a generic booking tool with a medical skin on top. Every flow, from the bilingual UI to the "Fit for Service" badge to the HR bulk-import, was designed against real Saudi medical-compliance workflows.',
+      items: [
+        {
+          title: 'Bilingual by default',
+          body: 'Every screen, every report, and every email is built Arabic-first and English-first, not translated as an afterthought.',
+        },
+        {
+          title: 'Connected to real clinics',
+          body: 'Direct integrations with our certified network mean your status updates the moment the clinic does, no phone tag, no chasing.',
+        },
+        {
+          title: 'Designed for individuals and HR alike',
+          body: 'One platform, two muscle memories: a single-tap experience for citizens, a bulk-control dashboard for corporate teams.',
+        },
+        {
+          title: 'Secure, encrypted, and yours',
+          body: 'Your medical record stays your medical record. End-to-end encryption, granular consent, and zero data resale, ever.',
+        },
+      ],
+    },
+    values: {
+      eyebrow: 'What we stand for',
+      items: [
+        {
+          title: 'Trust by design',
+          body: 'Every clinic, lab, and partner on Mwafq is vetted and certified. Your data is encrypted end-to-end.',
+        },
+        {
+          title: 'Built for speed',
+          body: 'Book in under a minute, check status in two taps, receive results without chasing anyone.',
+        },
+        {
+          title: 'Care, not paperwork',
+          body: 'Behind every exam is a person, a job, a family. We design Mwafq around that, not around the form.',
+        },
+      ],
+    },
+    how: {
+      eyebrow: 'How it works',
+      titleLead: 'Your medical journey',
+      titleAccent: 'in simple steps',
+      items: [
+        {
+          title: 'Book your appointment',
+          body: 'Choose your exam type and review the preconditions and requirements right inside the app.',
+        },
+        {
+          title: 'Take the exam',
+          body: 'Head to the medical center at your scheduled time and follow status updates from your phone in real time.',
+        },
+        {
+          title: 'Receive the result',
+          body: 'Download your medical report and check for your "Fit for Service" badge the moment it\'s ready.',
+        },
+      ],
+    },
+    milestones: {
+      eyebrow: 'Our Journey',
+      titleLead: 'A short timeline of',
+      titleAccent: "where we've been",
+      items: [
+        {
+          year: '2023',
+          title: 'The idea',
+          body: 'A small team forms around one belief: medical compliance can be a single experience, not five.',
+        },
+        {
+          year: '2024',
+          title: 'First 10K exams',
+          body: 'Mwafq crosses 10,000 completed exams and welcomes its first corporate partners.',
+        },
+        {
+          year: '2025',
+          title: 'Academy launches',
+          body: 'Mwafq Academy goes live with certified courses in workplace first aid, infection control, and more.',
+        },
+        {
+          year: '2026',
+          title: '50K+ & growing',
+          body: 'Mwafq reaches 50K+ completed exams, 100+ clinics, and a growing B2B portal for HR teams.',
+        },
+      ],
+    },
+    b2b: {
+      eyebrow: 'For Business',
+      titleLead: 'Comprehensive medical solutions',
+      titleAccent: 'for your team.',
+      body: "Manage your team's medical exams with ease. Mwafq gives HR managers a single tool for bulk bookings, employee tracking, and certified report retrieval across every clinic in our network.",
+      cta: 'Book a Demo',
+      points: [
+        'Bulk-book exams for hundreds of employees in a single flow.',
+        "Track every employee's status live, from booked to certified.",
+        'Pull certified PDF reports directly into your HR system.',
+        'A dedicated success manager for every corporate partner.',
+      ],
+    },
+    finalCta: {
+      titleLead: 'Ready when',
+      titleAccent: 'you are.',
+      body: 'Join thousands of individuals and businesses who trust Mwafq with their medical compliance every day.',
+      primary: 'Book Your Exam',
+      secondary: 'Contact Us',
+    },
+  },
+  b2b: {
+    meta: {
+      title: 'Mwafq for Business — Corporate Solutions',
+      description:
+        "Manage your team's medical exams with bulk bookings, live employee tracking, and certified PDF reports — built for HR managers and corporate teams across KSA.",
+    },
+    hero: {
+      eyebrow: 'B2B Portal',
+      headingLead: 'Corporate',
+      headingAccent: 'Solutions',
+      lead: "Manage your team's medical exams with ease. The Mwafq platform gives HR managers a single tool for bulk bookings, employee tracking, and certified report retrieval.",
+      primaryCta: 'Register Your Company',
+      secondaryCta: 'Contact Sales',
+      phone: {
+        greeting: 'Welcome,',
+        name: 'Acme HR',
+        bulkTitle: 'Bulk Book Exam',
+        bulkSubtitle: 'For your team',
+        sectionTitle: 'Team status',
+        statusDone: 'Done',
+        statusActive: 'Active',
+        statusWait: 'Wait',
+        employees: [
+          { initials: 'AS', name: 'Ahmad S.', type: 'Driving', status: 'done' },
+          { initials: 'FR', name: 'Fatima R.', type: 'Residency', status: 'active' },
+          { initials: 'KM', name: 'Khalid M.', type: 'Municipality', status: 'wait' },
+          { initials: 'NA', name: 'Noura A.', type: 'Occupational', status: 'wait' },
+        ],
+      },
+      floatingCards: [
+        { title: 'Bulk Book', detail: 'One click · 142 emps.' },
+        { title: '247 Employees', detail: 'Tracked live' },
+        { title: 'Reports Ready', detail: 'PDF · 1-click' },
+      ],
+    },
+    why: {
+      titleLead: 'Why Mwafq for',
+      titleAccent: 'Business',
+      items: [
+        {
+          title: 'One-Click Bulk Bookings',
+          body: 'Book medical exams for hundreds of employees in a single flow without paperwork or back-and-forth calls.',
+        },
+        {
+          title: 'Results in Your Pocket',
+          body: 'Download attached medical PDFs the moment they are ready, securely and ready to share.',
+        },
+        {
+          title: 'Certified & Reliable',
+          body: 'Once an employee passes, you receive the "Fit for Service" badge trusted by employers and regulators.',
+        },
+        {
+          title: 'Total Management Flexibility',
+          body: 'Full control with quick reschedule or cancel options directly inside the dashboard.',
+        },
+      ],
+    },
+    services: {
+      titleLead: 'Our',
+      titleAccent: 'Services',
+      body: 'Organise residency exams, work permit renewals, and municipality health certificates for large numbers of employees at the same time.',
+      items: [
+        {
+          title: 'Pre-Employment Checkups',
+          body: 'Run full pre-hire medical checks for new joiners across multiple clinics in one coordinated flow.',
+        },
+        {
+          title: 'Residency Exams',
+          body: 'Iqama medical screenings for your entire workforce, recognised by the Ministry of Health across KSA.',
+        },
+        {
+          title: 'Municipality Certificates',
+          body: 'Renew health certificates for food handlers, public-service workers, and licensees in a single batch.',
+        },
+        {
+          title: 'Occupational Health',
+          body: 'Workplace health screenings and periodic checks trusted by 500+ employers across the Kingdom.',
+        },
+      ],
+    },
+    steps: {
+      titleLead: "Steps to Manage Your",
+      titleAccent: "Team's Exams",
+      items: [
+        {
+          title: 'Add Employees',
+          body: 'Create your company account and upload employee data or integrate with your HR system.',
+        },
+        {
+          title: 'Assign Exams',
+          body: 'Select the exam type (Residency, Municipality, Occupational) for each employee and pick from certified clinics.',
+        },
+        {
+          title: 'Receive Results',
+          body: 'Once the exam is complete, reports are delivered directly to your dashboard to confirm medical fitness.',
+        },
+      ],
+    },
+    finalCta: {
+      titleLead: "Ready to Streamline Your",
+      titleAccent: "Company's Procedures",
+      body: "Join hundreds of companies managing their employees' medical exams with Mwafq.",
+      primary: 'Open Your Corporate Account',
+      secondary: 'Talk to Sales',
     },
   },
   contact: {
@@ -583,6 +836,9 @@ const en = {
     greeting: 'Hello {{name}}',
     welcome: 'Welcome back!',
   },
+  academyCourseDetails: {
+    relatedCourses: 'Related Courses',
+  },
   maintenance: {
     title: 'Under Maintenance',
     heading: "We'll be back soon",
@@ -613,6 +869,7 @@ const en = {
     contact: {
       title: 'Personal Information',
       edit: 'Edit',
+      memberSince: 'Member since',
       labels: {
         email: 'Email Address',
         phone: 'Phone Number',
@@ -654,9 +911,30 @@ const en = {
     preparationConditions: 'Preparation Conditions',
     cancelAppointment: 'Cancel Appointment',
     reorder: 'Reorder',
-    details: 'Details',
+    detailsLabel: 'Details',
     viewInformation: 'View Information',
     download: 'Download',
+    emptyExams: 'No upcoming reservations.',
+    emptyResults: 'No results yet.',
+    detailPage: {
+      backToExaminations: 'Back to Examinations',
+      backToResults: 'Back to Results',
+      cancelAppointment: 'Cancel Appointment',
+      orderInformation: 'Order Information',
+      resultInformation: 'Result Information',
+      orderDetails: 'Order Details',
+      orderId: 'Order ID',
+      orderedBy: 'Company',
+      price: 'Price',
+      preparation: 'Preparation',
+      resultDocumentUnavailable: 'Result document is not available yet.',
+      timeline: {
+        new: 'New',
+        accepted: 'Accepted',
+        progress: 'In Progress',
+        completed: 'Completed',
+      },
+    },
   },
 } as const;
 

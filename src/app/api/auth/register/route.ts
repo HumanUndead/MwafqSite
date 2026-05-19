@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import {
   extractUpstreamCode,
   extractUpstreamMessage,
@@ -11,11 +11,11 @@ import { MWAFQ_API_BASE_URL } from '@/shared/constants/config'
 
 function toStringOrNull(value: FormDataEntryValue | null): string | null {
   if (typeof value !== 'string') {
-    return null
+    return null;
   }
 
-  const trimmed = value.trim()
-  return trimmed.length > 0 ? trimmed : null
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
 }
 
 function toNonEmptyStringOrNull(value: FormDataEntryValue | null): string | null {
@@ -28,35 +28,35 @@ function toNonEmptyStringOrNull(value: FormDataEntryValue | null): string | null
 
 function normalizeSaudiPhoneNumber(value: string | null): string | null {
   if (!value) {
-    return null
+    return null;
   }
 
-  const digits = value.replace(/\D/g, '')
+  const digits = value.replace(/\D/g, '');
 
   if (digits.startsWith('966')) {
-    return `0${digits.slice(3, 12)}`.slice(0, 10)
+    return `0${digits.slice(3, 12)}`.slice(0, 10);
   }
 
   if (digits.startsWith('0')) {
-    return digits.slice(0, 10)
+    return digits.slice(0, 10);
   }
 
   if (digits.startsWith('5')) {
-    return `0${digits}`.slice(0, 10)
+    return `0${digits}`.slice(0, 10);
   }
 
-  return digits.slice(0, 10) || null
+  return digits.slice(0, 10) || null;
 }
 
 function parseJsonSafe(value: string): unknown {
   if (!value) {
-    return null
+    return null;
   }
 
   try {
-    return JSON.parse(value)
+    return JSON.parse(value);
   } catch {
-    return null
+    return null;
   }
 }
 
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
           data: null,
         },
         { status: 400 }
-      )
+      );
     }
 
     const upstreamForm = new FormData()
@@ -117,28 +117,31 @@ export async function POST(request: NextRequest) {
     upstreamForm.set('ConfirmPassword', confirmPassword)
 
     if (dateOfBirth) {
-      upstreamForm.set('DateOfBirth', dateOfBirth)
+      upstreamForm.set('DateOfBirth', dateOfBirth);
     }
 
     if (id) {
-      upstreamForm.set('Id', id)
+      upstreamForm.set('Id', id);
     }
 
     if (image instanceof File && image.size > 0) {
-      upstreamForm.set('Img', image)
+      upstreamForm.set('Img', image);
     }
 
-    const endpoint = new URL('/api/Authenticate/Auth/Register', MWAFQ_API_BASE_URL)
+    const endpoint = new URL(
+      '/api/Authenticate/Auth/Register',
+      MWAFQ_API_BASE_URL
+    );
     const upstreamResponse = await fetch(endpoint, {
       method: 'POST',
       body: upstreamForm,
       cache: 'no-store',
-    })
+    });
 
-    const responseText = await upstreamResponse.text()
-    const payload = parseJsonSafe(responseText)
+    const responseText = await upstreamResponse.text();
+    const payload = parseJsonSafe(responseText);
 
-    const upstreamCode = extractUpstreamCode(payload)
+    const upstreamCode = extractUpstreamCode(payload);
 
     if (!upstreamResponse.ok || hasUpstreamFailure(payload)) {
       return NextResponse.json(
@@ -148,8 +151,12 @@ export async function POST(request: NextRequest) {
           code: upstreamCode,
           data: null,
         },
-        { status: upstreamResponse.ok ? 400 : normalizeUpstreamStatus(upstreamResponse.status) }
-      )
+        {
+          status: upstreamResponse.ok
+            ? 400
+            : normalizeUpstreamStatus(upstreamResponse.status),
+        }
+      );
     }
 
     return NextResponse.json({
@@ -159,18 +166,21 @@ export async function POST(request: NextRequest) {
         phoneNumber,
         userName: identityNumber,
         registrationId:
-          payload && typeof payload === 'object' && 'id' in payload && typeof payload.id === 'string'
+          payload &&
+          typeof payload === 'object' &&
+          'id' in payload &&
+          typeof payload.id === 'string'
             ? payload.id
             : null,
         raw: payload,
       },
-    })
+    });
   } catch (error) {
-    console.error('[auth/register] Registration request failed.', error)
+    console.error('[auth/register] Registration request failed.', error);
 
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }
-    )
+    );
   }
 }

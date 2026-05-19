@@ -10,6 +10,7 @@ import {
   PersonalInfoIcon,
   ReservationsChartIcon,
 } from '@/shared/components/icons/profile';
+import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
 const navBase =
@@ -21,8 +22,7 @@ const navIdle = 'text-[#6b7196] hover:bg-[#f2f2f2] hover:text-[#1e2364]';
 
 function routeActive(pathWithoutLocale: string, segment: string): boolean {
   return (
-    pathWithoutLocale === segment ||
-    pathWithoutLocale.startsWith(`${segment}/`)
+    pathWithoutLocale === segment || pathWithoutLocale.startsWith(`${segment}/`)
   );
 }
 
@@ -31,43 +31,40 @@ export function ProfileNavLinks({ locale }: { locale: Locale }) {
   const pathWithoutLocale = getPathnameWithoutLocale(pathname);
   const t = useTranslations('profileLayout').nav;
 
-  const personalActive = routeActive(pathWithoutLocale, '/personal-info');
-  const academyActive = routeActive(pathWithoutLocale, '/academy-courses');
+  const personalActive = routeActive(pathWithoutLocale, ROUTES.PERSONAL_INFO);
+  const academyActive = routeActive(pathWithoutLocale, ROUTES.ACADEMY_COURSES);
   const reservationsActive = routeActive(
     pathWithoutLocale,
-    '/my-reservations',
+    ROUTES.MY_RESERVATIONS
   );
 
   return (
     <>
       <Link
-        href={`/${locale}/personal-info`}
+        href={`/${locale}${ROUTES.PERSONAL_INFO}`}
         className={cn(navBase, personalActive ? navActive : navIdle)}
         aria-current={personalActive ? 'page' : undefined}
         data-cursor
       >
-        <PersonalInfoIcon className="size-[18px] shrink-0 text-current" />
+        <PersonalInfoIcon className='size-[18px] shrink-0 text-current' />
         {t.personalInfo}
       </Link>
       <Link
-        href={`/${locale}/academy-courses`}
+        href={`/${locale}${ROUTES.ACADEMY_COURSES}`}
         className={cn(navBase, academyActive ? navActive : navIdle)}
         aria-current={academyActive ? 'page' : undefined}
         data-cursor
       >
-        <GraduationCapIcon className="size-[18px] shrink-0 text-current" />
+        <GraduationCapIcon className='size-[18px] shrink-0 text-current' />
         {t.academyCourses}
       </Link>
       <Link
-        href={`/${locale}/my-reservations`}
-        className={cn(
-          navBase,
-          reservationsActive ? navActive : navIdle,
-        )}
+        href={`/${locale}${ROUTES.MY_RESERVATIONS}`}
+        className={cn(navBase, reservationsActive ? navActive : navIdle)}
         aria-current={reservationsActive ? 'page' : undefined}
         data-cursor
       >
-        <ReservationsChartIcon className="size-[18px] shrink-0 text-current" />
+        <ReservationsChartIcon className='size-[18px] shrink-0 text-current' />
         {t.myReservations}
       </Link>
     </>

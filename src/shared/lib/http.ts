@@ -1,83 +1,100 @@
-import type { ApiResponse } from '@/shared/types/api.types'
+import type { ApiResponse } from '@/shared/types/api.types';
+import { getAuthTokenFromDocumentCookie } from '@/shared/lib/authCookie';
 
 export class ApiError extends Error {
-  code: string | null
+  code: string | null;
 
   constructor(message: string, code: string | null = null) {
-    super(message)
-    this.name = 'ApiError'
-    this.code = code
+    super(message);
+    this.name = 'ApiError';
+    this.code = code;
   }
 }
 
 class HttpClient {
   private isFormData(value: unknown): value is FormData {
-    return typeof FormData !== 'undefined' && value instanceof FormData
+    return typeof FormData !== 'undefined' && value instanceof FormData;
   }
 
   private extractErrorCode(payload: unknown): string | null {
     if (!payload || typeof payload !== 'object') {
-      return null
+      return null;
     }
 
-    const record = payload as Record<string, unknown>
-    const candidate = record.code
+    const record = payload as Record<string, unknown>;
+    const candidate = record.code;
 
-    return typeof candidate === 'string' && candidate.trim() ? candidate.trim() : null
+    return typeof candidate === 'string' && candidate.trim()
+      ? candidate.trim()
+      : null;
+  }
+
+  private applyBearerFromCookie(headers: Headers) {
+    if (headers.has('Authorization')) {
+      return;
+    }
+
+    const token = getAuthTokenFromDocumentCookie();
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const headers = new Headers(options.headers)
-
+    const headers = new Headers(options.headers);
     if (!this.isFormData(options.body) && !headers.has('Content-Type')) {
-      headers.set('Content-Type', 'application/json')
+      headers.set('Content-Type', 'application/json');
     }
+    this.applyBearerFromCookie(headers);
 
     const response = await fetch(endpoint, {
       headers,
       credentials: 'include',
       ...options,
-    })
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     if (!response.ok) {
-      throw new ApiError(data.message || 'Request failed', this.extractErrorCode(data))
+      throw new ApiError(
+        data.message || 'Request failed',
+        this.extractErrorCode(data)
+      );
     }
 
-    return data
+    return data;
   }
 
   get<T>(endpoint: string, options?: RequestInit) {
-    return this.request<T>(endpoint, { ...options, method: 'GET' })
+    return this.request<T>(endpoint, { ...options, method: 'GET' });
   }
 
   post<T>(endpoint: string, body: unknown, options?: RequestInit) {
-    const isFormData = this.isFormData(body)
+    const isFormData = this.isFormData(body);
 
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
       body: isFormData ? body : JSON.stringify(body),
-    })
+    });
   }
 
   put<T>(endpoint: string, body: unknown, options?: RequestInit) {
-    const isFormData = this.isFormData(body)
+    const isFormData = this.isFormData(body);
 
     return this.request<T>(endpoint, {
       ...options,
       method: 'PUT',
       body: isFormData ? body : JSON.stringify(body),
-    })
+    });
   }
 
   delete<T>(endpoint: string, options?: RequestInit) {
-    return this.request<T>(endpoint, { ...options, method: 'DELETE' })
+    return this.request<T>(endpoint, { ...options, method: 'DELETE' });
   }
 }
 
-export const http = new HttpClient()
+export const http = new HttpClient();
