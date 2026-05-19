@@ -33,6 +33,8 @@ export const authApi = {
     formData.set('CountryID', '14')
     formData.set('IdentityNumber', data.identityNumber.trim())
     formData.set('RelatedTo', '')
+    formData.set('Password', data.password)
+    formData.set('ConfirmPassword', data.confirmPassword)
 
     if (data.dateOfBirth) {
       formData.set('DateOfBirth', data.dateOfBirth)

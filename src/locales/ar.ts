@@ -523,6 +523,12 @@ const ar = {
     validation: {
       invalidEmail: 'يرجى إدخال بريد إلكتروني صحيح',
       passwordMin: 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل',
+      passwordUppercase: 'حرف كبير واحد على الأقل',
+      passwordLowercase: 'حرف صغير واحد على الأقل',
+      passwordNumber: 'رقم واحد على الأقل',
+      passwordSpecial: 'رمز خاص واحد على الأقل',
+      passwordWeak: 'كلمة المرور لا تستوفي جميع المتطلبات',
+      passwordMatch: 'تتطابق مع كلمة المرور',
       nameMin: 'يجب أن يتكون الاسم من حرفين على الأقل',
       passwordMismatch: 'كلمتا المرور غير متطابقتين',
       identityRequired: 'رقم الهوية / الإقامة مطلوب',

@@ -8,6 +8,7 @@ import { Button } from '@/shared/components/ui/Button'
 import { ROUTES } from '@/shared/constants/routes'
 import { cn } from '@/shared/lib/cn'
 import { useRegister } from '../hooks/useRegister'
+import { getPasswordChecks, isStrongPassword } from '../passwordRules'
 import { OtpModal } from './OtpModal'
 import { AuthTextField } from './AuthTextField'
 import type { RegisterDto } from '../types/auth.types'
@@ -91,6 +92,41 @@ function UploadIcon() {
   )
 }
 
+function RequirementCheckIcon({ met }: { met: boolean }) {
+  return (
+    <span
+      className={cn(
+        'flex size-4 items-center justify-center rounded-[4px] border transition-colors',
+        met ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-[#cfd5e6] bg-white text-transparent',
+      )}
+      aria-hidden="true"
+    >
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 6.5 4.7 9 10 3" />
+      </svg>
+    </span>
+  )
+}
+
+function PasswordRequirementList({
+  requirements,
+}: {
+  requirements: Array<{ label: string; met: boolean }>
+}) {
+  return (
+    <ul className="mt-2 grid gap-2 rounded-[14px] border border-[#d9ddea] bg-[#f8f9fc] p-3 sm:grid-cols-2">
+      {requirements.map(requirement => (
+        <li key={requirement.label} className="flex items-center gap-2">
+          <RequirementCheckIcon met={requirement.met} />
+          <span className={cn('text-xs', requirement.met ? 'text-[#1e2364]' : 'text-[#6b7196]')}>
+            {requirement.label}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export function RegisterForm() {
   const locale = useLocale()
   const auth = useTranslations('auth')
@@ -102,9 +138,13 @@ export function RegisterForm() {
     identityNumber: '',
     phoneNumber: '',
     dateOfBirth: '',
+    password: '',
+    confirmPassword: '',
     image: null,
   })
   const [errors, setErrors] = useState<Partial<RegisterDto>>({})
+  const passwordChecks = getPasswordChecks(form.password)
+  const passwordsMatch = form.password.length > 0 && form.password === form.confirmPassword
 
   const validate = (): boolean => {
     const next: Partial<RegisterDto> = {}
@@ -112,6 +152,8 @@ export function RegisterForm() {
     if (form.lastName.trim().length < 2) next.lastName = auth.validation.nameMin
     if (!/^\d{10}$/.test(form.identityNumber)) next.identityNumber = auth.validation.identityNumberLength
     if (!/^05\d{8}$/.test(form.phoneNumber)) next.phoneNumber = auth.validation.invalidSaudiPhone
+    if (!isStrongPassword(form.password)) next.password = auth.validation.passwordWeak
+    if (form.password !== form.confirmPassword) next.confirmPassword = auth.validation.passwordMismatch
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -131,12 +173,18 @@ export function RegisterForm() {
 
     setForm(current => ({ ...current, [key]: value }))
     setErrors(current => {
-      if (!current[key]) {
+      if (!current[key] && (key !== 'password' && key !== 'confirmPassword')) {
         return current
       }
 
       const next = { ...current }
       delete next[key]
+
+      if (key === 'password' || key === 'confirmPassword') {
+        delete next.password
+        delete next.confirmPassword
+      }
+
       return next
     })
   }
@@ -221,6 +269,44 @@ export function RegisterForm() {
           hint={auth.fields.dateOfBirthHint}
           max={new Date().toISOString().slice(0, 10)}
         />
+
+        <div>
+          <AuthTextField
+            label={auth.fields.password}
+            value={form.password}
+            onChange={updateField('password')}
+            error={errors.password}
+            placeholder={auth.fields.passwordPlaceholder}
+            type="password"
+            autoComplete="new-password"
+          />
+          <PasswordRequirementList
+            requirements={[
+              { label: auth.validation.passwordMin, met: passwordChecks.minLength },
+              { label: auth.validation.passwordUppercase, met: passwordChecks.uppercase },
+              { label: auth.validation.passwordLowercase, met: passwordChecks.lowercase },
+              { label: auth.validation.passwordNumber, met: passwordChecks.number },
+              { label: auth.validation.passwordSpecial, met: passwordChecks.special },
+            ]}
+          />
+        </div>
+
+        <div>
+          <AuthTextField
+            label={auth.fields.confirmPassword}
+            value={form.confirmPassword}
+            onChange={updateField('confirmPassword')}
+            error={errors.confirmPassword}
+            placeholder={auth.fields.passwordPlaceholder}
+            type="password"
+            autoComplete="new-password"
+          />
+          <PasswordRequirementList
+            requirements={[
+              { label: auth.validation.passwordMatch, met: passwordsMatch },
+            ]}
+          />
+        </div>
 
         <div className="flex flex-col gap-1.5">
           <label className="px-1 text-[13px] font-bold tracking-[-0.01em] text-[#1e2364]">

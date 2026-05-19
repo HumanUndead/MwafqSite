@@ -23,6 +23,8 @@ export interface RegisterDto {
   identityNumber: string
   phoneNumber: string
   dateOfBirth: string
+  password: string
+  confirmPassword: string
   image: File | null
 }
 
@@ -33,6 +35,8 @@ export interface RegisterRequestDto {
   countryId: number
   identityNumber: string
   relatedTo: string | null
+  password: string
+  confirmPassword: string
   dateOfBirth?: string | null
   id?: string | null
   image?: File | null

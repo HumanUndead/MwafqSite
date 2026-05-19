@@ -6,6 +6,7 @@ import {
   hasUpstreamFailure,
   normalizeUpstreamStatus,
 } from '@/modules/auth/server/upstreamAuthResult'
+import { isStrongPassword } from '@/modules/auth/passwordRules'
 import { MWAFQ_API_BASE_URL } from '@/shared/constants/config'
 
 function toStringOrNull(value: FormDataEntryValue | null): string | null {
@@ -15,6 +16,14 @@ function toStringOrNull(value: FormDataEntryValue | null): string | null {
 
   const trimmed = value.trim()
   return trimmed.length > 0 ? trimmed : null
+}
+
+function toNonEmptyStringOrNull(value: FormDataEntryValue | null): string | null {
+  if (typeof value !== 'string') {
+    return null
+  }
+
+  return value.length > 0 ? value : null
 }
 
 function normalizeSaudiPhoneNumber(value: string | null): string | null {
@@ -60,13 +69,37 @@ export async function POST(request: NextRequest) {
     const identityNumber = toStringOrNull(incomingForm.get('IdentityNumber'))
     const dateOfBirth = toStringOrNull(incomingForm.get('DateOfBirth'))
     const id = toStringOrNull(incomingForm.get('Id'))
+    const password = toNonEmptyStringOrNull(incomingForm.get('Password'))
+    const confirmPassword = toNonEmptyStringOrNull(incomingForm.get('ConfirmPassword'))
     const image = incomingForm.get('Img')
 
-    if (!phoneNumber || !firstName || !lastName || !identityNumber) {
+    if (!phoneNumber || !firstName || !lastName || !identityNumber || !password || !confirmPassword) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Phone number, first name, last name, and identity number are required.',
+          message: 'Phone number, first name, last name, identity number, password, and confirm password are required.',
+          data: null,
+        },
+        { status: 400 }
+      )
+    }
+
+    if (!isStrongPassword(password)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Password does not meet all requirements.',
+          data: null,
+        },
+        { status: 400 }
+      )
+    }
+
+    if (password !== confirmPassword) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Passwords do not match.',
           data: null,
         },
         { status: 400 }
@@ -80,6 +113,8 @@ export async function POST(request: NextRequest) {
     upstreamForm.set('CountryID', '14')
     upstreamForm.set('IdentityNumber', identityNumber)
     upstreamForm.set('Id', '')
+    upstreamForm.set('Password', password)
+    upstreamForm.set('ConfirmPassword', confirmPassword)
 
     if (dateOfBirth) {
       upstreamForm.set('DateOfBirth', dateOfBirth)

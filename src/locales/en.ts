@@ -532,6 +532,12 @@ const en = {
     validation: {
       invalidEmail: 'Please enter a valid email',
       passwordMin: 'Password must be at least 8 characters',
+      passwordUppercase: 'At least 1 uppercase letter',
+      passwordLowercase: 'At least 1 lowercase letter',
+      passwordNumber: 'At least 1 number',
+      passwordSpecial: 'At least 1 special character',
+      passwordWeak: 'Password does not meet all requirements',
+      passwordMatch: 'Matches password',
       nameMin: 'Name must be at least 2 characters',
       passwordMismatch: 'Passwords do not match',
       identityRequired: 'Iqama / Passport number is required',
