@@ -1,6 +1,8 @@
 import type { User } from '@/shared/types/user.types';
 
-export function getUserDisplayName(user: Pick<User, 'firstName' | 'lastName' | 'name'>): string {
+export function getUserDisplayName(
+  user: Pick<User, 'firstName' | 'lastName' | 'name'>
+): string {
   const fromParts = [user.firstName, user.lastName]
     .map((part) => part?.trim())
     .filter(Boolean)

@@ -1,1 +1,1 @@
-export { B2BPage } from './B2BPage'
+export { B2BPage } from './B2BPage';

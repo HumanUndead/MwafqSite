@@ -1,20 +1,10 @@
-/**
- * Placeholder profile values until API wiring. Pass `contact` / `stats` props
- * from `PersonalInfoView` when data is loaded.
- */
+/** Fallback contact fields when session user has no value. */
 export const personalInfoPlaceholderContact = {
-  email: 'Mohammad@gmail.com',
-  phone: '+966 54 000 0000',
-  city: 'Riyadh',
-  country: 'Saudi Arabia',
-  mailingAddress:
-    'King Fahd Road, Olaya District, Riyadh 12313, Saudi Arabia',
-} as const;
-
-export const personalInfoPlaceholderStats = {
-  reservationsCount: '12',
-  coursesOngoingCount: '9',
-  coursesFinishedCount: '6',
+  email: '—',
+  phone: '—',
+  city: '—',
+  country: '—',
+  mailingAddress: '—',
 } as const;
 
 const statIconWrap = {

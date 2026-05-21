@@ -13,11 +13,8 @@ import {
   PencilEditIcon,
 } from '@/shared/components/icons/profile';
 import { cn } from '@/shared/lib/cn';
-import {
-  personalInfoPlaceholderContact,
-  personalInfoPlaceholderStats,
-  statIconWrap,
-} from './constants';
+import { personalInfoPlaceholderContact, statIconWrap } from './constants';
+import type { PersonalInfoStats } from '@/modules/profile-personal/personalStats.shared';
 
 function contactFromUser(user: User | null): Partial<PersonalInfoContact> {
   if (!user) {
@@ -71,11 +68,7 @@ export type PersonalInfoContact = {
   mailingAddress: string;
 };
 
-export type PersonalInfoStats = {
-  reservationsCount: string;
-  coursesOngoingCount: string;
-  coursesFinishedCount: string;
-};
+export type { PersonalInfoStats };
 
 export type PersonalInfoViewProps = {
   /** User from session cookie (RSC). Client store wins after rehydrate. */
@@ -103,7 +96,14 @@ export function PersonalInfoView({
     [contactProp, resolvedUser]
   );
 
-  const stats = { ...personalInfoPlaceholderStats, ...statsProp };
+  const stats = useMemo(
+    () => ({
+      reservationsCount: statsProp?.reservationsCount ?? '0',
+      coursesOngoingCount: statsProp?.coursesOngoingCount ?? '0',
+      coursesFinishedCount: statsProp?.coursesFinishedCount ?? '0',
+    }),
+    [statsProp]
+  );
 
   const memberSince = resolvedUser
     ? getUserMemberSinceDate(resolvedUser)

@@ -12,7 +12,7 @@ export function ReorderAppointmentLink({ className }: { className: string }) {
   const t = useTranslations('profileReservations');
   return (
     <Link
-      href="#"
+      href='#'
       data-cursor
       onMouseEnter={() => {
         setSpin((n) => n + 1);
@@ -22,12 +22,12 @@ export function ReorderAppointmentLink({ className }: { className: string }) {
       {t.reorder}
       <motion.span
         key={spin}
-        className="inline-flex size-4 shrink-0 items-center justify-center"
+        className='inline-flex size-4 shrink-0 items-center justify-center'
         initial={{ rotate: 0 }}
         animate={{ rotate: 360 }}
         transition={{ duration: 0.6, ease: EASE }}
       >
-        <ReorderIcon className="size-4 text-current" />
+        <ReorderIcon className='size-4 text-current' />
       </motion.span>
     </Link>
   );

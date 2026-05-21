@@ -32,14 +32,14 @@ export const authApi = {
     const formData = new FormData();
     const localPhoneNumber = normalizeSaudiPhoneNumber(data.phoneNumber);
 
-    formData.set('PhoneNumber', localPhoneNumber)
-    formData.set('FirstName', data.firstName.trim())
-    formData.set('LastName', data.lastName.trim())
-    formData.set('CountryID', '14')
-    formData.set('IdentityNumber', data.identityNumber.trim())
-    formData.set('RelatedTo', '')
-    formData.set('Password', data.password)
-    formData.set('ConfirmPassword', data.confirmPassword)
+    formData.set('PhoneNumber', localPhoneNumber);
+    formData.set('FirstName', data.firstName.trim());
+    formData.set('LastName', data.lastName.trim());
+    formData.set('CountryID', '14');
+    formData.set('IdentityNumber', data.identityNumber.trim());
+    formData.set('RelatedTo', '');
+    formData.set('Password', data.password);
+    formData.set('ConfirmPassword', data.confirmPassword);
 
     if (data.dateOfBirth) {
       formData.set('DateOfBirth', data.dateOfBirth);

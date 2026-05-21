@@ -58,7 +58,8 @@ export interface AcademyCourse {
 export type AcademyMyCoursesPage = PaginatedResponse<AcademyCourse>;
 
 /** Full upstream MyCourses response body. */
-export type AcademyMyCoursesResponse = UpstreamApiResponse<AcademyMyCoursesPage>;
+export type AcademyMyCoursesResponse =
+  UpstreamApiResponse<AcademyMyCoursesPage>;
 
 /** Row shape used by `AcademyCoursesView`. */
 export interface AcademyCourseRow {

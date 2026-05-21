@@ -5,9 +5,9 @@ import {
   extractUpstreamMessage,
   hasUpstreamFailure,
   normalizeUpstreamStatus,
-} from '@/modules/auth/server/upstreamAuthResult'
-import { isStrongPassword } from '@/modules/auth/passwordRules'
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config'
+} from '@/modules/auth/server/upstreamAuthResult';
+import { isStrongPassword } from '@/modules/auth/passwordRules';
+import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 
 function toStringOrNull(value: FormDataEntryValue | null): string | null {
   if (typeof value !== 'string') {
@@ -18,12 +18,14 @@ function toStringOrNull(value: FormDataEntryValue | null): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
-function toNonEmptyStringOrNull(value: FormDataEntryValue | null): string | null {
+function toNonEmptyStringOrNull(
+  value: FormDataEntryValue | null
+): string | null {
   if (typeof value !== 'string') {
-    return null
+    return null;
   }
 
-  return value.length > 0 ? value : null
+  return value.length > 0 ? value : null;
 }
 
 function normalizeSaudiPhoneNumber(value: string | null): string | null {
@@ -62,26 +64,38 @@ function parseJsonSafe(value: string): unknown {
 
 export async function POST(request: NextRequest) {
   try {
-    const incomingForm = await request.formData()
-    const phoneNumber = normalizeSaudiPhoneNumber(toStringOrNull(incomingForm.get('PhoneNumber')))
-    const firstName = toStringOrNull(incomingForm.get('FirstName'))
-    const lastName = toStringOrNull(incomingForm.get('LastName'))
-    const identityNumber = toStringOrNull(incomingForm.get('IdentityNumber'))
-    const dateOfBirth = toStringOrNull(incomingForm.get('DateOfBirth'))
-    const id = toStringOrNull(incomingForm.get('Id'))
-    const password = toNonEmptyStringOrNull(incomingForm.get('Password'))
-    const confirmPassword = toNonEmptyStringOrNull(incomingForm.get('ConfirmPassword'))
-    const image = incomingForm.get('Img')
+    const incomingForm = await request.formData();
+    const phoneNumber = normalizeSaudiPhoneNumber(
+      toStringOrNull(incomingForm.get('PhoneNumber'))
+    );
+    const firstName = toStringOrNull(incomingForm.get('FirstName'));
+    const lastName = toStringOrNull(incomingForm.get('LastName'));
+    const identityNumber = toStringOrNull(incomingForm.get('IdentityNumber'));
+    const dateOfBirth = toStringOrNull(incomingForm.get('DateOfBirth'));
+    const id = toStringOrNull(incomingForm.get('Id'));
+    const password = toNonEmptyStringOrNull(incomingForm.get('Password'));
+    const confirmPassword = toNonEmptyStringOrNull(
+      incomingForm.get('ConfirmPassword')
+    );
+    const image = incomingForm.get('Img');
 
-    if (!phoneNumber || !firstName || !lastName || !identityNumber || !password || !confirmPassword) {
+    if (
+      !phoneNumber ||
+      !firstName ||
+      !lastName ||
+      !identityNumber ||
+      !password ||
+      !confirmPassword
+    ) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Phone number, first name, last name, identity number, password, and confirm password are required.',
+          message:
+            'Phone number, first name, last name, identity number, password, and confirm password are required.',
           data: null,
         },
         { status: 400 }
-      )
+      );
     }
 
     if (!isStrongPassword(password)) {
@@ -92,7 +106,7 @@ export async function POST(request: NextRequest) {
           data: null,
         },
         { status: 400 }
-      )
+      );
     }
 
     if (password !== confirmPassword) {
@@ -106,15 +120,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const upstreamForm = new FormData()
-    upstreamForm.set('PhoneNumber', phoneNumber)
-    upstreamForm.set('FirstName', firstName)
-    upstreamForm.set('LastName', lastName)
-    upstreamForm.set('CountryID', '14')
-    upstreamForm.set('IdentityNumber', identityNumber)
-    upstreamForm.set('Id', '')
-    upstreamForm.set('Password', password)
-    upstreamForm.set('ConfirmPassword', confirmPassword)
+    const upstreamForm = new FormData();
+    upstreamForm.set('PhoneNumber', phoneNumber);
+    upstreamForm.set('FirstName', firstName);
+    upstreamForm.set('LastName', lastName);
+    upstreamForm.set('CountryID', '14');
+    upstreamForm.set('IdentityNumber', identityNumber);
+    upstreamForm.set('Id', '');
+    upstreamForm.set('Password', password);
+    upstreamForm.set('ConfirmPassword', confirmPassword);
 
     if (dateOfBirth) {
       upstreamForm.set('DateOfBirth', dateOfBirth);

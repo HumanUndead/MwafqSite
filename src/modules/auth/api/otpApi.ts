@@ -1,9 +1,8 @@
-import { http } from '@/shared/lib/http'
-import type { AuthResponse } from '../types/auth.types'
+import { http } from '@/shared/lib/http';
+import type { AuthResponse } from '../types/auth.types';
 
 export const otpApi = {
-  send: (email: string) =>
-    http.post<null>('/api/auth/otp/send', { email }),
+  send: (email: string) => http.post<null>('/api/auth/otp/send', { email }),
 
   sendUserNameOtp: (userName: string) =>
     http.post<{ userName: string }>('/api/auth/otp/send', { userName }),
@@ -16,6 +15,6 @@ export const otpApi = {
 
   verifyUserNameOtp: (userName: string, otp: string) =>
     http.get<AuthResponse & { raw?: unknown }>(
-      `/api/auth/otp/verify?UserName=${encodeURIComponent(userName)}&OTP=${encodeURIComponent(otp)}`,
+      `/api/auth/otp/verify?UserName=${encodeURIComponent(userName)}&OTP=${encodeURIComponent(otp)}`
     ),
-}
+};

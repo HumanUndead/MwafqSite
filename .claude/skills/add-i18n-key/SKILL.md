@@ -31,6 +31,7 @@ description: Use when adding, renaming, or removing a translation key, or when i
 ## Example
 
 `src/locales/en.ts`:
+
 ```ts
 auth: {
   login: {
@@ -42,6 +43,7 @@ auth: {
 ```
 
 `src/locales/ar.ts`:
+
 ```ts
 auth: {
   login: {
@@ -53,9 +55,10 @@ auth: {
 ```
 
 Usage:
+
 ```tsx
-'use client'
-import { useTranslations } from '@/i18n/DictionaryProvider'
-const auth = useTranslations('auth')
-return <button>{auth.login.submit}</button>
+'use client';
+import { useTranslations } from '@/i18n/DictionaryProvider';
+const auth = useTranslations('auth');
+return <button>{auth.login.submit}</button>;
 ```

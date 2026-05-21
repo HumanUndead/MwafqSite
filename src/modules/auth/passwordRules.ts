@@ -1,11 +1,11 @@
-export const PASSWORD_MIN_LENGTH = 8
+export const PASSWORD_MIN_LENGTH = 8;
 
 export interface PasswordChecks {
-  minLength: boolean
-  uppercase: boolean
-  lowercase: boolean
-  number: boolean
-  special: boolean
+  minLength: boolean;
+  uppercase: boolean;
+  lowercase: boolean;
+  number: boolean;
+  special: boolean;
 }
 
 export function getPasswordChecks(password: string): PasswordChecks {
@@ -15,11 +15,11 @@ export function getPasswordChecks(password: string): PasswordChecks {
     lowercase: /[a-z]/.test(password),
     number: /\d/.test(password),
     special: /[^A-Za-z0-9]/.test(password),
-  }
+  };
 }
 
 export function isStrongPassword(password: string): boolean {
-  const checks = getPasswordChecks(password)
+  const checks = getPasswordChecks(password);
 
-  return Object.values(checks).every(Boolean)
+  return Object.values(checks).every(Boolean);
 }

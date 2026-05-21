@@ -66,7 +66,9 @@ export function ResultReservationCard({
                 {hasLocation ? (
                   <span className='inline-flex min-w-0 items-start gap-2'>
                     <MapPinIcon className='mt-0.5 size-4 shrink-0 text-sky-500' />
-                    <span className='min-w-0 leading-snug'>{card.hospital}</span>
+                    <span className='min-w-0 leading-snug'>
+                      {card.hospital}
+                    </span>
                   </span>
                 ) : null}
                 {hasSchedule ? (
@@ -96,7 +98,11 @@ export function ResultReservationCard({
             'translate-y-[5px] max-[380px]:flex-col'
           )}
         >
-          <Link href={detailsHref} data-cursor className={cn(btnOutline, 'min-w-42')}>
+          <Link
+            href={detailsHref}
+            data-cursor
+            className={cn(btnOutline, 'min-w-42')}
+          >
             {t.viewInformation}
             <motion.span
               className='inline-flex size-4 shrink-0'

@@ -37,7 +37,10 @@ export async function GET(request: NextRequest) {
           code: error.code,
           data: null,
         },
-        { status: error.status >= 400 && error.status <= 599 ? error.status : 400 }
+        {
+          status:
+            error.status >= 400 && error.status <= 599 ? error.status : 400,
+        }
       );
     }
 

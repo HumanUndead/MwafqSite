@@ -1,4 +1,10 @@
-export function Eyebrow({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
+export function Eyebrow({
+  children,
+  dark = false,
+}: {
+  children: React.ReactNode;
+  dark?: boolean;
+}) {
   return (
     <span
       className={[
@@ -10,5 +16,5 @@ export function Eyebrow({ children, dark = false }: { children: React.ReactNode;
     >
       {children}
     </span>
-  )
+  );
 }

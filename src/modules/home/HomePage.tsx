@@ -1,30 +1,30 @@
-import { isRtl, type Locale } from '@/i18n/config'
-import { getDictionary } from '@/i18n/dictionaries'
-import { AcademySection } from './components/AcademySection'
-import { AppShowcaseSection } from './components/AppShowcaseSection'
-import { B2BSection } from './components/B2BSection'
-import { BookingSection } from './components/BookingSection'
-import { CtaSection } from './components/CtaSection'
-import { HeroSection } from './components/HeroSection'
-import { ServicesSection } from './components/ServicesSection'
-import { StatsSection } from './components/StatsSection'
-import { StepsSection } from './components/StepsSection'
-import { TestimonialSection } from './components/TestimonialSection'
-import { TickerSection } from './components/TickerSection'
-import { WhySection } from './components/WhySection'
-import { getHomePageContent } from './server/homeContentService'
+import { isRtl, type Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/dictionaries';
+import { AcademySection } from './components/AcademySection';
+import { AppShowcaseSection } from './components/AppShowcaseSection';
+import { B2BSection } from './components/B2BSection';
+import { BookingSection } from './components/BookingSection';
+import { CtaSection } from './components/CtaSection';
+import { HeroSection } from './components/HeroSection';
+import { ServicesSection } from './components/ServicesSection';
+import { StatsSection } from './components/StatsSection';
+import { StepsSection } from './components/StepsSection';
+import { TestimonialSection } from './components/TestimonialSection';
+import { TickerSection } from './components/TickerSection';
+import { WhySection } from './components/WhySection';
+import { getHomePageContent } from './server/homeContentService';
 
 interface Props {
-  locale: Locale
+  locale: Locale;
 }
 
 export async function HomePage({ locale }: Props) {
-  const dictionary = await getDictionary(locale)
-  const content = await getHomePageContent(locale, dictionary)
-  const rtl = isRtl(locale)
+  const dictionary = await getDictionary(locale);
+  const content = await getHomePageContent(locale, dictionary);
+  const rtl = isRtl(locale);
 
   return (
-    <main className="bg-[#eeeeef] text-[#1e2364]">
+    <main className='bg-[#eeeeef] text-[#1e2364]'>
       <HeroSection content={content.hero} isRtl={rtl} locale={locale} />
       <TickerSection />
       <ServicesSection locale={locale} content={content.services} />
@@ -40,5 +40,5 @@ export async function HomePage({ locale }: Props) {
       <TestimonialSection content={content.testimonial} />
       <CtaSection locale={locale} content={content.finalCta} />
     </main>
-  )
+  );
 }

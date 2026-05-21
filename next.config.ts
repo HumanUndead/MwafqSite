@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: 'productionapi.mwafq.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
+      },
     ],
   },
 };
