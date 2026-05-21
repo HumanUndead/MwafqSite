@@ -25,8 +25,5 @@ export function resolveRequestBearerTokenFromCookieStore(
   request: NextRequest,
   getCookie: (name: string) => { value: string } | undefined
 ): string | null {
-  return resolveRequestBearerToken(
-    request,
-    getCookie(authCookieName)?.value
-  );
+  return resolveRequestBearerToken(request, getCookie(authCookieName)?.value);
 }

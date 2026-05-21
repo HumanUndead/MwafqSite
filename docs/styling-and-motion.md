@@ -25,7 +25,7 @@ This document is the **instruction manual** for how we style UI and handle anima
 
 ## Instructions — Tailwind
 
-- Merge classes with **`cn()`** from `@/shared/lib/cn`** when variants or props change the class string (avoids conflicting utilities).
+- Merge classes with **`cn()`** from `@/shared/lib/cn`\*\* when variants or props change the class string (avoids conflicting utilities).
 - Prefer **theme tokens** from `@theme` / `globals.css` when they exist; otherwise use **arbitrary values** (e.g. `rounded-[28px]`, `text-[#6b7196]`) to match design until tokens are added.
 - Use **`wrap-break-word`** (or project-preferred overflow wrap utility) for long user-generated text instead of ad-hoc CSS.
 
@@ -67,9 +67,9 @@ import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 export function SidebarShell({ children }: { children: React.ReactNode }) {
   return (
     <ScrollReveal
-      variant="y"
+      variant='y'
       revealAfterLoadMs={200}
-      className="sticky top-[110px] flex flex-col gap-1 rounded-[28px] border-2 border-[#e5e7f0] bg-white p-[14px]"
+      className='sticky top-[110px] flex flex-col gap-1 rounded-[28px] border-2 border-[#e5e7f0] bg-white p-[14px]'
     >
       {children}
     </ScrollReveal>
@@ -92,5 +92,5 @@ export function SidebarShell({ children }: { children: React.ReactNode }) {
 _Add rows here when Tailwind or Motion is not used, with reason and owner/date._
 
 | Area | Exception | Reason |
-|------|-----------|--------|
-| — | — | — |
+| ---- | --------- | ------ |
+| —    | —         | —      |

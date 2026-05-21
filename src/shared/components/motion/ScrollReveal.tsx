@@ -82,10 +82,7 @@ export function ScrollReveal({
   }, [revealAfterLoadMs]);
 
   const shown =
-    prefersReducedMotion ||
-    instant ||
-    loadShown ||
-    (useIntersection && inView);
+    prefersReducedMotion || instant || loadShown || (useIntersection && inView);
 
   if (variant === 'word') {
     return (
@@ -106,9 +103,7 @@ export function ScrollReveal({
   }
 
   const hidden =
-    variant === 'x'
-      ? { opacity: 0, x: 60, y: 0 }
-      : { opacity: 0, y: 40, x: 0 };
+    variant === 'x' ? { opacity: 0, x: 60, y: 0 } : { opacity: 0, y: 40, x: 0 };
   const visible = { opacity: 1, x: 0, y: 0 };
 
   return (

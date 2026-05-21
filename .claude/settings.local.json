@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Emran/Downloads/new/Mwafq-Profile/**)",
+      "Bash(npx tsc *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Emran\\\\MwafqSite\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(mkdir -p \"c:/Users/Emran/MwafqSite/src/app/[locale]/\\(marketing\\)/contact\")",
+      "WebFetch(domain:productionapi.mwafq.com)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"
+    ]
+  }
+}

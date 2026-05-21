@@ -11,11 +11,11 @@ This is the binding style guide. It supplements `docs/styling-and-motion.md` (ta
 
 ## 1. Two component libraries — pick the right one
 
-| Library | Path | When |
-|---|---|---|
-| **Custom shared** | `@/shared/components/ui/*` (Button, Card, Input, Modal, OtpInput, Spinner) | Default for product UI. Uses brand tokens (`#1e2364`, `#00a8f1`). Variants from `@/shared/lib/variants`. |
+| Library                | Path                                                                                     | When                                                                                                                             |
+| ---------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Custom shared**      | `@/shared/components/ui/*` (Button, Card, Input, Modal, OtpInput, Spinner)               | Default for product UI. Uses brand tokens (`#1e2364`, `#00a8f1`). Variants from `@/shared/lib/variants`.                         |
 | **shadcn (base-nova)** | `@/components/ui/*` (avatar, button, card, carousel, dropdown-menu, input, select, tabs) | Use when you need a primitive the shared set doesn't have (Carousel, Dropdown, Select, Tabs, Avatar). Uses OKLCH neutral tokens. |
-| **Headless** | `@base-ui/react`, `embla-carousel-react` | Only when both libraries fall short, or when shadcn is built on it. |
+| **Headless**           | `@base-ui/react`, `embla-carousel-react`                                                 | Only when both libraries fall short, or when shadcn is built on it.                                                              |
 
 **Rule:** never re-implement a primitive that exists in either library. Never mix the two button systems in one component — choose one.
 
@@ -25,17 +25,17 @@ This is the binding style guide. It supplements `docs/styling-and-motion.md` (ta
 
 Brand colors live as hex literals in `@/shared/lib/variants.ts` and inline in components. There is no Tailwind theme yet, so use hex with arbitrary-value utilities.
 
-| Token | Hex | Use |
-|---|---|---|
-| Brand dark | `#1e2364` | Primary surfaces, headings, brand buttons, focus ring |
-| Brand hover | `#233567` / `#2a3178` | Hover on brand surfaces |
-| Brand accent | `#00a8f1` | Links, accent CTAs (hover `#0090d1`) |
-| Page bg | `#f3f4f8` | Body / app background |
-| Card bg | `#ffffff` | Cards, modals, sidebar |
-| Subtle border | `#e5e7f0` | Card / sidebar borders, dividers |
-| Muted text | `#6b7196` | Secondary copy |
-| Destructive | `red-600` / `red-500` / `red-50` | Errors (Tailwind palette) |
-| Success | `green-600` / `green-50` | Confirmations |
+| Token         | Hex                              | Use                                                   |
+| ------------- | -------------------------------- | ----------------------------------------------------- |
+| Brand dark    | `#1e2364`                        | Primary surfaces, headings, brand buttons, focus ring |
+| Brand hover   | `#233567` / `#2a3178`            | Hover on brand surfaces                               |
+| Brand accent  | `#00a8f1`                        | Links, accent CTAs (hover `#0090d1`)                  |
+| Page bg       | `#f3f4f8`                        | Body / app background                                 |
+| Card bg       | `#ffffff`                        | Cards, modals, sidebar                                |
+| Subtle border | `#e5e7f0`                        | Card / sidebar borders, dividers                      |
+| Muted text    | `#6b7196`                        | Secondary copy                                        |
+| Destructive   | `red-600` / `red-500` / `red-50` | Errors (Tailwind palette)                             |
+| Success       | `green-600` / `green-50`         | Confirmations                                         |
 
 shadcn primitives use OKLCH tokens (`--primary`, `--background`, …) defined in `src/app/globals.css`. Do NOT mix the two systems in a single component — if you use a shadcn primitive, theme it via its variant API; if you use a custom component, theme it with brand hex.
 
@@ -153,10 +153,12 @@ Variants: `primary | secondary | outline | ghost | danger | brand | brandOutline
 ## 12. Cards
 
 ```tsx
-<div className={cn(
-  'rounded-[28px] border-2 border-[#e5e7f0] bg-white p-[14px]',
-  'flex flex-col gap-1',
-)}>
+<div
+  className={cn(
+    'rounded-[28px] border-2 border-[#e5e7f0] bg-white p-[14px]',
+    'flex flex-col gap-1'
+  )}
+>
   ...
 </div>
 ```

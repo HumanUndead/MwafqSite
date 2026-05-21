@@ -21,23 +21,23 @@ All app routes live under `src/app/[locale]/`. The locale segment is required �
 2. **Create the page**: `src/app/[locale]/(group)/<segment>/page.tsx`. Keep it thin:
 
 ```tsx
-import { notFound } from 'next/navigation'
-import { hasLocale, type Locale } from '@/i18n/config'
-import { MyFeaturePage } from '@/modules/<feature>/MyFeaturePage'
+import { notFound } from 'next/navigation';
+import { hasLocale, type Locale } from '@/i18n/config';
+import { MyFeaturePage } from '@/modules/<feature>/MyFeaturePage';
 
 export default async function Page({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params
-  if (!hasLocale(locale)) notFound()
-  return <MyFeaturePage locale={locale as Locale} />
+  const { locale } = await params;
+  if (!hasLocale(locale)) notFound();
+  return <MyFeaturePage locale={locale as Locale} />;
 }
 ```
 
-   - `params` is a Promise in Next 16 — always `await`.
-   - Validate `hasLocale()` and `notFound()` on miss.
+- `params` is a Promise in Next 16 — always `await`.
+- Validate `hasLocale()` and `notFound()` on miss.
 
 3. **Register the path** in `src/shared/constants/routes.ts`:
 

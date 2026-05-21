@@ -423,7 +423,8 @@ const ar = {
       },
       vision: {
         label: 'رؤيتنا',
-        headline: 'منطقةٌ لا يقف فيها الالتزام الطبي عائقًا أمام العمل أو الدراسة أو الحياة.',
+        headline:
+          'منطقةٌ لا يقف فيها الالتزام الطبي عائقًا أمام العمل أو الدراسة أو الحياة.',
         body: 'نرى مستقبلًا تقرأ فيه كل عيادة وكل صاحب عمل وكل مواطن من سجلٍ موثوقٍ واحد، ولا يضطر أحدٌ لأن يقول "انتظر أسبوعين للنتيجة".',
       },
     },
@@ -588,7 +589,12 @@ const ar = {
         statusWait: 'انتظار',
         employees: [
           { initials: 'أ.ص', name: 'أحمد ص.', type: 'قيادة', status: 'done' },
-          { initials: 'ف.ر', name: 'فاطمة ر.', type: 'إقامة', status: 'active' },
+          {
+            initials: 'ف.ر',
+            name: 'فاطمة ر.',
+            type: 'إقامة',
+            status: 'active',
+          },
           { initials: 'خ.م', name: 'خالد م.', type: 'بلدية', status: 'wait' },
           { initials: 'ن.ع', name: 'نورة ع.', type: 'مهنية', status: 'wait' },
         ],
@@ -671,13 +677,24 @@ const ar = {
     },
   },
   contact: {
+    meta: {
+      title: 'تواصل معنا — موفق',
+      description: 'هل لديك سؤال أو تحتاج إلى مساعدة؟ يسعدنا أن نسمع منك.',
+    },
     title: 'تواصل معنا',
     description: 'هل لديك سؤال أو تحتاج إلى مساعدة؟ يسعدنا أن نسمع منك.',
+    info: {
+      email: { label: 'البريد الإلكتروني', value: 'support@mwafq.com' },
+      phone: { label: 'الهاتف', value: '+966 11 000 0000' },
+      address: { label: 'المكتب', value: 'الرياض، المملكة العربية السعودية' },
+    },
     form: {
-      nameLabel: 'الاسم',
-      namePlaceholder: 'اسمك',
+      nameLabel: 'الاسم الكامل',
+      namePlaceholder: 'اسمك الكامل',
       emailLabel: 'البريد الإلكتروني',
       emailPlaceholder: 'you@example.com',
+      phoneLabel: 'الجوال / الهاتف',
+      phonePlaceholder: '+966 5x xxx xxxx',
       messageLabel: 'الرسالة',
       messagePlaceholder: 'كيف يمكننا مساعدتك؟',
       submit: 'إرسال الرسالة',
@@ -906,6 +923,57 @@ const ar = {
         progress: 'قيد التنفيذ',
         completed: 'مكتمل',
       },
+    },
+  },
+  services: {
+    filter: {
+      titleLead: 'باقات',
+      titleAccent: 'المختبر الشاملة.',
+      subtitle:
+        'تصفح قائمتنا الشاملة من الفحوصات أو ابحث بسهولة عن الفحص الذي تحتاجه',
+      packageNameLabel: 'اسم الباقة',
+      packageNamePlaceholder: 'ابحث باسم الباقة',
+      searchBtn: 'بحث',
+    },
+    cards: {
+      popularTag: 'الأكثر طلباً',
+      newTag: 'جديد',
+      buyNow: 'اشترِ الآن',
+      min: 'د',
+      tests: 'فحصاً',
+      sarAriaLabel: 'ريال سعودي',
+    },
+    pagination: {
+      ariaLabel: 'ترقيم الباقات',
+      previous: 'الصفحة السابقة',
+      next: 'الصفحة التالية',
+    },
+    detail: {
+      backLink: 'باقات المختبر',
+      breadcrumbAriaLabel: 'مسار التنقل',
+      requirementsTitle: 'متطلبات فحص {{name}}',
+      conditionsTitle: 'شروط وإرشادات الفحص',
+      relatedTitle: 'فحوصات ذات صلة',
+      buyNow: 'اشترِ الآن',
+      emptyRequirements: 'لا توجد متطلبات محددة لهذه الباقة.',
+      emptyConditions: 'لا توجد شروط محددة لهذه الباقة.',
+    },
+    booking: {
+      defaultSubtitle: 'إدارة مواعيدك القادمة ونتائجك الطبية.',
+      steps: {
+        examinations: 'الفحوصات',
+        course: 'اختر المسار',
+        facility: 'اختر المنشأة',
+        time: 'الوقت',
+      },
+      examItemLabel: 'فحص رقم {{id}}',
+      examsListAriaLabel: 'الفحوصات المشمولة',
+      noExams: 'لا تتضمن هذه الباقة أي فحوصات.',
+      comingSoon: 'هذه الخطوة قريباً.',
+      cancel: 'إلغاء',
+      back: 'رجوع',
+      next: 'التالي',
+      finish: 'إنهاء',
     },
   },
 } as const;

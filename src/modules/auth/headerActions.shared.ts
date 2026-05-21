@@ -1,1 +1,1 @@
-export const logoutActionPath = '__logout__'
+export const logoutActionPath = '__logout__';

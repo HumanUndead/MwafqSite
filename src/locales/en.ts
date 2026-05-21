@@ -610,9 +610,24 @@ const en = {
         statusWait: 'Wait',
         employees: [
           { initials: 'AS', name: 'Ahmad S.', type: 'Driving', status: 'done' },
-          { initials: 'FR', name: 'Fatima R.', type: 'Residency', status: 'active' },
-          { initials: 'KM', name: 'Khalid M.', type: 'Municipality', status: 'wait' },
-          { initials: 'NA', name: 'Noura A.', type: 'Occupational', status: 'wait' },
+          {
+            initials: 'FR',
+            name: 'Fatima R.',
+            type: 'Residency',
+            status: 'active',
+          },
+          {
+            initials: 'KM',
+            name: 'Khalid M.',
+            type: 'Municipality',
+            status: 'wait',
+          },
+          {
+            initials: 'NA',
+            name: 'Noura A.',
+            type: 'Occupational',
+            status: 'wait',
+          },
         ],
       },
       floatingCards: [
@@ -667,7 +682,7 @@ const en = {
       ],
     },
     steps: {
-      titleLead: "Steps to Manage Your",
+      titleLead: 'Steps to Manage Your',
       titleAccent: "Team's Exams",
       items: [
         {
@@ -685,7 +700,7 @@ const en = {
       ],
     },
     finalCta: {
-      titleLead: "Ready to Streamline Your",
+      titleLead: 'Ready to Streamline Your',
       titleAccent: "Company's Procedures",
       body: "Join hundreds of companies managing their employees' medical exams with Mwafq.",
       primary: 'Open Your Corporate Account',
@@ -693,13 +708,24 @@ const en = {
     },
   },
   contact: {
+    meta: {
+      title: 'Contact Us — Mwafq',
+      description: "Have a question or need help? We'd love to hear from you.",
+    },
     title: 'Get in touch',
     description: "Have a question or need help? We'd love to hear from you.",
+    info: {
+      email: { label: 'Email', value: 'support@mwafq.com' },
+      phone: { label: 'Phone', value: '+966 11 000 0000' },
+      address: { label: 'Office', value: 'Riyadh, Saudi Arabia' },
+    },
     form: {
-      nameLabel: 'Name',
-      namePlaceholder: 'Your name',
+      nameLabel: 'Full Name',
+      namePlaceholder: 'Your full name',
       emailLabel: 'Email',
       emailPlaceholder: 'you@example.com',
+      phoneLabel: 'Mobile / Phone',
+      phonePlaceholder: '+966 5x xxx xxxx',
       messageLabel: 'Message',
       messagePlaceholder: 'How can we help?',
       submit: 'Send message',
@@ -721,21 +747,25 @@ const en = {
       forgotPassword: 'Forgot password?',
       noAccount: "Don't have an account?",
       signUp: 'Sign up',
-      welcomeBack: 'Welcome back to Mwafq. Sign in with your verification code to continue.',
+      welcomeBack:
+        'Welcome back to Mwafq. Sign in with your verification code to continue.',
       otpSent: 'OTP sent successfully. Enter the 4-digit code to sign in.',
     },
     register: {
       title: 'Create Account',
-      description: 'Create your Mwafq profile and verify your phone to continue.',
+      description:
+        'Create your Mwafq profile and verify your phone to continue.',
       submit: 'Create account',
       alreadyHaveAccount: 'Already have an account?',
       signIn: 'Sign in',
       success: 'Registration successful. Enter the OTP to verify your account.',
-      otpSent: 'Registration complete. We sent a 4-digit code to continue signing you in.',
+      otpSent:
+        'Registration complete. We sent a 4-digit code to continue signing you in.',
       verifiedSuccess: 'Account verified successfully!',
       invalidOtp: 'Invalid or expired OTP',
       doneTitle: 'Your account is ready',
-      doneDescription: 'Your account has been verified. You can now continue to sign in.',
+      doneDescription:
+        'Your account has been verified. You can now continue to sign in.',
     },
     forgotPassword: {
       title: 'Reset your password',
@@ -934,6 +964,57 @@ const en = {
         progress: 'In Progress',
         completed: 'Completed',
       },
+    },
+  },
+  services: {
+    filter: {
+      titleLead: 'Comprehensive',
+      titleAccent: 'Lab Packages.',
+      subtitle:
+        'Browse our comprehensive list of tests or easily search for the specific exam you need',
+      packageNameLabel: 'Package Name',
+      packageNamePlaceholder: 'Search by package name',
+      searchBtn: 'Search',
+    },
+    cards: {
+      popularTag: 'Popular',
+      newTag: 'New',
+      buyNow: 'Buy Now',
+      min: 'min',
+      tests: 'tests',
+      sarAriaLabel: 'Saudi riyal',
+    },
+    pagination: {
+      ariaLabel: 'Packages pagination',
+      previous: 'Previous page',
+      next: 'Next page',
+    },
+    detail: {
+      backLink: 'Lab Packages',
+      breadcrumbAriaLabel: 'Breadcrumb',
+      requirementsTitle: '{{name}} Exam Requirements',
+      conditionsTitle: 'Exam Conditions & Guidelines',
+      relatedTitle: 'Related Tests',
+      buyNow: 'Buy Now',
+      emptyRequirements: 'No specific requirements listed for this package.',
+      emptyConditions: 'No specific conditions listed for this package.',
+    },
+    booking: {
+      defaultSubtitle: 'Manage your upcoming appointments and medical results.',
+      steps: {
+        examinations: 'Examinations',
+        course: 'Choose Course',
+        facility: 'Choose Facility',
+        time: 'Time',
+      },
+      examItemLabel: 'Exam #{{id}}',
+      examsListAriaLabel: 'Included examinations',
+      noExams: 'No examinations are included in this package.',
+      comingSoon: 'This step is coming soon.',
+      cancel: 'Cancel',
+      back: 'Back',
+      next: 'Next',
+      finish: 'Finish',
     },
   },
 } as const;

@@ -1,11 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,9 +39,7 @@ export function HeaderUserMenu({ locale, menu }: HeaderUserMenuProps) {
         aria-label={menu.profileLabel}
       >
         <Avatar className='size-10 border-2 border-[#d8e4ff]'>
-          {menu.avatarSrc ? (
-            <AvatarImage src={menu.avatarSrc} alt='' />
-          ) : null}
+          {menu.avatarSrc ? <AvatarImage src={menu.avatarSrc} alt='' /> : null}
           <AvatarFallback className='bg-[#1e2364] text-sm font-semibold text-white'>
             {menu.avatarInitials}
           </AvatarFallback>

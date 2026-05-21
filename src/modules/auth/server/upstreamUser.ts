@@ -47,7 +47,10 @@ function readNumber(record: PlainObject, keys: readonly string[]): number {
   return 0;
 }
 
-function readNullableNumber(record: PlainObject, keys: readonly string[]): number | null {
+function readNullableNumber(
+  record: PlainObject,
+  keys: readonly string[]
+): number | null {
   for (const key of keys) {
     if (!(key in record)) {
       continue;
@@ -73,7 +76,11 @@ function readNullableNumber(record: PlainObject, keys: readonly string[]): numbe
   return null;
 }
 
-function readBoolean(record: PlainObject, keys: readonly string[], fallback = false): boolean {
+function readBoolean(
+  record: PlainObject,
+  keys: readonly string[],
+  fallback = false
+): boolean {
   for (const key of keys) {
     const value = record[key];
 
@@ -93,7 +100,10 @@ function readBoolean(record: PlainObject, keys: readonly string[], fallback = fa
   return fallback;
 }
 
-function readStringArray(record: PlainObject, keys: readonly string[]): string[] {
+function readStringArray(
+  record: PlainObject,
+  keys: readonly string[]
+): string[] {
   for (const key of keys) {
     const value = record[key];
     if (!Array.isArray(value)) {
@@ -101,14 +111,19 @@ function readStringArray(record: PlainObject, keys: readonly string[]): string[]
     }
 
     return value
-      .map((item) => (typeof item === 'string' ? item.trim() : String(item ?? '')))
+      .map((item) =>
+        typeof item === 'string' ? item.trim() : String(item ?? '')
+      )
       .filter(Boolean);
   }
 
   return [];
 }
 
-function readNumberArray(record: PlainObject, keys: readonly string[]): number[] {
+function readNumberArray(
+  record: PlainObject,
+  keys: readonly string[]
+): number[] {
   for (const key of keys) {
     const value = record[key];
     if (!Array.isArray(value)) {
@@ -132,7 +147,10 @@ function readNumberArray(record: PlainObject, keys: readonly string[]): number[]
   return [];
 }
 
-function readUnknownArray(record: PlainObject, keys: readonly string[]): unknown[] {
+function readUnknownArray(
+  record: PlainObject,
+  keys: readonly string[]
+): unknown[] {
   for (const key of keys) {
     const value = record[key];
     if (Array.isArray(value)) {
@@ -155,7 +173,10 @@ function readCompanyBranches(record: PlainObject): UserCompanyBranch[] {
     .filter((item): item is PlainObject => item !== null)
     .map((branch) => ({
       id: readNumber(branch, ['id', 'Id']),
-      companyBranchId: readNumber(branch, ['companyBranchId', 'CompanyBranchId']),
+      companyBranchId: readNumber(branch, [
+        'companyBranchId',
+        'CompanyBranchId',
+      ]),
       companyBranchName: readString(branch, [
         'companyBranchName',
         'CompanyBranchName',
@@ -207,8 +228,12 @@ function mapRecordToUser(
   const firstName = readString(record, ['firstName', 'FirstName']);
   const lastName = readString(record, ['lastName', 'LastName']);
   const userName =
-    readString(record, ['userName', 'UserName', 'identityNumber', 'IdentityNumber']) ||
-    fallbackUserName.trim();
+    readString(record, [
+      'userName',
+      'UserName',
+      'identityNumber',
+      'IdentityNumber',
+    ]) || fallbackUserName.trim();
 
   const user: User = {
     id: readString(record, ['id', 'Id']) || userName,

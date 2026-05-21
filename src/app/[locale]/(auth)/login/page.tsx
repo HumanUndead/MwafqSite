@@ -1,21 +1,21 @@
-import { notFound } from 'next/navigation'
-import { getDictionary } from '@/i18n/dictionaries'
-import { hasLocale } from '@/i18n/config'
-import { LoginForm } from '@/modules/auth'
-import { AuthSplitShell } from '@/modules/auth/components/AuthSplitShell'
+import { notFound } from 'next/navigation';
+import { getDictionary } from '@/i18n/dictionaries';
+import { hasLocale } from '@/i18n/config';
+import { LoginForm } from '@/modules/auth';
+import { AuthSplitShell } from '@/modules/auth/components/AuthSplitShell';
 
 interface LoginPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 export default async function LoginPage({ params }: LoginPageProps) {
-  const { locale } = await params
+  const { locale } = await params;
 
   if (!hasLocale(locale)) {
-    notFound()
+    notFound();
   }
 
-  const dictionary = await getDictionary(locale)
+  const dictionary = await getDictionary(locale);
 
   return (
     <AuthSplitShell
@@ -26,5 +26,5 @@ export default async function LoginPage({ params }: LoginPageProps) {
     >
       <LoginForm />
     </AuthSplitShell>
-  )
+  );
 }

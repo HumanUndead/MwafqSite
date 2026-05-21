@@ -1,17 +1,17 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import type { User } from '../types/auth.types'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { User } from '../types/auth.types';
 
 interface AuthState {
-  user: User | null
-  isAuthenticated: boolean
-  setUser: (user: User) => void
-  clearAuth: () => void
+  user: User | null;
+  isAuthenticated: boolean;
+  setUser: (user: User) => void;
+  clearAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    set => ({
+    (set) => ({
       user: null,
       isAuthenticated: false,
       setUser: (user) => set({ user, isAuthenticated: true }),
@@ -19,4 +19,4 @@ export const useAuthStore = create<AuthState>()(
     }),
     { name: 'auth-storage' }
   )
-)
+);

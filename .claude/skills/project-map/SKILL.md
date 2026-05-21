@@ -9,18 +9,18 @@ Stack: Next.js 16 App Router + React 19 + TS 5 + Tailwind 4 + shadcn (base-nova)
 
 ## Where things go
 
-| Concern | Location |
-|---|---|
-| Pages / route entries | `src/app/[locale]/(group)/<path>/page.tsx` |
-| Feature UI + hooks + types | `src/modules/<feature>/` |
-| shadcn primitives | `src/components/ui/` |
-| Cross-feature UI / lib | `src/shared/{components,lib,hooks,constants,types}/` |
-| i18n config + helpers | `src/i18n/` |
-| Translation dictionaries | `src/locales/{en,ar}.ts` |
-| Middleware (locale + auth) | `src/proxy.ts` |
-| Local API routes | `src/app/api/<feature>/route.ts` |
-| Global styles + tokens | `src/app/globals.css` |
-| Styling / motion rules | `docs/styling-and-motion.md` |
+| Concern                    | Location                                             |
+| -------------------------- | ---------------------------------------------------- |
+| Pages / route entries      | `src/app/[locale]/(group)/<path>/page.tsx`           |
+| Feature UI + hooks + types | `src/modules/<feature>/`                             |
+| shadcn primitives          | `src/components/ui/`                                 |
+| Cross-feature UI / lib     | `src/shared/{components,lib,hooks,constants,types}/` |
+| i18n config + helpers      | `src/i18n/`                                          |
+| Translation dictionaries   | `src/locales/{en,ar}.ts`                             |
+| Middleware (locale + auth) | `src/proxy.ts`                                       |
+| Local API routes           | `src/app/api/<feature>/route.ts`                     |
+| Global styles + tokens     | `src/app/globals.css`                                |
+| Styling / motion rules     | `docs/styling-and-motion.md`                         |
 
 ## Route groups under `src/app/[locale]/`
 

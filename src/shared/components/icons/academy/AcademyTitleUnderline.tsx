@@ -8,7 +8,9 @@ type AcademyTitleUnderlineProps = {
   className?: string;
 };
 
-export function AcademyTitleUnderline({ className }: AcademyTitleUnderlineProps) {
+export function AcademyTitleUnderline({
+  className,
+}: AcademyTitleUnderlineProps) {
   const pathRef = useRef<SVGPathElement>(null);
   const inView = useInView(pathRef, { once: true, amount: 0.5 });
   const prefersReducedMotion = useReducedMotion();

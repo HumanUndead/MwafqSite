@@ -31,20 +31,20 @@ src/modules/<feature>/
 3. **Client API wrapper** in `api/<feature>Api.ts`:
 
 ```ts
-import { http } from '@/shared/lib/http'
-import type { FooDto, FooResponse } from '../types/foo.types'
+import { http } from '@/shared/lib/http';
+import type { FooDto, FooResponse } from '../types/foo.types';
 
 export const fooApi = {
   list: () => http.get<FooResponse[]>('/api/foo'),
   create: (data: FooDto) => http.post<FooResponse>('/api/foo', data),
-}
+};
 ```
 
 4. **Server service** in `server/<feature>Service.ts` (if you call upstream from server):
 
 ```ts
-import 'server-only'
-import { upstreamRequest } from '@/modules/auth/server/upstreamRequest'
+import 'server-only';
+import { upstreamRequest } from '@/modules/auth/server/upstreamRequest';
 // ... call upstream API, unwrap UpstreamApiResponse, return view model
 ```
 

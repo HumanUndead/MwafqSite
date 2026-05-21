@@ -1,0 +1,262 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { CircleCheck, Clock } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardTitle,
+} from '@/components/ui/card';
+import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
+import { cn } from '@/lib/utils';
+import { BuyNowButton } from './BuyNowButton';
+import { packageCardVariants, packageMediaVariants } from '../constants';
+import type { ServiceGroupListItem } from '@/modules/auth/serviceGroup.types';
+import { type Locale, localeToLangId } from '@/i18n/config';
+import { getLocalizedRoute } from '@/i18n/routing';
+import { ROUTES } from '@/shared/constants/routes';
+import { getServiceGroupBuyPath } from '@/modules/services/booking.shared';
+import {
+  lowestServiceGroupPrice,
+  serviceGroupImageFallback,
+  serviceGroupImageSrc,
+} from '@/shared/lib/serviceGroupMedia';
+
+const MotionCard = motion.create(Card);
+
+function SarIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox='0 0 1124.14 1256.39'
+      aria-hidden
+      className={cn('fill-current', className)}
+    >
+      <path d='M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z' />
+      <path d='M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z' />
+    </svg>
+  );
+}
+
+function formatPrice(price: number): string {
+  return price % 1 === 0 ? String(price) : price.toFixed(2);
+}
+
+type PackageCardProps = {
+  pkg: ServiceGroupListItem;
+  locale: Locale;
+  t: {
+    popularTag: string;
+    newTag: string;
+    buyNow: string;
+    min: string;
+    tests: string;
+    sarAriaLabel: string;
+  };
+  delay?: number;
+  /** Compact card for the related-tests grid (title, image, price, CTA only). */
+  variant?: 'default' | 'related';
+  /** Set false when a parent already wraps the card in ScrollReveal. */
+  withScrollReveal?: boolean;
+};
+
+export function PackageCard({
+  pkg,
+  locale,
+  t,
+  delay = 0,
+  variant = 'default',
+  withScrollReveal,
+}: PackageCardProps) {
+  const isRelated = variant === 'related';
+  const shouldReveal = withScrollReveal ?? !isRelated;
+
+  const prefersReducedMotion = useReducedMotion();
+  const localeId = localeToLangId[locale];
+  const isAr = localeId === 2;
+  const translation =
+    pkg.translations.find((tr) => tr.langId === localeId) ??
+    pkg.translations[0];
+  const title = translation?.name?.trim() ?? '';
+  const desc = translation?.description;
+  const tagLabel = isRelated ? null : t.popularTag;
+  const buyHref = getServiceGroupBuyPath(locale, pkg.id);
+  const packageDetailHref = `${getLocalizedRoute(locale, ROUTES.SERVICES)}/${pkg.id}`;
+  const price = lowestServiceGroupPrice(pkg.serviceGroupClassificationPricings);
+  const [imageSrc, setImageSrc] = useState(() =>
+    serviceGroupImageSrc(pkg.icon, pkg.id)
+  );
+
+  const cardMotion = prefersReducedMotion
+    ? {}
+    : {
+        variants: packageCardVariants,
+        initial: 'rest' as const,
+        whileHover: 'hover' as const,
+      };
+
+  const mediaMotion = prefersReducedMotion
+    ? {}
+    : { variants: packageMediaVariants };
+
+  const image = (
+    <Image
+      src={imageSrc}
+      alt={title}
+      fill
+      sizes={
+        isRelated
+          ? '(max-width: 480px) 100vw, 20vw'
+          : '(max-width: 640px) 100vw, 240px'
+      }
+      className='object-cover'
+      loading='lazy'
+      onError={() => setImageSrc(serviceGroupImageFallback(pkg.id))}
+    />
+  );
+
+  const card = isRelated ? (
+    <MotionCard
+      {...cardMotion}
+      className={cn(
+        'h-full w-full min-w-0 gap-0 overflow-hidden rounded-[14px] border-2 bg-white py-0 text-[#1e2364] shadow-none ring-0'
+      )}
+    >
+      <Link
+        href={packageDetailHref}
+        className='relative block aspect-square overflow-hidden bg-[#f2f2f2]'
+      >
+        <motion.div className='absolute inset-0' {...mediaMotion}>
+          {image}
+        </motion.div>
+      </Link>
+
+      <div className='border-t border-[#e5e7f0] px-4 py-3.5'>
+        <Link href={packageDetailHref}>
+          <CardTitle className='text-[15px] font-extrabold leading-tight text-[#1e2364]'>
+            {title}
+          </CardTitle>
+        </Link>
+      </div>
+
+      <CardFooter className='mt-auto justify-between gap-2 border-t border-[#e5e7f0] bg-transparent px-4 py-3.5'>
+        {price != null ? (
+          <span className='inline-flex items-baseline gap-1 text-[20px] font-extrabold text-[#1e2364]'>
+            {formatPrice(price)}
+            <SarIcon className='inline-block h-[14px] w-[12px]' />
+          </span>
+        ) : (
+          <span />
+        )}
+        <BuyNowButton
+          href={buyHref}
+          label={t.buyNow}
+          locale={locale}
+          size='card'
+        />
+      </CardFooter>
+    </MotionCard>
+  ) : (
+    <MotionCard
+      {...cardMotion}
+      className={cn(
+        'h-full w-full min-w-0 gap-0 overflow-hidden rounded-[20px] border-2 bg-white py-0 text-[#1e2364] shadow-none ring-0'
+      )}
+    >
+      <Link
+        href={packageDetailHref}
+        className='relative block h-pkg-media shrink-0 overflow-hidden bg-[#1e2364] max-[640px]:h-pkg-media-sm'
+      >
+        <motion.div className='absolute inset-0 z-0' {...mediaMotion}>
+          {image}
+        </motion.div>
+        {tagLabel ? (
+          <span
+            className={cn(
+              'absolute top-3.5 z-10 rounded-[30px] border border-[rgba(0,222,201,0.35)] bg-[rgba(0,222,201,0.18)] px-3 py-[5px] text-[10.5px] font-bold uppercase tracking-[0.6px] text-[#00dec9]',
+              isAr ? 'inset-s-3.5' : 'inset-e-3.5'
+            )}
+          >
+            {tagLabel}
+          </span>
+        ) : null}
+      </Link>
+
+      <CardContent className='flex flex-1 flex-col gap-2.5 px-[22px] pt-[22px] pb-[18px]'>
+        <Link href={packageDetailHref} className='block'>
+          <CardTitle className='min-h-11 text-[18px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
+            {title}
+          </CardTitle>
+        </Link>
+        <CardDescription
+          className='min-h-[38px] text-[12.5px] leading-[1.55] text-[#6b7196]'
+          dangerouslySetInnerHTML={{ __html: desc ?? '' }}
+        />
+
+        <div
+          className='flex items-center gap-3.5 pt-1.5 text-[12px] text-[#6b7196]'
+          aria-label={title}
+        >
+          <span className='inline-flex items-center gap-[5px]'>
+            <Clock
+              className='size-[13px] shrink-0 text-[#00a8f1]'
+              strokeWidth={2}
+              aria-hidden
+            />
+            {pkg.sla} {t.min}
+          </span>
+          <span className='inline-flex items-center gap-[5px]'>
+            <CircleCheck
+              className='size-[13px] shrink-0 text-[#00a8f1]'
+              strokeWidth={2}
+              aria-hidden
+            />
+            {pkg.serviceGroupServices.length} {t.tests}
+          </span>
+        </div>
+      </CardContent>
+
+      <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-[22px] pt-4 pb-[22px]'>
+        {price != null ? (
+          <span className='inline-flex items-baseline gap-1 font-extrabold'>
+            <span className='text-[24px] leading-none tracking-[-0.5px] text-[#1e2364]'>
+              {formatPrice(price)}
+            </span>
+            <span
+              className='inline-flex h-5 w-[18px] translate-y-0.5 text-[#1e2364]'
+              aria-label={t.sarAriaLabel}
+            >
+              <SarIcon className='h-full w-full' />
+            </span>
+          </span>
+        ) : (
+          <span />
+        )}
+        <BuyNowButton
+          href={buyHref}
+          label={t.buyNow}
+          locale={locale}
+          size='card'
+        />
+      </CardFooter>
+    </MotionCard>
+  );
+
+  if (!shouldReveal) {
+    return card;
+  }
+
+  return (
+    <ScrollReveal
+      className={cn(isRelated ? 'h-full w-full' : 'h-[460px] w-[235px]')}
+      transitionDelay={delay}
+    >
+      {card}
+    </ScrollReveal>
+  );
+}

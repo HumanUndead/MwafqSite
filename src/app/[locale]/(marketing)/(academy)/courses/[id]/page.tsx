@@ -22,11 +22,5 @@ export default async function CourseDetailsPage({ params }: PageProps) {
   ]);
   const langId = localeToLangId[locale];
 
-  return (
-    <CourseDetailsView
-      locale={locale}
-      langId={langId}
-      course={course}
-    />
-  );
+  return <CourseDetailsView locale={locale} langId={langId} course={course} />;
 }

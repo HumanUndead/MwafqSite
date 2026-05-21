@@ -13,28 +13,28 @@ export interface LoginResponse {
 }
 
 export interface RegisterDto {
-  firstName: string
-  lastName: string
-  identityNumber: string
-  phoneNumber: string
-  dateOfBirth: string
-  password: string
-  confirmPassword: string
-  image: File | null
+  firstName: string;
+  lastName: string;
+  identityNumber: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+  password: string;
+  confirmPassword: string;
+  image: File | null;
 }
 
 export interface RegisterRequestDto {
-  phoneNumber: string
-  firstName: string
-  lastName: string
-  countryId: number
-  identityNumber: string
-  relatedTo: string | null
-  password: string
-  confirmPassword: string
-  dateOfBirth?: string | null
-  id?: string | null
-  image?: File | null
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  countryId: number;
+  identityNumber: string;
+  relatedTo: string | null;
+  password: string;
+  confirmPassword: string;
+  dateOfBirth?: string | null;
+  id?: string | null;
+  image?: File | null;
 }
 
 export interface RegisterResponse {

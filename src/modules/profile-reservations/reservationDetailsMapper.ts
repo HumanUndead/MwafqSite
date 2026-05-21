@@ -1,6 +1,10 @@
 import { ReservationStatus } from './reservationStatus';
 import type { Reservation } from './types/reservation.types';
-import { buildPrepItems, formatReservationDate, formatReservationTime } from './reservationFormat';
+import {
+  buildPrepItems,
+  formatReservationDate,
+  formatReservationTime,
+} from './reservationFormat';
 
 export type TimelineStepId = 'new' | 'accepted' | 'progress' | 'completed';
 
@@ -44,7 +48,9 @@ export function resolveIsResultView(
 }
 
 export function shouldShowCancelAction(status: number): boolean {
-  return status === ReservationStatus.New || status === ReservationStatus.Accept;
+  return (
+    status === ReservationStatus.New || status === ReservationStatus.Accept
+  );
 }
 
 export function shouldShowReorderAction(status: number): boolean {
