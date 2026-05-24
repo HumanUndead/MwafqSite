@@ -35,7 +35,7 @@ export function Header({ locale, content }: HeaderProps) {
         'max-[980px]:w-[calc(100%-24px)] max-[980px]:pl-4 max-[980px]:pr-2.5',
         'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3 max-[560px]:pr-2',
         isScrolled &&
-          'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150'
+        'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150'
       )}
     >
       <CmsLink
@@ -45,7 +45,7 @@ export function Header({ locale, content }: HeaderProps) {
         aria-label={content.brandLabel}
       >
         <Image
-          src={'/demo-assets/logo.svg'}
+          src={'/demo-assets/logo.svg'} 
           alt={content.brandLabel}
           width={200}
           height={200}
@@ -55,6 +55,7 @@ export function Header({ locale, content }: HeaderProps) {
               ? 'h-14 max-[980px]:h-13 max-[560px]:h-11.5'
               : 'h-22 max-[980px]:h-16 max-[560px]:h-13'
           )}
+          loading='eager'
         />
       </CmsLink>
 
