@@ -2,14 +2,7 @@ import type {
   PaginatedResponse,
   UpstreamApiResponse,
 } from '@/shared/types/api.types';
-
-export interface CourseCategoryTranslation {
-  id: number;
-  langId: number;
-  categoryId: number;
-  name: string;
-  description: string;
-}
+import type { EntityTranslation } from '@/shared/types/entity-translation.types';
 
 export interface CourseCategoryListItem {
   id: number;
@@ -20,7 +13,7 @@ export interface CourseCategoryListItem {
   hasChild: boolean;
   hasCourse: boolean;
   parentName: string | null;
-  translations: CourseCategoryTranslation[];
+  translations: EntityTranslation[];
 }
 
 export type CourseCategoryListPage = PaginatedResponse<CourseCategoryListItem>;

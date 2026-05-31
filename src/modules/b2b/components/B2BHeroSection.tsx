@@ -33,7 +33,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
   return (
     <section
       id='home'
-      className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-20 pt-44 sm:px-7 sm:pt-52 lg:pt-[210px]'
+      className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-20 sm:px-7'
     >
       <div
         aria-hidden='true'

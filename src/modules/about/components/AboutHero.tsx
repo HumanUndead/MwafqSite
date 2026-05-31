@@ -10,7 +10,7 @@ export function AboutHero({ content }: Props) {
   return (
     <section
       id='about'
-      className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-10 pt-40 sm:px-7 sm:pt-44 lg:pt-[210px]'
+      className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-10 sm:px-7'
     >
       <div
         aria-hidden='true'

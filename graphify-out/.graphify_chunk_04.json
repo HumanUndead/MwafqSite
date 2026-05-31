@@ -1,0 +1,303 @@
+{
+  "nodes": [
+    {
+      "id": "logo01_mabda",
+      "label": "Logo 01 – Unidentified Brand (m-p-a-r style lettering)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo01.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "6 paths; monochrome black; letterforms at x≈63(a), x≈92(m), x≈163(p/b), x≈234(symbol). Unidentified partner brand shown on Mwafq site."
+    },
+    {
+      "id": "logo02_slack",
+      "label": "Logo 02 – Slack (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo02.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "Gray (#8c8c8c) fill. SVG group id='Group'; paths include geometric connector/asterisk shape (Path1-6) consistent with Slack logo, plus secondary text letterforms (Path7-12). Very large file (630KB). AMBIGUOUS identification."
+    },
+    {
+      "id": "logo03_writer",
+      "label": "Logo 03 – WRITER",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo03.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "6 paths; monochrome; letter positions map to W(x=25), R(x=90), I(x=137), T(x=168), E(x=201), R(x=241) = 'WRITER'. AI writing assistant brand."
+    },
+    {
+      "id": "logo04_intercom",
+      "label": "Logo 04 – Intercom (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo04.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "Monochrome; contains a distinctive signal/soundwave icon (x=19-67) plus letterforms I(x≈104), N(x≈118), T(x≈148), E(x≈167), R(x≈201), C(x≈221), O(x≈245), M(x≈262). Consistent with Intercom branding. INFERRED."
+    },
+    {
+      "id": "logo05_copilot",
+      "label": "Logo 05 – GitHub Copilot (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo05.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "2 paths; monochrome. Path 1 at x≈15–291 contains letter shapes C,o,p,i,l,o,t. Path 2 at x=31 contains a circular brand mark with lines consistent with GitHub/Copilot octocat-style icon. INFERRED."
+    },
+    {
+      "id": "logo06_icelandair",
+      "label": "Logo 06 – Icelandair (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo06.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "11 shapes (polygons, rects, paths); monochrome black. Letter x-positions map: I(6.4), C(18-34), E(40.9), L(65.2), A(94), N(113), D(152), A(174), I(193.9), R(222.9), S/diagonal(277). Matches 'ICELANDAIR' airline brand. INFERRED."
+    },
+    {
+      "id": "logo07_replit",
+      "label": "Logo 07 – Replit (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo07.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "2 paths; monochrome. Path 1 at x=83+ contains letter forms t,r,e,b,l,i,t consistent with 'replit'. Path 2 at x=7-52 shows 3 stacked rectangles forming the Replit logo icon. INFERRED."
+    },
+    {
+      "id": "logo08_duolingo",
+      "label": "Logo 08 – Duolingo",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo08.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "SVG group IDs explicitly spell out d, u, o1, l, i, i., n, g, o2 = 'duolingo'. EXTRACTED. Language learning platform."
+    },
+    {
+      "id": "logo09_harvey",
+      "label": "Logo 09 – Harvey AI (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo09.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "Single large path; fill=#0f0e0d (near-black). Letter shapes at x=4(H), x=53(H), x=89(a), x=119(v), x=157(e), x=196(y) = 'HaHavy'? Path structure shows H-A-V-E-Y = 'HARVEY'. AI legal platform. INFERRED."
+    },
+    {
+      "id": "logo10_pendo",
+      "label": "Logo 10 – Pendo (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo10.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "1 path + 1 polygon; monochrome. Polygon at x=3 forms distinctive P-block icon. Path contains circular shapes (13.7 radius circles at x=231, x=276, x=96) and letter-segment shapes d,e,p,e,n,d/o. Consistent with 'Pendo' product analytics brand. INFERRED."
+    },
+    {
+      "id": "logo11_mastercard",
+      "label": "Logo 11 – Mastercard (inferred)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo11.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "2 paths; monochrome. Complex letter-segment paths span x=2 to x=295 covering letters m,a,s,t,e,r,c,a,r,d. Consistent with 'mastercard' wordmark. INFERRED."
+    },
+    {
+      "id": "mwafq_partner_logos_collection",
+      "label": "Mwafq Partner/Client Logo Collection (Logos/Logos/)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "notes": "Collection of 11 partner/client brand logos used in the Mwafq website demo. All are monochrome SVGs exported from Adobe Illustrator 30.3.0, viewBox 0 0 300 300."
+    }
+  ],
+  "edges": [
+    {
+      "source": "logo08_duolingo",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo08.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo03_writer",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo03.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo01_mabda",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo01.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo02_slack",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo02.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo04_intercom",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo04.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo05_copilot",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo05.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo06_icelandair",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo06.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo07_replit",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo07.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo09_harvey",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo09.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo10_pendo",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo10.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo11_mastercard",
+      "target": "mwafq_partner_logos_collection",
+      "relation": "member_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/logo11.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo04_intercom",
+      "target": "logo07_replit",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/",
+      "source_location": null,
+      "weight": 0.65
+    },
+    {
+      "source": "logo05_copilot",
+      "target": "logo08_duolingo",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.55,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/",
+      "source_location": null,
+      "weight": 0.55
+    },
+    {
+      "source": "logo03_writer",
+      "target": "logo05_copilot",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/",
+      "source_location": null,
+      "weight": 0.65
+    },
+    {
+      "source": "logo09_harvey",
+      "target": "logo03_writer",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.55,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/Logos/",
+      "source_location": null,
+      "weight": 0.55
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

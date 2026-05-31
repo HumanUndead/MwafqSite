@@ -112,7 +112,7 @@ export async function CourseDetailsView({
 
   return (
     <div className='mx-auto w-full max-w-full overflow-x-clip bg-[#eeeeef] text-[#1e2364]'>
-      <div className='pt-[120px] pb-3 sm:pt-[140px] md:pt-[180px]'>
+      <div className='pb-3'>
         <div className='mx-auto w-full max-w-[1320px] min-w-0 px-4 md:px-7'>
           <ScrollReveal variant='y' revealAfterLoadMs={200}>
             <nav
@@ -327,6 +327,7 @@ export async function CourseDetailsView({
         <CourseCarousel
           categoryId={course.categoryId}
           categoryName={academyLabels.relatedCourses}
+          locale={locale}
           excludeCourseId={course.id}
         />
       </section>

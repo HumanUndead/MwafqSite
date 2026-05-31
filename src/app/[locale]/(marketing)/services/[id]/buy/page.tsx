@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { fetchServiceGroupById } from '@/modules/auth/server/ServiceGroupService';
 import { ServiceGroupBuyPage } from '@/modules/services/ServiceGroupBuyPage';
+import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -17,5 +18,9 @@ export default async function ServiceGroupBuyRoute({ params }: PageProps) {
 
   const serviceGroup = await fetchServiceGroupById(numericId);
 
-  return <ServiceGroupBuyPage serviceGroup={serviceGroup} />;
+  return (
+    <MarketingStickyHeaderOffset variant='detailRoomy'>
+      <ServiceGroupBuyPage serviceGroup={serviceGroup} />
+    </MarketingStickyHeaderOffset>
+  );
 }

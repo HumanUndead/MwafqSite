@@ -76,7 +76,7 @@ export function ContactPage({ content }: Props) {
   return (
     <>
       {/* Hero */}
-      <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-14 pt-40 sm:px-7 sm:pt-44 lg:pt-[210px]'>
+      <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-14 sm:px-7'>
         <div
           aria-hidden='true'
           className='pointer-events-none absolute inset-0 opacity-55 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:24px_24px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'

@@ -1,6 +1,8 @@
 ﻿'use client';
 
 import { memo, useCallback, useMemo, useState } from 'react';
+import type { Locale } from '@/i18n/config';
+import { getTranslationName } from '@/shared/lib/getTranslationName';
 import type { CourseCategoryListItem } from '../courseCategory.types';
 import {
   Select,
@@ -37,22 +39,19 @@ const selectItemClassName = cn(
 
 export function getCategorySelectOptions(
   categories: readonly CourseCategoryListItem[],
-  langId: number
+  locale: Locale
 ): CategorySelectOption[] {
   return categories
     .filter((category) => category.translations.length > 0)
     .map((category) => ({
       value: category.id.toString(),
-      label:
-        category.translations.find((t) => t.langId === langId)?.name ??
-        category.translations.at(0)?.name ??
-        '',
+      label: getTranslationName(category.translations, locale),
     }));
 }
 
 export type AcademyCategorySelectProps = {
   categories: readonly CourseCategoryListItem[];
-  langId: number;
+  locale: Locale;
   value?: string;
   defaultValue?: string;
   onValueChange?: (categoryId: string) => void;
@@ -77,7 +76,7 @@ const CategorySelectItem = memo(function CategorySelectItem({
 
 function AcademyCategorySelectInner({
   categories,
-  langId,
+  locale,
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -88,15 +87,15 @@ function AcademyCategorySelectInner({
   className,
 }: AcademyCategorySelectProps) {
   const options = useMemo(
-    () => getCategorySelectOptions(categories, langId),
-    [categories, langId]
+    () => getCategorySelectOptions(categories, locale),
+    [categories, locale]
   );
 
   const [uncontrolledValue, setUncontrolledValue] = useState(
     () => defaultValue ?? options[0]?.value ?? ''
   );
 
-  const isControlled = controlledValue !== undefined;
+  const isControlled = !!controlledValue;
   const selectedValue = isControlled ? controlledValue : uncontrolledValue;
 
   const handleValueChange = useCallback(
@@ -127,7 +126,7 @@ function AcademyCategorySelectInner({
       {label ? (
         <label
           htmlFor={id}
-          className='mb-2 ml-1.5 block text-[13px] font-bold tracking-[-0.1px] text-[#1e2364]'
+          className='mb-2 ml-1.5 block text-[13px] font-bold tracking-[-0.1px] text-[#1e2364] rtl:ml-0 rtl:mr-1.5'
         >
           {label}
         </label>

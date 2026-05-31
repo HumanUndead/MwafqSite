@@ -838,6 +838,24 @@ const ar = {
   academyCourseDetails: {
     relatedCourses: 'دورات ذات صلة',
   },
+  academyCourses: {
+    filter: {
+      titleLead: 'مرحباً بك في',
+      titleAccent: 'أكاديمية موفق',
+      subtitle: 'واصِل تطوير مهاراتك المهنية والطبية',
+      sectionLabel: 'القسم',
+      sectionPlaceholder: 'اختر التصنيف',
+      searchLabel: 'بحث',
+      searchPlaceholder: 'ابحث...',
+      searchBtn: 'بحث',
+    },
+    carousel: {
+      enrollNow: 'سجّل الآن',
+      reviewsCount: '({{count}})',
+      previous: 'الدورات السابقة',
+      next: 'الدورات التالية',
+    },
+  },
   profileAcademy: {
     title: 'دوراتي في أكاديمية موفق',
     carouselControls: 'عناصر التحكم بعرض الدورات',

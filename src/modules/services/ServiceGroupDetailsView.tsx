@@ -78,7 +78,7 @@ export async function ServiceGroupDetailsView({
 
   return (
     <div className='overflow-x-clip bg-[#eeeeef] text-[#1e2364]'>
-      <div className='pt-[120px] pb-3 sm:pt-[140px] md:pt-[180px]'>
+      <div className='pb-3'>
         <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
           <ScrollReveal variant='y' revealAfterLoadMs={200}>
             <nav aria-label={t.breadcrumbAriaLabel}>

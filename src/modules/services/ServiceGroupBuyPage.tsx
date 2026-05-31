@@ -76,7 +76,7 @@ export function ServiceGroupBuyPage({
 
   return (
     <div className='overflow-x-clip bg-[#eeeeef] pb-16 text-[#1e2364]'>
-      <section className='pt-[140px] pb-10 md:pt-[180px] md:pb-[60px]'>
+      <section className='pb-10 md:pb-[60px]'>
         <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
           <BookingStepper
             steps={steps}

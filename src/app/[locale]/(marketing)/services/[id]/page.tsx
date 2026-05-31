@@ -7,6 +7,7 @@ import {
   fetchServiceGroupById,
   fetchServiceGroupsList,
 } from '@/modules/auth/server/ServiceGroupService';
+import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -31,11 +32,13 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
     .slice(0, 5);
 
   return (
-    <ServiceGroupDetailsView
-      locale={locale}
-      langId={langId}
-      serviceGroup={serviceGroup}
-      relatedPackages={relatedPackages}
-    />
+    <MarketingStickyHeaderOffset variant='detail'>
+      <ServiceGroupDetailsView
+        locale={locale}
+        langId={langId}
+        serviceGroup={serviceGroup}
+        relatedPackages={relatedPackages}
+      />
+    </MarketingStickyHeaderOffset>
   );
 }

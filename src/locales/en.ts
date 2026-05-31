@@ -869,6 +869,24 @@ const en = {
   academyCourseDetails: {
     relatedCourses: 'Related Courses',
   },
+  academyCourses: {
+    filter: {
+      titleLead: 'Welcome to',
+      titleAccent: 'Mwafq Academy',
+      subtitle: 'Keep advancing your professional and medical skills',
+      sectionLabel: 'Section',
+      sectionPlaceholder: 'Select category',
+      searchLabel: 'Search',
+      searchPlaceholder: 'Search...',
+      searchBtn: 'Search',
+    },
+    carousel: {
+      enrollNow: 'Enroll now',
+      reviewsCount: '({{count}})',
+      previous: 'Previous courses',
+      next: 'Next courses',
+    },
+  },
   maintenance: {
     title: 'Under Maintenance',
     heading: "We'll be back soon",
