@@ -1,13 +1,11 @@
-import { GetLocale } from '@/i18n/server';
 import type { Locale } from '@/i18n/config';
 import { fetchCourseList } from './server/courseListService';
 import { CourseCarouselClient } from './CourseCarouselClient';
 
-const localeToLangId: Record<Locale, number> = { en: 1, ar: 2 };
-
 export type CourseCarouselProps = {
   categoryId?: number;
   categoryName: string;
+  locale: Locale;
   isFeatured?: boolean;
   /** Omit this course id from the carousel (e.g. current course on detail page). */
   excludeCourseId?: number;
@@ -16,11 +14,10 @@ export type CourseCarouselProps = {
 export async function CourseCarousel({
   categoryId,
   categoryName,
+  locale,
   isFeatured,
   excludeCourseId,
 }: CourseCarouselProps) {
-  const locale = await GetLocale();
-  const langId = localeToLangId[locale];
   const courses = await fetchCourseList({ categoryId, featured: isFeatured });
 
   const rows = !excludeCourseId
@@ -33,7 +30,7 @@ export async function CourseCarousel({
     <CourseCarouselClient
       categoryName={categoryName}
       courses={rows}
-      langId={langId}
+      locale={locale}
     />
   );
 }

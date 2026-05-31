@@ -1,26 +1,25 @@
-import { localeToLangId } from '@/i18n/config';
 import { GetLocale } from '@/i18n/server';
 import { AcademyFilter } from '@/modules/auth/AcademyFilter';
 import { CourseCarousel } from '@/modules/auth/CourseCarousel';
 import { fetchCourseCategoryList } from '@/modules/auth/server/courseCategoryListService';
+import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
+import { getTranslationName } from '@/shared/lib/getTranslationName';
 
 const page = async () => {
   const categories = await fetchCourseCategoryList();
   const locale = await GetLocale();
-  const langId = localeToLangId[locale];
   return (
-    <div>
-      <AcademyFilter categories={categories.data} langId={langId} />
+    <MarketingStickyHeaderOffset variant='filter'>
+      <AcademyFilter categories={categories.data} locale={locale} />
       {categories.data.map((category) => (
         <CourseCarousel
           key={category.id}
           categoryId={category.id}
-          categoryName={
-            category.translations.find((t) => t.langId === langId)?.name ?? ''
-          }
+          categoryName={getTranslationName(category.translations, locale)}
+          locale={locale}
         />
       ))}
-    </div>
+    </MarketingStickyHeaderOffset>
   );
 };
 

@@ -1,0 +1,1807 @@
+{
+  "C:\\Users\\Emran\\MwafqSite\\components.json": {
+    "mtime": 1779353765.6734297,
+    "ast_hash": "fc5c9e9a7b93eeb2f7b4e1ce0959e4a6",
+    "semantic_hash": "fc5c9e9a7b93eeb2f7b4e1ce0959e4a6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\eslint.config.mjs": {
+    "mtime": 1779353769.58678,
+    "ast_hash": "88c020d5ecb6b574420427d6e0fb61ed",
+    "semantic_hash": "88c020d5ecb6b574420427d6e0fb61ed"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\next.config.ts": {
+    "mtime": 1779353769.597751,
+    "ast_hash": "afac34e7751656198c57fa38bb20d648",
+    "semantic_hash": "afac34e7751656198c57fa38bb20d648"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\package.json": {
+    "mtime": 1779353769.6040752,
+    "ast_hash": "07b48d7f19b3a7a4a215874d11d479e6",
+    "semantic_hash": "07b48d7f19b3a7a4a215874d11d479e6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\postcss.config.mjs": {
+    "mtime": 1779353769.6195986,
+    "ast_hash": "e9d66e1263ec6f84f9c7f4b88b00e4f9",
+    "semantic_hash": "e9d66e1263ec6f84f9c7f4b88b00e4f9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\tsconfig.json": {
+    "mtime": 1779353779.8476777,
+    "ast_hash": "ee17fd1c97c735e9f3564e3f5251f125",
+    "semantic_hash": "ee17fd1c97c735e9f3564e3f5251f125"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.claude\\settings.local.json": {
+    "mtime": 1780209665.5418186,
+    "ast_hash": "e6f5a8fd1dae9d3e0ddd483213487fc3",
+    "semantic_hash": "e6f5a8fd1dae9d3e0ddd483213487fc3"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.vscode\\extensions.json": {
+    "mtime": 1779353765.548225,
+    "ast_hash": "cd48b0e4049173224cf535c3af27c118",
+    "semantic_hash": "cd48b0e4049173224cf535c3af27c118"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.vscode\\settings.json": {
+    "mtime": 1779353765.560199,
+    "ast_hash": "ae978c1ba461112617f878fdca4938d8",
+    "semantic_hash": "ae978c1ba461112617f878fdca4938d8"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\proxy.ts": {
+    "mtime": 1779353778.6480289,
+    "ast_hash": "599c5c390649f4172138166b244da3dc",
+    "semantic_hash": "599c5c390649f4172138166b244da3dc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\layout.tsx": {
+    "mtime": 1779353771.1303632,
+    "ast_hash": "9db5b157678e3f9fc9b85ff097f41844",
+    "semantic_hash": "9db5b157678e3f9fc9b85ff097f41844"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\page.tsx": {
+    "mtime": 1779353771.1405842,
+    "ast_hash": "0da2d01c670d44ba7e777b6c5ee79252",
+    "semantic_hash": "0da2d01c670d44ba7e777b6c5ee79252"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\academy\\my-courses\\route.ts": {
+    "mtime": 1779353770.545804,
+    "ast_hash": "8f0138681e5cb7d9ed36386ab6250688",
+    "semantic_hash": "8f0138681e5cb7d9ed36386ab6250688"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\auth\\get-user-by-token\\route.ts": {
+    "mtime": 1779353770.5990624,
+    "ast_hash": "3bcca03e9b73a9e5d5bcd6c66c1614ec",
+    "semantic_hash": "3bcca03e9b73a9e5d5bcd6c66c1614ec"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\auth\\login\\route.ts": {
+    "mtime": 1779353770.6567018,
+    "ast_hash": "5a195e056de6dcbf9ab84dcbf4104f9e",
+    "semantic_hash": "5a195e056de6dcbf9ab84dcbf4104f9e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\auth\\logout\\route.ts": {
+    "mtime": 1779353770.6846297,
+    "ast_hash": "9e34eb16181c1adb42280d85b068196a",
+    "semantic_hash": "9e34eb16181c1adb42280d85b068196a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\auth\\otp\\resend\\route.ts": {
+    "mtime": 1779353770.7328336,
+    "ast_hash": "ee4defad199c991dad0e2a4d703116c0",
+    "semantic_hash": "ee4defad199c991dad0e2a4d703116c0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\auth\\otp\\send\\route.ts": {
+    "mtime": 1779353770.7979264,
+    "ast_hash": "56d01495968f9484784f185070b8f117",
+    "semantic_hash": "56d01495968f9484784f185070b8f117"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\auth\\otp\\verify\\route.ts": {
+    "mtime": 1779353770.8607705,
+    "ast_hash": "4b4186bbaa427aedefa77cef034f893b",
+    "semantic_hash": "4b4186bbaa427aedefa77cef034f893b"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\auth\\register\\route.ts": {
+    "mtime": 1779353770.9248416,
+    "ast_hash": "d9acf5bb66f81d5125800a5ee853d79f",
+    "semantic_hash": "d9acf5bb66f81d5125800a5ee853d79f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\contact\\route.ts": {
+    "mtime": 1779353770.9818487,
+    "ast_hash": "4cd97a998811b005e7ffe43915bc1d13",
+    "semantic_hash": "4cd97a998811b005e7ffe43915bc1d13"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\api\\reservations\\shortcut-list\\route.ts": {
+    "mtime": 1779353771.0077443,
+    "ast_hash": "cee25e95590676c95a15b9a8bccb51a4",
+    "semantic_hash": "cee25e95590676c95a15b9a8bccb51a4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\error.tsx": {
+    "mtime": 1779359905.79505,
+    "ast_hash": "28297bb4c6c5810fdf246dd2d166036c",
+    "semantic_hash": "28297bb4c6c5810fdf246dd2d166036c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\layout.tsx": {
+    "mtime": 1779353770.5029356,
+    "ast_hash": "9be261175fbe26a798db2d8f1f820433",
+    "semantic_hash": "9be261175fbe26a798db2d8f1f820433"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(auth)\\layout.tsx": {
+    "mtime": 1779353769.8558786,
+    "ast_hash": "9c40f0045679b5c5c445ef09a3bbcf7f",
+    "semantic_hash": "9c40f0045679b5c5c445ef09a3bbcf7f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(auth)\\forgot-password\\page.tsx": {
+    "mtime": 1779353769.8218746,
+    "ast_hash": "1a027962406e7b1e190d987ae2c30b19",
+    "semantic_hash": "1a027962406e7b1e190d987ae2c30b19"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(auth)\\login\\page.tsx": {
+    "mtime": 1779353769.8894892,
+    "ast_hash": "a6d2bf35ef8939957894e3e9d7026cdc",
+    "semantic_hash": "a6d2bf35ef8939957894e3e9d7026cdc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(auth)\\register\\page.tsx": {
+    "mtime": 1779353769.9476452,
+    "ast_hash": "b2b8a5d95956aecf0a9a7665374130fd",
+    "semantic_hash": "b2b8a5d95956aecf0a9a7665374130fd"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(dashboard)\\layout.tsx": {
+    "mtime": 1779353770.005973,
+    "ast_hash": "41a3d648251518db59257406c680605d",
+    "semantic_hash": "41a3d648251518db59257406c680605d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(dashboard)\\dashboard\\page.tsx": {
+    "mtime": 1779353769.989295,
+    "ast_hash": "f3495606139369286319042d273f891d",
+    "semantic_hash": "f3495606139369286319042d273f891d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\layout.tsx": {
+    "mtime": 1779358535.6795342,
+    "ast_hash": "7376a23cb79f3cad9c28dc1538774eaf",
+    "semantic_hash": "7376a23cb79f3cad9c28dc1538774eaf"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\page.tsx": {
+    "mtime": 1779358544.3442128,
+    "ast_hash": "b6e750413e73f7cc8720067f6e9632c0",
+    "semantic_hash": "b6e750413e73f7cc8720067f6e9632c0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\(academy)\\courses\\page.tsx": {
+    "mtime": 1779366035.0226505,
+    "ast_hash": "29b8bf409a2edbc8066496bd85451ad2",
+    "semantic_hash": "29b8bf409a2edbc8066496bd85451ad2"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\(academy)\\courses\\[id]\\page.tsx": {
+    "mtime": 1779358561.9805746,
+    "ast_hash": "64da6dd0f365fb56341809f97afae261",
+    "semantic_hash": "64da6dd0f365fb56341809f97afae261"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\(profile)\\layout.tsx": {
+    "mtime": 1779358594.079916,
+    "ast_hash": "cd08e31b9433149ec638597a4e6719a6",
+    "semantic_hash": "cd08e31b9433149ec638597a4e6719a6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\(profile)\\academy-courses\\page.tsx": {
+    "mtime": 1779358602.5816643,
+    "ast_hash": "daf88879b103d8bd5cfaac19d730d824",
+    "semantic_hash": "daf88879b103d8bd5cfaac19d730d824"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\(profile)\\my-reservations\\page.tsx": {
+    "mtime": 1779358598.734319,
+    "ast_hash": "fde1e9ebc5d442a3244cdb47d0bc91bf",
+    "semantic_hash": "fde1e9ebc5d442a3244cdb47d0bc91bf"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\(profile)\\my-reservations\\[id]\\page.tsx": {
+    "mtime": 1779358600.9783082,
+    "ast_hash": "68cf11aaae04c6ee1639aed7d5575b4d",
+    "semantic_hash": "68cf11aaae04c6ee1639aed7d5575b4d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\(profile)\\personal-info\\page.tsx": {
+    "mtime": 1779358596.8416007,
+    "ast_hash": "f42b57fbe58df5d2d58689dbb6e8bd8d",
+    "semantic_hash": "f42b57fbe58df5d2d58689dbb6e8bd8d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\about\\page.tsx": {
+    "mtime": 1779358546.02248,
+    "ast_hash": "fff39f62e37ae14fda99ec414bbd3c58",
+    "semantic_hash": "fff39f62e37ae14fda99ec414bbd3c58"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\b2b\\page.tsx": {
+    "mtime": 1779358549.6738474,
+    "ast_hash": "24388de6ad5e80dfe8e443ce5eb462cc",
+    "semantic_hash": "24388de6ad5e80dfe8e443ce5eb462cc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact\\page.tsx": {
+    "mtime": 1779358547.6171057,
+    "ast_hash": "8a8b0c69bcb10d23de52c129f107b621",
+    "semantic_hash": "8a8b0c69bcb10d23de52c129f107b621"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\services\\loading.tsx": {
+    "mtime": 1779358552.3250458,
+    "ast_hash": "a4d8422e3d8a889481949ed322d2bdbe",
+    "semantic_hash": "a4d8422e3d8a889481949ed322d2bdbe"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\services\\page.tsx": {
+    "mtime": 1779360065.8785641,
+    "ast_hash": "25075e4bbc0851da7b161022396b7cd9",
+    "semantic_hash": "25075e4bbc0851da7b161022396b7cd9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\services\\[id]\\page.tsx": {
+    "mtime": 1779358554.2431188,
+    "ast_hash": "69ca5fbfed4c1d784c15d85755122596",
+    "semantic_hash": "69ca5fbfed4c1d784c15d85755122596"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\services\\[id]\\buy\\page.tsx": {
+    "mtime": 1779358557.6441605,
+    "ast_hash": "e74dce9d5c3106f2fc36eb0f10e1ab57",
+    "semantic_hash": "e74dce9d5c3106f2fc36eb0f10e1ab57"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\avatar.tsx": {
+    "mtime": 1779353771.4306242,
+    "ast_hash": "a3cb522557862027dd71c0173d087ccc",
+    "semantic_hash": "a3cb522557862027dd71c0173d087ccc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\button.tsx": {
+    "mtime": 1779353771.4491682,
+    "ast_hash": "57d5480afb1e31e6274f6253f163fce3",
+    "semantic_hash": "57d5480afb1e31e6274f6253f163fce3"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\card.tsx": {
+    "mtime": 1779353771.4732347,
+    "ast_hash": "1b5743df22913ffe5dbc8bb0c5725064",
+    "semantic_hash": "1b5743df22913ffe5dbc8bb0c5725064"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\carousel.tsx": {
+    "mtime": 1779353771.5479913,
+    "ast_hash": "5b9f5a93ef187ce7f3ae5ec2aa74112d",
+    "semantic_hash": "5b9f5a93ef187ce7f3ae5ec2aa74112d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\dropdown-menu.tsx": {
+    "mtime": 1779353771.6062326,
+    "ast_hash": "5ed22c7e08719d1825920d10b61e95b3",
+    "semantic_hash": "5ed22c7e08719d1825920d10b61e95b3"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\input.tsx": {
+    "mtime": 1779353771.644989,
+    "ast_hash": "e6a8adfcad140b99e7c583d8432b5c2c",
+    "semantic_hash": "e6a8adfcad140b99e7c583d8432b5c2c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\pagination.tsx": {
+    "mtime": 1779353771.677438,
+    "ast_hash": "b45d4e376dd7292b59243704549a350e",
+    "semantic_hash": "b45d4e376dd7292b59243704549a350e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\select.tsx": {
+    "mtime": 1779353771.7178102,
+    "ast_hash": "03a069370ee6ec47f87bd6c8e4d3daf2",
+    "semantic_hash": "03a069370ee6ec47f87bd6c8e4d3daf2"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\components\\ui\\tabs.tsx": {
+    "mtime": 1779353771.739589,
+    "ast_hash": "44fe7e603aba5c1228e0caedfb2ce8e1",
+    "semantic_hash": "44fe7e603aba5c1228e0caedfb2ce8e1"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\i18n\\config.ts": {
+    "mtime": 1779353771.771887,
+    "ast_hash": "fead78c9a7037b0f15db21baf17a0c94",
+    "semantic_hash": "fead78c9a7037b0f15db21baf17a0c94"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\i18n\\dictionaries.ts": {
+    "mtime": 1779353771.7980108,
+    "ast_hash": "4b6f430b7572cfcd36bc9a241ad1769a",
+    "semantic_hash": "4b6f430b7572cfcd36bc9a241ad1769a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\i18n\\DictionaryProvider.tsx": {
+    "mtime": 1779353771.859373,
+    "ast_hash": "bd128567b624d27a9b6b0391d80081cd",
+    "semantic_hash": "bd128567b624d27a9b6b0391d80081cd"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\i18n\\LanguageSwitcher.tsx": {
+    "mtime": 1779353771.8795805,
+    "ast_hash": "704f755bfb7ddd9c8ac3545e676d5722",
+    "semantic_hash": "704f755bfb7ddd9c8ac3545e676d5722"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\i18n\\routing.ts": {
+    "mtime": 1779353771.922063,
+    "ast_hash": "179fb413211d74b964b90c2fb6516914",
+    "semantic_hash": "179fb413211d74b964b90c2fb6516914"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\i18n\\server.ts": {
+    "mtime": 1779353771.930107,
+    "ast_hash": "f9ee167fd40af98a575ded0f40309297",
+    "semantic_hash": "f9ee167fd40af98a575ded0f40309297"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\lib\\utils.ts": {
+    "mtime": 1779353771.9584825,
+    "ast_hash": "8595c2f874aa1ff8c7cc28df2999f354",
+    "semantic_hash": "8595c2f874aa1ff8c7cc28df2999f354"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\locales\\ar.ts": {
+    "mtime": 1779364300.3786907,
+    "ast_hash": "bd99c7bf00a46f16850bcbff50cbe254",
+    "semantic_hash": "bd99c7bf00a46f16850bcbff50cbe254"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\locales\\en.ts": {
+    "mtime": 1779364298.831599,
+    "ast_hash": "f41fe6210cf8b424be6fdebadd947a98",
+    "semantic_hash": "f41fe6210cf8b424be6fdebadd947a98"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\locales\\types.ts": {
+    "mtime": 1779353772.29494,
+    "ast_hash": "eeefa8553533820cca6bf82185a8e259",
+    "semantic_hash": "eeefa8553533820cca6bf82185a8e259"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\AboutPage.tsx": {
+    "mtime": 1779353772.3731472,
+    "ast_hash": "dee6ef8e1f27605631fcaa1086fcbc1d",
+    "semantic_hash": "dee6ef8e1f27605631fcaa1086fcbc1d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\index.ts": {
+    "mtime": 1779353773.7805417,
+    "ast_hash": "7b74e0826ff2611ce824d9111f5d0b31",
+    "semantic_hash": "7b74e0826ff2611ce824d9111f5d0b31"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\AboutB2BSection.tsx": {
+    "mtime": 1779353772.4650724,
+    "ast_hash": "c2db6f31767e54329ea2af120b490bd3",
+    "semantic_hash": "c2db6f31767e54329ea2af120b490bd3"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\AboutFinalCtaSection.tsx": {
+    "mtime": 1779353772.4977608,
+    "ast_hash": "076290f65bb60bfb4188aa163929fb7f",
+    "semantic_hash": "076290f65bb60bfb4188aa163929fb7f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\AboutHero.tsx": {
+    "mtime": 1779357135.3745162,
+    "ast_hash": "e6615352236e82e3d652accf96003e31",
+    "semantic_hash": "e6615352236e82e3d652accf96003e31"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\AboutStatsSection.tsx": {
+    "mtime": 1779353772.6289134,
+    "ast_hash": "49ece64c9f1b623b8cd8259f244788eb",
+    "semantic_hash": "49ece64c9f1b623b8cd8259f244788eb"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\HowItWorksSection.tsx": {
+    "mtime": 1779353772.7103336,
+    "ast_hash": "f36788714ae9cab499b8dc2312847ac6",
+    "semantic_hash": "f36788714ae9cab499b8dc2312847ac6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\MilestonesSection.tsx": {
+    "mtime": 1779353772.7607307,
+    "ast_hash": "295128027267f6bd5fe039b7d9ab832c",
+    "semantic_hash": "295128027267f6bd5fe039b7d9ab832c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\MissionVisionSection.tsx": {
+    "mtime": 1779353772.8820596,
+    "ast_hash": "6d01ef244d818191619cca7fb60d2afd",
+    "semantic_hash": "6d01ef244d818191619cca7fb60d2afd"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\StorySection.tsx": {
+    "mtime": 1779353773.1449113,
+    "ast_hash": "87f8057b123c658ce1b2de9ffd48b712",
+    "semantic_hash": "87f8057b123c658ce1b2de9ffd48b712"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\ValuesSection.tsx": {
+    "mtime": 1779353773.5950823,
+    "ast_hash": "9b56d75c5cb5989764d16f0a3c8f65f6",
+    "semantic_hash": "9b56d75c5cb5989764d16f0a3c8f65f6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\WhatWeDoSection.tsx": {
+    "mtime": 1779353773.7166414,
+    "ast_hash": "419eaaa16e5618da711a8913fbd33ca9",
+    "semantic_hash": "419eaaa16e5618da711a8913fbd33ca9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\components\\WhyMwafqSection.tsx": {
+    "mtime": 1779353773.767402,
+    "ast_hash": "fbadecfedb7102a7e2457fd51cb380f9",
+    "semantic_hash": "fbadecfedb7102a7e2457fd51cb380f9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\server\\aboutContent.config.ts": {
+    "mtime": 1779353773.8445866,
+    "ast_hash": "c3f75e4965c0f037e2e56237bc455d50",
+    "semantic_hash": "c3f75e4965c0f037e2e56237bc455d50"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\about\\server\\aboutContentService.ts": {
+    "mtime": 1779353774.0187166,
+    "ast_hash": "cf572ce3cdda8a9058a9401fc3d4aa64",
+    "semantic_hash": "cf572ce3cdda8a9058a9401fc3d4aa64"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\AcademyFilter.tsx": {
+    "mtime": 1779364818.1883593,
+    "ast_hash": "c4902d5e44e0f1698f438798a6a35a82",
+    "semantic_hash": "c4902d5e44e0f1698f438798a6a35a82"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\authError.ts": {
+    "mtime": 1779353774.1911435,
+    "ast_hash": "abc107cc50a0a0f51764392022b47bd9",
+    "semantic_hash": "abc107cc50a0a0f51764392022b47bd9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\course.types.ts": {
+    "mtime": 1779365478.12107,
+    "ast_hash": "bf8a87c83c82b2f7db30845561357d34",
+    "semantic_hash": "bf8a87c83c82b2f7db30845561357d34"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\CourseCarousel.tsx": {
+    "mtime": 1779364864.4990234,
+    "ast_hash": "b886d0ba9ccb15bf08e56b3081432422",
+    "semantic_hash": "b886d0ba9ccb15bf08e56b3081432422"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\CourseCarouselClient.tsx": {
+    "mtime": 1779364843.4378896,
+    "ast_hash": "8998c2088261c45b6c9475007f9943ba",
+    "semantic_hash": "8998c2088261c45b6c9475007f9943ba"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\courseCategory.types.ts": {
+    "mtime": 1779365596.932333,
+    "ast_hash": "4ac015784f690d6e494fab21b3ff644c",
+    "semantic_hash": "4ac015784f690d6e494fab21b3ff644c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\CourseDetailsView.tsx": {
+    "mtime": 1779364861.2007704,
+    "ast_hash": "b1e4ad66eed82812485bd60dc3d32d9e",
+    "semantic_hash": "b1e4ad66eed82812485bd60dc3d32d9e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\headerActions.shared.ts": {
+    "mtime": 1779353774.7754004,
+    "ast_hash": "8ed3988df2ba158ed6a80d6cde76b400",
+    "semantic_hash": "8ed3988df2ba158ed6a80d6cde76b400"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\index.ts": {
+    "mtime": 1779353774.933272,
+    "ast_hash": "e9b3b69e2fb5f41d52b0804eba483de8",
+    "semantic_hash": "e9b3b69e2fb5f41d52b0804eba483de8"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\loginForm.shared.ts": {
+    "mtime": 1779353774.9645104,
+    "ast_hash": "eb2dd7a0c7a81bb3574349bb50ce4dc0",
+    "semantic_hash": "eb2dd7a0c7a81bb3574349bb50ce4dc0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\passwordRules.ts": {
+    "mtime": 1779353774.9810562,
+    "ast_hash": "32a28f833a50b015c06a7ffbeec20309",
+    "semantic_hash": "32a28f833a50b015c06a7ffbeec20309"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\registerPage.types.ts": {
+    "mtime": 1779353774.9960983,
+    "ast_hash": "9fbf30881a0c348ac3b70f59e0c352c8",
+    "semantic_hash": "9fbf30881a0c348ac3b70f59e0c352c8"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\serviceGroup.types.ts": {
+    "mtime": 1779365480.5694313,
+    "ast_hash": "69d1eb64f6d060ebb6972aa1c5baaa91",
+    "semantic_hash": "69d1eb64f6d060ebb6972aa1c5baaa91"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\session.shared.ts": {
+    "mtime": 1779353775.6633074,
+    "ast_hash": "c8f67f1531cf93fe5a27910680a9c3f5",
+    "semantic_hash": "c8f67f1531cf93fe5a27910680a9c3f5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\api\\authApi.ts": {
+    "mtime": 1779353774.1404686,
+    "ast_hash": "0f9486a0efb86e0dcb45ba776ca69dce",
+    "semantic_hash": "0f9486a0efb86e0dcb45ba776ca69dce"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\api\\otpApi.ts": {
+    "mtime": 1779353774.1675358,
+    "ast_hash": "c843fd861cd683c8dfacb82bb4cb187f",
+    "semantic_hash": "c843fd861cd683c8dfacb82bb4cb187f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\AcademyCategorySelect.tsx": {
+    "mtime": 1779365948.4942534,
+    "ast_hash": "36aca33d24e1dd0465bb7787d9c18dc7",
+    "semantic_hash": "36aca33d24e1dd0465bb7787d9c18dc7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\AuthSplitShell.tsx": {
+    "mtime": 1779353774.2740464,
+    "ast_hash": "c7acf02c9e923fbcdd5bbed662b3b002",
+    "semantic_hash": "c7acf02c9e923fbcdd5bbed662b3b002"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\AuthTextField.tsx": {
+    "mtime": 1779353774.3016999,
+    "ast_hash": "b24fbf8348d02646ff353c713d66638a",
+    "semantic_hash": "b24fbf8348d02646ff353c713d66638a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\ForgotPasswordForm.tsx": {
+    "mtime": 1779353774.3330417,
+    "ast_hash": "2172494513a61add5c14f4e3464e5c82",
+    "semantic_hash": "2172494513a61add5c14f4e3464e5c82"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\ForgotPasswordView.tsx": {
+    "mtime": 1779353774.3630013,
+    "ast_hash": "81ffde8f3217dbbdf02625d83927d8a7",
+    "semantic_hash": "81ffde8f3217dbbdf02625d83927d8a7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\LoginForm.tsx": {
+    "mtime": 1779353774.412476,
+    "ast_hash": "2aba7d1a209cf84fe304384c54815552",
+    "semantic_hash": "2aba7d1a209cf84fe304384c54815552"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\OtpModal.tsx": {
+    "mtime": 1779353774.4542172,
+    "ast_hash": "b415679d67039e338b76039aa5410770",
+    "semantic_hash": "b415679d67039e338b76039aa5410770"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\components\\RegisterForm.tsx": {
+    "mtime": 1779353774.5729654,
+    "ast_hash": "5957e75f339f49891c9aa4a47af7b85e",
+    "semantic_hash": "5957e75f339f49891c9aa4a47af7b85e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\hooks\\useClientLogout.ts": {
+    "mtime": 1779353774.8006365,
+    "ast_hash": "448137584c0615b629a76e981e639130",
+    "semantic_hash": "448137584c0615b629a76e981e639130"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\hooks\\useForgotPassword.ts": {
+    "mtime": 1779353774.8460872,
+    "ast_hash": "29d009eb1a0ede2548790c37f574469f",
+    "semantic_hash": "29d009eb1a0ede2548790c37f574469f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\hooks\\useLogin.ts": {
+    "mtime": 1779353774.9002879,
+    "ast_hash": "97178f90dff6ed77eb104605b0c4eb86",
+    "semantic_hash": "97178f90dff6ed77eb104605b0c4eb86"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\hooks\\useRegister.ts": {
+    "mtime": 1779353774.9250114,
+    "ast_hash": "a9d08c4bd2eda0b17e8b350ce9dd9a23",
+    "semantic_hash": "a9d08c4bd2eda0b17e8b350ce9dd9a23"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\authService.ts": {
+    "mtime": 1779353775.046998,
+    "ast_hash": "c430847ff9ea13dd204e68e99468e012",
+    "semantic_hash": "c430847ff9ea13dd204e68e99468e012"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\authSession.ts": {
+    "mtime": 1779353775.0865557,
+    "ast_hash": "d29b7519cfd1e527a24e0dc2ee99a0ae",
+    "semantic_hash": "d29b7519cfd1e527a24e0dc2ee99a0ae"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\courseByIdService.ts": {
+    "mtime": 1779353775.1114657,
+    "ast_hash": "b2e58695539fc7ba6fd4b03f64a20330",
+    "semantic_hash": "b2e58695539fc7ba6fd4b03f64a20330"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\courseCategoryListService.ts": {
+    "mtime": 1779353775.146117,
+    "ast_hash": "058a5aad2685ba5a057949ceefeebeb0",
+    "semantic_hash": "058a5aad2685ba5a057949ceefeebeb0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\courseListService.ts": {
+    "mtime": 1779353775.158695,
+    "ast_hash": "1a6b83b97c8cb525f71d384b952c7472",
+    "semantic_hash": "1a6b83b97c8cb525f71d384b952c7472"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\headerAuth.ts": {
+    "mtime": 1779353775.17982,
+    "ast_hash": "ff2228433dc21fd566c674459c129f40",
+    "semantic_hash": "ff2228433dc21fd566c674459c129f40"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\loginAction.ts": {
+    "mtime": 1779353775.1962316,
+    "ast_hash": "d1f3b9877ae1f2b1aa8993fc167307a5",
+    "semantic_hash": "d1f3b9877ae1f2b1aa8993fc167307a5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\otpStore.ts": {
+    "mtime": 1779353775.2162738,
+    "ast_hash": "603b8fa3d78c2ffb3b2c7b973ec435e0",
+    "semantic_hash": "603b8fa3d78c2ffb3b2c7b973ec435e0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\profileService.ts": {
+    "mtime": 1779353775.2292993,
+    "ast_hash": "628cf1c952624a9c7234041f53feb189",
+    "semantic_hash": "628cf1c952624a9c7234041f53feb189"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\registerPageContent.config.ts": {
+    "mtime": 1779353775.2641742,
+    "ast_hash": "01d0edba8f8af9045c0aa5fd5b5c3182",
+    "semantic_hash": "01d0edba8f8af9045c0aa5fd5b5c3182"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\registerPageContentService.ts": {
+    "mtime": 1779353775.3289077,
+    "ast_hash": "b6ce7a4f1bba947176a32f2f94a40ff5",
+    "semantic_hash": "b6ce7a4f1bba947176a32f2f94a40ff5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\resolveRequestBearerToken.ts": {
+    "mtime": 1779353775.338954,
+    "ast_hash": "4e299b06c875734e3e9028ce3eb2c654",
+    "semantic_hash": "4e299b06c875734e3e9028ce3eb2c654"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\ServiceGroupService.ts": {
+    "mtime": 1779353775.3569527,
+    "ast_hash": "b8592d4e5ecf3b66fc78533e22ffbe02",
+    "semantic_hash": "b8592d4e5ecf3b66fc78533e22ffbe02"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\signInContent.config.ts": {
+    "mtime": 1779353775.379313,
+    "ast_hash": "0e6195b1a434006808441f0cd63b5f82",
+    "semantic_hash": "0e6195b1a434006808441f0cd63b5f82"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\upstreamAuthResult.ts": {
+    "mtime": 1779353775.419698,
+    "ast_hash": "9b11b81168ece553363eec17a0fb235b",
+    "semantic_hash": "9b11b81168ece553363eec17a0fb235b"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\upstreamRequest.ts": {
+    "mtime": 1779353775.5134113,
+    "ast_hash": "725509e03f3dab07534d6a3088ae85d3",
+    "semantic_hash": "725509e03f3dab07534d6a3088ae85d3"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\server\\upstreamUser.ts": {
+    "mtime": 1779353775.581976,
+    "ast_hash": "0d61e8fa7dd084198616bb546bae859f",
+    "semantic_hash": "0d61e8fa7dd084198616bb546bae859f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\store\\authStore.ts": {
+    "mtime": 1779353775.6835446,
+    "ast_hash": "428b9e23e97cd7ea166c79de9b1cc86a",
+    "semantic_hash": "428b9e23e97cd7ea166c79de9b1cc86a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\auth\\types\\auth.types.ts": {
+    "mtime": 1779353775.7138247,
+    "ast_hash": "e5600323f69528649b8aa4d7532724df",
+    "semantic_hash": "e5600323f69528649b8aa4d7532724df"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\B2BPage.tsx": {
+    "mtime": 1779353775.7339144,
+    "ast_hash": "d50330a89679158a53bd73bfb0bd4c93",
+    "semantic_hash": "d50330a89679158a53bd73bfb0bd4c93"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\index.ts": {
+    "mtime": 1779353775.9463663,
+    "ast_hash": "c671c88e5a73210b18238cdb50ba66f9",
+    "semantic_hash": "c671c88e5a73210b18238cdb50ba66f9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\components\\B2BFinalCtaSection.tsx": {
+    "mtime": 1779353775.7635233,
+    "ast_hash": "f4e225f3bffe7c7e6d79607c05c2a21d",
+    "semantic_hash": "f4e225f3bffe7c7e6d79607c05c2a21d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\components\\B2BHeroSection.tsx": {
+    "mtime": 1779357139.6979933,
+    "ast_hash": "3b242a7c63d625062d1d03cd138b55f4",
+    "semantic_hash": "3b242a7c63d625062d1d03cd138b55f4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\components\\B2BServicesSection.tsx": {
+    "mtime": 1779353775.8778255,
+    "ast_hash": "5464454f04ed9665c6eb438d1c9c2755",
+    "semantic_hash": "5464454f04ed9665c6eb438d1c9c2755"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\components\\B2BStepsSection.tsx": {
+    "mtime": 1779353775.8967326,
+    "ast_hash": "893d5102a4f298875ffa0f7434cfee91",
+    "semantic_hash": "893d5102a4f298875ffa0f7434cfee91"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\components\\B2BWhySection.tsx": {
+    "mtime": 1779353775.9361978,
+    "ast_hash": "125eef3ef08d91ff1530d40a038cafa2",
+    "semantic_hash": "125eef3ef08d91ff1530d40a038cafa2"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\server\\b2bContent.config.ts": {
+    "mtime": 1779353775.987071,
+    "ast_hash": "85a0c387a14357403241769c10d30fba",
+    "semantic_hash": "85a0c387a14357403241769c10d30fba"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\b2b\\server\\b2bContentService.ts": {
+    "mtime": 1779359481.9286249,
+    "ast_hash": "01159e8dc1611fca9742eb3dbf92d553",
+    "semantic_hash": "01159e8dc1611fca9742eb3dbf92d553"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\contact\\ContactPage.tsx": {
+    "mtime": 1779357137.8797977,
+    "ast_hash": "011f7db397dc1f995d03b8f9b5c1f804",
+    "semantic_hash": "011f7db397dc1f995d03b8f9b5c1f804"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\contact\\index.ts": {
+    "mtime": 1779353776.2198381,
+    "ast_hash": "e7a997ba688c81d62a7287cf53833e89",
+    "semantic_hash": "e7a997ba688c81d62a7287cf53833e89"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\contact\\api\\contactApi.ts": {
+    "mtime": 1779353776.1096992,
+    "ast_hash": "3d7b3af3fecd96746f241e9c8d75131c",
+    "semantic_hash": "3d7b3af3fecd96746f241e9c8d75131c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\contact\\components\\ContactForm.tsx": {
+    "mtime": 1779353776.1795418,
+    "ast_hash": "3bc975648a71d6822d3ff5e3ad898c39",
+    "semantic_hash": "3bc975648a71d6822d3ff5e3ad898c39"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\cmsHref.ts": {
+    "mtime": 1779353776.2616618,
+    "ast_hash": "62bf2c1a6c0d5af0830aa7dffccfae9c",
+    "semantic_hash": "62bf2c1a6c0d5af0830aa7dffccfae9c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\home.types.ts": {
+    "mtime": 1779353777.1220262,
+    "ast_hash": "a7fe78ad26fbb72b53cf02fc8b316dc7",
+    "semantic_hash": "a7fe78ad26fbb72b53cf02fc8b316dc7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\HomePage.tsx": {
+    "mtime": 1779353777.1527574,
+    "ast_hash": "feb6abd439a8370e9636266fdfdd1267",
+    "semantic_hash": "feb6abd439a8370e9636266fdfdd1267"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\LocaleToggle.tsx": {
+    "mtime": 1779353777.162668,
+    "ast_hash": "0aa7a4cb3acc475161441f363e3839ae",
+    "semantic_hash": "0aa7a4cb3acc475161441f363e3839ae"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\AcademySection.tsx": {
+    "mtime": 1779353776.3012476,
+    "ast_hash": "80a60dc5bf86ac85bda0beb36554c52a",
+    "semantic_hash": "80a60dc5bf86ac85bda0beb36554c52a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\AppShowcaseSection.tsx": {
+    "mtime": 1779353776.343128,
+    "ast_hash": "56f286fa58a27fc84c69a01c2ad327d2",
+    "semantic_hash": "56f286fa58a27fc84c69a01c2ad327d2"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\B2BSection.tsx": {
+    "mtime": 1779353776.3823926,
+    "ast_hash": "967356271a1f4815241a760f4c9799ab",
+    "semantic_hash": "967356271a1f4815241a760f4c9799ab"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\BookingSection.tsx": {
+    "mtime": 1779353776.483424,
+    "ast_hash": "494fd83a9c6f9fbcfd4cff482caa64fc",
+    "semantic_hash": "494fd83a9c6f9fbcfd4cff482caa64fc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\CmsLink.tsx": {
+    "mtime": 1779353776.5129426,
+    "ast_hash": "b8cc072ca984cc590b19dc384b043007",
+    "semantic_hash": "b8cc072ca984cc590b19dc384b043007"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\CountingUp.tsx": {
+    "mtime": 1779353776.554073,
+    "ast_hash": "577f74b29ac4a1430eb911f70a5d3c35",
+    "semantic_hash": "577f74b29ac4a1430eb911f70a5d3c35"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\CtaSection.tsx": {
+    "mtime": 1779353776.5769527,
+    "ast_hash": "eac15b1ff45cb13f06b38abb1932c5d0",
+    "semantic_hash": "eac15b1ff45cb13f06b38abb1932c5d0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\Eyebrow.tsx": {
+    "mtime": 1779353776.602376,
+    "ast_hash": "0d5210573e6d8f0445cdb49d8bf68dcb",
+    "semantic_hash": "0d5210573e6d8f0445cdb49d8bf68dcb"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\FooterSection.tsx": {
+    "mtime": 1779353776.634731,
+    "ast_hash": "adf051501330a7fb28a618500fa06723",
+    "semantic_hash": "adf051501330a7fb28a618500fa06723"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\HeroSection.tsx": {
+    "mtime": 1779357145.927717,
+    "ast_hash": "4a07df8bf2fdedc89b0b9e9199d39307",
+    "semantic_hash": "4a07df8bf2fdedc89b0b9e9199d39307"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\Icons.tsx": {
+    "mtime": 1779353776.7661757,
+    "ast_hash": "659f54c91872e66833c64013d458614c",
+    "semantic_hash": "659f54c91872e66833c64013d458614c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\RotatingWord.tsx": {
+    "mtime": 1779353776.7862158,
+    "ast_hash": "888a67a376c814e5cac5a64793db256e",
+    "semantic_hash": "888a67a376c814e5cac5a64793db256e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\ServicesSection.tsx": {
+    "mtime": 1779353776.8473628,
+    "ast_hash": "dd24cc5531273e50c812fba85b074fac",
+    "semantic_hash": "dd24cc5531273e50c812fba85b074fac"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\StatsSection.tsx": {
+    "mtime": 1779353776.8677301,
+    "ast_hash": "12e79ce63ab45331081472371f2a3477",
+    "semantic_hash": "12e79ce63ab45331081472371f2a3477"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\StepsSection.tsx": {
+    "mtime": 1779353776.938058,
+    "ast_hash": "72ed81d9e30b5f913a13b6c02a2f83f8",
+    "semantic_hash": "72ed81d9e30b5f913a13b6c02a2f83f8"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\TestimonialSection.tsx": {
+    "mtime": 1779353776.9566736,
+    "ast_hash": "21b056d6dfbda698ad8c745edcf5b569",
+    "semantic_hash": "21b056d6dfbda698ad8c745edcf5b569"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\TickerSection.tsx": {
+    "mtime": 1779353776.971377,
+    "ast_hash": "955c3e0050e94626b7b5098ef96b3eaa",
+    "semantic_hash": "955c3e0050e94626b7b5098ef96b3eaa"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\useSectionScrollCapture.ts": {
+    "mtime": 1779353777.0004115,
+    "ast_hash": "3486904f75db461cfa51625d116a7f9e",
+    "semantic_hash": "3486904f75db461cfa51625d116a7f9e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\components\\WhySection.tsx": {
+    "mtime": 1779353777.0693858,
+    "ast_hash": "2c258f3c7ea33059e3648115c3d4afe4",
+    "semantic_hash": "2c258f3c7ea33059e3648115c3d4afe4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\server\\homeContent.config.ts": {
+    "mtime": 1779353777.1945658,
+    "ast_hash": "4be978fcd9af5cf0fb6466104531176e",
+    "semantic_hash": "4be978fcd9af5cf0fb6466104531176e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\home\\server\\homeContentService.ts": {
+    "mtime": 1779353777.4138658,
+    "ast_hash": "67858b07165fd6d60a2979e20043ecd4",
+    "semantic_hash": "67858b07165fd6d60a2979e20043ecd4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\landing\\index.ts": {
+    "mtime": 1779353777.4843652,
+    "ast_hash": "3b842155cf61d8863ec4741911f50b90",
+    "semantic_hash": "3b842155cf61d8863ec4741911f50b90"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\landing\\LandingPage.tsx": {
+    "mtime": 1779353777.496386,
+    "ast_hash": "582bf0152a0d9b4e49cd4dfe3994a625",
+    "semantic_hash": "582bf0152a0d9b4e49cd4dfe3994a625"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\landing\\components\\CtaSection.tsx": {
+    "mtime": 1779353777.432464,
+    "ast_hash": "cc130d1b40aa87404507a8f7dca2cdc8",
+    "semantic_hash": "cc130d1b40aa87404507a8f7dca2cdc8"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\landing\\components\\FeaturesSection.tsx": {
+    "mtime": 1779353777.4434352,
+    "ast_hash": "08e92aa478d430376a9c7161a710ef13",
+    "semantic_hash": "08e92aa478d430376a9c7161a710ef13"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\landing\\components\\HeroSection.tsx": {
+    "mtime": 1779353777.4553888,
+    "ast_hash": "7e4ec13f125701d54eef58cd27e3c518",
+    "semantic_hash": "7e4ec13f125701d54eef58cd27e3c518"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\landing\\components\\PricingSection.tsx": {
+    "mtime": 1779353777.474296,
+    "ast_hash": "92e6df0bdda665bd3acccfb44370169f",
+    "semantic_hash": "92e6df0bdda665bd3acccfb44370169f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\landing\\components\\TestimonialsSection.tsx": {
+    "mtime": 1779353777.4843652,
+    "ast_hash": "e62c74495f37305faf66d9e05c5ec2e9",
+    "semantic_hash": "e62c74495f37305faf66d9e05c5ec2e9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile\\constants.ts": {
+    "mtime": 1779353778.1284814,
+    "ast_hash": "ed696a8ec2046e3006e4fd69b14355ad",
+    "semantic_hash": "ed696a8ec2046e3006e4fd69b14355ad"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile\\ProfileLogoutButton.tsx": {
+    "mtime": 1779353778.1568623,
+    "ast_hash": "f4b07928f66886f3865b5c982d8c761a",
+    "semantic_hash": "f4b07928f66886f3865b5c982d8c761a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile\\ProfileNavLinks.tsx": {
+    "mtime": 1779353778.1755378,
+    "ast_hash": "64098682df836969e86060c6793ffa28",
+    "semantic_hash": "64098682df836969e86060c6793ffa28"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile\\ProfileSidebar.tsx": {
+    "mtime": 1779353778.178762,
+    "ast_hash": "ba16eef798d16b6a611c50ee32062649",
+    "semantic_hash": "ba16eef798d16b6a611c50ee32062649"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-academy\\AcademyCoursesView.tsx": {
+    "mtime": 1779353777.5275624,
+    "ast_hash": "fc68a69d6ef63b95f939ee6b7d6b3cb4",
+    "semantic_hash": "fc68a69d6ef63b95f939ee6b7d6b3cb4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-academy\\constants.ts": {
+    "mtime": 1779353777.5467594,
+    "ast_hash": "e9bb63eda1b5d35b9059d8aa40bf1680",
+    "semantic_hash": "e9bb63eda1b5d35b9059d8aa40bf1680"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-academy\\api\\academyApi.ts": {
+    "mtime": 1779353777.536592,
+    "ast_hash": "45e7700697e354204b1454d347ee1966",
+    "semantic_hash": "45e7700697e354204b1454d347ee1966"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-academy\\server\\academyCoursesService.ts": {
+    "mtime": 1779353777.575011,
+    "ast_hash": "3598b787f2e1417cef45d7acaac686a9",
+    "semantic_hash": "3598b787f2e1417cef45d7acaac686a9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-academy\\server\\parseMyCourses.ts": {
+    "mtime": 1779353777.5852592,
+    "ast_hash": "6b695f442f2a3e49c4d09e7037b9cd1d",
+    "semantic_hash": "6b695f442f2a3e49c4d09e7037b9cd1d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-academy\\types\\academy.types.ts": {
+    "mtime": 1779353777.6108494,
+    "ast_hash": "39e7fb6b0f381afda6c38d8e5e353502",
+    "semantic_hash": "39e7fb6b0f381afda6c38d8e5e353502"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-personal\\constants.ts": {
+    "mtime": 1779353777.6108494,
+    "ast_hash": "24d433b1f08f79ce3c712cd703e31156",
+    "semantic_hash": "24d433b1f08f79ce3c712cd703e31156"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-personal\\PersonalInfoView.tsx": {
+    "mtime": 1779353777.6614585,
+    "ast_hash": "c7dce34e504a18118a47f24293802e49",
+    "semantic_hash": "c7dce34e504a18118a47f24293802e49"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-personal\\personalStats.shared.ts": {
+    "mtime": 1779353777.6614585,
+    "ast_hash": "219247a3de2c5a5b3e597e84e191ffe7",
+    "semantic_hash": "219247a3de2c5a5b3e597e84e191ffe7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-personal\\types\\personalStats.types.ts": {
+    "mtime": 1779353777.677596,
+    "ast_hash": "72a5804c5a9f88935a64c9e9669b9270",
+    "semantic_hash": "72a5804c5a9f88935a64c9e9669b9270"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\constants.ts": {
+    "mtime": 1779353777.8960848,
+    "ast_hash": "b452dde50635ed0443f3605653662ac6",
+    "semantic_hash": "b452dde50635ed0443f3605653662ac6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\mapReservations.ts": {
+    "mtime": 1779353777.9164217,
+    "ast_hash": "0c22d2b4b0e4f0dc71f31a0b251f58fb",
+    "semantic_hash": "0c22d2b4b0e4f0dc71f31a0b251f58fb"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\MyReservationsView.tsx": {
+    "mtime": 1779353777.933509,
+    "ast_hash": "b6d0e38c6fc8428a186efb00e1bb730c",
+    "semantic_hash": "b6d0e38c6fc8428a186efb00e1bb730c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\reservationDetailsMapper.ts": {
+    "mtime": 1779353777.9616857,
+    "ast_hash": "03a34b349165f266807f9f664a9b22e7",
+    "semantic_hash": "03a34b349165f266807f9f664a9b22e7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\ReservationDetailsView.tsx": {
+    "mtime": 1779353777.995545,
+    "ast_hash": "5fce456937e6328b32e5932d8a5b1157",
+    "semantic_hash": "5fce456937e6328b32e5932d8a5b1157"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\reservationFormat.ts": {
+    "mtime": 1779353778.011497,
+    "ast_hash": "7379a6ff62fb624046f7522ef7ff4987",
+    "semantic_hash": "7379a6ff62fb624046f7522ef7ff4987"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\reservationStatus.ts": {
+    "mtime": 1779353778.0450983,
+    "ast_hash": "7c4823492a99be57f1b24adac6e21dcf",
+    "semantic_hash": "7c4823492a99be57f1b24adac6e21dcf"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\styles.ts": {
+    "mtime": 1779353778.0780752,
+    "ast_hash": "2cb90fea262658cd8512b340f8564a01",
+    "semantic_hash": "2cb90fea262658cd8512b340f8564a01"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\types.ts": {
+    "mtime": 1779353778.0954342,
+    "ast_hash": "eccb8e084d970ee8a284e1a5c4ae3483",
+    "semantic_hash": "eccb8e084d970ee8a284e1a5c4ae3483"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\utils.ts": {
+    "mtime": 1779353778.1284814,
+    "ast_hash": "82517e7d351666d870113b64fd920755",
+    "semantic_hash": "82517e7d351666d870113b64fd920755"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\components\\ExamReservationCard.tsx": {
+    "mtime": 1779353777.730276,
+    "ast_hash": "0f75cc4da4cd3d4aa86d26650e6f81b5",
+    "semantic_hash": "0f75cc4da4cd3d4aa86d26650e6f81b5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\components\\ReorderAppointmentLink.tsx": {
+    "mtime": 1779353777.744956,
+    "ast_hash": "d54a9de9df43d0876d317de87290e4ba",
+    "semantic_hash": "d54a9de9df43d0876d317de87290e4ba"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\components\\ReservationsExamsPanel.tsx": {
+    "mtime": 1779353777.7647867,
+    "ast_hash": "bf35763d7c6e8a856ac41ecd5bf17f2f",
+    "semantic_hash": "bf35763d7c6e8a856ac41ecd5bf17f2f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\components\\ReservationsPanelSkeleton.tsx": {
+    "mtime": 1779353777.7778914,
+    "ast_hash": "2f445ce68312772ea8ca16ba47b9dffe",
+    "semantic_hash": "2f445ce68312772ea8ca16ba47b9dffe"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\components\\ReservationsResultsPanel.tsx": {
+    "mtime": 1779353777.82811,
+    "ast_hash": "355ff7b97b0728f1c37ae0ed1ff52101",
+    "semantic_hash": "355ff7b97b0728f1c37ae0ed1ff52101"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\components\\ReservationStatusTimeline.tsx": {
+    "mtime": 1779353777.8483772,
+    "ast_hash": "74b03467fbf84297cb1ab051754cd1c6",
+    "semantic_hash": "74b03467fbf84297cb1ab051754cd1c6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\components\\ResultReservationCard.tsx": {
+    "mtime": 1779353777.8778331,
+    "ast_hash": "80f61928f9e91dcb4f8b991da3ad1fcd",
+    "semantic_hash": "80f61928f9e91dcb4f8b991da3ad1fcd"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\server\\parseReservations.ts": {
+    "mtime": 1779353778.0655594,
+    "ast_hash": "e9588959ab6a2f21a626d2e63b991743",
+    "semantic_hash": "e9588959ab6a2f21a626d2e63b991743"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\server\\reservationsService.ts": {
+    "mtime": 1779353778.0780752,
+    "ast_hash": "22caa9dd706b860df49acc603a1e8319",
+    "semantic_hash": "22caa9dd706b860df49acc603a1e8319"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\profile-reservations\\types\\reservation.types.ts": {
+    "mtime": 1779353778.1117544,
+    "ast_hash": "b2e48bab42eee4f3c9bbd3cdfa136757",
+    "semantic_hash": "b2e48bab42eee4f3c9bbd3cdfa136757"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\booking.shared.ts": {
+    "mtime": 1779353778.195469,
+    "ast_hash": "1aed5c04dbced3c3c2abadc4a3cf3435",
+    "semantic_hash": "1aed5c04dbced3c3c2abadc4a3cf3435"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\constants.ts": {
+    "mtime": 1779353778.4813669,
+    "ast_hash": "df38088bdc9a865e80ef7c1a97e3c8a6",
+    "semantic_hash": "df38088bdc9a865e80ef7c1a97e3c8a6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\index.ts": {
+    "mtime": 1779353778.512192,
+    "ast_hash": "9740cf1e20a27b061729f4dc4e990600",
+    "semantic_hash": "9740cf1e20a27b061729f4dc4e990600"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\ServiceGroupBuyPage.tsx": {
+    "mtime": 1779357145.0701745,
+    "ast_hash": "15892322ce92f4becfc44f6c06f9d6a4",
+    "semantic_hash": "15892322ce92f4becfc44f6c06f9d6a4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\ServiceGroupDetailsView.tsx": {
+    "mtime": 1779357142.3645499,
+    "ast_hash": "65b5d7e81931164b4bdb24aba5e05dc4",
+    "semantic_hash": "65b5d7e81931164b4bdb24aba5e05dc4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\ServicesPage.tsx": {
+    "mtime": 1779353778.5961013,
+    "ast_hash": "74f82136515c32bf90dd0b8e8f121667",
+    "semantic_hash": "74f82136515c32bf90dd0b8e8f121667"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\BuyNowButton.tsx": {
+    "mtime": 1779353778.345081,
+    "ast_hash": "51d0dc9c940c52b5c4051abae0a4e8c5",
+    "semantic_hash": "51d0dc9c940c52b5c4051abae0a4e8c5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\FilterSection.tsx": {
+    "mtime": 1779354985.7334516,
+    "ast_hash": "6c2a0af9e92104274821bc4e221cfd92",
+    "semantic_hash": "6c2a0af9e92104274821bc4e221cfd92"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\PackageCard.tsx": {
+    "mtime": 1779356614.0129194,
+    "ast_hash": "89995c32d2d88241f63915419fb307b5",
+    "semantic_hash": "89995c32d2d88241f63915419fb307b5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\ServiceGroupDetailImage.tsx": {
+    "mtime": 1779353778.4482715,
+    "ast_hash": "d2f78c9bacc5807c1cac25b309b35470",
+    "semantic_hash": "d2f78c9bacc5807c1cac25b309b35470"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\booking\\BookingActions.tsx": {
+    "mtime": 1779353778.2285388,
+    "ast_hash": "45dc7f36a245aa70962feade8833c39d",
+    "semantic_hash": "45dc7f36a245aa70962feade8833c39d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\booking\\BookingStepper.tsx": {
+    "mtime": 1779353778.2616544,
+    "ast_hash": "51260e680a6a57e081778b80fa579998",
+    "semantic_hash": "51260e680a6a57e081778b80fa579998"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\booking\\steps\\BookingPlaceholderStep.tsx": {
+    "mtime": 1779353778.2786534,
+    "ast_hash": "5a601b85505b61cabd099b4cd571f481",
+    "semantic_hash": "5a601b85505b61cabd099b4cd571f481"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\components\\booking\\steps\\ExaminationsStep.tsx": {
+    "mtime": 1779353778.3303926,
+    "ast_hash": "185d36e7a2a014f17f3dadac643f514b",
+    "semantic_hash": "185d36e7a2a014f17f3dadac643f514b"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\data\\packages.data.ts": {
+    "mtime": 1779353778.4959793,
+    "ast_hash": "e723fefe8567212f0cef4468cfb66cfd",
+    "semantic_hash": "e723fefe8567212f0cef4468cfb66cfd"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\modules\\services\\types\\services.types.ts": {
+    "mtime": 1779353778.6124763,
+    "ast_hash": "9365e42bfe1aef6559ab3fc2abad36cd",
+    "semantic_hash": "9365e42bfe1aef6559ab3fc2abad36cd"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\feedback\\ErrorBoundary.tsx": {
+    "mtime": 1779353778.681185,
+    "ast_hash": "cc873e468d2e4dbaf82f562986ae803f",
+    "semantic_hash": "cc873e468d2e4dbaf82f562986ae803f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\feedback\\Toast.tsx": {
+    "mtime": 1779353778.6959112,
+    "ast_hash": "2137012c2506e4421cca676e2588a5e2",
+    "semantic_hash": "2137012c2506e4421cca676e2588a5e2"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\filter\\index.ts": {
+    "mtime": 1779354971.6526842,
+    "ast_hash": "707e1ffd1d2806642e32d06f812213f4",
+    "semantic_hash": "707e1ffd1d2806642e32d06f812213f4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\filter\\PageFilterSearchButton.tsx": {
+    "mtime": 1779354969.9176955,
+    "ast_hash": "1a5a24f5b517023fdf9e72cb26f95d49",
+    "semantic_hash": "1a5a24f5b517023fdf9e72cb26f95d49"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\filter\\PageFilterSearchField.tsx": {
+    "mtime": 1779354963.693255,
+    "ast_hash": "40582d847267269e7a0c54c3b464a962",
+    "semantic_hash": "40582d847267269e7a0c54c3b464a962"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\filter\\PageFilterSection.tsx": {
+    "mtime": 1779357132.6194544,
+    "ast_hash": "10c625107a08f865d97140c3d4533be9",
+    "semantic_hash": "10c625107a08f865d97140c3d4533be9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\about\\CareIcon.tsx": {
+    "mtime": 1779353778.7287986,
+    "ast_hash": "f181bd290706cbb7777c70682d8359be",
+    "semantic_hash": "f181bd290706cbb7777c70682d8359be"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\about\\CornerBracketIcon.tsx": {
+    "mtime": 1779353778.7287986,
+    "ast_hash": "f75783747d703e39cf20e3282465d2f0",
+    "semantic_hash": "f75783747d703e39cf20e3282465d2f0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\about\\index.ts": {
+    "mtime": 1779353778.7454617,
+    "ast_hash": "aec397d3d7005daa13c7d28bb5990bba",
+    "semantic_hash": "aec397d3d7005daa13c7d28bb5990bba"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\about\\MissionIcon.tsx": {
+    "mtime": 1779353778.7624636,
+    "ast_hash": "5731b0cd4def4367d37059af08e1a5ed",
+    "semantic_hash": "5731b0cd4def4367d37059af08e1a5ed"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\about\\SpeedIcon.tsx": {
+    "mtime": 1779353778.7624636,
+    "ast_hash": "da29ca4f510dfdded1118b1984da6527",
+    "semantic_hash": "da29ca4f510dfdded1118b1984da6527"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\about\\TrustIcon.tsx": {
+    "mtime": 1779353778.7786517,
+    "ast_hash": "0526275db4b0b7777c1748a2bc36408f",
+    "semantic_hash": "0526275db4b0b7777c1748a2bc36408f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\about\\VisionIcon.tsx": {
+    "mtime": 1779353778.7959225,
+    "ast_hash": "2cbdef04749071181d6bc795d8ea8084",
+    "semantic_hash": "2cbdef04749071181d6bc795d8ea8084"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\academy\\AcademySearchIcon.tsx": {
+    "mtime": 1779353778.8127,
+    "ast_hash": "a8371fca5f6c03f6acce2f0eea61bb49",
+    "semantic_hash": "a8371fca5f6c03f6acce2f0eea61bb49"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\academy\\AcademyTitleUnderline.tsx": {
+    "mtime": 1779353778.8458009,
+    "ast_hash": "86c037272827f8c33f6168d643dbd947",
+    "semantic_hash": "86c037272827f8c33f6168d643dbd947"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\academy\\CheckSmIcon.tsx": {
+    "mtime": 1779353778.8626547,
+    "ast_hash": "26e476668f2b2e61f079a5acd48f1f8f",
+    "semantic_hash": "26e476668f2b2e61f079a5acd48f1f8f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\academy\\ChevronDownSmIcon.tsx": {
+    "mtime": 1779353778.897958,
+    "ast_hash": "4f80c05c380a8b6d9beda1dc153702e2",
+    "semantic_hash": "4f80c05c380a8b6d9beda1dc153702e2"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\academy\\ChevronRightSmIcon.tsx": {
+    "mtime": 1779353778.9153197,
+    "ast_hash": "495743dac74d8fee183faa56b0a02fcc",
+    "semantic_hash": "495743dac74d8fee183faa56b0a02fcc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\academy\\index.ts": {
+    "mtime": 1779353778.9293687,
+    "ast_hash": "f223717e77393a40bc3e310d150b753c",
+    "semantic_hash": "f223717e77393a40bc3e310d150b753c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\academy\\StarFilledSmIcon.tsx": {
+    "mtime": 1779353778.938437,
+    "ast_hash": "ceb49deba7dd153ed1e1b91edaf9b39f",
+    "semantic_hash": "ceb49deba7dd153ed1e1b91edaf9b39f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\layout\\index.ts": {
+    "mtime": 1779353778.9687538,
+    "ast_hash": "2ef92c949b366433a3b909c54eb52c5b",
+    "semantic_hash": "2ef92c949b366433a3b909c54eb52c5b"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\layout\\MenuHamburgerIcon.tsx": {
+    "mtime": 1779353778.9891424,
+    "ast_hash": "520fcd8e3b75d12948eabc66db60c9e0",
+    "semantic_hash": "520fcd8e3b75d12948eabc66db60c9e0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\layout\\SunIcon.tsx": {
+    "mtime": 1779353779.0003183,
+    "ast_hash": "bc0f322af6d4ebf23bd98ae2304716da",
+    "semantic_hash": "bc0f322af6d4ebf23bd98ae2304716da"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\AwardMedalIcon.tsx": {
+    "mtime": 1779353779.0294278,
+    "ast_hash": "18bd3f45bc5ec7213008237e3915a0d4",
+    "semantic_hash": "18bd3f45bc5ec7213008237e3915a0d4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\CalendarIcon.tsx": {
+    "mtime": 1779353779.039482,
+    "ast_hash": "d553c6890d1fe0e700e25e47f9bb9581",
+    "semantic_hash": "d553c6890d1fe0e700e25e47f9bb9581"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\GraduationCapIcon.tsx": {
+    "mtime": 1779353779.0509965,
+    "ast_hash": "4b252d7733cffe8ca155d47344c1038c",
+    "semantic_hash": "4b252d7733cffe8ca155d47344c1038c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\index.ts": {
+    "mtime": 1779353779.0703502,
+    "ast_hash": "a26ba679628cd8c0b7c18dfeac16f9db",
+    "semantic_hash": "a26ba679628cd8c0b7c18dfeac16f9db"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\PencilEditIcon.tsx": {
+    "mtime": 1779353779.090394,
+    "ast_hash": "460913877befc5a572dbd06bd81255fa",
+    "semantic_hash": "460913877befc5a572dbd06bd81255fa"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\PersonalInfoIcon.tsx": {
+    "mtime": 1779353779.1003664,
+    "ast_hash": "a82936f288fbec124a3cf638fb37628c",
+    "semantic_hash": "a82936f288fbec124a3cf638fb37628c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\ReservationsChartIcon.tsx": {
+    "mtime": 1779353779.1128073,
+    "ast_hash": "a3610536571e6b5d87a942e555b35e4a",
+    "semantic_hash": "a3610536571e6b5d87a942e555b35e4a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\profile\\SignOutIcon.tsx": {
+    "mtime": 1779353779.120366,
+    "ast_hash": "ce36ee49834928eccd9240502b764b62",
+    "semantic_hash": "ce36ee49834928eccd9240502b764b62"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\ClipboardCheckIcon.tsx": {
+    "mtime": 1779353779.1458702,
+    "ast_hash": "1d18df2548e7e1eb6a3f3fb11696c2f5",
+    "semantic_hash": "1d18df2548e7e1eb6a3f3fb11696c2f5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\ClockIcon.tsx": {
+    "mtime": 1779353779.1484082,
+    "ast_hash": "161c16f73961749f8c7356b22c97854a",
+    "semantic_hash": "161c16f73961749f8c7356b22c97854a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\DownloadIcon.tsx": {
+    "mtime": 1779353779.1705117,
+    "ast_hash": "1de75692542e4ecbc7495f36b42813b0",
+    "semantic_hash": "1de75692542e4ecbc7495f36b42813b0"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\EyeIcon.tsx": {
+    "mtime": 1779353779.1806684,
+    "ast_hash": "f4768eaa359dc9e649cb782f3b237664",
+    "semantic_hash": "f4768eaa359dc9e649cb782f3b237664"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\index.ts": {
+    "mtime": 1779353779.188698,
+    "ast_hash": "dae431e25ec75ca2ea006f4bacf686cf",
+    "semantic_hash": "dae431e25ec75ca2ea006f4bacf686cf"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\MapPinIcon.tsx": {
+    "mtime": 1779353779.2006567,
+    "ast_hash": "be20761efbc2656e98c81f26ca35aaa6",
+    "semantic_hash": "be20761efbc2656e98c81f26ca35aaa6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\ReorderIcon.tsx": {
+    "mtime": 1779353779.212929,
+    "ast_hash": "4cb23cb76383902c91c98bd4b19bd0d4",
+    "semantic_hash": "4cb23cb76383902c91c98bd4b19bd0d4"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\ReservationsSearchIcon.tsx": {
+    "mtime": 1779353779.2209885,
+    "ast_hash": "65e16a43a310da60342461ce02eabfd6",
+    "semantic_hash": "65e16a43a310da60342461ce02eabfd6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\icons\\reservations\\XMarkIcon.tsx": {
+    "mtime": 1779353779.2295904,
+    "ast_hash": "3bc529ef5cc5b88a1c8c409fbfd084b2",
+    "semantic_hash": "3bc529ef5cc5b88a1c8c409fbfd084b2"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\layout\\Footer.tsx": {
+    "mtime": 1779353779.2511172,
+    "ast_hash": "e919cc1b50efeaa48fde749f8d6dca83",
+    "semantic_hash": "e919cc1b50efeaa48fde749f8d6dca83"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\layout\\Header.tsx": {
+    "mtime": 1779353779.271534,
+    "ast_hash": "8ca53f9c1dcf3a052c46f4e701f71912",
+    "semantic_hash": "8ca53f9c1dcf3a052c46f4e701f71912"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\layout\\HeaderUserMenu.tsx": {
+    "mtime": 1779353779.29633,
+    "ast_hash": "f75925ab772640f473a5accf143380cf",
+    "semantic_hash": "f75925ab772640f473a5accf143380cf"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\marketing\\Container.tsx": {
+    "mtime": 1779353779.3130395,
+    "ast_hash": "fca3a24620ff4f760c4377fd36f56723",
+    "semantic_hash": "fca3a24620ff4f760c4377fd36f56723"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\marketing\\index.ts": {
+    "mtime": 1779358532.8986852,
+    "ast_hash": "061f58e29b729aab2a2407228725feff",
+    "semantic_hash": "061f58e29b729aab2a2407228725feff"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\marketing\\marketingHeaderOffset.ts": {
+    "mtime": 1779358530.4859076,
+    "ast_hash": "5e8a28a1bbd07143aefac4eddc353793",
+    "semantic_hash": "5e8a28a1bbd07143aefac4eddc353793"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\marketing\\MarketingStickyHeaderOffset.tsx": {
+    "mtime": 1779358532.1386807,
+    "ast_hash": "3ab66178d8e8d34adb3411c957c5a15b",
+    "semantic_hash": "3ab66178d8e8d34adb3411c957c5a15b"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\motion\\revealPresets.ts": {
+    "mtime": 1779353779.353633,
+    "ast_hash": "a9cfdda825788a42e2ef461897a81e53",
+    "semantic_hash": "a9cfdda825788a42e2ef461897a81e53"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\motion\\ScrollReveal.tsx": {
+    "mtime": 1779353779.4314938,
+    "ast_hash": "126f897a9c173e42deb7d7802c7d6c9c",
+    "semantic_hash": "126f897a9c173e42deb7d7802c7d6c9c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\ui\\Button.tsx": {
+    "mtime": 1779353779.4523897,
+    "ast_hash": "0e41f578d5f8bb9a84aa9f339fe27f0a",
+    "semantic_hash": "0e41f578d5f8bb9a84aa9f339fe27f0a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\ui\\Card.tsx": {
+    "mtime": 1779353779.4835439,
+    "ast_hash": "0dfb4d305d7fb3af93f5a4490e739fca",
+    "semantic_hash": "0dfb4d305d7fb3af93f5a4490e739fca"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\ui\\Input.tsx": {
+    "mtime": 1779353779.4994774,
+    "ast_hash": "efc8e5ca777e7dfa99a89d916ee46892",
+    "semantic_hash": "efc8e5ca777e7dfa99a89d916ee46892"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\ui\\Modal.tsx": {
+    "mtime": 1779353779.5148823,
+    "ast_hash": "a2ab434470f7434d6faaee14830e7ab3",
+    "semantic_hash": "a2ab434470f7434d6faaee14830e7ab3"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\ui\\MwafqPagination.tsx": {
+    "mtime": 1779353779.5357747,
+    "ast_hash": "a151918c8cf51a455cdd6e31af81b856",
+    "semantic_hash": "a151918c8cf51a455cdd6e31af81b856"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\ui\\OtpInput.tsx": {
+    "mtime": 1779353779.565959,
+    "ast_hash": "61044c5c263d626369d1f0e5a336e07a",
+    "semantic_hash": "61044c5c263d626369d1f0e5a336e07a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\components\\ui\\Spinner.tsx": {
+    "mtime": 1779356932.0936234,
+    "ast_hash": "45b1ea5e9a25a7776da5b6dd9083b85c",
+    "semantic_hash": "45b1ea5e9a25a7776da5b6dd9083b85c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\constants\\config.ts": {
+    "mtime": 1779353779.5859761,
+    "ast_hash": "cd1b929cc3d115c4271366673283ca89",
+    "semantic_hash": "cd1b929cc3d115c4271366673283ca89"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\constants\\routes.ts": {
+    "mtime": 1779353779.6042774,
+    "ast_hash": "a2a19b4a98a05cd7a685b58704c88711",
+    "semantic_hash": "a2a19b4a98a05cd7a685b58704c88711"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\hooks\\useCountdown.ts": {
+    "mtime": 1779353779.6170037,
+    "ast_hash": "f296156c73c9f2a165053a79c91f494d",
+    "semantic_hash": "f296156c73c9f2a165053a79c91f494d"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\hooks\\useDebounce.ts": {
+    "mtime": 1779353779.6305149,
+    "ast_hash": "358d99d1517b5e4db77b40be3d98ce93",
+    "semantic_hash": "358d99d1517b5e4db77b40be3d98ce93"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\authCookie.ts": {
+    "mtime": 1779353779.6472232,
+    "ast_hash": "b23f4a30da5f5dcc7b4ec7877ad6c41a",
+    "semantic_hash": "b23f4a30da5f5dcc7b4ec7877ad6c41a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\cn.ts": {
+    "mtime": 1779353779.6572661,
+    "ast_hash": "8595c2f874aa1ff8c7cc28df2999f354",
+    "semantic_hash": "8595c2f874aa1ff8c7cc28df2999f354"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\cookies.ts": {
+    "mtime": 1779353779.6675274,
+    "ast_hash": "8706c249885afb93646040c1e4bb8dd1",
+    "semantic_hash": "8706c249885afb93646040c1e4bb8dd1"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\fetchWithErrorHandling.shared.ts": {
+    "mtime": 1779354782.833584,
+    "ast_hash": "50ccd0d477b9ef64b107fcdab089571c",
+    "semantic_hash": "50ccd0d477b9ef64b107fcdab089571c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\fetchWithErrorHandling.ts": {
+    "mtime": 1779354789.4824948,
+    "ast_hash": "07826e6a09f41305c0ddbb4ac86fa84b",
+    "semantic_hash": "07826e6a09f41305c0ddbb4ac86fa84b"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\getTranslationName.ts": {
+    "mtime": 1779365671.1907747,
+    "ast_hash": "b1a9cb4d9e35042133cc0e91f6af15f9",
+    "semantic_hash": "b1a9cb4d9e35042133cc0e91f6af15f9"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\http.ts": {
+    "mtime": 1779353779.7381797,
+    "ast_hash": "ea9f14b22053a5645eecc8dd6745d5cb",
+    "semantic_hash": "ea9f14b22053a5645eecc8dd6745d5cb"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\serviceGroupMedia.ts": {
+    "mtime": 1779353779.7686472,
+    "ast_hash": "44c9017206b3f9deb558a95e2b11fc3e",
+    "semantic_hash": "44c9017206b3f9deb558a95e2b11fc3e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\user.ts": {
+    "mtime": 1779353779.7887623,
+    "ast_hash": "e3bcb57685584c6b89eb032e1ef7e9c1",
+    "semantic_hash": "e3bcb57685584c6b89eb032e1ef7e9c1"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\lib\\variants.ts": {
+    "mtime": 1779356928.884952,
+    "ast_hash": "ddbda461a95153acaeaaa4dfb14f4de7",
+    "semantic_hash": "ddbda461a95153acaeaaa4dfb14f4de7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\types\\api.types.ts": {
+    "mtime": 1779353779.837489,
+    "ast_hash": "0389e3456bf5cc8a6077f33300af3f6a",
+    "semantic_hash": "0389e3456bf5cc8a6077f33300af3f6a"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\types\\entity-translation.types.ts": {
+    "mtime": 1779365596.7850277,
+    "ast_hash": "d84fdb435d57df8a9c366ed263ef5a89",
+    "semantic_hash": "d84fdb435d57df8a9c366ed263ef5a89"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\src\\shared\\types\\user.types.ts": {
+    "mtime": 1779353779.8476777,
+    "ast_hash": "51b709a43af2270b8a572112627d3c5e",
+    "semantic_hash": "51b709a43af2270b8a572112627d3c5e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\AGENTS.md": {
+    "mtime": 1779353765.5944164,
+    "ast_hash": "94dd5b51ec050825828cc3b9bfebd55e",
+    "semantic_hash": "94dd5b51ec050825828cc3b9bfebd55e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\CLAUDE.md": {
+    "mtime": 1779353765.6673696,
+    "ast_hash": "7381fe6b2aefc9c7609c7cc1015039d5",
+    "semantic_hash": "7381fe6b2aefc9c7609c7cc1015039d5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\README.md": {
+    "mtime": 1779353769.7724514,
+    "ast_hash": "f15aaa42d5d299d091b1171097ea56ad",
+    "semantic_hash": "f15aaa42d5d299d091b1171097ea56ad"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.claude\\skills\\add-feature-module\\SKILL.md": {
+    "mtime": 1779353765.0813084,
+    "ast_hash": "9b62c9d8aee62530aef25da506e53d2c",
+    "semantic_hash": "9b62c9d8aee62530aef25da506e53d2c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.claude\\skills\\add-i18n-key\\SKILL.md": {
+    "mtime": 1779353765.1676016,
+    "ast_hash": "a509f6c8de4b69cceab87ee8da56ee69",
+    "semantic_hash": "a509f6c8de4b69cceab87ee8da56ee69"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.claude\\skills\\add-localized-route\\SKILL.md": {
+    "mtime": 1779353765.235151,
+    "ast_hash": "919a2766701cc4242cd2507b6cf42440",
+    "semantic_hash": "919a2766701cc4242cd2507b6cf42440"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.claude\\skills\\project-map\\SKILL.md": {
+    "mtime": 1779353765.2939937,
+    "ast_hash": "8e9c14adc1bb17e172f65c7dd54a809b",
+    "semantic_hash": "8e9c14adc1bb17e172f65c7dd54a809b"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\.claude\\skills\\ui-ux\\SKILL.md": {
+    "mtime": 1779353765.4050417,
+    "ast_hash": "8da0c07a09e8991c6f0dc4d658b844a1",
+    "semantic_hash": "8da0c07a09e8991c6f0dc4d658b844a1"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\about-us.html": {
+    "mtime": 1779353767.1725895,
+    "ast_hash": "d0f9df96b7fee88a1fd3e4fc47f22946",
+    "semantic_hash": "d0f9df96b7fee88a1fd3e4fc47f22946"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\B2B-Portal.html": {
+    "mtime": 1779353767.6696,
+    "ast_hash": "5be9dbf89970e8a5b50ef3573eb745f6",
+    "semantic_hash": "5be9dbf89970e8a5b50ef3573eb745f6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\index.html": {
+    "mtime": 1779353769.3707497,
+    "ast_hash": "d4c2ad9dc2f89e484ba375f187e36780",
+    "semantic_hash": "d4c2ad9dc2f89e484ba375f187e36780"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\docs\\styling-and-motion.md": {
+    "mtime": 1779353769.5710375,
+    "ast_hash": "93825140e8e6be47df61291c994053b6",
+    "semantic_hash": "93825140e8e6be47df61291c994053b6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\character 2.svg": {
+    "mtime": 1779100671.5207,
+    "ast_hash": "6e7b500a6ff4d25ce5e0a51680b23dc7",
+    "semantic_hash": "6e7b500a6ff4d25ce5e0a51680b23dc7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\character3.svg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "bad6fea6cd67b08eed9b7f1de9e609a6",
+    "semantic_hash": "bad6fea6cd67b08eed9b7f1de9e609a6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\icons and vector visuals.svg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "26d7ec58db2190844041470064850d96",
+    "semantic_hash": "26d7ec58db2190844041470064850d96"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\img1.jpg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98",
+    "semantic_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\img2.jpg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98",
+    "semantic_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\img3.jpg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98",
+    "semantic_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\logo.svg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "fab09da4a14f3e88914e04173836bd8e",
+    "semantic_hash": "fab09da4a14f3e88914e04173836bd8e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\profile icon.svg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "428c1ec1df98d2d172676ca7d5c91720",
+    "semantic_hash": "428c1ec1df98d2d172676ca7d5c91720"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo01.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "39846cb60a2b44a08428b2d6be0a3e4c",
+    "semantic_hash": "39846cb60a2b44a08428b2d6be0a3e4c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo02.svg": {
+    "mtime": 1778679063.4563806,
+    "ast_hash": "f5312975f54705d0663432afc62bdaa5",
+    "semantic_hash": "f5312975f54705d0663432afc62bdaa5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo03.svg": {
+    "mtime": 1778679063.4563806,
+    "ast_hash": "0ae480fd8c6e55c43186d70f1e6407cc",
+    "semantic_hash": "0ae480fd8c6e55c43186d70f1e6407cc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo04.svg": {
+    "mtime": 1778679063.4563806,
+    "ast_hash": "76e5edcfc34632ce9c7a4ebba9a08744",
+    "semantic_hash": "76e5edcfc34632ce9c7a4ebba9a08744"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo05.svg": {
+    "mtime": 1778679063.4563806,
+    "ast_hash": "d20ff46cd399c1ee444e0085047a3bdc",
+    "semantic_hash": "d20ff46cd399c1ee444e0085047a3bdc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo06.svg": {
+    "mtime": 1778679063.4563806,
+    "ast_hash": "4df1ac14a97851109aed5feeee3b7ffa",
+    "semantic_hash": "4df1ac14a97851109aed5feeee3b7ffa"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo07.svg": {
+    "mtime": 1778679063.4563806,
+    "ast_hash": "48cada92d499e1bfd8660ee4cc2753b6",
+    "semantic_hash": "48cada92d499e1bfd8660ee4cc2753b6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo08.svg": {
+    "mtime": 1778679063.4563806,
+    "ast_hash": "58529634d37e6dd45ee87a20bed0fb2f",
+    "semantic_hash": "58529634d37e6dd45ee87a20bed0fb2f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo09.svg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "31900b713fae766e5924f53b8f2975ec",
+    "semantic_hash": "31900b713fae766e5924f53b8f2975ec"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo10.svg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "65fc0f86cd1a9f67dc594572dbeba145",
+    "semantic_hash": "65fc0f86cd1a9f67dc594572dbeba145"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\logo11.svg": {
+    "mtime": 1778679063.4719932,
+    "ast_hash": "ca40e2ec5b21f10a6549977285dfc006",
+    "semantic_hash": "ca40e2ec5b21f10a6549977285dfc006"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo01.svg": {
+    "mtime": 1778679063.4250932,
+    "ast_hash": "39846cb60a2b44a08428b2d6be0a3e4c",
+    "semantic_hash": "39846cb60a2b44a08428b2d6be0a3e4c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo02.svg": {
+    "mtime": 1778679063.4250932,
+    "ast_hash": "f5312975f54705d0663432afc62bdaa5",
+    "semantic_hash": "f5312975f54705d0663432afc62bdaa5"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo03.svg": {
+    "mtime": 1778679063.4250932,
+    "ast_hash": "0ae480fd8c6e55c43186d70f1e6407cc",
+    "semantic_hash": "0ae480fd8c6e55c43186d70f1e6407cc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo04.svg": {
+    "mtime": 1778679063.4250932,
+    "ast_hash": "76e5edcfc34632ce9c7a4ebba9a08744",
+    "semantic_hash": "76e5edcfc34632ce9c7a4ebba9a08744"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo05.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "d20ff46cd399c1ee444e0085047a3bdc",
+    "semantic_hash": "d20ff46cd399c1ee444e0085047a3bdc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo06.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "4df1ac14a97851109aed5feeee3b7ffa",
+    "semantic_hash": "4df1ac14a97851109aed5feeee3b7ffa"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo07.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "48cada92d499e1bfd8660ee4cc2753b6",
+    "semantic_hash": "48cada92d499e1bfd8660ee4cc2753b6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo08.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "58529634d37e6dd45ee87a20bed0fb2f",
+    "semantic_hash": "58529634d37e6dd45ee87a20bed0fb2f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo09.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "31900b713fae766e5924f53b8f2975ec",
+    "semantic_hash": "31900b713fae766e5924f53b8f2975ec"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo10.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "65fc0f86cd1a9f67dc594572dbeba145",
+    "semantic_hash": "65fc0f86cd1a9f67dc594572dbeba145"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\demo-reference\\Mwafq-Website-Demo\\Logos\\Logos\\logo11.svg": {
+    "mtime": 1778679063.440756,
+    "ast_hash": "ca40e2ec5b21f10a6549977285dfc006",
+    "semantic_hash": "ca40e2ec5b21f10a6549977285dfc006"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\file.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
+    "semantic_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\globe.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
+    "semantic_hash": "2aaafa6a49b6563925fe440891e32717"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\next.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "8e061864f388b47f33a1c3780831193e",
+    "semantic_hash": "8e061864f388b47f33a1c3780831193e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\vercel.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
+    "semantic_hash": "c0af2f507b369b085b35ef4bbe3bcf1e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\window.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": "a2760511c65806022ad20adf74370ff3"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\character-2.svg": {
+    "mtime": 1779100671.5272074,
+    "ast_hash": "6e7b500a6ff4d25ce5e0a51680b23dc7",
+    "semantic_hash": "6e7b500a6ff4d25ce5e0a51680b23dc7"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\character3.svg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "bad6fea6cd67b08eed9b7f1de9e609a6",
+    "semantic_hash": "bad6fea6cd67b08eed9b7f1de9e609a6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\icons and vector visuals.svg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "26d7ec58db2190844041470064850d96",
+    "semantic_hash": "26d7ec58db2190844041470064850d96"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\img1.jpg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98",
+    "semantic_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\img2.jpg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98",
+    "semantic_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\img3.jpg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98",
+    "semantic_hash": "0c688b0f9f40ca6a4c3ef0bf512faa98"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logo.svg": {
+    "mtime": 1778679063.4875784,
+    "ast_hash": "fab09da4a14f3e88914e04173836bd8e",
+    "semantic_hash": "fab09da4a14f3e88914e04173836bd8e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\profile-icon.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "428c1ec1df98d2d172676ca7d5c91720",
+    "semantic_hash": "428c1ec1df98d2d172676ca7d5c91720"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo.svg": {
+    "mtime": 1778759163.483305,
+    "ast_hash": "fab09da4a14f3e88914e04173836bd8e",
+    "semantic_hash": "fab09da4a14f3e88914e04173836bd8e"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo01.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "39846cb60a2b44a08428b2d6be0a3e4c",
+    "semantic_hash": "39846cb60a2b44a08428b2d6be0a3e4c"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo03.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "0ae480fd8c6e55c43186d70f1e6407cc",
+    "semantic_hash": "0ae480fd8c6e55c43186d70f1e6407cc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo04.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "76e5edcfc34632ce9c7a4ebba9a08744",
+    "semantic_hash": "76e5edcfc34632ce9c7a4ebba9a08744"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo05.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "d20ff46cd399c1ee444e0085047a3bdc",
+    "semantic_hash": "d20ff46cd399c1ee444e0085047a3bdc"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo06.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "4df1ac14a97851109aed5feeee3b7ffa",
+    "semantic_hash": "4df1ac14a97851109aed5feeee3b7ffa"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo07.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "48cada92d499e1bfd8660ee4cc2753b6",
+    "semantic_hash": "48cada92d499e1bfd8660ee4cc2753b6"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo08.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "58529634d37e6dd45ee87a20bed0fb2f",
+    "semantic_hash": "58529634d37e6dd45ee87a20bed0fb2f"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo09.svg": {
+    "mtime": 1778679063.5032003,
+    "ast_hash": "31900b713fae766e5924f53b8f2975ec",
+    "semantic_hash": "31900b713fae766e5924f53b8f2975ec"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo10.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "65fc0f86cd1a9f67dc594572dbeba145",
+    "semantic_hash": "65fc0f86cd1a9f67dc594572dbeba145"
+  },
+  "C:\\Users\\Emran\\MwafqSite\\public\\demo-assets\\logos\\logo11.svg": {
+    "mtime": 1778679063.5188212,
+    "ast_hash": "ca40e2ec5b21f10a6549977285dfc006",
+    "semantic_hash": "ca40e2ec5b21f10a6549977285dfc006"
+  }
+}

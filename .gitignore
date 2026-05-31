@@ -39,7 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/.vscode
+# Shared workspace config is committed; ignore personal VS Code/Cursor state
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 certificates
 

@@ -4,6 +4,7 @@ import { hasLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 import { B2BPage } from '@/modules/b2b';
 import { getB2BPageContent } from '@/modules/b2b/server/b2bContentService';
+import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 
 interface RouteProps {
   params: Promise<{ locale: string }>;
@@ -31,5 +32,9 @@ export default async function B2BRoute({ params }: RouteProps) {
   if (!hasLocale(locale)) notFound();
   const dict = await getDictionary(locale as Locale);
   const content = await getB2BPageContent(locale as Locale, dict);
-  return <B2BPage locale={locale as Locale} content={content} />;
+  return (
+    <MarketingStickyHeaderOffset variant='heroSpacious'>
+      <B2BPage locale={locale as Locale} content={content} />
+    </MarketingStickyHeaderOffset>
+  );
 }

@@ -9,10 +9,9 @@ export default async function PersonalInfoPage() {
     getPersonalStatistics(),
   ]);
 
-  const stats =
-    personalStats != null
-      ? personalStatisticsToInfoStats(personalStats)
-      : undefined;
+  const stats = personalStats
+    ? personalStatisticsToInfoStats(personalStats)
+    : undefined;
 
   return <PersonalInfoView sessionUser={sessionUser} stats={stats} />;
 }

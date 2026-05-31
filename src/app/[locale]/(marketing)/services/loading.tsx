@@ -1,5 +1,13 @@
-const loading = () => {
-  return <div className='text-center text-2xl font-bold'>loading...</div>;
-};
+import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
+import { Spinner } from '@/shared/components/ui/Spinner';
 
-export default loading;
+export default function ServicesLoading() {
+  return (
+    <MarketingStickyHeaderOffset
+      variant='filter'
+      className='flex min-h-[40vh] items-center justify-center'
+    >
+      <Spinner size='lg' />
+    </MarketingStickyHeaderOffset>
+  );
+}

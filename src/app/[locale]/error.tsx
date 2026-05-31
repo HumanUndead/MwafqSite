@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
+import { useRouter } from 'next/navigation';
 
 function WrenchIcon() {
   return (
@@ -33,7 +34,7 @@ export default function MaintenancePage() {
   const locale = useLocale();
   const t = useTranslations('maintenance');
   const [status, setStatus] = useState<'idle' | 'checking' | 'down'>('idle');
-
+  const router = useRouter();
   const handleRetry = async () => {
     setStatus('checking');
     try {
@@ -44,7 +45,8 @@ export default function MaintenancePage() {
         signal: AbortSignal.timeout(10000),
       });
       if (res.ok || res.status >= 400) {
-        window.location.href = getLocalizedRoute(locale, ROUTES.HOME);
+        router.refresh();
+        // window.location.href = getLocalizedRoute(locale, ROUTES.HOME);
         return;
       }
     } catch {
@@ -72,7 +74,7 @@ export default function MaintenancePage() {
 
         <div className='flex flex-col gap-3'>
           <button
-            onClick={handleRetry}
+            onClick={() => window.location.reload()}
             disabled={status === 'checking'}
             className='inline-flex items-center justify-center gap-2 rounded-lg bg-[#1e2364] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2a3178] focus:outline-none focus:ring-2 focus:ring-[#1e2364] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
           >

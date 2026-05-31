@@ -6,7 +6,13 @@
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Emran\\\\MwafqSite\" -Directory)",
       "Bash(Select-Object Name)",
       "Bash(mkdir -p \"c:/Users/Emran/MwafqSite/src/app/[locale]/\\(marketing\\)/contact\")",
-      "WebFetch(domain:productionapi.mwafq.com)"
+      "WebFetch(domain:productionapi.mwafq.com)",
+      "Bash(gh repo *)",
+      "Bash(gh api *)",
+      "Bash(python -c \"import sys,base64; print\\(base64.b64decode\\(sys.stdin.read\\(\\)\\).decode\\(\\)\\)\")",
+      "WebFetch(domain:github.com)",
+      "Bash(uv --version)",
+      "Bash(pipx --version)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"

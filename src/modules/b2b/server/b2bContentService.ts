@@ -496,6 +496,5 @@ export async function getB2BPageContent(
 ): Promise<Dictionary['b2b']> {
   const langId = localeToLangId[locale];
   const rootCategory = await fetchB2BContentTree();
-  console.log('🚀 ~ getB2BPageContent ~ rootCategory:', rootCategory);
   return buildB2BContent(dict, rootCategory, langId);
 }

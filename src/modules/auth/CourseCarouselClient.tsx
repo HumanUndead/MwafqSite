@@ -1,6 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+
+import { localeToLangId, type Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/DictionaryProvider';
+import { getTranslationName } from '@/shared/lib/getTranslationName';
 import {
   ChevronRightSmIcon,
   StarFilledSmIcon,
@@ -17,14 +21,24 @@ import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 
 function CourseCard({
   course,
-  langId,
+  locale,
+  labels,
 }: {
   course: CourseListItem;
-  langId: number;
+  locale: Locale;
+  labels: {
+    enrollNow: string;
+    reviewsCount: string;
+  };
 }) {
-  const t =
-    course.translations.find((tr) => tr.langId === langId) ??
-    course.translations[0];
+  const title = getTranslationName(course.translations, locale);
+  const langId = localeToLangId[locale];
+  const translation =
+    course.translations.length === 1
+      ? course.translations[0]
+      : (course.translations.find((tr) => tr.langId === langId) ??
+        course.translations[0]);
+  const description = translation?.description ?? '';
 
   return (
     <article className='group relative flex min-h-full flex-col overflow-hidden rounded-[20px] border-2 border-[#e5e7f0] bg-white transition-all duration-[0.4s] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-[#00a8f1] hover:bg-[#fbfcff]'>
@@ -35,7 +49,7 @@ function CourseCard({
               ? `${MWAFQ_API_BASE_URL}/${course.fullImagePath}.png`
               : 'https://loremflickr.com/640/400/medical,training/all?lock=academy'
           }
-          alt={t?.name ?? ''}
+          alt={title}
           fill
           sizes='(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw'
           className='object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105'
@@ -43,10 +57,10 @@ function CourseCard({
       </div>
       <div className='flex flex-1 flex-col gap-2.5 px-[22px] pb-3.5 pt-[22px]'>
         <h3 className='min-h-[44px] text-[17px] font-extrabold leading-[1.3] tracking-[-0.3px] text-[#1e2364]'>
-          {t?.name ?? ''}
+          {title}
         </h3>
         <p className='min-h-[38px] text-[13px] leading-[1.55] text-[#6b7196]'>
-          {t?.description ?? ''}
+          {description}
         </p>
       </div>
       <div className='flex items-center justify-between gap-2.5 border-t-2 border-[#eef0f7] px-[22px] pb-[22px] pt-3.5'>
@@ -54,10 +68,13 @@ function CourseCard({
           <span className='inline-flex text-[#1e2364]'>
             <StarFilledSmIcon className='size-3.5' />
           </span>
-          4.5 <span className='font-semibold text-[#6b7196]'>(0)</span>
+          4.5{' '}
+          <span className='font-semibold text-[#6b7196]'>
+            {labels.reviewsCount.replace('{{count}}', '0')}
+          </span>
         </span>
         <span className='inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[#00a8f1] px-4 py-2 text-xs font-bold text-white transition-all duration-300 hover:gap-3'>
-          Enroll now
+          {labels.enrollNow}
           <ChevronRightSmIcon className='size-3 transition-transform duration-300 rtl:rotate-180' />
         </span>
       </div>
@@ -68,14 +85,16 @@ function CourseCard({
 export type CourseCarouselClientProps = {
   categoryName: string;
   courses: readonly CourseListItem[];
-  langId: number;
+  locale: Locale;
 };
 
 export function CourseCarouselClient({
   categoryName,
   courses,
-  langId,
+  locale,
 }: CourseCarouselClientProps) {
+  const t = useTranslations('academyCourses');
+
   return (
     <Carousel opts={{ align: 'start' }}>
       <section className='py-[30px] last:pb-[120px]'>
@@ -87,18 +106,31 @@ export function CourseCarouselClient({
               </h2>
             </div>
             <div className='mt-7 flex items-center justify-center gap-2'>
-              <CarouselPrevious className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] ' />
-              <CarouselNext className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] ' />
+              <CarouselPrevious
+                aria-label={t.carousel.previous}
+                className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] '
+              />
+              <CarouselNext
+                aria-label={t.carousel.next}
+                className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] '
+              />
             </div>
           </div>
 
           <CarouselContent className='ml-[-22px]'>
-            {courses?.map((course, i) => (
+            {courses?.map((course) => (
               <CarouselItem
                 key={course.id}
                 className='pl-[22px] basis-full sm:basis-1/2 lg:basis-1/3'
               >
-                <CourseCard course={course} langId={langId} />
+                <CourseCard
+                  course={course}
+                  locale={locale}
+                  labels={{
+                    enrollNow: t.carousel.enrollNow,
+                    reviewsCount: t.carousel.reviewsCount,
+                  }}
+                />
               </CarouselItem>
             ))}
           </CarouselContent>

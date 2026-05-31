@@ -1,4 +1,5 @@
 import type { Dictionary } from '@/locales/types';
+import { MissionIcon, VisionIcon } from '@/shared/components/icons/about';
 
 interface Props {
   content: Dictionary['about']['mv'];
@@ -9,8 +10,14 @@ export function MissionVisionSection({ content }: Props) {
     <section className='bg-[#eeeeef] px-4 py-20 sm:px-7 sm:pb-16 sm:pt-20'>
       <div className='mx-auto max-w-[1320px]'>
         <div className='grid gap-5 lg:grid-cols-2'>
-          <MvCard data={content.mission} icon={<MissionIcon />} />
-          <MvCard data={content.vision} icon={<VisionIcon />} />
+          <MvCard
+            data={content.mission}
+            icon={<MissionIcon className='h-[34px] w-[34px]' />}
+          />
+          <MvCard
+            data={content.vision}
+            icon={<VisionIcon className='h-[34px] w-[34px] text-[#6f8fcf]' />}
+          />
         </div>
       </div>
     </section>
@@ -39,44 +46,5 @@ function MvCard({
       </h3>
       <p className='text-[15.5px] leading-[1.7] text-[#6b7196]'>{data.body}</p>
     </article>
-  );
-}
-
-function MissionIcon() {
-  return (
-    <svg
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      className='h-[34px] w-[34px]'
-      aria-hidden='true'
-    >
-      <circle cx='12' cy='12' r='9' />
-      <circle cx='12' cy='12' r='5' />
-      <circle cx='12' cy='12' r='1.5' fill='currentColor' />
-      <path d='M21 3 L13 11' />
-      <path d='M18 3h3v3' />
-    </svg>
-  );
-}
-
-function VisionIcon() {
-  return (
-    <svg
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      className='h-[34px] w-[34px] text-[#6f8fcf]'
-      aria-hidden='true'
-    >
-      <path d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z' />
-      <circle cx='12' cy='12' r='3' />
-    </svg>
   );
 }

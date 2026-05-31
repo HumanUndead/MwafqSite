@@ -170,7 +170,7 @@ export function PackageCard({
     >
       <Link
         href={packageDetailHref}
-        className='relative block h-pkg-media shrink-0 overflow-hidden bg-[#1e2364] max-[640px]:h-pkg-media-sm'
+        className='relative block aspect-square w-full shrink-0 overflow-hidden bg-[#1e2364]'
       >
         <motion.div className='absolute inset-0 z-0' {...mediaMotion}>
           {image}

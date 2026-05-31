@@ -1,0 +1,311 @@
+{
+  "nodes": [
+    {
+      "id": "logo01_writer",
+      "label": "Writer (AI Writing Platform)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo01.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo02_tawk",
+      "label": "tawk.to (Customer Messaging Platform)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo02.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo03_writer_alt",
+      "label": "Writer Logo Variant",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo03.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo04_intercom",
+      "label": "Intercom (Customer Messaging)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo04.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo05_github_copilot",
+      "label": "Copilot (AI Coding Assistant)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo05.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo06_cedar",
+      "label": "Cedar (Partner/Client Brand)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo06.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo07_replit",
+      "label": "Replit (Online IDE Platform)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo07.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo08_duolingo",
+      "label": "Duolingo (Language Learning)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo08.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo09_harvey",
+      "label": "Harvey AI (Legal AI Assistant)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo09.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo10_beqo",
+      "label": "beqo / Partner Brand with Arrow Mark",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo10.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo11_mwmwm",
+      "label": "Partner Brand (Complex Wordmark)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo11.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "mwafq_partner_logos_chunk03",
+      "label": "Mwafq Partner/Client Logos (Chunk 03)",
+      "file_type": "image",
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "logo01_writer",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo01.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo02_tawk",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo02.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo03_writer_alt",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo03.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo04_intercom",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo04.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo05_github_copilot",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo05.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo06_cedar",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo06.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo07_replit",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo07.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo08_duolingo",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo08.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo09_harvey",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo09.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo10_beqo",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo10.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo11_mwmwm",
+      "target": "mwafq_partner_logos_chunk03",
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo11.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo01_writer",
+      "target": "logo03_writer_alt",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo01.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "logo01_writer",
+      "target": "logo05_github_copilot",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo01.svg",
+      "source_location": null,
+      "weight": 0.6
+    },
+    {
+      "source": "logo02_tawk",
+      "target": "logo04_intercom",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo02.svg",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "logo08_duolingo",
+      "target": "logo07_replit",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.55,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo08.svg",
+      "source_location": null,
+      "weight": 0.5
+    },
+    {
+      "source": "logo09_harvey",
+      "target": "logo01_writer",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.55,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo09.svg",
+      "source_location": null,
+      "weight": 0.5
+    },
+    {
+      "source": "logo04_intercom",
+      "target": "logo05_github_copilot",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.55,
+      "source_file": "demo-reference/Mwafq-Website-Demo/Logos/logo04.svg",
+      "source_location": null,
+      "weight": 0.5
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 12800,
+  "output_tokens": 1200
+}

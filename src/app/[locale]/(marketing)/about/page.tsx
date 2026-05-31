@@ -4,6 +4,7 @@ import { hasLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 import { AboutPage } from '@/modules/about';
 import { getAboutPageContent } from '@/modules/about/server/aboutContentService';
+import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 
 interface RouteProps {
   params: Promise<{ locale: string }>;
@@ -31,5 +32,9 @@ export default async function AboutRoute({ params }: RouteProps) {
   if (!hasLocale(locale)) notFound();
   const dict = await getDictionary(locale as Locale);
   const content = await getAboutPageContent(locale as Locale, dict);
-  return <AboutPage locale={locale as Locale} content={content} />;
+  return (
+    <MarketingStickyHeaderOffset variant='hero'>
+      <AboutPage locale={locale as Locale} content={content} />
+    </MarketingStickyHeaderOffset>
+  );
 }
