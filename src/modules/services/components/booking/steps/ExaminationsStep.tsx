@@ -16,6 +16,7 @@ export function ExaminationsStep({
   noExamsMessage,
 }: ExaminationsStepProps) {
   const exams = serviceGroup.serviceGroupServices;
+  console.log('🚀 ~ ExaminationsStep ~ exams:', exams);
 
   if (!exams.length) {
     return (

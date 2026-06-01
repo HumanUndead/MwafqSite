@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 
 import type { Locale } from '@/i18n/config';
-import { localeToLangId } from '@/i18n/config';
 import { getTranslations } from '@/i18n/server';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
@@ -46,6 +45,7 @@ export type ServiceGroupDetailsViewProps = {
   langId: number;
   serviceGroup: ServiceGroupDetail;
   relatedPackages: ServiceGroupListItem[];
+  isAuthenticated: boolean;
 };
 
 export async function ServiceGroupDetailsView({
@@ -53,6 +53,7 @@ export async function ServiceGroupDetailsView({
   langId,
   serviceGroup,
   relatedPackages,
+  isAuthenticated,
 }: ServiceGroupDetailsViewProps) {
   const servicesT = await getTranslations('services');
   const t = servicesT.detail;
@@ -132,7 +133,11 @@ export async function ServiceGroupDetailsView({
                       <SarIcon />
                     </span>
                     <BuyNowButton
-                      href={getServiceGroupBuyPath(locale, serviceGroup.id)}
+                      href={
+                        isAuthenticated
+                          ? getServiceGroupBuyPath(locale, serviceGroup.id)
+                          : `${getLocalizedRoute(locale, ROUTES.LOGIN)}?redirect=${encodeURIComponent(getServiceGroupBuyPath(locale, serviceGroup.id))}`
+                      }
                       label={t.buyNow}
                       locale={locale}
                       size='detail'
@@ -217,6 +222,7 @@ export async function ServiceGroupDetailsView({
                     variant='related'
                     withScrollReveal={false}
                     delay={Math.min(index, 4) * 0.08}
+                    isAuthenticated={isAuthenticated}
                   />
                 </ScrollReveal>
               ))}

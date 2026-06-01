@@ -20,9 +20,10 @@ export async function fetchServiceGroupsList(
 }
 
 export async function fetchServiceGroupById(
-  id: number
+  id: number,
+  filter?: { isMandatoryTest?: boolean }
 ): Promise<ServiceGroupDetail> {
-  const params = queryString.stringify({ id });
+  const params = queryString.stringify({ id, ...filter }, { skipNull: true });
   return fetchWithErrorHandling<ServiceGroupDetail>(
     `/api/Service/ServiceGroup/GetById?${params}`
   );

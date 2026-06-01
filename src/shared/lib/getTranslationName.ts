@@ -7,23 +7,24 @@ function resolveLangId(localeOrLangId: Locale | number): number {
     : localeToLangId[localeOrLangId];
 }
 
+export function getTranslation<T extends EntityTranslation>(
+  translations: readonly T[],
+  localeOrLangId: Locale | number
+): T | undefined {
+  if (translations.length === 0) return undefined;
+  if (translations.length === 1) return translations[0];
+
+  const langId = resolveLangId(localeOrLangId);
+  return (
+    translations.find((t) => t.langId === langId) ??
+    translations.find((t) => t.langId === localeToLangId.en) ??
+    translations[0]
+  );
+}
+
 export function getTranslationName(
   translations: readonly EntityTranslation[],
   localeOrLangId: Locale | number
 ): string {
-  if (translations.length === 0) {
-    return '';
-  }
-
-  if (translations.length === 1) {
-    return translations[0]?.name?.trim() ?? '';
-  }
-
-  const langId = resolveLangId(localeOrLangId);
-  const match =
-    translations.find((t) => t.langId === langId) ??
-    translations.find((t) => t.langId === localeToLangId.en) ??
-    translations[0];
-
-  return match?.name?.trim() ?? '';
+  return getTranslation(translations, localeOrLangId)?.name?.trim() ?? '';
 }

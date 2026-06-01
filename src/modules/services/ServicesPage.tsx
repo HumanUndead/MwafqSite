@@ -11,12 +11,14 @@ type ServicesPageProps = {
   services: ServiceGroupListItem[];
   page: number;
   totalPages: number;
+  isAuthenticated: boolean;
 };
 
 export function ServicesPage({
   services,
   page,
   totalPages,
+  isAuthenticated,
 }: ServicesPageProps) {
   const t = useTranslations('services');
   const locale = useLocale();
@@ -56,6 +58,7 @@ export function ServicesPage({
                 locale={locale}
                 t={t.cards}
                 delay={Math.min(i, 4) * 0.08}
+                isAuthenticated={isAuthenticated}
               />
             ))}
           </div>

@@ -6,7 +6,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+          'bg-[#192363] text-white hover:bg-[#1a2a75] focus:ring-2 focus:ring-[#192363] focus:ring-offset-2',
         secondary:
           'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2',
         outline:

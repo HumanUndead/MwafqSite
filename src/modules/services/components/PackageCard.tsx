@@ -63,6 +63,7 @@ type PackageCardProps = {
   variant?: 'default' | 'related';
   /** Set false when a parent already wraps the card in ScrollReveal. */
   withScrollReveal?: boolean;
+  isAuthenticated?: boolean;
 };
 
 export function PackageCard({
@@ -72,6 +73,7 @@ export function PackageCard({
   delay = 0,
   variant = 'default',
   withScrollReveal,
+  isAuthenticated = false,
 }: PackageCardProps) {
   const isRelated = variant === 'related';
   const shouldReveal = withScrollReveal ?? !isRelated;
@@ -85,7 +87,9 @@ export function PackageCard({
   const title = translation?.name?.trim() ?? '';
   const desc = translation?.description;
   const tagLabel = isRelated ? null : t.popularTag;
-  const buyHref = getServiceGroupBuyPath(locale, pkg.id);
+  const buyHref = isAuthenticated
+    ? getServiceGroupBuyPath(locale, pkg.id)
+    : `${getLocalizedRoute(locale, ROUTES.LOGIN)}?redirect=${encodeURIComponent(getServiceGroupBuyPath(locale, pkg.id))}`;
   const packageDetailHref = `${getLocalizedRoute(locale, ROUTES.SERVICES)}/${pkg.id}`;
   const price = lowestServiceGroupPrice(pkg.serviceGroupClassificationPricings);
   const [imageSrc, setImageSrc] = useState(() =>

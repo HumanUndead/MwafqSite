@@ -1,6 +1,12 @@
 import type { Locale } from '@/i18n/config';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
+import { getTranslation } from '@/shared/lib/getTranslationName';
+import type { EntityTranslation } from '@/shared/types/entity-translation.types';
+import type {
+  ServiceGroupCourse,
+  ServiceGroupCourseOption,
+} from '@/modules/services/types/booking.types';
 
 export const BOOKING_STEP_IDS = [
   'examinations',
@@ -14,7 +20,7 @@ export type BookingStepId = (typeof BOOKING_STEP_IDS)[number];
 export function getBookingSteps(serviceGroup: {
   courses: unknown[] | null | undefined;
 }): BookingStepId[] {
-  const hasCourses = (serviceGroup.courses?.length ?? 0) > 0;
+  const hasCourses = !!serviceGroup.courses?.length;
   return BOOKING_STEP_IDS.filter((step) => step !== 'course' || hasCourses);
 }
 
@@ -37,4 +43,33 @@ export function plainTextFromHtml(value: string): string {
     .replace(/<[^>]*>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+export function mapServiceGroupCourseToOption(
+  course: ServiceGroupCourse,
+  localeOrLangId: Locale | number
+): ServiceGroupCourseOption {
+  const translation = getTranslation(
+    course.translations as unknown as EntityTranslation[],
+    localeOrLangId
+  );
+  const description = translation?.description
+    ? plainTextFromHtml(translation.description)
+    : null;
+
+  return {
+    id: course.id,
+    name: translation?.name?.trim() ?? '',
+    description: description || null,
+    price: course.paymentSettings?.price ?? null,
+  };
+}
+
+export function mapServiceGroupCoursesToOptions(
+  courses: ServiceGroupCourse[],
+  localeOrLangId: Locale | number
+): ServiceGroupCourseOption[] {
+  return courses
+    .filter((course) => course.status)
+    .map((course) => mapServiceGroupCourseToOption(course, localeOrLangId));
 }
