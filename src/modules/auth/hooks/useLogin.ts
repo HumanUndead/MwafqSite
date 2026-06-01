@@ -22,7 +22,7 @@ function maskPhoneNumber(value: string | null | undefined): string | null {
   return `•••• ${digits.slice(-4)}`;
 }
 
-export function useLogin() {
+export function useLogin({ redirectTo }: { redirectTo?: string } = {}) {
   const locale = useLocale();
   const auth = useTranslations('auth');
   const [loading, setLoading] = useState(false);
@@ -73,7 +73,7 @@ export function useLogin() {
       setUser(userResponse.data);
       setIsOtpModalOpen(false);
       toast.success(auth.login.welcomeBack);
-      router.push(getLocalizedRoute(locale, ROUTES.HOME));
+      router.push(redirectTo ?? getLocalizedRoute(locale, ROUTES.HOME));
       router.refresh();
     } catch (err) {
       const message = getLocalizedAuthErrorMessage(

@@ -18,6 +18,11 @@ const PROTECTED_PREFIXES = [
   ROUTES.ACADEMY_COURSES,
   ROUTES.MY_RESERVATIONS,
 ];
+
+const PROTECTED_PATTERNS = [
+  /^\/services\/\d+\/buy(\/|$)/,
+];
+
 const AUTH_PATHS = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
 const PUBLIC_FILE = /\.[^/]+$/;
 
@@ -46,9 +51,9 @@ export function proxy(request: NextRequest) {
   }
 
   const appPathname = getPathnameWithoutLocale(pathname);
-  const isProtected = PROTECTED_PREFIXES.some((prefix) =>
-    appPathname.startsWith(prefix)
-  );
+  const isProtected =
+    PROTECTED_PREFIXES.some((prefix) => appPathname.startsWith(prefix)) ||
+    PROTECTED_PATTERNS.some((pattern) => pattern.test(appPathname));
   const isAuthPath = AUTH_PATHS.includes(
     appPathname as (typeof AUTH_PATHS)[number]
   );
@@ -56,6 +61,7 @@ export function proxy(request: NextRequest) {
   if (isProtected && !isAuthenticated) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = localizePathname(ROUTES.LOGIN, localeFromPath);
+    redirectUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(redirectUrl);
   }
 

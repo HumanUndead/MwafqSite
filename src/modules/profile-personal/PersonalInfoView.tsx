@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAuthStore } from '@/modules/auth/store/authStore';
 import type { User } from '@/shared/types/user.types';
 import { getUserMemberSinceDate } from '@/shared/lib/user';
@@ -15,6 +15,7 @@ import {
 import { cn } from '@/shared/lib/cn';
 import { personalInfoPlaceholderContact, statIconWrap } from './constants';
 import type { PersonalInfoStats } from '@/modules/profile-personal/personalStats.shared';
+import { EditPersonalInfoDialog } from './components/EditPersonalInfoDialog';
 
 function contactFromUser(user: User | null): Partial<PersonalInfoContact> {
   if (!user) {
@@ -86,6 +87,7 @@ export function PersonalInfoView({
   const locale = useLocale();
   const storeUser = useAuthStore((s) => s.user);
   const resolvedUser = storeUser ?? sessionUser ?? null;
+  const [editOpen, setEditOpen] = useState(false);
 
   const contact = useMemo(
     () => ({
@@ -143,8 +145,9 @@ export function PersonalInfoView({
               </p>
             ) : null}
           </div>
-          <a
-            href='#'
+          <button
+            type='button'
+            onClick={() => setEditOpen(true)}
             className={cn(
               'inline-flex shrink-0 items-center gap-[7px] rounded-[30px]',
               'bg-[rgba(0,168,241,0.1)] px-[14px] py-2 text-sm font-bold text-[#00a8f1]',
@@ -155,7 +158,14 @@ export function PersonalInfoView({
           >
             <PencilEditIcon className='size-[14px] shrink-0' />
             {t.contact.edit}
-          </a>
+          </button>
+
+          <EditPersonalInfoDialog
+            open={editOpen}
+            onOpenChange={setEditOpen}
+            user={resolvedUser}
+            labels={t.editDialog}
+          />
         </div>
 
         <div className='grid grid-cols-1 gap-x-8 gap-y-[22px] md:grid-cols-2'>

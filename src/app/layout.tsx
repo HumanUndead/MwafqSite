@@ -60,6 +60,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={isRtl(locale) ? 'rtl' : 'ltr'}
+      data-scroll-behavior='smooth'
       className={cn(
         'h-full',
         'antialiased',

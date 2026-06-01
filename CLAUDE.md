@@ -81,6 +81,16 @@ Pages in `app/` should stay thin: validate `locale`, fetch, render `<FeaturePage
 - Merge classes with `cn()` from `@/shared/lib/cn`.
 - Animations: Framer Motion. Use `<ScrollReveal>` from `@/shared/components/motion/ScrollReveal` for reveal-on-view or reveal-on-load patterns. Respect `prefers-reduced-motion` (use `useReducedMotion()` in custom motion components).
 
+## UI components
+
+Never use raw HTML elements (`<input>`, `<select>`, `<button>`, `<textarea>`, `<a>` for actions) directly in UI. Always follow this lookup order:
+
+1. **Shared reusable component** — check `src/shared/components/ui/` first (e.g. `Button` with `loading` prop, `Input`, `Card`).
+2. **shadcn primitive** — if nothing exists in shared, use the component from `src/components/ui/` (e.g. `Input`, `Select`, `Dialog`, `Tabs`).
+3. **Install from shadcn** — if the primitive doesn't exist yet, run `npx shadcn@latest add <component>` then use it.
+
+This rule applies to every element type: buttons, inputs, selects, textareas, modals, tabs, etc. No exceptions. Keeping raw HTML elements out of feature UI ensures consistent styling, accessibility attributes, and design tokens across the codebase.
+
 ## Conventions
 
 - Path alias `@/*` only. Never relative `../../`.

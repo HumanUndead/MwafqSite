@@ -91,7 +91,7 @@ function SelectContent({
         alignItemWithTrigger={alignItemWithTrigger}
         collisionAvoidance={collisionAvoidance}
         positionMethod={positionMethod}
-        className='isolate z-50'
+        className='isolate z-220'
       >
         <SelectPrimitive.Popup
           data-slot='select-content'

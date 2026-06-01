@@ -1,13 +1,10 @@
-export interface LectureListTranslation {
-  id: number;
-  langId: number;
+import type { EntityTranslation } from '@/shared/types/entity-translation.types';
+
+export interface LectureListTranslation extends EntityTranslation {
   lectureId: number;
-  name: string;
   videoLengthInMinutes: number;
-  description: string | null;
   attachments: string;
   textContent: string | null;
-  videoUrl: string;
 }
 
 export interface LectureListItem {

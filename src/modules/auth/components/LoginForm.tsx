@@ -35,7 +35,7 @@ function UserNameIcon() {
   );
 }
 
-export function LoginForm() {
+export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
   const locale = useLocale();
   const auth = useTranslations('auth');
   const {
@@ -47,7 +47,7 @@ export function LoginForm() {
     resendOtp,
     isOtpModalOpen,
     otpDestinationLabel,
-  } = useLogin();
+  } = useLogin({ redirectTo });
   const [form, setForm] = useState<LoginValues>({ userName: '' });
   const [fieldError, setFieldError] = useState<string>();
 

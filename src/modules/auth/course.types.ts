@@ -2,11 +2,10 @@ import {
   PaginatedResponse,
   UpstreamApiResponse,
 } from '@/shared/types/api.types';
+import { EntityTranslation } from '@/shared/types/entity-translation.types';
 
-export interface CourseListTranslation {
-  langId: number;
-  name: string;
-  description: string;
+export interface CourseTranslation extends EntityTranslation {
+  courseId: number;
   tags: string;
   whatYouWillLearn: string;
 }
@@ -19,6 +18,8 @@ export interface CourseLessonLecture {
   textContent: string | null;
   name: string;
   description: string | null;
+  /** Populated from lecture list API via `mergeCourseLessonsWithLectures`. */
+  attachments?: string;
 }
 
 /** Quiz on a course lesson; extend when upstream shape is known. */
@@ -43,8 +44,7 @@ export interface CourseListItem {
   categoryName: string;
   target: string;
   fullImagePath: string;
-  translations: CourseListTranslation[];
-  lessons: CourseLesson[];
+  translations: CourseTranslation[];
 }
 
 export interface CourseListResponse extends UpstreamApiResponse<

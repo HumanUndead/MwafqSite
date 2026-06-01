@@ -1,7 +1,7 @@
 export interface EntityTranslation {
   id: number;
   langId: number;
-  categoryId: number;
+  categoryId?: number;
   name: string;
-  description: string;
+  description?: string | null;
 }

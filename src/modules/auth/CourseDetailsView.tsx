@@ -1,8 +1,8 @@
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight,
-  ChevronDown,
   ChevronLeft,
   ClipboardCheck,
   Download,
@@ -17,46 +17,30 @@ import { getTranslations } from '@/i18n/server';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 import { CourseCarousel } from './CourseCarousel';
-import type { CourseListItem } from './course.types';
+import type { CourseLesson, CourseListItem } from './course.types';
+import {
+  formatCourseDuration,
+  plainTextFromHtml,
+  tagListFromCourse,
+} from './courseDetails.shared';
+import { getTranslation } from '@/shared/lib/getTranslationName';
+
+const CourseContentAccordion = dynamic(
+  () =>
+    import('./components/course-details/CourseContentAccordion').then(
+      (mod) => mod.CourseContentAccordion
+    ),
+  {
+    loading: () => (
+      <div
+        className='h-48 animate-pulse rounded-xl border border-[#e5e7f0] bg-[#eef0f7]'
+        aria-hidden
+      />
+    ),
+  }
+);
 
 const easeClass = 'duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]';
-
-type Section = {
-  title: string;
-  duration: string;
-  lectures: string[];
-};
-
-const defaultSections: Section[] = [
-  {
-    title: 'Getting Started',
-    duration: '29m',
-    lectures: Array(4).fill(
-      'Introduction to Aid Essentials training course'
-    ) as string[],
-  },
-  {
-    title: 'First Aid',
-    duration: '29m',
-    lectures: Array(4).fill(
-      'Introduction to Aid Essentials training course'
-    ) as string[],
-  },
-  {
-    title: 'Professional and medical skills',
-    duration: '29m',
-    lectures: Array(4).fill(
-      'Introduction to Aid Essentials training course'
-    ) as string[],
-  },
-  {
-    title: 'Professional and medical skills',
-    duration: '29m',
-    lectures: Array(4).fill(
-      'Introduction to Aid Essentials training course'
-    ) as string[],
-  },
-];
 
 function courseImageSrc(course: CourseListItem): string {
   if (course.fullImagePath) {
@@ -65,48 +49,39 @@ function courseImageSrc(course: CourseListItem): string {
   return 'https://loremflickr.com/640/400/medical,training/all?lock=academy-detail';
 }
 
-function tagListFromCourse(tags: string | undefined): string[] {
-  if (!tags?.trim()) return [];
-  return tags
-    .split(/[,،]/)
-    .map((t) => t.trim())
-    .filter(Boolean);
-}
-
-/** Plain text when API returns HTML in description fields. */
-function plainTextFromHtml(value: string): string {
-  return value
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 export type CourseDetailsViewProps = {
   locale: Locale;
   langId: number;
   course: CourseListItem;
-  /** Optional curriculum sections; defaults match static design. */
-  curriculumSections?: Section[];
+  lecturesDuration: number;
+  lessons: CourseLesson[];
 };
 
 export async function CourseDetailsView({
   locale,
   langId,
   course,
-  curriculumSections = defaultSections,
+  lecturesDuration,
+  lessons,
 }: CourseDetailsViewProps) {
-  const academyLabels = await getTranslations('academyCourseDetails');
-  const t =
-    course.translations.find((tr) => tr.langId === langId) ??
-    course.translations[0];
+  const lecturesDurationInHours = Math.ceil(lecturesDuration / 60);
+  const t = await getTranslations('academyCourseDetails');
+  const courseTranslation = getTranslation(course.translations, langId);
   const coursesBase = `/${locale}/courses`;
 
-  const title = plainTextFromHtml(t?.name ?? '');
-  const description = plainTextFromHtml(t?.description ?? '');
+  const title = plainTextFromHtml(courseTranslation?.name ?? '');
+  const description = plainTextFromHtml(courseTranslation?.description ?? '');
   const whatLearn = plainTextFromHtml(
-    t?.whatYouWillLearn?.trim() || t?.description || ''
+    courseTranslation?.whatYouWillLearn?.trim() ||
+      courseTranslation?.description ||
+      ''
   );
-  const tags = tagListFromCourse(t?.tags);
+  const tags = tagListFromCourse(courseTranslation?.tags);
+
+  const lectureCount = lessons.reduce(
+    (acc, lesson) => acc + lesson.lectures.length,
+    0
+  );
 
   const imageSrc = courseImageSrc(course);
 
@@ -124,7 +99,7 @@ export async function CourseDetailsView({
                 className='group inline-flex items-center gap-2 text-[14.5px] font-bold text-[#1e2364] transition-colors hover:text-[#00a8f1]'
               >
                 <ChevronLeft className='size-4 shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-x-1 rtl:rotate-180 rtl:group-hover:translate-x-1' />
-                Mwafq Academy
+                {t.breadcrumb}
               </Link>
             </nav>
           </ScrollReveal>
@@ -149,7 +124,7 @@ export async function CourseDetailsView({
 
                 <div className='mb-10'>
                   <h2 className='mb-2 text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                    What you&apos;ll learn?
+                    {t.whatYouWillLearn}
                   </h2>
                   <p className='min-w-0 wrap-break-word text-sm leading-relaxed whitespace-pre-line text-[#6b7196]'>
                     {whatLearn}
@@ -171,7 +146,7 @@ export async function CourseDetailsView({
 
                 <div className='mb-9'>
                   <div className='mb-3 inline-block text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                    This course includes
+                    {t.courseIncludes}
                   </div>
                   <ul className='flex flex-col gap-2.5'>
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
@@ -180,7 +155,10 @@ export async function CourseDetailsView({
                         strokeWidth={2}
                         aria-hidden
                       />
-                      9.5 hours on demand video
+                      {t.hoursOnDemandVideo.replace(
+                        '{{hours}}',
+                        String(lecturesDurationInHours)
+                      )}
                     </li>
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
                       <ClipboardCheck
@@ -188,7 +166,7 @@ export async function CourseDetailsView({
                         strokeWidth={2}
                         aria-hidden
                       />
-                      Assignments
+                      {t.assignments}
                     </li>
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
                       <FileText
@@ -196,7 +174,7 @@ export async function CourseDetailsView({
                         strokeWidth={2}
                         aria-hidden
                       />
-                      1 article
+                      {t.article}
                     </li>
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
                       <Download
@@ -204,54 +182,24 @@ export async function CourseDetailsView({
                         strokeWidth={2}
                         aria-hidden
                       />
-                      1 downloadable resource
+                      {t.downloadableResource}
                     </li>
                   </ul>
                 </div>
 
-                <div>
-                  <div className='mb-3 inline-block text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                    Course Content
-                  </div>
-                  <p className='mb-3.5 text-[13px] text-[#6b7196]'>
-                    25 sections • 95 lectures • 9h 29m total length
-                  </p>
-
-                  <div className='overflow-hidden rounded-xl border border-[#e5e7f0] bg-white'>
-                    {curriculumSections.map((section, idx) => (
-                      <details
-                        key={`${section.title}-${idx}`}
-                        className='group border-b border-[#e5e7f0] last:border-b-0'
-                        name='course-content'
-                        open={idx === 0}
-                      >
-                        <summary className='flex min-w-0 cursor-pointer list-none items-center justify-between gap-3 bg-[#eef0f7] px-[18px] py-3.5 text-[14.5px] font-bold text-[#1e2364] transition-colors hover:bg-[#e8ebf3] [&::-webkit-details-marker]:hidden'>
-                          <span className='flex min-w-0 flex-1 items-center gap-2.5'>
-                            <ChevronDown className='size-4 shrink-0 text-[#1e2364] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-open:rotate-180' />
-                            {section.title}
-                          </span>
-                          <span className='text-[13px] font-semibold text-[#6b7196]'>
-                            {section.duration}
-                          </span>
-                        </summary>
-                        <ul className='bg-white py-1 pb-2.5'>
-                          {section.lectures.map((lecture, i) => (
-                            <li
-                              key={i}
-                              className='flex min-w-0 items-center gap-3 px-[18px] py-2 pl-11 text-[13.5px] wrap-break-word text-[#6b7196]'
-                            >
-                              <Play
-                                className='size-4 shrink-0 fill-[#00a8f1] text-[#00a8f1]'
-                                aria-hidden
-                              />
-                              {lecture}
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    ))}
-                  </div>
-                </div>
+                <CourseContentAccordion
+                  lessons={lessons}
+                  labels={{
+                    title: t.courseContent.title,
+                    meta: t.courseContent.sectionsMeta
+                      .replace('{{sections}}', String(lessons.length))
+                      .replace('{{lectures}}', String(lectureCount))
+                      .replace(
+                        '{{duration}}',
+                        formatCourseDuration(lecturesDuration)
+                      ),
+                  }}
+                />
               </div>
             </ScrollReveal>
 
@@ -274,7 +222,7 @@ export async function CourseDetailsView({
                   />
                   <button
                     type='button'
-                    aria-label='Play preview'
+                    aria-label={t.playPreview}
                     className='absolute left-1/2 top-1/2 z-3 flex size-[60px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#1e2364] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 hover:bg-white'
                   >
                     <Play
@@ -309,7 +257,7 @@ export async function CourseDetailsView({
                     href='#'
                     className='group/enroll inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#00a8f1] px-4 py-2 text-xs font-bold text-white transition-[gap] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:gap-2'
                   >
-                    Enroll now
+                    {t.enrollNow}
                     <ArrowRight
                       className='size-3 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/enroll:translate-x-1 rtl:-scale-x-100 rtl:group-hover/enroll:-translate-x-1'
                       strokeWidth={2.4}
@@ -326,7 +274,7 @@ export async function CourseDetailsView({
       <section className='overflow-x-clip border-t-2 border-[#e5e7f0] pb-16 pt-2 md:pb-24 md:pt-4'>
         <CourseCarousel
           categoryId={course.categoryId}
-          categoryName={academyLabels.relatedCourses}
+          categoryName={t.relatedCourses}
           locale={locale}
           excludeCourseId={course.id}
         />

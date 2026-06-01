@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { DictionaryProvider } from '@/i18n/DictionaryProvider';
+import { QueryProvider } from '@/shared/providers/QueryProvider';
 import { getDictionary } from '@/i18n/dictionaries';
 import { hasLocale, locales, type Locale } from '@/i18n/config';
 
@@ -42,8 +43,10 @@ export default async function LocaleLayout({
   const dict = await getDictionary(locale as Locale);
 
   return (
-    <DictionaryProvider dict={dict} locale={locale}>
-      {children}
-    </DictionaryProvider>
+    <QueryProvider>
+      <DictionaryProvider dict={dict} locale={locale}>
+        {children}
+      </DictionaryProvider>
+    </QueryProvider>
   );
 }

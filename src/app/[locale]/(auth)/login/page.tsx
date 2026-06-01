@@ -6,10 +6,11 @@ import { AuthSplitShell } from '@/modules/auth/components/AuthSplitShell';
 
 interface LoginPageProps {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ redirect?: string }>;
 }
 
-export default async function LoginPage({ params }: LoginPageProps) {
-  const { locale } = await params;
+export default async function LoginPage({ params, searchParams }: LoginPageProps) {
+  const [{ locale }, { redirect }] = await Promise.all([params, searchParams]);
 
   if (!hasLocale(locale)) {
     notFound();
@@ -24,7 +25,7 @@ export default async function LoginPage({ params }: LoginPageProps) {
       subtitle={dictionary.auth.login.welcomeBack}
       centered
     >
-      <LoginForm />
+      <LoginForm redirectTo={redirect} />
     </AuthSplitShell>
   );
 }
