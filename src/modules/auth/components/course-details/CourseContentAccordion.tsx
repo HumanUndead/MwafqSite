@@ -30,7 +30,7 @@ export function CourseContentAccordion({
       <p className='mb-3.5 text-[13px] text-[#6b7196]'>{labels.meta}</p>
 
       <Accordion
-        type='multiple'
+        multiple
         defaultValue={defaultOpen}
         className='overflow-hidden rounded-xl border border-[#e5e7f0] bg-white'
       >
