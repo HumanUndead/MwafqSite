@@ -257,7 +257,7 @@ export function PackageCard({
 
   return (
     <ScrollReveal
-      className={cn(isRelated ? 'h-full w-full' : 'h-[460px] w-[235px]')}
+      className={cn(isRelated ? 'h-full w-full' : 'w-full')}
       transitionDelay={delay}
     >
       {card}

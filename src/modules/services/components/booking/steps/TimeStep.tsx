@@ -1,13 +1,42 @@
 'use client';
 
-import { Clock } from 'lucide-react';
-
+import { useLocale } from '@/i18n/DictionaryProvider';
 import { cn } from '@/lib/utils';
-import { useBookingTimeSlots } from '@/modules/services/hooks/useBookingTimeSlots';
-import type { BookingTimeSlot } from '@/modules/services/types/booking.types';
+import { BookingCalendar } from '@/modules/services/components/booking/BookingCalendar';
+import { useBookingWeeklyTimeSlots } from '@/modules/services/hooks/useBookingWeeklyTimeSlots';
+import type {
+  BookingTimeSlot,
+  ServiceProviderBranch,
+} from '@/modules/services/types/booking.types';
+
+const DAY_NAMES: Record<string, number> = {
+  sunday: 0, monday: 1, tuesday: 2, wednesday: 3,
+  thursday: 4, friday: 5, saturday: 6,
+};
+
+function parseDayOfWeek(day: string): number | undefined {
+  const n = Number(day);
+  if (Number.isInteger(n) && n >= 0 && n <= 6) return n;
+  return DAY_NAMES[day.toLowerCase().trim()];
+}
+
+function englishWeekdayName(dateStr: string): string {
+  return new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(
+    new Date(`${dateStr}T12:00:00`)
+  );
+}
+
+function fmtSelectedDay(dateStr: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(dateStr + 'T00:00:00'));
+}
 
 type TimeStepLabels = {
-  pickDate: string;
+  availableTimes: string;
+  pickDateFirst: string;
   loadingSlots: string;
   noSlots: string;
   loadError: string;
@@ -17,7 +46,7 @@ type TimeStepLabels = {
 type TimeStepProps = {
   serviceGroupId: number;
   serviceIds: number[];
-  branchId: number;
+  branch: ServiceProviderBranch;
   selectedDate: string | null;
   selectedSlots: BookingTimeSlot[];
   onDateChange: (date: string) => void;
@@ -28,21 +57,38 @@ type TimeStepProps = {
 export function TimeStep({
   serviceGroupId,
   serviceIds,
-  branchId,
+  branch,
   selectedDate,
   selectedSlots,
   onDateChange,
   onSlotsChange,
   labels,
 }: TimeStepProps) {
-  const { slots, loading, error } = useBookingTimeSlots({
-    branchId,
-    serviceGroupId,
+  const locale = useLocale();
+
+  const { days, loading, error } = useBookingWeeklyTimeSlots({
+    branchId: branch.id,
     serviceIds,
-    selectedDate,
+    serviceGroupIds: [serviceGroupId],
   });
 
-  const today = new Date().toISOString().split('T')[0];
+  const availableDayOfWeeks = new Set(
+    days.flatMap((g) => {
+      const n = parseDayOfWeek(g.day);
+      return n !== undefined ? [n] : [];
+    })
+  );
+
+  const scheduleOffDates = new Set(
+    branch.scheduleOffs.map((s) => s.date).filter((d): d is string => d !== null)
+  );
+
+  const slots = (() => {
+    if (!selectedDate) return [];
+    const weekday = englishWeekdayName(selectedDate);
+    const raw = days.find((group) => group.day === weekday)?.slotTimes ?? [];
+    return [...new Map(raw.map((s) => [s.slotTimeId, s])).values()];
+  })();
 
   function toggleSlot(slot: BookingTimeSlot) {
     const already = selectedSlots.some((s) => s.slotTimeId === slot.slotTimeId);
@@ -50,69 +96,82 @@ export function TimeStep({
   }
 
   return (
-    <div className='mb-6'>
-      <label className='mb-1.5 block text-[13.5px] font-semibold text-[#1e2364]'>
-        {labels.pickDate}
-      </label>
-      <input
-        type='date'
-        min={today}
-        value={selectedDate ?? ''}
-        onChange={(e) => onDateChange(e.target.value)}
-        className='mb-6 rounded-xl border-2 border-[#e5e7f0] bg-white px-4 py-3 text-[14.5px] text-[#1e2364] focus:border-[#00a8f1] focus:outline-none'
+    <div className='mb-6 flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12'>
+      <BookingCalendar
+        value={selectedDate}
+        onChange={onDateChange}
+        locale={locale}
+        loading={loading}
+        availableDayOfWeeks={availableDayOfWeeks}
+        closingDays={branch.closingDays}
+        scheduleOffDates={scheduleOffDates}
       />
 
-      {selectedDate && (
-        <>
-          {loading ? (
-            <>
-              <p className='mb-3 text-[13px] text-[#6b7196]' role='status'>
-                {labels.loadingSlots}
-              </p>
-              <div className='grid grid-cols-2 gap-2.5 sm:grid-cols-3'>
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className='h-11 animate-pulse rounded-xl bg-[#f0f2f8]' />
-                ))}
-              </div>
-            </>
-          ) : error ? (
-            <p className='rounded-lg bg-red-50 px-4 py-3 text-[13.5px] font-medium text-red-600'>
-              {labels.loadError}
-            </p>
-          ) : !slots.length ? (
-            <p className='text-[14px] text-[#6b7196]'>{labels.noSlots}</p>
-          ) : (
-            <ul
-              className='grid grid-cols-2 gap-2.5 sm:grid-cols-3'
-              aria-label={labels.slotsAriaLabel}
-            >
-              {slots.map((slot) => {
-                const isSelected = selectedSlots.some(
-                  (s) => s.slotTimeId === slot.slotTimeId
-                );
-                return (
-                  <li key={slot.slotTimeId}>
-                    <button
-                      type='button'
-                      onClick={() => toggleSlot(slot)}
-                      aria-pressed={isSelected}
-                      className={cn(
-                        'flex w-full items-center justify-center gap-2 rounded-xl border-2 px-3 py-2.5 text-[13px] font-semibold transition-colors duration-200',
-                        isSelected
-                          ? 'border-[#00a8f1] bg-[#00a8f1] text-white'
-                          : 'border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1]/40'
-                      )}
-                    >
-                      <Clock className='size-3.5 shrink-0' aria-hidden />
-                      {slot.from} – {slot.to}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+      <div className='flex min-w-0 flex-1 flex-col'>
+        <div className='mb-2.5 flex flex-wrap items-center justify-between gap-2'>
+          <span className='translate-x-0.5 text-[12.5px] font-bold text-[#1e2364]'>
+            {labels.availableTimes}
+          </span>
+          {selectedDate && (
+            <span className='-translate-x-0.5 text-[11px] font-semibold text-[#6b7196]'>
+              {fmtSelectedDay(selectedDate, locale)}
+            </span>
           )}
-        </>
-      )}
+        </div>
+
+        {loading ? (
+          <>
+            <p className='mb-2.5 text-[13px] text-[#6b7196]' role='status'>
+              {labels.loadingSlots}
+            </p>
+            <div className='grid grid-cols-3 gap-2.5'>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className='h-[50px] animate-pulse rounded-[6px] bg-[#f0f2f8]' />
+              ))}
+            </div>
+          </>
+        ) : error ? (
+          <p className='rounded-lg bg-red-50 px-4 py-3 text-[13.5px] font-medium text-red-600'>
+            {labels.loadError}
+          </p>
+        ) : !selectedDate ? (
+          <>
+            <div className='pointer-events-none grid grid-cols-3 gap-2.5 opacity-55'>
+              {Array.from({ length: 9 }).map((_, i) => (
+                <div key={i} className='h-[50px] rounded-[6px] border border-[#e5e7f0] bg-white' />
+              ))}
+            </div>
+            <p className='mt-2 text-end text-[11.5px] font-semibold text-[#6b7196]'>
+              {labels.pickDateFirst}
+            </p>
+          </>
+        ) : !slots.length ? (
+          <p className='text-[14px] text-[#6b7196]'>{labels.noSlots}</p>
+        ) : (
+          <ul className='grid grid-cols-3 gap-2.5' aria-label={labels.slotsAriaLabel}>
+            {slots.map((slot) => {
+              const isSelected = selectedSlots.some((s) => s.slotTimeId === slot.slotTimeId);
+              return (
+                <li key={slot.slotTimeId}>
+                  <button
+                    type='button'
+                    onClick={() => toggleSlot(slot)}
+                    aria-pressed={isSelected}
+                    className={cn(
+                      'w-full cursor-pointer rounded-[6px] border px-1 py-3.5 text-center text-[13.5px] font-bold tracking-[-0.2px] transition duration-200 hover:-translate-y-px',
+                      isSelected
+                        ? 'border-[#00a8f1] bg-[#00a8f1] text-white'
+                        : 'border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:bg-[#00a8f1]/5'
+                    )}
+                  >
+                    {slot.from} – {slot.to}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

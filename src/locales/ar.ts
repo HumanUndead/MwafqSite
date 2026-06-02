@@ -967,6 +967,11 @@ const ar = {
     download: 'تحميل',
     emptyExams: 'لا توجد حجوزات قادمة.',
     emptyResults: 'لا توجد نتائج بعد.',
+    pagination: {
+      ariaLabel: 'ترقيم صفحات الحجوزات',
+      previous: 'الصفحة السابقة',
+      next: 'الصفحة التالية',
+    },
     detailPage: {
       backToExaminations: 'العودة إلى الفحوصات',
       backToResults: 'العودة إلى النتائج',
@@ -1036,9 +1041,16 @@ const ar = {
         empty: 'لا توجد منشآت متاحة لهذه الباقة.',
         loadError: 'تعذّر تحميل المنشآت. يرجى المحاولة مرة أخرى.',
         selectAriaLabel: 'اختر منشأة',
+        viewMap: 'الخريطة',
+        viewList: 'قائمة',
+        viewModeAriaLabel: 'طريقة العرض',
+        yourLocation: 'موقعك',
+        locationFallback: 'الموقع الافتراضي (الرياض)',
       },
       time: {
         pickDate: 'اختر تاريخ الموعد',
+        availableTimes: 'الأوقات المتاحة',
+        pickDateFirst: 'اختر التاريخ أولاً ثم اختر الوقت',
         loadingSlots: 'جارٍ تحميل المواعيد المتاحة…',
         noSlots: 'لا توجد مواعيد متاحة في التاريخ المحدد.',
         loadError: 'تعذّر تحميل المواعيد. جرّب تاريخاً آخر.',

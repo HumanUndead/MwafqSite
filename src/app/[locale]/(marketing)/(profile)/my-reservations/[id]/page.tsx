@@ -1,6 +1,5 @@
-import { notFound } from 'next/navigation';
 import ReservationDetailsView from '@/modules/profile-reservations/ReservationDetailsView';
-import { buildReservationDetailsViewModel } from '@/modules/profile-reservations/reservationDetailsMapper';
+import { buildReservationDetailsViewModelFromPublic } from '@/modules/profile-reservations/reservationDetailsMapper';
 import { getReservationById } from '@/modules/profile-reservations/server/reservationsService';
 
 type ReservationDetailsPageProps = {
@@ -15,12 +14,9 @@ export default async function ReservationDetailsPage({
   const { id } = await params;
   const { view } = await searchParams;
   const reservation = await getReservationById(id);
-
-  if (!reservation) {
-    notFound();
-  }
-
-  const details = buildReservationDetailsViewModel(reservation, { view });
+  const details = buildReservationDetailsViewModelFromPublic(id, reservation, {
+    view,
+  });
 
   return <ReservationDetailsView details={details} />;
 }

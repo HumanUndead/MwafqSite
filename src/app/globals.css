@@ -323,3 +323,86 @@ body {
     @apply font-sans;
   }
 }
+
+/* Facility booking map markers (Leaflet divIcon) — see Choose-Facility.html */
+.leaflet-div-icon.mwafq-facility-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+.mwafq-facility-marker {
+  position: relative;
+  width: 34px;
+  height: 34px;
+}
+.mwafq-facility-marker-pin {
+  position: absolute;
+  inset: 0;
+  background: #1e2364;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid #fff;
+  transition:
+    background 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mwafq-facility-marker-dot {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  background: #fff;
+  border-radius: 50%;
+}
+.mwafq-facility-marker.is-selected .mwafq-facility-marker-pin {
+  background: #00a8f1;
+  transform: rotate(-45deg) scale(1.15);
+}
+.mwafq-facility-marker.is-selected::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid #00a8f1;
+  opacity: 0.55;
+  animation: mwafq-marker-pulse 2s ease-out infinite;
+}
+@keyframes mwafq-marker-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+.leaflet-div-icon.mwafq-user-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+.mwafq-user-marker {
+  position: relative;
+  width: 34px;
+  height: 34px;
+}
+.mwafq-user-marker-pin {
+  position: absolute;
+  inset: 0;
+  background: #e53e3e;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(229, 62, 62, 0.45);
+}
+.mwafq-user-marker-dot {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  background: #fff;
+  border-radius: 50%;
+}

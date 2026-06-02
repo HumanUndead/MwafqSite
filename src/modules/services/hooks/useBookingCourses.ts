@@ -19,7 +19,7 @@ export function useBookingCourses({ serviceGroupId }: UseBookingCoursesParams) {
     queryKey: [...bookingQueryKeys.courses(serviceGroupId), locale],
     queryFn: ({ signal }) =>
       fetchServiceGroupCourses(serviceGroupId, { signal }),
-    select: (data) => mapServiceGroupCoursesToOptions(data, locale),
+    select: (data) => mapServiceGroupCoursesToOptions(data.data, locale),
   });
 
   return {

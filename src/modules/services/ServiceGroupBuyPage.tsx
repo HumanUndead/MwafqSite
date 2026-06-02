@@ -183,7 +183,7 @@ export function ServiceGroupBuyPage({
                 <TimeStep
                   serviceGroupId={serviceGroup.id}
                   serviceIds={serviceGroup.serviceGroupServices.map((s) => s.serviceId)}
-                  branchId={selectedBranch.id}
+                  branch={selectedBranch}
                   selectedDate={selectedDate}
                   selectedSlots={selectedSlots}
                   onDateChange={(date) => {

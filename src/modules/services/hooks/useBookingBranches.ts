@@ -10,7 +10,9 @@ export type UseBookingBranchesParams = {
   serviceGroupId: number;
 };
 
-export function useBookingBranches({ serviceGroupId }: UseBookingBranchesParams) {
+export function useBookingBranches({
+  serviceGroupId,
+}: UseBookingBranchesParams) {
   const query = useQuery({
     queryKey: bookingQueryKeys.branches(serviceGroupId),
     queryFn: ({ signal }) => fetchBranches(serviceGroupId, { signal }),

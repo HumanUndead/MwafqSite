@@ -1,33 +1,20 @@
 import 'server-only';
 
-import { cookies } from 'next/headers';
-import { authCookieName } from '@/modules/auth/server/authService';
-import {
-  extractUpstreamCode,
-  extractUpstreamMessage,
-} from '@/modules/auth/server/upstreamAuthResult';
-import { performUpstreamTextRequest } from '@/modules/auth/server/upstreamRequest';
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+import queryString from 'query-string';
+
+import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
+import { FetchResponseError } from '@/shared/lib/fetchWithErrorHandling.shared';
+import { RESERVATIONS_PAGE_SIZE } from '../reservationsPagination.shared';
 import type {
   Reservation,
+  ReservationPublicDetail,
   ReservationsShortcutListPage,
 } from '../types/reservation.types';
-import {
-  parseMyReservationsList,
-  parseReservationsShortcutListPage,
-} from './parseReservations';
 
-function parseJsonSafe(value: string): unknown {
-  if (!value) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(value);
-  } catch {
-    return null;
-  }
-}
+export type GetMyReservationsPageParams = {
+  pageNumber?: number;
+  pageSize?: number;
+};
 
 export class ReservationsError extends Error {
   code: string | null;
@@ -41,39 +28,64 @@ export class ReservationsError extends Error {
   }
 }
 
-async function getMyReservationsPayload(): Promise<unknown> {
-  const endpoint = new URL(
-    '/api/client/client/GetMyReservations',
-    MWAFQ_API_BASE_URL
-  );
-
-  const upstreamResponse = await performUpstreamTextRequest({
-    method: 'GET',
-    url: endpoint,
-  });
-
-  const payload = parseJsonSafe(upstreamResponse.body);
-  const upstreamCode = extractUpstreamCode(payload);
-
-  if (upstreamResponse.status >= 400) {
-    throw new ReservationsError(
-      extractUpstreamMessage(payload, 'Failed to load reservations'),
-      upstreamResponse.status,
-      upstreamCode
-    );
-  }
-
-  return payload;
+function normalizeReservationsPage(
+  page: ReservationsShortcutListPage
+): ReservationsShortcutListPage {
+  return {
+    ...page,
+    data: Array.isArray(page.data) ? page.data : [],
+  };
 }
 
-export async function getMyReservations(): Promise<Reservation[]> {
-  const payload = await getMyReservationsPayload();
-  return parseMyReservationsList(payload);
+async function fetchMyReservations(
+  params?: GetMyReservationsPageParams
+): Promise<ReservationsShortcutListPage> {
+  const query = queryString.stringify(
+    {
+      pageNumber: params?.pageNumber,
+      pageSize: params?.pageSize,
+    },
+    { skipNull: true }
+  );
+  const url = query
+    ? `/api/client/client/GetMyReservations?${query}`
+    : '/api/client/client/GetMyReservations';
+
+  try {
+    const page =
+      await fetchWithErrorHandling<ReservationsShortcutListPage>(url);
+    return normalizeReservationsPage(page);
+  } catch (error) {
+    if (error instanceof FetchResponseError) {
+      throw new ReservationsError(error.message, error.status);
+    }
+    throw error;
+  }
+}
+
+export async function getMyReservationsPage(
+  params: GetMyReservationsPageParams = {}
+): Promise<ReservationsShortcutListPage> {
+  const pageSize = params.pageSize ?? RESERVATIONS_PAGE_SIZE;
+  const pageNumber = params.pageNumber ?? 1;
+  return fetchMyReservations({ pageNumber, pageSize });
+}
+
+/** Unpaginated list (e.g. shortcut API). Prefer {@link getMyReservationsPage} for UI. */
+export async function getMyReservations({
+  pageNumber,
+  pageSize,
+}: GetMyReservationsPageParams = {}): Promise<Reservation[]> {
+  const page = await fetchMyReservations({ pageNumber, pageSize });
+  return page.data;
 }
 
 export async function getReservationById(
   id: string
-): Promise<Reservation | undefined> {
-  const reservations = await getMyReservations();
-  return reservations.find((item) => item.id === id);
+): Promise<ReservationPublicDetail> {
+  const query = queryString.stringify({ id }, { skipNull: true });
+
+  return await fetchWithErrorHandling<ReservationPublicDetail>(
+    `/api/Reservation/Reservation/PublicGetById?${query}`
+  );
 }

@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useAuthStore } from '@/modules/auth/store/authStore';
+import { authApi } from '@/modules/auth/api/authApi';
 import type { User } from '@/shared/types/user.types';
 import { useLocale } from '@/i18n/DictionaryProvider';
 import { getTranslationName } from '@/shared/lib/getTranslationName';
@@ -103,8 +104,9 @@ export function EditPersonalInfoDialog({
 
   const updateMutation = useMutation({
     mutationFn: updateUserInfo,
-    onSuccess(updated: User) {
-      setUser(updated);
+    async onSuccess() {
+      const userResponse = await authApi.getUserByToken();
+      setUser(userResponse.data);
       onOpenChange(false);
     },
   });

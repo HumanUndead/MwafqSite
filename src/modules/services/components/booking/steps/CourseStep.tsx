@@ -1,8 +1,6 @@
 'use client';
 
-import { BookOpen } from 'lucide-react';
-
-import { cn } from '@/lib/utils';
+import { CourseCard } from '@/modules/services/components/booking/CourseCard';
 import { useBookingCourses } from '@/modules/services/hooks/useBookingCourses';
 
 type CourseStepLabels = {
@@ -34,12 +32,19 @@ export function CourseStep({
         <p className='mb-3 text-[13px] text-[#6b7196]' role='status'>
           {labels.loading}
         </p>
-        <div className='grid grid-cols-1 gap-3'>
-          {Array.from({ length: 3 }).map((_, i) => (
+        <div className='grid grid-cols-1 gap-[18px] sm:grid-cols-2'>
+          {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className='h-[80px] animate-pulse rounded-xl bg-[#f0f2f8]'
-            />
+              className='animate-pulse overflow-hidden rounded-[14px] border-2 border-[#e5e7f0]'
+            >
+              <div className='aspect-16/10 bg-[#f0f2f8]' />
+              <div className='space-y-2 p-4'>
+                <div className='h-4 w-3/4 rounded bg-[#f0f2f8]' />
+                <div className='h-3 w-full rounded bg-[#f0f2f8]' />
+                <div className='h-3 w-5/6 rounded bg-[#f0f2f8]' />
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -60,57 +65,22 @@ export function CourseStep({
 
   return (
     <ul
-      className='mb-6 grid grid-cols-1 gap-3'
+      className='mb-6 grid grid-cols-1 gap-[18px] sm:grid-cols-2'
       aria-label={labels.selectAriaLabel}
     >
-      {courses.map((course) => {
-        const isSelected = selectedCourseId === course.id;
-        return (
-          <li key={course.id}>
-            <button
-              type='button'
-              onClick={() => onSelect(course.id)}
-              className={cn(
-                'flex w-full items-start gap-3.5 rounded-xl border-2 px-[18px] py-4 text-start transition-colors duration-200',
-                isSelected
-                  ? 'border-[#00a8f1] bg-[#f0fbff]'
-                  : 'border-[#e5e7f0] bg-[#f5f8ff] hover:border-[#00a8f1]/40'
-              )}
-              aria-pressed={isSelected}
-            >
-              <span
-                className={cn(
-                  'mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-full',
-                  isSelected
-                    ? 'bg-[#00a8f1] text-white'
-                    : 'bg-white text-[#1e2364]'
-                )}
-                aria-hidden
-              >
-                <BookOpen className='size-[18px]' strokeWidth={1.8} />
-              </span>
-              <span className='min-w-0 flex-1'>
-                <span className='block text-[15px] font-bold leading-snug text-[#1e2364]'>
-                  {course.name}
-                </span>
-                {course.description ? (
-                  <span className='mt-0.5 block text-[12.5px] leading-relaxed text-[#6b7196]'>
-                    {course.description}
-                  </span>
-                ) : null}
-                {course.price ? (
-                  <span className='mt-1 block text-[13px] font-semibold text-[#00a8f1]'>
-                    {labels.priceLabel.replace(
-                      '{{price}}',
-                      String(course.price)
-                    )}
-                  </span>
-                ) : null}
-              </span>
-            </button>
-          </li>
-        );
-      })}
+      {courses.map((course) => (
+        <li key={course.id}>
+          <CourseCard
+            id={course.id}
+            name={course.name}
+            description={course.description}
+            price={course.price}
+            fullImagePath={course.fullImagePath}
+            isSelected={selectedCourseId === course.id}
+            onSelect={onSelect}
+          />
+        </li>
+      ))}
     </ul>
   );
 }

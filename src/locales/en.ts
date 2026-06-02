@@ -1008,6 +1008,11 @@ const en = {
     download: 'Download',
     emptyExams: 'No upcoming reservations.',
     emptyResults: 'No results yet.',
+    pagination: {
+      ariaLabel: 'Reservations pagination',
+      previous: 'Previous page',
+      next: 'Next page',
+    },
     detailPage: {
       backToExaminations: 'Back to Examinations',
       backToResults: 'Back to Results',
@@ -1077,9 +1082,16 @@ const en = {
         empty: 'No facilities available for this package.',
         loadError: 'Could not load facilities. Please try again.',
         selectAriaLabel: 'Select a facility',
+        viewMap: 'Map',
+        viewList: 'List',
+        viewModeAriaLabel: 'View mode',
+        yourLocation: 'Your location',
+        locationFallback: 'Default location (Riyadh)',
       },
       time: {
         pickDate: 'Select appointment date',
+        availableTimes: 'Available Times',
+        pickDateFirst: 'Pick a date first to choose a time',
         loadingSlots: 'Loading available slots…',
         noSlots: 'No available time slots for the selected date.',
         loadError: 'Could not load time slots. Please try another date.',
