@@ -14,9 +14,7 @@ const USER_LOCATION_ZOOM = 15;
 const SELECTED_BRANCH_ZOOM = 15;
 
 function branchHasMapCoords(branch: ServiceProviderBranch): boolean {
-  return (
-    Number.isFinite(branch.latitude) && Number.isFinite(branch.longitude)
-  );
+  return Number.isFinite(branch.latitude) && Number.isFinite(branch.longitude);
 }
 
 function branchToLatLngTuple(
@@ -80,7 +78,7 @@ function mapHasLayout(map: L.Map): boolean {
 function isMapOperational(map: L.Map | null): map is L.Map {
   if (!map) return false;
   if (!mapHasLayout(map)) return false;
-  return map.getPane('mapPane') != null;
+  return map.getPane('mapPane');
 }
 
 function runMapViewOp(map: L.Map, op: () => void): boolean {

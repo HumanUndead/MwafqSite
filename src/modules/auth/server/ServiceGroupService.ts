@@ -9,6 +9,7 @@ import type {
   ServiceGroupDetail,
   ServiceGroupListItem,
 } from '../serviceGroup.types';
+import { Locale, localeToLangId } from '@/i18n/config';
 
 export async function fetchServiceGroupsList(
   query: FetchServiceGroupListParams
@@ -21,9 +22,13 @@ export async function fetchServiceGroupsList(
 
 export async function fetchServiceGroupById(
   id: number,
-  filter?: { isMandatoryTest?: boolean }
+  filter?: { isMandatoryTest?: boolean; locale?: Locale }
 ): Promise<ServiceGroupDetail> {
-  const params = queryString.stringify({ id, ...filter }, { skipNull: true });
+  const langId = localeToLangId[filter?.locale ?? 'en'];
+  const params = queryString.stringify(
+    { id, langId, ...filter },
+    { skipNull: true }
+  );
   return fetchWithErrorHandling<ServiceGroupDetail>(
     `/api/Service/ServiceGroup/GetById?${params}`
   );

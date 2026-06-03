@@ -11,6 +11,7 @@ export const BOOKING_STEP_IDS = [
   'course',
   'facility',
   'time',
+  'payment',
 ] as const;
 
 export type BookingStepId = (typeof BOOKING_STEP_IDS)[number];

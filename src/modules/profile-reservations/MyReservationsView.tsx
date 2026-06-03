@@ -74,13 +74,14 @@ export default function MyReservationsView({
     }
   }
 
-  const { examCards, resultCards } = useMemo(() => {
+  const getCards = () => {
     const { exams, results } = partitionReservations(reservations);
     return {
       examCards: exams.map(mapReservationToExamCard),
       resultCards: results.map(mapReservationToResultCard),
     };
-  }, [reservations]);
+  };
+  const { examCards, resultCards } = getCards();
 
   return (
     <section className='relative pt-2'>
@@ -151,10 +152,7 @@ export default function MyReservationsView({
         </ScrollReveal>
 
         <div id='reservationsGrid' className='min-h-[200px]'>
-          <TabsContent
-            value='exams'
-            className='mt-0 flex-1 outline-none'
-          >
+          <TabsContent value='exams' className='mt-0 flex-1 outline-none'>
             <ReservationsExamsPanel
               cards={examCards}
               chevronShift={chevronShift}
@@ -162,10 +160,7 @@ export default function MyReservationsView({
             />
           </TabsContent>
 
-          <TabsContent
-            value='results'
-            className='mt-0 flex-1 outline-none'
-          >
+          <TabsContent value='results' className='mt-0 flex-1 outline-none'>
             <Suspense fallback={<ReservationsPanelSkeleton />}>
               <ReservationsResultsPanel
                 cards={resultCards}

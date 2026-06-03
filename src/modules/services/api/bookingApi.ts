@@ -64,9 +64,7 @@ export async function fetchWeeklyTimeSlots(
   return result.slotTimesGroupedByDay ?? [];
 }
 
-export async function submitReservation(
-  input: CreateReservationInput
-): Promise<{ id: string | number }> {
+export async function submitReservation(input: CreateReservationInput) {
   const form = new URLSearchParams();
   form.set('serviceProviderBranchId', String(input.serviceProviderBranchId));
   if (input.dateChosen) form.set('dateChosen', input.dateChosen);
@@ -80,11 +78,11 @@ export async function submitReservation(
     form.set(`ReservationServices[${i}].slotTimeId`, String(slot.slotTimeId));
   });
 
-  if (input.courseId != null) {
+  if (input.courseId) {
     form.set('optionalCourseId', String(input.courseId));
   }
 
-  return fetchWithErrorHandlingClient<{ id: string | number }>(
+  return fetchWithErrorHandlingClient<string>(
     '/api/client/client/CreateReservation',
     {
       method: 'POST',

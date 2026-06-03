@@ -14,6 +14,7 @@ export const ABOUT_SECTION_RANKS = {
   // Both milestones (id 155) and b2bSnippet (id 156) share rank 9.
   // sortByRank breaks ties by id, so index 0 = milestones, index 1 = b2bSnippet.
   rankWithMilestonesAndB2b: 9,
+  finalCta: 10,
 } as const;
 
 // Hero articles (category rank 1):

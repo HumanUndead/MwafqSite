@@ -17,6 +17,7 @@ type BookingActionsProps = {
   onBack?: () => void;
   nextDisabled?: boolean;
   showBack?: boolean;
+  hideNext?: boolean;
 };
 
 export function BookingActions({
@@ -29,6 +30,7 @@ export function BookingActions({
   onBack,
   nextDisabled = false,
   showBack = false,
+  hideNext = false,
 }: BookingActionsProps) {
   const rtl = isRtl(locale);
   const NextArrow = rtl ? ArrowLeft : ArrowRight;
@@ -56,17 +58,19 @@ export function BookingActions({
         </Link>
       )}
 
-      <Button
-        type='button'
-        disabled={nextDisabled}
-        onClick={onNext}
-        className={cn(
-          'inline-flex min-w-[84px] items-center justify-center gap-2 rounded-full bg-[#1e2364] px-3.5 py-[11px] text-[13px] font-semibold text-white hover:bg-[#233567] disabled:opacity-50'
-        )}
-      >
-        {nextLabel}
-        <NextArrow className='size-4' strokeWidth={2.4} aria-hidden />
-      </Button>
+      {!hideNext && (
+        <Button
+          type='button'
+          disabled={nextDisabled}
+          onClick={onNext}
+          className={cn(
+            'inline-flex min-w-[84px] items-center justify-center gap-2 rounded-full bg-[#1e2364] px-3.5 py-[11px] text-[13px] font-semibold text-white hover:bg-[#233567] disabled:opacity-50'
+          )}
+        >
+          {nextLabel}
+          <NextArrow className='size-4' strokeWidth={2.4} aria-hidden />
+        </Button>
+      )}
     </div>
   );
 }

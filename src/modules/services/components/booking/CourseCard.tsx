@@ -73,7 +73,7 @@ export function CourseCard({
             {description}
           </span>
         ) : null}
-        {price != null ? (
+        {price ? (
           <div className='mt-1.5 flex items-center justify-end gap-1'>
             <span className='text-[18px] font-extrabold leading-none tracking-[-0.4px] text-[#1e2364]'>
               {price}

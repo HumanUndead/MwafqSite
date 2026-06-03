@@ -126,7 +126,7 @@ export async function ServiceGroupDetailsView({
                   ) : null}
                 </div>
 
-                {price != null ? (
+                {price ? (
                   <div className='flex items-center justify-between gap-3.5 border-t border-[#e5e7f0] px-5 py-3.5'>
                     <span className='inline-flex items-end gap-1.5 text-[30px] font-black leading-none tracking-[-1.4px] text-[#1e2364]'>
                       {formatPrice(price)}

@@ -11,7 +11,6 @@ import { ROUTES } from '@/shared/constants/routes';
 import { getLocalizedRoute } from '@/i18n/routing';
 import type { ServiceGroupDetail } from '@/modules/auth/serviceGroup.types';
 import { useAuthStore } from '@/modules/auth/store/authStore';
-import { submitReservation } from '@/modules/services/api/bookingApi';
 import {
   type BookingStepId,
   getBookingSteps,
@@ -28,6 +27,7 @@ import { CourseStep } from '@/modules/services/components/booking/steps/CourseSt
 import { ExaminationsStep } from '@/modules/services/components/booking/steps/ExaminationsStep';
 import { FacilityStep } from '@/modules/services/components/booking/steps/FacilityStep';
 import { TimeStep } from '@/modules/services/components/booking/steps/TimeStep';
+import { PaymentStep } from '@/modules/services/components/booking/steps/PaymentStep';
 
 type ServiceGroupBuyPageProps = {
   serviceGroup: ServiceGroupDetail;
@@ -48,8 +48,6 @@ export function ServiceGroupBuyPage({
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlots, setSelectedSlots] = useState<BookingTimeSlot[]>([]);
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const steps = useMemo(() => getBookingSteps(serviceGroup), [serviceGroup]);
 
@@ -72,6 +70,7 @@ export function ServiceGroupBuyPage({
   const currentStepIndex = Math.max(0, steps.indexOf(currentStep));
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
+  const isPaymentStep = currentStep === 'payment';
 
   const canProceed = useMemo(() => {
     switch (currentStep) {
@@ -83,6 +82,8 @@ export function ServiceGroupBuyPage({
         return !!(selectedDate && selectedSlots.length > 0);
       case 'course':
         return !!selectedCourseId;
+      case 'payment':
+        return false;
       default:
         return false;
     }
@@ -100,6 +101,7 @@ export function ServiceGroupBuyPage({
       facility: t.steps.facility,
       time: t.steps.time,
       course: t.steps.course,
+      payment: t.steps.payment,
     }),
     [t.steps]
   );
@@ -116,27 +118,8 @@ export function ServiceGroupBuyPage({
     if (prev) setCurrentStep(prev);
   }
 
-  async function handleFinish() {
-    if (!canProceed || !selectedBranch || !selectedDate || !selectedSlots.length) return;
-    if (!user) return;
-
-    setSubmitting(true);
-    setSubmitError(null);
-
-    try {
-      await submitReservation({
-        serviceProviderBranchId: selectedBranch.id,
-        dateChosen: dayjs(selectedDate).toJSON(),
-        ownerId: user.id,
-        slots: selectedSlots,
-        courseId: selectedCourseId ?? undefined,
-      });
-      router.push(getLocalizedRoute(locale, ROUTES.MY_RESERVATIONS));
-    } catch {
-      setSubmitError(t.submitError);
-    } finally {
-      setSubmitting(false);
-    }
+  function handlePaymentSuccess() {
+    router.push(getLocalizedRoute(locale, ROUTES.MY_RESERVATIONS));
   }
 
   return (
@@ -165,7 +148,6 @@ export function ServiceGroupBuyPage({
               {currentStep === 'examinations' && (
                 <ExaminationsStep
                   serviceGroup={serviceGroup}
-                  examItemLabel={t.examItemLabel}
                   noExamsMessage={t.noExams}
                 />
               )}
@@ -182,7 +164,9 @@ export function ServiceGroupBuyPage({
               {currentStep === 'time' && selectedBranch && (
                 <TimeStep
                   serviceGroupId={serviceGroup.id}
-                  serviceIds={serviceGroup.serviceGroupServices.map((s) => s.serviceId)}
+                  serviceIds={serviceGroup.serviceGroupServices.map(
+                    (s) => s.serviceId
+                  )}
                   branch={selectedBranch}
                   selectedDate={selectedDate}
                   selectedSlots={selectedSlots}
@@ -204,24 +188,30 @@ export function ServiceGroupBuyPage({
                 />
               )}
 
-              {submitError && (
-                <p className='mb-4 rounded-lg bg-red-50 px-4 py-3 text-[13.5px] font-medium text-red-600'>
-                  {submitError}
-                </p>
+              {isPaymentStep && user && selectedBranch && selectedDate && (
+                <PaymentStep
+                  locale={locale}
+                  selectedBranch={selectedBranch}
+                  selectedDate={selectedDate}
+                  selectedSlots={selectedSlots}
+                  selectedCourseId={selectedCourseId}
+                  user={user}
+                  onPaymentSuccess={handlePaymentSuccess}
+                  labels={t.payment}
+                />
               )}
 
               <BookingActions
                 locale={locale}
                 cancelHref={cancelHref}
                 cancelLabel={t.cancel}
-                nextLabel={
-                  isLastStep ? (submitting ? t.submitting : t.finish) : t.next
-                }
+                nextLabel={t.next}
                 backLabel={t.back}
-                onNext={isLastStep ? handleFinish : handleNext}
+                onNext={handleNext}
                 onBack={handleBack}
-                nextDisabled={!canProceed || submitting}
+                nextDisabled={!canProceed}
                 showBack={!isFirstStep}
+                hideNext={isPaymentStep}
               />
             </div>
           </ScrollReveal>
