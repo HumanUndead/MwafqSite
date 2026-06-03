@@ -1,15 +1,19 @@
 import type { Locale } from '@/i18n/config';
 import { getLocalizedRoute } from '@/i18n/routing';
-import type { Dictionary } from '@/locales/types';
+import type { AboutFinalCtaContent } from '@/modules/about/types/aboutContent';
 import { ROUTES } from '@/shared/constants/routes';
 import { buttonVariants } from '@/shared/lib/variants';
 
 interface Props {
   locale: Locale;
-  content: Dictionary['about']['finalCta'];
+  content: AboutFinalCtaContent;
 }
 
 export function AboutFinalCtaSection({ locale, content }: Props) {
+  const primaryLabel = content.primary.trim();
+  const secondaryLabel = content.secondary.trim();
+  const showActions = primaryLabel.length > 0 || secondaryLabel.length > 0;
+
   return (
     <section className='relative border-t-2 border-[#e5e7f0] bg-white px-7 py-24 text-center sm:py-[100px]'>
       <div className='mx-auto max-w-[760px]'>
@@ -22,28 +26,34 @@ export function AboutFinalCtaSection({ locale, content }: Props) {
         <p className='mx-auto mb-9 max-w-[560px] text-[16.5px] leading-[1.65] text-[#6b7196]'>
           {content.body}
         </p>
-        <div className='flex flex-wrap justify-center gap-3.5'>
-          <a
-            href={getLocalizedRoute(locale, ROUTES.HOME) + '#booking'}
-            className={buttonVariants({
-              variant: 'brand',
-              size: 'hero',
-              shape: 'pill',
-            })}
-          >
-            {content.primary}
-          </a>
-          <a
-            href={getLocalizedRoute(locale, ROUTES.CONTACT)}
-            className={buttonVariants({
-              variant: 'brandOutline',
-              size: 'hero',
-              shape: 'pill',
-            })}
-          >
-            {content.secondary}
-          </a>
-        </div>
+        {showActions ? (
+          <div className='flex flex-wrap justify-center gap-3.5'>
+            {primaryLabel ? (
+              <a
+                href={getLocalizedRoute(locale, ROUTES.HOME) + '#booking'}
+                className={buttonVariants({
+                  variant: 'brand',
+                  size: 'hero',
+                  shape: 'pill',
+                })}
+              >
+                {primaryLabel}
+              </a>
+            ) : null}
+            {secondaryLabel ? (
+              <a
+                href={getLocalizedRoute(locale, ROUTES.CONTACT)}
+                className={buttonVariants({
+                  variant: 'brandOutline',
+                  size: 'hero',
+                  shape: 'pill',
+                })}
+              >
+                {secondaryLabel}
+              </a>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </section>
   );

@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 
-import type { Dictionary } from '@/locales/types';
+import type { AboutHeroContent } from '@/modules/about/types/aboutContent';
 
 interface Props {
-  content: Dictionary['about']['hero'];
+  content: AboutHeroContent;
 }
 
 export function AboutHero({ content }: Props) {

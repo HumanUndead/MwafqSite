@@ -1,8 +1,8 @@
-import type { Dictionary } from '@/locales/types';
+import type { AboutStatItemContent } from '@/modules/about/types/aboutContent';
 import { CountUp } from '@/modules/home/components/CountingUp';
 
 interface Props {
-  items: Dictionary['about']['stats'];
+  items: AboutStatItemContent[];
 }
 
 export function AboutStatsSection({ items }: Props) {

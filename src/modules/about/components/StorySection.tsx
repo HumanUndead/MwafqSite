@@ -1,8 +1,8 @@
-import type { Dictionary } from '@/locales/types';
+import type { AboutStoryContent } from '@/modules/about/types/aboutContent';
 import { CornerBracketIcon } from '@/shared/components/icons/about';
 
 interface Props {
-  content: Dictionary['about']['story'];
+  content: AboutStoryContent;
 }
 
 export function StorySection({ content }: Props) {

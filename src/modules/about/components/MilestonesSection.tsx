@@ -1,8 +1,8 @@
-import type { Dictionary } from '@/locales/types';
+import type { AboutMilestonesContent } from '@/modules/about/types/aboutContent';
 import { Eyebrow } from '@/modules/home/components/Eyebrow';
 
 interface Props {
-  content: Dictionary['about']['milestones'];
+  content: AboutMilestonesContent;
 }
 
 export function MilestonesSection({ content }: Props) {

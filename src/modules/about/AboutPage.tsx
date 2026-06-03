@@ -1,5 +1,5 @@
 import type { Locale } from '@/i18n/config';
-import type { Dictionary } from '@/locales/types';
+import type { AboutPageContent } from '@/modules/about/types/aboutContent';
 import { AboutHero } from './components/AboutHero';
 import { StorySection } from './components/StorySection';
 import { MissionVisionSection } from './components/MissionVisionSection';
@@ -14,7 +14,7 @@ import { AboutFinalCtaSection } from './components/AboutFinalCtaSection';
 
 interface Props {
   locale: Locale;
-  content: Dictionary['about'];
+  content: AboutPageContent;
 }
 
 export function AboutPage({ locale, content }: Props) {

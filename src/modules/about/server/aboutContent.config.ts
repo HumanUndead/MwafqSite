@@ -1,5 +1,5 @@
 export const ABOUT_CONTENT_ROOT_CATEGORY_ID = 146;
-export const ABOUT_CONTENT_REVALIDATE_SECONDS = 60 * 10;
+export const ABOUT_CONTENT_REVALIDATE_SECONDS = 1;
 export const ABOUT_CONTENT_CACHE_TAG = `about-content-${ABOUT_CONTENT_ROOT_CATEGORY_ID}`;
 
 export const ABOUT_SECTION_RANKS = {
@@ -90,4 +90,14 @@ export const ABOUT_MILESTONE_YEARS = ['2023', '2024', '2025', '2026'] as const;
 export const ABOUT_B2B_ARTICLE_RANKS = {
   header: 1,
   content: 2,
+} as const;
+
+// Final CTA (category rank 10, id 157):
+//   rank 1 → titleLead (name), titleAccent (extraInfo), body (shortDescription)
+//   rank 2 → primary CTA (name), secondary CTA (extraInfo)
+//   rank 3 → optional secondary CTA (name) if split into a separate article later
+export const ABOUT_FINAL_CTA_ARTICLE_RANKS = {
+  content: 1,
+  actions: 2,
+  secondaryFallback: 3,
 } as const;

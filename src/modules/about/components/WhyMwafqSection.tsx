@@ -1,8 +1,8 @@
-import type { Dictionary } from '@/locales/types';
+import type { AboutWhyContent } from '@/modules/about/types/aboutContent';
 import { Eyebrow } from '@/modules/home/components/Eyebrow';
 
 interface Props {
-  content: Dictionary['about']['why'];
+  content: AboutWhyContent;
 }
 
 export function WhyMwafqSection({ content }: Props) {

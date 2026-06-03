@@ -2,13 +2,27 @@ import 'server-only';
 
 import { cache } from 'react';
 import type { Locale } from '@/i18n/config';
-import type { Dictionary } from '@/locales/types';
+import type {
+  AboutB2bSnippetContent,
+  AboutFinalCtaContent,
+  AboutHeroContent,
+  AboutMetaContent,
+  AboutMilestonesContent,
+  AboutMvContent,
+  AboutPageContent,
+  AboutSectionWithItemsContent,
+  AboutStatItemContent,
+  AboutStoryContent,
+  AboutValuesContent,
+  AboutWhyContent,
+} from '@/modules/about/types/aboutContent';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import {
   ABOUT_B2B_ARTICLE_RANKS,
   ABOUT_CONTENT_CACHE_TAG,
   ABOUT_CONTENT_REVALIDATE_SECONDS,
   ABOUT_CONTENT_ROOT_CATEGORY_ID,
+  ABOUT_FINAL_CTA_ARTICLE_RANKS,
   ABOUT_HERO_ARTICLE_RANKS,
   ABOUT_HOW_ARTICLE_RANKS,
   ABOUT_MILESTONE_YEARS,
@@ -146,24 +160,43 @@ function trimToNull(value: string | null | undefined): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
-// ─── Section mappers ──────────────────────────────────────────────────────────
+function stripHtmlToNull(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const stripped = value
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return stripped.length > 0 ? stripped : null;
+}
 
-type HeroContent = Dictionary['about']['hero'];
-type StoryContent = Dictionary['about']['story'];
-type MvContent = Dictionary['about']['mv'];
-type StatsContent = Dictionary['about']['stats'];
-type WhatContent = Dictionary['about']['what'];
-type WhyContent = Dictionary['about']['why'];
-type ValuesContent = Dictionary['about']['values'];
-type HowContent = Dictionary['about']['how'];
-type MilestonesContent = Dictionary['about']['milestones'];
-type B2bSnippetContent = Dictionary['about']['b2b'];
-type FinalCtaContent = Dictionary['about']['finalCta'];
+function getCategoryTranslation(
+  category: CategoryDto | null,
+  langId: number
+): { name: string; description: string | null } | null {
+  if (!category) return null;
+  const t = getPreferredTranslation(category.translations, langId);
+  if (!t) return null;
+  return { name: t.name ?? '', description: t.description ?? null };
+}
+
+function mapMetaContent(
+  rootCategory: CategoryDto | null,
+  langId: number
+): AboutMetaContent {
+  const t = getCategoryTranslation(rootCategory, langId);
+  return {
+    title: trimToNull(t?.name) ?? '',
+    description: stripHtmlToNull(t?.description) ?? '',
+  };
+}
+
+// ─── Section mappers ──────────────────────────────────────────────────────────
 
 function mapHeroContent(
   rootCategory: CategoryDto | null,
   langId: number
-): HeroContent {
+): AboutHeroContent {
   const heroCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.hero
@@ -195,7 +228,7 @@ function mapHeroContent(
 function mapStoryContent(
   rootCategory: CategoryDto | null,
   langId: number
-): StoryContent {
+): AboutStoryContent {
   const storyCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.story
@@ -212,7 +245,7 @@ function mapStoryContent(
 function mapMvContent(
   rootCategory: CategoryDto | null,
   langId: number
-): MvContent {
+): AboutMvContent {
   const mvCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.mv
@@ -250,7 +283,7 @@ function mapMvContent(
 function mapStatsContent(
   rootCategory: CategoryDto | null,
   langId: number
-): StatsContent {
+): AboutStatItemContent[] {
   const statsCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.stats
@@ -270,7 +303,7 @@ function mapStatsContent(
 function mapWhatContent(
   rootCategory: CategoryDto | null,
   langId: number
-): WhatContent {
+): AboutSectionWithItemsContent {
   const whatCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.what
@@ -304,7 +337,7 @@ function mapWhatContent(
 function mapWhyContent(
   rootCategory: CategoryDto | null,
   langId: number
-): WhyContent {
+): AboutWhyContent {
   const whyCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.why
@@ -351,7 +384,7 @@ function mapWhyContent(
 function mapValuesContent(
   rootCategory: CategoryDto | null,
   langId: number
-): ValuesContent {
+): AboutValuesContent {
   const valuesCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.values
@@ -383,7 +416,7 @@ function mapValuesContent(
 function mapHowContent(
   rootCategory: CategoryDto | null,
   langId: number
-): HowContent {
+): AboutSectionWithItemsContent {
   const howCategory = getChildCategoryByRank(
     rootCategory,
     ABOUT_SECTION_RANKS.how
@@ -417,7 +450,7 @@ function mapHowContent(
 function mapMilestonesContent(
   rootCategory: CategoryDto | null,
   langId: number
-): MilestonesContent {
+): AboutMilestonesContent {
   // Rank-9 categories sorted by id: index 0 = milestones (id 155), index 1 = b2b (id 156)
   const milestonesCategory =
     getChildrenByRank(
@@ -457,7 +490,7 @@ function mapMilestonesContent(
 function mapB2bSnippetContent(
   rootCategory: CategoryDto | null,
   langId: number
-): B2bSnippetContent {
+): AboutB2bSnippetContent {
   // Rank-9 categories sorted by id: index 0 = milestones (id 155), index 1 = b2b (id 156)
   const b2bCategory =
     getChildrenByRank(
@@ -502,19 +535,57 @@ function mapB2bSnippetContent(
   };
 }
 
-function mapFinalCtaContent(dict: Dictionary): FinalCtaContent {
-  return dict.about.finalCta;
+function mapFinalCtaContent(
+  rootCategory: CategoryDto | null,
+  langId: number
+): AboutFinalCtaContent {
+  const finalCtaCategory = getChildCategoryByRank(
+    rootCategory,
+    ABOUT_SECTION_RANKS.finalCta
+  );
+  const contentArticle = getArticleByRank(
+    finalCtaCategory,
+    ABOUT_FINAL_CTA_ARTICLE_RANKS.content
+  );
+  const actionsArticle = getArticleByRank(
+    finalCtaCategory,
+    ABOUT_FINAL_CTA_ARTICLE_RANKS.actions
+  );
+  const secondaryFallbackArticle = getArticleByRank(
+    finalCtaCategory,
+    ABOUT_FINAL_CTA_ARTICLE_RANKS.secondaryFallback
+  );
+
+  const contentT = contentArticle
+    ? getArticleTranslation(contentArticle, langId)
+    : null;
+  const actionsT = actionsArticle
+    ? getArticleTranslation(actionsArticle, langId)
+    : null;
+  const secondaryFallbackT = secondaryFallbackArticle
+    ? getArticleTranslation(secondaryFallbackArticle, langId)
+    : null;
+
+  return {
+    titleLead: trimToNull(contentT?.name) ?? '',
+    titleAccent: trimToNull(contentT?.extraInfo) ?? '',
+    body: trimToNull(contentT?.shortDescription) ?? '',
+    primary: trimToNull(actionsT?.name) ?? '',
+    secondary:
+      trimToNull(actionsT?.extraInfo) ??
+      trimToNull(secondaryFallbackT?.name) ??
+      '',
+  };
 }
 
 // ─── Build ────────────────────────────────────────────────────────────────────
 
 function buildAboutContent(
-  dict: Dictionary,
   rootCategory: CategoryDto | null,
   langId: number
-): Dictionary['about'] {
+): AboutPageContent {
   return {
-    meta: dict.about.meta,
+    meta: mapMetaContent(rootCategory, langId),
     hero: mapHeroContent(rootCategory, langId),
     story: mapStoryContent(rootCategory, langId),
     mv: mapMvContent(rootCategory, langId),
@@ -525,7 +596,7 @@ function buildAboutContent(
     how: mapHowContent(rootCategory, langId),
     milestones: mapMilestonesContent(rootCategory, langId),
     b2b: mapB2bSnippetContent(rootCategory, langId),
-    finalCta: mapFinalCtaContent(dict),
+    finalCta: mapFinalCtaContent(rootCategory, langId),
   };
 }
 
@@ -551,11 +622,10 @@ const fetchAboutContentTree = cache(async (): Promise<CategoryDto | null> => {
 
 // ─── Export ───────────────────────────────────────────────────────────────────
 
-export async function getAboutPageContent(
-  locale: Locale,
-  dict: Dictionary
-): Promise<Dictionary['about']> {
-  const langId = localeToLangId[locale];
-  const rootCategory = await fetchAboutContentTree();
-  return buildAboutContent(dict, rootCategory, langId);
-}
+export const getAboutPageContent = cache(
+  async (locale: Locale): Promise<AboutPageContent> => {
+    const langId = localeToLangId[locale];
+    const rootCategory = await fetchAboutContentTree();
+    return buildAboutContent(rootCategory, langId);
+  }
+);
