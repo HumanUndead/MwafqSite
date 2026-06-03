@@ -16,6 +16,7 @@ export interface ServiceGroupServiceLink {
   id: number;
   serviceGroupId: number;
   serviceId: number;
+  serviceName: string;
 }
 
 export interface ServiceGroupClassificationPricing {

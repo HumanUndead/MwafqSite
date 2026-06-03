@@ -2,18 +2,18 @@ export const bookingQueryKeys = {
   all: ['booking'] as const,
   branches: (serviceGroupId: number) =>
     [...bookingQueryKeys.all, 'branches', serviceGroupId] as const,
-  timeSlots: (
+  courses: (serviceGroupId: number) =>
+    [...bookingQueryKeys.all, 'courses', serviceGroupId] as const,
+  weeklyTimeSlots: (
     branchId: number,
-    serviceGroupId: number,
-    dateChosen: string | null
+    serviceIds: number[],
+    serviceGroupIds: number[]
   ) =>
     [
       ...bookingQueryKeys.all,
-      'timeSlots',
+      'weeklyTimeSlots',
       branchId,
-      serviceGroupId,
-      dateChosen,
+      serviceIds,
+      serviceGroupIds,
     ] as const,
-  courses: (serviceGroupId: number) =>
-    [...bookingQueryKeys.all, 'courses', serviceGroupId] as const,
 };

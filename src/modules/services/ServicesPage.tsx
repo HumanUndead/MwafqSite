@@ -50,7 +50,7 @@ export function ServicesPage({
 
       <section id='packagesGrid' className='relative px-0 pb-[120px] pt-[30px]'>
         <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
-          <div className='flex flex-wrap items-stretch gap-[22px]'>
+          <div className='grid grid-cols-2 gap-[22px] sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
             {services.map((pkg, i) => (
               <PackageCard
                 key={pkg.id}

@@ -13,7 +13,7 @@ export function AcademySection({ locale, content }: Props) {
   return (
     <section className='relative mt-20 overflow-hidden rounded-t-[60px] bg-white pb-[50px] pt-[90px]'>
       <div
-        className='pointer-events-none absolute inset-0 [background-image:linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.18]'
+        className='pointer-events-none absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] [background-size:32px_32px]'
         aria-hidden='true'
       />
       <div className='relative mx-auto max-w-[1320px] px-4 md:px-7'>
@@ -38,7 +38,7 @@ export function AcademySection({ locale, content }: Props) {
               key={`${course.title}-${course.path ?? index}`}
               locale={locale}
               href={course.path}
-              className="group relative overflow-hidden rounded-[4px_28px_4px_28px] border-2 border-[#e5e7f0] bg-white px-[30px] pb-8 pt-[54px] transition-all duration-400 hover:-translate-y-1 hover:bg-[#fbfcff] before:absolute before:left-0 before:top-0 before:h-2.5 before:origin-left before:scale-x-0 before:bg-[#00a8f1] before:content-[''] before:[left:30px] before:[right:0] before:transition-transform before:duration-500 hover:before:scale-x-100 after:absolute after:bottom-0 after:left-0 after:top-[30px] after:w-2.5 after:origin-top after:scale-y-0 after:bg-[#00a8f1] after:content-[''] after:transition-transform after:duration-500 hover:after:scale-y-100 rtl:rounded-[28px_4px_28px_4px] rtl:before:origin-right rtl:before:[left:0px] rtl:before:[right:30px] rtl:after:left-auto rtl:after:right-0"
+              className="group relative overflow-hidden rounded-[4px_28px_4px_28px] border-2 border-[#e5e7f0] bg-white px-[30px] pb-8 pt-[54px] transition-all duration-400 hover:-translate-y-1 hover:bg-[#fbfcff] before:absolute before:top-0 before:left-0 before:right-0 before:h-2.5 before:origin-left before:scale-x-0 before:bg-[#00a8f1] before:content-[''] before:transition-transform before:duration-500 hover:before:scale-x-100 after:absolute after:bottom-0 after:left-0 after:top-[30px] after:w-2.5 after:origin-top after:scale-y-0 after:bg-[#00a8f1] after:content-[''] after:transition-transform after:duration-500 hover:after:scale-y-100 rtl:rounded-[28px_4px_28px_4px] rtl:before:origin-right rtl:before:left-auto rtl:before:right-[30px] rtl:after:left-auto rtl:after:right-0"
             >
               <div
                 aria-hidden='true'
@@ -50,7 +50,7 @@ export function AcademySection({ locale, content }: Props) {
                 }}
               />
               <div className='mb-[18px] flex items-center gap-3.5'>
-                <div className='flex h-[54px] w-[54px] flex-shrink-0 items-center justify-center rounded-[14px_4px_14px_4px] border-2 border-[#e5e7f0] bg-[#fbfcff] group-hover:border-[#00a8f1]'>
+                <div className='flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[14px_4px_14px_4px] border-2 border-[#e5e7f0] bg-[#fbfcff] group-hover:border-[#00a8f1]'>
                   {getUtilityIconByKey(course.iconKey)}
                 </div>
                 <span
@@ -73,9 +73,11 @@ export function AcademySection({ locale, content }: Props) {
                     ({course.ratingCount})
                   </span>
                 </div>
-                <span className='inline-flex items-center gap-1.5 text-[13px] font-bold text-[#00a8f1] transition-[gap] duration-300 group-hover:gap-3'>
-                  {content.ctaLabel}
-                </span>
+                {content.ctaLabel.trim() ? (
+                  <span className='inline-flex items-center gap-1.5 text-[13px] font-bold text-[#00a8f1] transition-[gap] duration-300 group-hover:gap-3'>
+                    {content.ctaLabel}
+                  </span>
+                ) : null}
               </div>
             </CmsLink>
           ))}

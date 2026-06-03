@@ -111,7 +111,7 @@ export function PersonalInfoView({
     ? getUserMemberSinceDate(resolvedUser)
     : undefined;
   const memberSinceLabel =
-    memberSince != null && memberSince !== ''
+    memberSince && memberSince !== ''
       ? `${t.contact.memberSince} ${formatMemberSince(memberSince, locale)}`
       : null;
   return (

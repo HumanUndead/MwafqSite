@@ -20,280 +20,6 @@ const en = {
   footer: {
     copyright: '© {{year}} Mwafq. All rights reserved.',
   },
-  home: {
-    nav: {
-      home: 'Home',
-      about: 'About us',
-      services: 'Services',
-      app: 'App',
-      academy: 'Academy',
-      businesses: 'B2B Portal',
-      contact: 'Contact',
-      cta: 'Book Now',
-      switchLabel: 'AR',
-    },
-    hero: {
-      badge: 'Trusted by 500+ healthcare partners across KSA',
-      titleLead: 'Medical exams',
-      titleMiddle: 'made',
-      rotatingWords: ['Easier.', 'Faster.', 'Better.'],
-      subtitle:
-        'Book residency, driving-license, municipality, and occupational-health exams from one trusted platform, then receive your certified result directly on your phone.',
-      primaryCta: 'Book Your Exam',
-      secondaryCta: 'Download App',
-      stats: [
-        { value: 50000, suffix: 'K+', label: 'Completed Exams' },
-        { value: 4.9, decimals: 1, label: 'Avg App Rating' },
-        { value: 500, suffix: '+', label: 'Corporate Partners' },
-      ],
-      phoneGreeting: 'Hello,',
-      phoneName: 'Ahmad',
-      phoneSearchPlaceholder: 'Find your exam',
-      servicesTitle: 'Services',
-      servicesLink: 'See all',
-      phoneTiles: [
-        { title: 'Driving', subtitle: 'License' },
-        { title: 'Residency', subtitle: 'Iqama' },
-        { title: 'Municipality', subtitle: 'Health Cert.' },
-        { title: 'Occupational', subtitle: 'Pre-employ.' },
-      ],
-      liveBookings: '247',
-      liveBookingsLabel: 'booked today',
-      floatingCards: [
-        { title: 'Fit for Service', detail: 'Driving — Approved' },
-        { title: 'Real-time', detail: 'Updated 2m ago' },
-        { title: 'Booked', detail: 'Tomorrow · 9:00 AM' },
-      ],
-    },
-    logosLabel: 'Healthcare partners',
-    services: {
-      eyebrow: 'Our Services',
-      title: 'One platform. Every official exam.',
-      body: 'Designed around the exact booking and reporting flows people and employers actually need.',
-      items: [
-        {
-          title: 'Driving License',
-          description:
-            'The medical fitness exam you need for your Saudi driving license. Officially recognised, ready in minutes.',
-        },
-        {
-          title: 'Residency Exam',
-          description:
-            'The iqama medical screening, at the clinic nearest you. Recognised by the Ministry of Health across KSA.',
-        },
-        {
-          title: 'Municipality',
-          description:
-            'The health certificate every food handler, public-service worker and municipal licensee needs — sorted in one visit.',
-        },
-        {
-          title: 'Occupational Health',
-          description:
-            'Pre-employment and workplace health screenings, trusted by 500+ employers across the Kingdom.',
-        },
-      ],
-    },
-    why: {
-      eyebrow: 'Why Mwafq',
-      title: 'A cleaner experience for patients, clinics, and employers',
-      items: [
-        {
-          title: 'Real-time tracking',
-          description:
-            'Watch every status from booking acceptance to final approval without chasing calls.',
-        },
-        {
-          title: 'Reports in pocket',
-          description:
-            'Download your certified report the moment results are ready.',
-        },
-        {
-          title: 'Certified and reliable',
-          description:
-            'Built around verified providers and official Saudi exam categories.',
-        },
-        {
-          title: 'Total flexibility',
-          description:
-            'Serve individuals and HR teams from the same calm workflow.',
-        },
-      ],
-    },
-    booking: {
-      eyebrow: 'Find Your Next Exam',
-      title: 'Book an appointment in a few calm taps',
-      fields: {
-        exam: 'Exam Type',
-        city: 'City or Center',
-        date: 'Date',
-        search: 'Search Appointments',
-        examPlaceholder: 'Select exam',
-        cityPlaceholder: 'City or center name',
-        datePlaceholder: 'DD / MM / YYYY',
-      },
-      examOptions: [
-        'Driving License Exam',
-        'Residency Exam',
-        'Municipality Exam',
-        'Occupational Exam',
-        'Pre-Employment Basic',
-      ],
-      note: 'Bring your valid National ID or Residency (Iqama) to the medical center to avoid appointment cancellation.',
-    },
-    steps: {
-      eyebrow: 'How it works',
-      title: 'Three taps',
-      highlight: 'Done.',
-      cta: 'Start Booking ->',
-      items: [
-        {
-          title: 'Find Your Next Exam',
-          body: 'Choose the exam category, city, and date, then lock in the slot that fits your day.',
-          meta1: { value: '30s', label: 'avg booking' },
-          meta2: { value: '100+', label: 'centres' },
-        },
-        {
-          title: 'Take the exam',
-          body: 'Arrive at the medical center, complete the required screening, and follow each live status update in the app.',
-          meta1: { value: '9 min', label: 'avg exam' },
-          meta2: { value: 'Live', label: 'status updates' },
-        },
-        {
-          title: 'Receive the result',
-          body: 'Your certified report is delivered to your phone as soon as review is complete, ready to download and share.',
-          meta1: { value: '<3 days', label: 'avg delivery' },
-          meta2: { value: 'PDF', label: 'on your phone' },
-        },
-      ],
-    },
-    app: {
-      eyebrow: 'Mwafq App',
-      title: 'Your medical journey, in your pocket.',
-      body: 'Track upcoming appointments, exam progress, and result delivery from one focused dashboard.',
-      cards: [
-        {
-          title: "Today's schedule",
-          detail: 'Driving License Exam · 09:00 AM · Riyadh',
-        },
-        {
-          title: 'Live status',
-          detail: 'Booking accepted · Sample collected · Lab review',
-        },
-        {
-          title: 'Reports',
-          detail: 'Fit for Service and approved PDFs ready to download',
-        },
-      ],
-      points: [
-        {
-          title: 'Real-time exam tracking',
-          detail: 'Watch every status from accepted to completed.',
-        },
-        {
-          title: 'Reports in your pocket',
-          detail: 'One-tap PDF download the moment results are ready.',
-        },
-        {
-          title: '"Fit for Service" badge',
-          detail: 'Official certification delivered straight to your phone.',
-        },
-      ],
-    },
-    academy: {
-      eyebrow: 'Mwafq Academy',
-      title: 'Keep your skills sharp.',
-      cta: 'Enroll →',
-      items: [
-        {
-          title: 'Advanced First Aid',
-          detail:
-            'Practical workplace-first-aid guidance designed for modern teams.',
-          meta: '4.8 rating',
-        },
-        {
-          title: 'CPR Basics',
-          detail:
-            'Lifesaving essentials with a clear, confidence-building format.',
-          meta: 'Popular course',
-        },
-        {
-          title: 'Safety Officer Bundle',
-          detail:
-            'First aid, infection control, and risk assessment in one path.',
-          meta: 'Save 30%',
-        },
-      ],
-    },
-    stats: {
-      title: 'Trusted at scale',
-      items: [
-        { value: 98, suffix: '%', label: 'On-time delivery' },
-        { value: 500, suffix: '+', label: 'Completed Exams' },
-        { value: 100, suffix: '+', label: 'Certified clinics & labs' },
-        { value: 10000, suffix: 'K+', label: 'App users' },
-      ],
-    },
-    business: {
-      eyebrow: 'Mwafq for Teams',
-      title: "Your team's medical exams, one dashboard.",
-      body: 'Book in bulk, track every employee, and retrieve every report from a single operational view.',
-      points: [
-        'One-click bulk bookings across the entire team',
-        'Add employees manually or sync your HR workflow',
-        'Track residency, municipality, and occupational readiness together',
-        'Receive reports directly inside your company dashboard',
-      ],
-      metrics: [
-        { label: 'Employees', value: '248' },
-        { label: 'Cleared', value: '96%' },
-        { label: 'Pending', value: '12' },
-      ],
-      employees: [
-        {
-          name: 'Ahmad K.',
-          exam: 'Pre-Employment Basic · Riyadh',
-          status: 'Completed',
-        },
-        {
-          name: 'Sara M.',
-          exam: 'Residency Exam · Jeddah',
-          status: 'In Progress',
-        },
-        {
-          name: 'Faisal H.',
-          exam: 'Occupational Exam · Dammam',
-          status: 'Scheduled',
-        },
-      ],
-      primaryCta: 'Open Corporate Account',
-      secondaryCta: 'Book a Demo',
-    },
-    testimonial: {
-      quote:
-        'We moved 240 staff through residency screening in a single week. With Mwafq, what used to take a month now takes',
-      highlight: 'three days.',
-      author: 'Anonymous',
-      role: 'HR Director · Riyadh logistics company',
-    },
-    finalCta: {
-      title: 'Ready to make medical exams actually easy?',
-      body: 'Join 10,000+ users and 500+ companies already managing their healthcare on Mwafq.',
-      primary: 'Book Now',
-      secondary: "Let's Talk",
-    },
-    footer: {
-      body: 'Your trusted digital platform for completing official medical exams and managing healthcare for individuals and businesses securely and easily.',
-      pages: 'Pages',
-      help: 'Help',
-      contact: 'Contact',
-      latest: 'Get the latest information',
-      emailPlaceholder: 'Your Email',
-      subscribe: 'Subscribe',
-      links: ['About us', 'Services', 'Academy', 'B2B Solutions'],
-      helpLinks: ['FAQs', 'Support'],
-      rights: 'All rights reserved.',
-    },
-  },
   landing: {
     hero: {
       titlePrefix: 'Your trusted platform for',
@@ -416,174 +142,6 @@ const en = {
       description:
         'Join thousands of teams already using Mwafq to grow their business.',
       button: 'Start for free today',
-    },
-  },
-  about: {
-    meta: {
-      title: 'About Mwafq — Medical exams made simple',
-      description:
-        'Mwafq is a Saudi-built digital platform that brings booking, real-time tracking, and certified medical reports together for individuals and businesses.',
-    },
-    hero: {
-      leadLabel: 'Who we are',
-      headingTop: 'About Mwafq',
-      headingMidLead: 'Medical exams',
-      headingMidAccent: 'made simple',
-      lead: "We're a Saudi-built digital platform that brings booking, real-time tracking, and certified medical reports together, so individuals and businesses spend less time on compliance and more time on what matters.",
-      imageAlt: 'Mwafq mascot illustration',
-    },
-    story: {
-      title: 'Our Story',
-      body: "We started because medical compliance shouldn't feel like a second job. So we built one platform that connects clinics, labs, and HR teams to a single source of truth, used by thousands of people every month.",
-    },
-    mv: {
-      mission: {
-        label: 'Our Mission',
-        headline: 'Turn complex medical paperwork into a two-tap experience.',
-        body: 'From booking the right exam at the right clinic to receiving the official "Fit for Service" badge, we handle every step in between, securely and easily.',
-      },
-      vision: {
-        label: 'Our Vision',
-        headline:
-          'A region where medical compliance never gets in the way of work, study, or life.',
-        body: 'We see a future where every clinic, employer, and citizen reads from one trusted record, and where "wait two weeks for the result" stops being a sentence anyone has to say.',
-      },
-    },
-    stats: [
-      { value: 50000, suffix: 'K+', label: 'Completed Exams' },
-      { value: 100, suffix: '+', label: 'Clinics & Labs' },
-      { value: 10, suffix: '+', label: 'Certified Partners' },
-      { value: 500, suffix: '+', label: 'Corporate Users' },
-    ],
-    what: {
-      eyebrow: 'What we do',
-      titleLead: 'Medical compliance',
-      titleAccent: 'all in one place',
-      items: [
-        {
-          title: 'Real-Time Tracking',
-          body: 'Monitor your exam status step by step, from "Accepted" to "Completed", without a single phone call.',
-        },
-        {
-          title: 'Results in Your Pocket',
-          body: "Download official medical PDFs the moment they're ready, with one tap, securely, on any device.",
-        },
-        {
-          title: 'Certified & Reliable',
-          body: 'Once you pass, you receive the official "Fit for Service" badge, recognized by employers and regulators alike.',
-        },
-        {
-          title: 'Total Management Flexibility',
-          body: 'Reschedule or cancel in a tap. HR teams move people through compliance without spreadsheets.',
-        },
-      ],
-    },
-    why: {
-      eyebrow: 'Why Mwafq',
-      titleLead: 'A platform built',
-      titleAccent: 'for the way Saudi Arabia works.',
-      body: 'Mwafq isn\'t a generic booking tool with a medical skin on top. Every flow, from the bilingual UI to the "Fit for Service" badge to the HR bulk-import, was designed against real Saudi medical-compliance workflows.',
-      items: [
-        {
-          title: 'Bilingual by default',
-          body: 'Every screen, every report, and every email is built Arabic-first and English-first, not translated as an afterthought.',
-        },
-        {
-          title: 'Connected to real clinics',
-          body: 'Direct integrations with our certified network mean your status updates the moment the clinic does, no phone tag, no chasing.',
-        },
-        {
-          title: 'Designed for individuals and HR alike',
-          body: 'One platform, two muscle memories: a single-tap experience for citizens, a bulk-control dashboard for corporate teams.',
-        },
-        {
-          title: 'Secure, encrypted, and yours',
-          body: 'Your medical record stays your medical record. End-to-end encryption, granular consent, and zero data resale, ever.',
-        },
-      ],
-    },
-    values: {
-      eyebrow: 'What we stand for',
-      items: [
-        {
-          title: 'Trust by design',
-          body: 'Every clinic, lab, and partner on Mwafq is vetted and certified. Your data is encrypted end-to-end.',
-        },
-        {
-          title: 'Built for speed',
-          body: 'Book in under a minute, check status in two taps, receive results without chasing anyone.',
-        },
-        {
-          title: 'Care, not paperwork',
-          body: 'Behind every exam is a person, a job, a family. We design Mwafq around that, not around the form.',
-        },
-      ],
-    },
-    how: {
-      eyebrow: 'How it works',
-      titleLead: 'Your medical journey',
-      titleAccent: 'in simple steps',
-      items: [
-        {
-          title: 'Book your appointment',
-          body: 'Choose your exam type and review the preconditions and requirements right inside the app.',
-        },
-        {
-          title: 'Take the exam',
-          body: 'Head to the medical center at your scheduled time and follow status updates from your phone in real time.',
-        },
-        {
-          title: 'Receive the result',
-          body: 'Download your medical report and check for your "Fit for Service" badge the moment it\'s ready.',
-        },
-      ],
-    },
-    milestones: {
-      eyebrow: 'Our Journey',
-      titleLead: 'A short timeline of',
-      titleAccent: "where we've been",
-      items: [
-        {
-          year: '2023',
-          title: 'The idea',
-          body: 'A small team forms around one belief: medical compliance can be a single experience, not five.',
-        },
-        {
-          year: '2024',
-          title: 'First 10K exams',
-          body: 'Mwafq crosses 10,000 completed exams and welcomes its first corporate partners.',
-        },
-        {
-          year: '2025',
-          title: 'Academy launches',
-          body: 'Mwafq Academy goes live with certified courses in workplace first aid, infection control, and more.',
-        },
-        {
-          year: '2026',
-          title: '50K+ & growing',
-          body: 'Mwafq reaches 50K+ completed exams, 100+ clinics, and a growing B2B portal for HR teams.',
-        },
-      ],
-    },
-    b2b: {
-      eyebrow: 'For Business',
-      titleLead: 'Comprehensive medical solutions',
-      titleAccent: 'for your team.',
-      body: "Manage your team's medical exams with ease. Mwafq gives HR managers a single tool for bulk bookings, employee tracking, and certified report retrieval across every clinic in our network.",
-      cta: 'Book a Demo',
-      points: [
-        'Bulk-book exams for hundreds of employees in a single flow.',
-        "Track every employee's status live, from booked to certified.",
-        'Pull certified PDF reports directly into your HR system.',
-        'A dedicated success manager for every corporate partner.',
-      ],
-    },
-    finalCta: {
-      titleLead: 'Ready when',
-      titleAccent: 'you are.',
-      body: 'Join thousands of individuals and businesses who trust Mwafq with their medical compliance every day.',
-      primary: 'Book Your Exam',
-      secondary: 'Contact Us',
     },
   },
   b2b: {
@@ -1008,6 +566,11 @@ const en = {
     download: 'Download',
     emptyExams: 'No upcoming reservations.',
     emptyResults: 'No results yet.',
+    pagination: {
+      ariaLabel: 'Reservations pagination',
+      previous: 'Previous page',
+      next: 'Next page',
+    },
     detailPage: {
       backToExaminations: 'Back to Examinations',
       backToResults: 'Back to Results',
@@ -1068,6 +631,7 @@ const en = {
         facility: 'Choose Facility',
         time: 'Time',
         course: 'Choose Course',
+        payment: 'Payment',
       },
       examItemLabel: 'Exam #{{id}}',
       examsListAriaLabel: 'Included examinations',
@@ -1077,9 +641,16 @@ const en = {
         empty: 'No facilities available for this package.',
         loadError: 'Could not load facilities. Please try again.',
         selectAriaLabel: 'Select a facility',
+        viewMap: 'Map',
+        viewList: 'List',
+        viewModeAriaLabel: 'View mode',
+        yourLocation: 'Your location',
+        locationFallback: 'Default location (Riyadh)',
       },
       time: {
         pickDate: 'Select appointment date',
+        availableTimes: 'Available Times',
+        pickDateFirst: 'Pick a date first to choose a time',
         loadingSlots: 'Loading available slots…',
         noSlots: 'No available time slots for the selected date.',
         loadError: 'Could not load time slots. Please try another date.',
@@ -1098,6 +669,33 @@ const en = {
       finish: 'Finish',
       submitting: 'Submitting…',
       submitError: 'Failed to submit reservation. Please try again.',
+      payment: {
+        step: 'Payment',
+        title: 'Order Summary',
+        subtitle: 'Review your booking details before payment',
+        facility: 'Facility',
+        date: 'Appointment Date',
+        services: 'Services',
+        basePrice: 'Base Price',
+        tax: 'Tax',
+        total: 'Total',
+        payNow: 'Confirm & Pay',
+        processing: 'Processing…',
+        sar: 'SAR',
+        dialog: {
+          title: 'Credit Card Payment',
+          secureNote: 'Your payment is secured and encrypted.',
+          cardNumber: 'Card Number',
+          cardHolder: 'Cardholder Name',
+          expiryDate: 'Expiry Date',
+          cvv: 'CVV',
+          pay: 'Pay',
+          cancel: 'Cancel',
+          paying: 'Processing…',
+        },
+        error: 'Payment failed. Please try again.',
+        reservationError: 'Failed to create reservation. Please try again.',
+      },
     },
   },
 } as const;

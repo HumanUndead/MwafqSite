@@ -151,13 +151,15 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                     <br />
                     <span className='text-[#00a8f1]'>{content.highlight}</span>
                   </h2>
-                  <CmsLink
-                    locale={locale}
-                    href={content.cta.path}
-                    className='mt-7 inline-flex items-center gap-2 rounded-full bg-[#1e2364] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#233567]'
-                  >
-                    {content.cta.label}
-                  </CmsLink>
+                  {content.cta.label.trim() ? (
+                    <CmsLink
+                      locale={locale}
+                      href={content.cta.path}
+                      className='mt-7 inline-flex items-center gap-2 rounded-full bg-[#1e2364] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#233567]'
+                    >
+                      {content.cta.label}
+                    </CmsLink>
+                  ) : null}
                 </div>
 
                 <div
@@ -166,7 +168,7 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                 >
                   <div
                     ref={listRef}
-                    className='flex flex-col gap-[18px] [will-change:transform]'
+                    className='flex flex-col gap-[18px] will-change-transform'
                   >
                     {steps.map((step) => (
                       <div

@@ -2,7 +2,6 @@ import 'server-only';
 
 import { cache } from 'react';
 import type { Locale } from '@/i18n/config';
-import type { Dictionary } from '@/locales/types';
 import type {
   HomeAcademyContent,
   HomeActionContent,
@@ -50,6 +49,7 @@ import {
   TESTIMONIAL_ARTICLE_RANKS,
   WHY_ARTICLE_RANKS,
 } from './homeContent.config';
+import { buildEmptyHomeFallback } from './homeContent.fallback';
 
 interface ArticleCategoryTranslationDto {
   id: number;
@@ -337,15 +337,27 @@ function toActionContent(
   fallback: HomeActionContent
 ): HomeActionContent {
   if (!article) {
-    return fallback;
+    return {
+      label: '',
+      path: trimToNull(fallback.path),
+    };
   }
 
   const translation = getArticleTranslation(article, langId);
 
   return {
-    label: trimToNull(translation.name) ?? fallback.label,
-    path: trimToNull(article.path) ?? fallback.path,
+    label: trimToNull(translation.name) ?? '',
+    path: trimToNull(article.path) ?? trimToNull(fallback.path),
   };
+}
+
+function toOptionalActionContent(
+  article: RecursiveArticleDto | null,
+  langId: number,
+  fallback: HomeActionContent
+): HomeActionContent | null {
+  const action = toActionContent(article, langId, fallback);
+  return action.label.trim() ? action : null;
 }
 
 function toLinkItemContent(
@@ -399,265 +411,6 @@ function mapHeroStats(
   });
 }
 
-function buildFallbackContent(dict: Dictionary): HomePageContent {
-  const home = dict.home;
-  const servicesTitleParts = splitTitleParts(home.services.title, '.');
-  const academyTitleParts = splitTitleParts(home.academy.title, '.');
-  const appTitleParts = splitTitleParts(home.app.title, ',');
-  const businessTitleParts = splitTitleParts(home.business.title, ',');
-
-  return {
-    header: {
-      brandLabel: dict.site.title,
-      brandDescription: dict.site.description,
-      brandPath: '#home',
-      brandImageSrc: '/demo-assets/logo.svg',
-      navLinks: [
-        { label: home.nav.home, path: '#home' },
-        { label: home.nav.about, path: '/about' },
-        { label: home.nav.services, path: '#services' },
-        { label: home.nav.app, path: '#app' },
-        { label: home.nav.academy, path: '#academy' },
-        { label: home.nav.businesses, path: '/b2b' },
-        { label: home.nav.contact, path: '#contact' },
-      ],
-      primaryAction: { label: home.nav.cta, path: '#booking' },
-      signInAction: { label: dict.navigation.signIn, path: '/login' },
-      userMenu: null,
-      localeSwitchLabel: home.nav.switchLabel,
-    },
-    hero: {
-      badge: home.hero.badge,
-      badgeImages: [
-        { src: '/demo-assets/img1.jpg', alt: dict.site.title },
-        { src: '/demo-assets/img2.jpg', alt: dict.site.title },
-        { src: '/demo-assets/img3.jpg', alt: dict.site.title },
-      ],
-      titleLead: home.hero.titleLead,
-      titleMiddle: home.hero.titleMiddle,
-      rotatingWords: [...home.hero.rotatingWords],
-      subtitle: home.hero.subtitle,
-      primaryAction: { label: home.hero.primaryCta, path: '#booking' },
-      secondaryAction: { label: home.hero.secondaryCta, path: '#app' },
-      stats: [...home.hero.stats],
-      phoneGreeting: home.hero.phoneGreeting,
-      phoneName: home.hero.phoneName,
-      phoneSearchPlaceholder: home.hero.phoneSearchPlaceholder,
-      servicesTitle: home.hero.servicesTitle,
-      servicesLink: home.hero.servicesLink,
-      phoneTiles: home.hero.phoneTiles.map((tile) => ({ ...tile })),
-      liveBookings: home.hero.liveBookings,
-      liveBookingsLabel: home.hero.liveBookingsLabel,
-      floatingCards: home.hero.floatingCards.map((card) => ({ ...card })),
-    },
-    services: {
-      eyebrow: home.services.eyebrow,
-      title: servicesTitleParts.title,
-      accent: servicesTitleParts.accent,
-      body: home.services.body,
-      items: home.services.items.map((item) => ({
-        title: item.title,
-        description: item.description,
-        path: null,
-      })),
-    },
-    why: {
-      eyebrow: home.why.eyebrow,
-      title: home.why.title,
-      items: home.why.items.map((item) => ({ ...item })),
-    },
-    booking: {
-      eyebrow: home.booking.eyebrow,
-      title: home.booking.title,
-      note: home.booking.note,
-      fields: {
-        exam: {
-          label: home.booking.fields.exam,
-          placeholder: home.booking.fields.examPlaceholder,
-        },
-        city: {
-          label: home.booking.fields.city,
-          placeholder: home.booking.fields.cityPlaceholder,
-        },
-        date: {
-          label: home.booking.fields.date,
-          placeholder: home.booking.fields.datePlaceholder,
-        },
-        search: {
-          label: home.booking.fields.search,
-          path: '#booking',
-        },
-      },
-      examOptions: [...home.booking.examOptions],
-    },
-    steps: {
-      eyebrow: home.steps.eyebrow,
-      title: home.steps.title,
-      highlight: home.steps.highlight,
-      cta: {
-        label: home.steps.cta,
-        path: '#booking',
-      },
-      items: home.steps.items.map((item) => ({
-        title: item.title,
-        body: item.body,
-        meta1: { ...item.meta1 },
-        meta2: { ...item.meta2 },
-      })),
-    },
-    app: {
-      eyebrow: home.app.eyebrow,
-      title: appTitleParts.title,
-      accent: appTitleParts.accent,
-      body: home.app.body,
-      scheduleCard: {
-        label: home.app.cards[0]?.title ?? '',
-        detail: home.app.cards[0]?.detail ?? '',
-        appointment: {
-          value: '12',
-          detail: '09:00 AM · Riyadh',
-          location: 'King Fahd Hospital',
-          iconKey: 'icon-calendar',
-        },
-      },
-      statusCard: {
-        label: home.app.cards[1]?.title ?? '',
-        detail: home.app.cards[1]?.detail ?? '',
-        status: 'In Progress',
-      },
-      reportsCard: {
-        label: home.app.cards[2]?.title ?? '',
-        detail: home.app.cards[2]?.detail ?? '',
-        status: 'Ready to download',
-        items: [
-          {
-            title: 'Driving License',
-            detail: 'Fit for Service',
-            badge: 'PDF',
-            iconKey: 'icon-pdf',
-          },
-          {
-            title: 'Residency Exam',
-            detail: 'Approved · Mar 12',
-            badge: 'PDF',
-            iconKey: 'icon-pdf',
-          },
-        ],
-      },
-      points: home.app.points.map((point) => ({ ...point })),
-      downloadLinks: [
-        { label: 'App Store', path: '/download/ios', iconKey: 'icon-apple' },
-        {
-          label: 'Google Play',
-          path: '/download/android',
-          iconKey: 'icon-google-play',
-        },
-      ],
-    },
-    academy: {
-      eyebrow: home.academy.eyebrow,
-      title: academyTitleParts.title,
-      accent: academyTitleParts.accent,
-      ctaLabel: home.academy.cta,
-      items: home.academy.items.map((item, index) => ({
-        title: item.title,
-        detail: item.detail,
-        meta: item.meta,
-        ratingValue: '4.8',
-        ratingCount: '12',
-        path:
-          index === 0
-            ? '/academy/advanced-first-aid'
-            : index === 1
-              ? '/academy/cpr-basics'
-              : '/academy/safety-officer-bundle',
-      })),
-    },
-    stats: {
-      title: home.stats.title,
-      items: [...home.stats.items],
-    },
-    business: {
-      eyebrow: home.business.eyebrow,
-      title: businessTitleParts.title,
-      accent: businessTitleParts.accent,
-      body: home.business.body,
-      points: [...home.business.points],
-      tabs: ['Overview', 'Employees', 'Reports'],
-      metrics: home.business.metrics.map((metric) => ({ ...metric })),
-      employees: home.business.employees.map((employee) => ({ ...employee })),
-      primaryAction: {
-        label: home.business.primaryCta,
-        path: '/b2b/open-corporate-account',
-      },
-      secondaryAction: {
-        label: home.business.secondaryCta,
-        path: '/b2b/book-demo',
-      },
-    },
-    testimonial: {
-      quote: home.testimonial.quote,
-      highlight: home.testimonial.highlight,
-      author: home.testimonial.author,
-      role: home.testimonial.role,
-    },
-    finalCta: {
-      title: home.finalCta.title,
-      highlight: '',
-      body: home.finalCta.body,
-      primaryAction: { label: home.finalCta.primary, path: '#booking' },
-      secondaryAction: { label: home.finalCta.secondary, path: '#contact' },
-    },
-    footer: {
-      brandLabel: dict.site.title,
-      brandBody: home.footer.body,
-      brandPath: '#home',
-      brandImageSrc: '/demo-assets/logo.svg',
-      newsletterPlaceholder: home.footer.emailPlaceholder,
-      newsletterEyebrow: home.footer.latest,
-      newsletterAction: home.footer.subscribe,
-      copyrightLabel: `© ${new Date().getFullYear()} ${dict.site.title}.`,
-      copyrightBody: home.footer.rights,
-      pages: {
-        title: home.footer.pages,
-        links: [
-          { label: home.footer.links[0] ?? '', path: '/about' },
-          { label: home.footer.links[1] ?? '', path: '#services' },
-          { label: home.footer.links[2] ?? '', path: '/academy-courses' },
-          { label: home.footer.links[3] ?? '', path: '/b2b' },
-        ],
-      },
-      help: {
-        title: home.footer.help,
-        links: [
-          { label: home.footer.helpLinks[0] ?? '', path: '/contact#faqs' },
-          { label: home.footer.helpLinks[1] ?? '', path: '/contact#support' },
-        ],
-      },
-      contact: {
-        title: home.footer.contact,
-        links: [
-          {
-            label: 'info@mwafq.com',
-            path: 'mailto:info@mwafq.com',
-            iconKey: 'icon-email',
-          },
-          {
-            label: '+966 5 400000',
-            path: 'tel:+9665400000',
-            iconKey: 'icon-phone',
-          },
-          {
-            label: 'Riyadh - KSA',
-            path: '/contact#riyadh',
-            iconKey: 'icon-location',
-          },
-        ],
-      },
-    },
-  };
-}
-
 function mapHeaderContent(
   fallback: HomeHeaderContent,
   rootCategory: RecursiveArticleCategoryDto | null,
@@ -693,7 +446,8 @@ function mapHeaderContent(
       (article) =>
         article.rank >= 10 && article.rank < HEADER_ARTICLE_RANKS.primaryAction
     )
-    .map((article) => toLinkItemContent(article, langId));
+    .map((article) => toLinkItemContent(article, langId))
+    .filter((link) => link.label.trim().length > 0);
 
   const brandTranslation = brandArticle
     ? getArticleTranslation(brandArticle, langId)
@@ -707,20 +461,16 @@ function mapHeaderContent(
     brandImageSrc:
       resolveCmsAssetUrl(brandArticle?.image) ?? fallback.brandImageSrc,
     navLinks: navLinks.length > 0 ? navLinks : fallback.navLinks,
-    primaryAction: primaryArticle
-      ? toActionContent(
-          primaryArticle,
-          langId,
-          fallback.primaryAction ?? { label: '', path: null }
-        )
-      : fallback.primaryAction,
-    signInAction: signInArticle
-      ? toActionContent(
-          signInArticle,
-          langId,
-          fallback.signInAction ?? { label: '', path: null }
-        )
-      : fallback.signInAction,
+    primaryAction: toOptionalActionContent(
+      primaryArticle,
+      langId,
+      fallback.primaryAction ?? { label: '', path: null }
+    ),
+    signInAction: toOptionalActionContent(
+      signInArticle,
+      langId,
+      fallback.signInAction ?? { label: '', path: null }
+    ),
     userMenu: fallback.userMenu,
     localeSwitchLabel:
       trimToNull(
@@ -1695,11 +1445,10 @@ function mapFooterContent(
 }
 
 function buildHomePageContent(
-  dict: Dictionary,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomePageContent {
-  const fallback = buildFallbackContent(dict);
+  const fallback = buildEmptyHomeFallback();
 
   return {
     header: mapHeaderContent(fallback.header, rootCategory, langId),
@@ -1762,12 +1511,11 @@ const fetchHomeContentTree = cache(
   }
 );
 
-export async function getHomePageContent(
-  locale: Locale,
-  dict: Dictionary
-): Promise<HomePageContent> {
-  const langId = localeToLangId[locale];
-  const rootCategory = await fetchHomeContentTree();
+export const getHomePageContent = cache(
+  async (locale: Locale): Promise<HomePageContent> => {
+    const langId = localeToLangId[locale];
+    const rootCategory = await fetchHomeContentTree();
 
-  return buildHomePageContent(dict, rootCategory, langId);
-}
+    return buildHomePageContent(rootCategory, langId);
+  }
+);

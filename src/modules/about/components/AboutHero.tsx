@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 
-import type { Dictionary } from '@/locales/types';
+import type { AboutHeroContent } from '@/modules/about/types/aboutContent';
 
 interface Props {
-  content: Dictionary['about']['hero'];
+  content: AboutHeroContent;
 }
 
 export function AboutHero({ content }: Props) {
@@ -14,7 +14,7 @@ export function AboutHero({ content }: Props) {
     >
       <div
         aria-hidden='true'
-        className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
+        className='pointer-events-none absolute inset-0 opacity-55 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:24px_24px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
       />
 
       <div className='relative z-2 mx-auto max-w-[1320px]'>

@@ -1,4 +1,4 @@
-import type { Dictionary } from '@/locales/types';
+import type { AboutValuesContent } from '@/modules/about/types/aboutContent';
 import { Eyebrow } from '@/modules/home/components/Eyebrow';
 import {
   CareIcon,
@@ -7,7 +7,7 @@ import {
 } from '@/shared/components/icons/about';
 
 interface Props {
-  content: Dictionary['about']['values'];
+  content: AboutValuesContent;
 }
 
 const valueIcons = [TrustIcon, SpeedIcon, CareIcon];

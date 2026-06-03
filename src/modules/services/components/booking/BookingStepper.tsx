@@ -10,6 +10,7 @@ type StepLabels = Record<BookingStepId, string>;
 const stepperGridClass: Record<number, string> = {
   3: 'md:grid-cols-3',
   4: 'md:grid-cols-4',
+  5: 'md:grid-cols-5',
 };
 
 type BookingStepperProps = {

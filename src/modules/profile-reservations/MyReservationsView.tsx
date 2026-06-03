@@ -1,6 +1,7 @@
 'use client';
 
 import { lazy, Suspense, useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { isRtl } from '@/i18n/config';
@@ -12,6 +13,7 @@ import {
   ReservationsSearchIcon,
 } from '@/shared/components/icons/reservations';
 import { cn } from '@/shared/lib/cn';
+import { MwafqPagination } from '@/shared/components/ui/MwafqPagination';
 import { ReservationsExamsPanel } from './components/ReservationsExamsPanel';
 import { ReservationsPanelSkeleton } from './components/ReservationsPanelSkeleton';
 import {
@@ -24,6 +26,8 @@ import type { TabValue } from './types';
 
 type MyReservationsViewProps = {
   reservations?: Reservation[];
+  page?: number;
+  totalPages?: number;
   initialTab?: TabValue;
 };
 
@@ -38,22 +42,46 @@ const tabTriggerClass =
 
 export default function MyReservationsView({
   reservations = [],
+  page = 1,
+  totalPages = 0,
   initialTab = 'exams',
 }: MyReservationsViewProps) {
   const locale = useLocale();
   const rtl = isRtl(locale);
   const chevronShift = rtl ? -4 : 4;
   const t = useTranslations('profileReservations');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const [tab, setTab] = useState<TabValue>(initialTab);
 
-  const { examCards, resultCards } = useMemo(() => {
+  function handlePageChange(nextPage: number) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (nextPage <= 1) {
+      params.delete('page');
+    } else {
+      params.set('page', String(nextPage));
+    }
+
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+
+    const grid = document.getElementById('reservationsGrid');
+    if (grid) {
+      grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  const getCards = () => {
     const { exams, results } = partitionReservations(reservations);
     return {
       examCards: exams.map(mapReservationToExamCard),
       resultCards: results.map(mapReservationToResultCard),
     };
-  }, [reservations]);
+  };
+  const { examCards, resultCards } = getCards();
 
   return (
     <section className='relative pt-2'>
@@ -123,28 +151,34 @@ export default function MyReservationsView({
           </TabsList>
         </ScrollReveal>
 
-        <TabsContent
-          value='exams'
-          className='mt-0 min-h-[200px] flex-1 outline-none'
-        >
-          <ReservationsExamsPanel
-            cards={examCards}
-            chevronShift={chevronShift}
-            emptyMessage={t.emptyExams}
-          />
-        </TabsContent>
-
-        <TabsContent
-          value='results'
-          className='mt-0 min-h-[200px] flex-1 outline-none'
-        >
-          <Suspense fallback={<ReservationsPanelSkeleton />}>
-            <ReservationsResultsPanel
-              cards={resultCards}
-              emptyMessage={t.emptyResults}
+        <div id='reservationsGrid' className='min-h-[200px]'>
+          <TabsContent value='exams' className='mt-0 flex-1 outline-none'>
+            <ReservationsExamsPanel
+              cards={examCards}
+              chevronShift={chevronShift}
+              emptyMessage={t.emptyExams}
             />
-          </Suspense>
-        </TabsContent>
+          </TabsContent>
+
+          <TabsContent value='results' className='mt-0 flex-1 outline-none'>
+            <Suspense fallback={<ReservationsPanelSkeleton />}>
+              <ReservationsResultsPanel
+                cards={resultCards}
+                emptyMessage={t.emptyResults}
+              />
+            </Suspense>
+          </TabsContent>
+        </div>
+
+        <MwafqPagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          className='mt-10'
+          ariaLabel={t.pagination.ariaLabel}
+          previousLabel={t.pagination.previous}
+          nextLabel={t.pagination.next}
+        />
       </Tabs>
     </section>
   );

@@ -1,8 +1,8 @@
-import type { Dictionary } from '@/locales/types';
+import type { AboutSectionWithItemsContent } from '@/modules/about/types/aboutContent';
 import { Eyebrow } from '@/modules/home/components/Eyebrow';
 
 interface Props {
-  content: Dictionary['about']['what'];
+  content: AboutSectionWithItemsContent;
 }
 
 export function WhatWeDoSection({ content }: Props) {

@@ -31,7 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   { className, type, prefix, suffix, affixWrapperClassName, ...props },
   ref
 ) {
-  const hasAffix = prefix != null || suffix != null;
+  const hasAffix = prefix || suffix;
 
   const control = (
     <InputPrimitive
@@ -55,13 +55,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
       data-slot='input-group'
       className={cn(inputAffixGroupClass, affixWrapperClassName)}
     >
-      {prefix != null ? (
+      {prefix ? (
         <span data-slot='input-prefix' className={inputAffixSlotClass}>
           {prefix}
         </span>
       ) : null}
       {control}
-      {suffix != null ? (
+      {suffix ? (
         <span data-slot='input-suffix' className={inputAffixSlotClass}>
           {suffix}
         </span>

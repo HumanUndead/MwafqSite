@@ -7,6 +7,7 @@ import type { Locale } from '@/i18n/config';
 import { LanguageSwitcher } from '@/i18n/LanguageSwitcher';
 import type { HomeHeaderContent } from '@/modules/home/home.types';
 import { CmsLink } from '@/modules/home/components/CmsLink';
+import { hasCmsActionLabel } from '@/modules/home/lib/hasCmsActionLabel';
 import { MenuHamburgerIcon, SunIcon } from '@/shared/components/icons/layout';
 import { cn } from '@/shared/lib/cn';
 import Image from 'next/image';
@@ -99,7 +100,7 @@ export function Header({ locale, content }: HeaderProps) {
           <HeaderUserMenu locale={locale} menu={content.userMenu} />
         ) : null}
 
-        {content.signInAction ? (
+        {hasCmsActionLabel(content.signInAction) ? (
           <CmsLink
             locale={locale}
             href={content.signInAction.path}

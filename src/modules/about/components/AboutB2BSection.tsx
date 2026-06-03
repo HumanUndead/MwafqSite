@@ -1,18 +1,18 @@
 import type { Locale } from '@/i18n/config';
 import { getLocalizedRoute } from '@/i18n/routing';
-import type { Dictionary } from '@/locales/types';
+import type { AboutB2bSnippetContent } from '@/modules/about/types/aboutContent';
 import { ROUTES } from '@/shared/constants/routes';
 import { Eyebrow } from '@/modules/home/components/Eyebrow';
 
 interface Props {
   locale: Locale;
-  content: Dictionary['about']['b2b'];
+  content: AboutB2bSnippetContent;
 }
 
 export function AboutB2BSection({ locale, content }: Props) {
   return (
     <section className='relative overflow-hidden border-y-2 border-[#e5e7f0] bg-[#1e2364] px-4 py-20 text-white sm:px-7 sm:py-[90px]'>
-      <div className='relative z-[2] mx-auto max-w-[1320px]'>
+      <div className='relative z-2 mx-auto max-w-[1320px]'>
         <div className='grid items-center gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-[50px]'>
           <div>
             <Eyebrow>{content.eyebrow}</Eyebrow>
@@ -41,7 +41,7 @@ export function AboutB2BSection({ locale, content }: Props) {
               >
                 <span
                   aria-hidden='true'
-                  className='mt-0.5 inline-flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-[#00a8f1]'
+                  className='mt-0.5 inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[#00a8f1]'
                 >
                   <svg
                     viewBox='0 0 24 24'

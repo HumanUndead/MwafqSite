@@ -1,20 +1,54 @@
 import { ReservationStatus } from './reservationStatus';
-import type { Reservation } from './types/reservation.types';
+import type {
+  Reservation,
+  ReservationPublicDetail,
+  ReservationPublicService,
+} from './types/reservation.types';
 import {
   buildPrepItems,
   formatReservationDate,
   formatReservationTime,
 } from './reservationFormat';
 
+function publicReservationServices(
+  detail: ReservationPublicDetail
+): ReservationPublicService[] {
+  return [
+    ...detail.reservationServices.services,
+    ...detail.reservationServices.groupServices,
+  ];
+}
+
+function buildPrepItemsFromPublicServices(
+  services: ReservationPublicService[]
+): string[] {
+  const items: string[] = [];
+  for (const service of services) {
+    if (service.conditions) {
+      for (const line of service.conditions) {
+        items.push(line);
+      }
+    }
+    if (service.requirements) {
+      for (const line of service.requirements) {
+        items.push(line.requirement);
+      }
+    }
+  }
+  return items;
+}
+
 export type TimelineStepId = 'new' | 'accepted' | 'progress' | 'completed';
 
+const CANCELED_RESERVATION_STATUSES: number[] = [
+  ReservationStatus.Cancel,
+  ReservationStatus.Reject,
+  ReservationStatus.NoShow,
+  ReservationStatus.Delayed,
+];
+
 export function isCanceledReservationStatus(status: number): boolean {
-  return (
-    status === ReservationStatus.Cancel ||
-    status === ReservationStatus.Reject ||
-    status === ReservationStatus.NoShow ||
-    status === ReservationStatus.Delayed
-  );
+  return CANCELED_RESERVATION_STATUSES.includes(status);
 }
 
 export function mapStatusToTimelineStep(status: number): TimelineStepId | null {
@@ -74,6 +108,32 @@ export type ReservationDetailsViewModel = {
   showCancel: boolean;
   showReorder: boolean;
 };
+
+export function buildReservationDetailsViewModelFromPublic(
+  id: string,
+  detail: ReservationPublicDetail,
+  options?: { view?: string }
+): ReservationDetailsViewModel {
+  const services = publicReservationServices(detail);
+  const primary = services[0];
+  const isResultView = options?.view === 'info';
+  const totalSell = services.reduce((sum, s) => sum + (s.sellPrice ?? 0), 0);
+
+  return {
+    id,
+    title: primary?.serviceName?.trim() || undefined,
+    date: formatReservationDate(detail.dateChosen),
+    time: formatReservationTime(primary?.from, primary?.to),
+    prepItems: buildPrepItemsFromPublicServices(services),
+    companyName: detail.companyName?.trim() || undefined,
+    sellPrice: totalSell > 0 ? totalSell : undefined,
+    timelineStep: null,
+    isCanceled: false,
+    isResultView,
+    showCancel: false,
+    showReorder: false,
+  };
+}
 
 export function buildReservationDetailsViewModel(
   reservation: Reservation,

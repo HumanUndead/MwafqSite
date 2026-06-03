@@ -1,10 +1,17 @@
+export interface ServiceProviderBranchScheduleOff {
+  date: string | null;
+}
+
 export interface ServiceProviderBranch {
   id: number;
   name: string;
-  address: string | null;
-  phone: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  address: string;
+  logoPath: string;
+  latitude: number;
+  longitude: number;
+  totalPrice: number;
+  scheduleOffs: ServiceProviderBranchScheduleOff[];
+  closingDays: number[];
 }
 
 export interface BookingTimeSlot {
@@ -24,6 +31,11 @@ export interface SlotDayGroup {
   day: string;
   totalPrice: number;
   slotTimes: BookingTimeSlot[];
+}
+
+/** Unwrapped `value` from GetWeeklyAvailableTimeSlotsForBranch. */
+export interface WeeklyAvailableTimeSlotsValue {
+  slotTimesGroupedByDay: SlotDayGroup[];
 }
 
 export interface ServiceGroupCourseTranslation {
@@ -66,6 +78,7 @@ export interface ServiceGroupCourseOption {
   name: string;
   description: string | null;
   price: number | null;
+  fullImagePath: string;
 }
 
 export interface CreateReservationInput {

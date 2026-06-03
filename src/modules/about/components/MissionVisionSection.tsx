@@ -1,8 +1,11 @@
-import type { Dictionary } from '@/locales/types';
+import type {
+  AboutMissionVisionBlockContent,
+  AboutMvContent,
+} from '@/modules/about/types/aboutContent';
 import { MissionIcon, VisionIcon } from '@/shared/components/icons/about';
 
 interface Props {
-  content: Dictionary['about']['mv'];
+  content: AboutMvContent;
 }
 
 export function MissionVisionSection({ content }: Props) {
@@ -28,7 +31,7 @@ function MvCard({
   data,
   icon,
 }: {
-  data: Dictionary['about']['mv']['mission'];
+  data: AboutMissionVisionBlockContent;
   icon: React.ReactNode;
 }) {
   return (

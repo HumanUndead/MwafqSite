@@ -1,5 +1,4 @@
 import { isRtl, type Locale } from '@/i18n/config';
-import { getDictionary } from '@/i18n/dictionaries';
 import { AcademySection } from './components/AcademySection';
 import { AppShowcaseSection } from './components/AppShowcaseSection';
 import { B2BSection } from './components/B2BSection';
@@ -19,8 +18,7 @@ interface Props {
 }
 
 export async function HomePage({ locale }: Props) {
-  const dictionary = await getDictionary(locale);
-  const content = await getHomePageContent(locale, dictionary);
+  const content = await getHomePageContent(locale);
   const rtl = isRtl(locale);
 
   return (

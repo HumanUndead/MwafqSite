@@ -149,7 +149,7 @@ export function PackageCard({
       </div>
 
       <CardFooter className='mt-auto justify-between gap-2 border-t border-[#e5e7f0] bg-transparent px-4 py-3.5'>
-        {price != null ? (
+        {price ? (
           <span className='inline-flex items-baseline gap-1 text-[20px] font-extrabold text-[#1e2364]'>
             {formatPrice(price)}
             <SarIcon className='inline-block h-[14px] w-[12px]' />
@@ -226,7 +226,7 @@ export function PackageCard({
       </CardContent>
 
       <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-[22px] pt-4 pb-[22px]'>
-        {price != null ? (
+        {price ? (
           <span className='inline-flex items-baseline gap-1 font-extrabold'>
             <span className='text-[24px] leading-none tracking-[-0.5px] text-[#1e2364]'>
               {formatPrice(price)}
@@ -257,7 +257,7 @@ export function PackageCard({
 
   return (
     <ScrollReveal
-      className={cn(isRelated ? 'h-full w-full' : 'h-[460px] w-[235px]')}
+      className={cn(isRelated ? 'h-full w-full' : 'w-full')}
       transitionDelay={delay}
     >
       {card}

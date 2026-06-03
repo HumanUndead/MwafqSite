@@ -3,16 +3,15 @@ import { getLocalizedRoute } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
 import { getTranslation } from '@/shared/lib/getTranslationName';
 import type { EntityTranslation } from '@/shared/types/entity-translation.types';
-import type {
-  ServiceGroupCourse,
-  ServiceGroupCourseOption,
-} from '@/modules/services/types/booking.types';
+import type { ServiceGroupCourseOption } from '@/modules/services/types/booking.types';
+import { CourseListItem } from '../auth/course.types';
 
 export const BOOKING_STEP_IDS = [
   'examinations',
   'course',
   'facility',
   'time',
+  'payment',
 ] as const;
 
 export type BookingStepId = (typeof BOOKING_STEP_IDS)[number];
@@ -46,7 +45,7 @@ export function plainTextFromHtml(value: string): string {
 }
 
 export function mapServiceGroupCourseToOption(
-  course: ServiceGroupCourse,
+  course: CourseListItem,
   localeOrLangId: Locale | number
 ): ServiceGroupCourseOption {
   const translation = getTranslation(
@@ -61,14 +60,16 @@ export function mapServiceGroupCourseToOption(
     id: course.id,
     name: translation?.name?.trim() ?? '',
     description: description || null,
-    price: course.paymentSettings?.price ?? null,
+    price: null,
+    fullImagePath: course.fullImagePath ?? '',
   };
 }
 
 export function mapServiceGroupCoursesToOptions(
-  courses: ServiceGroupCourse[],
+  courses: CourseListItem[],
   localeOrLangId: Locale | number
 ): ServiceGroupCourseOption[] {
+  console.log('🚀 ~ mapServiceGroupCoursesToOptions ~ courses:', courses);
   return courses
     .filter((course) => course.status)
     .map((course) => mapServiceGroupCourseToOption(course, localeOrLangId));
