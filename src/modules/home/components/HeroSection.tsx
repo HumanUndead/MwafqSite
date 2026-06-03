@@ -1,10 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 
 import type { Locale } from '@/i18n/config';
-import { buttonVariants } from '@/shared/lib/variants';
 import type { HomeHeroContent } from '../home.types';
-import { CmsLink } from './CmsLink';
 import { CountUp } from './CountingUp';
+import { HomeActionLinks } from './HomeActionLinks';
 import { ArrowIcon, SearchIcon, CarIcon, getServiceIconByKey } from './Icons';
 import { RotatingWord } from './RotatingWord';
 
@@ -107,31 +106,15 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             {content.subtitle}
           </p>
 
-          <div className='mb-11 flex flex-wrap gap-3.5'>
-            <CmsLink
-              locale={locale}
-              href={content.primaryAction.path}
-              className={buttonVariants({
-                variant: 'brand',
-                size: 'hero',
-                shape: 'pill',
-              })}
-            >
-              {content.primaryAction.label}
-              <ArrowIcon />
-            </CmsLink>
-            <CmsLink
-              locale={locale}
-              href={content.secondaryAction.path}
-              className={buttonVariants({
-                variant: 'brandOutline',
-                size: 'hero',
-                shape: 'pill',
-              })}
-            >
-              {content.secondaryAction.label}
-            </CmsLink>
-          </div>
+          <HomeActionLinks
+            locale={locale}
+            primary={content.primaryAction}
+            secondary={content.secondaryAction}
+            primaryVariant='brand'
+            secondaryVariant='brandOutline'
+            className='mb-11 flex flex-wrap gap-3.5'
+            primaryTrailing={<ArrowIcon />}
+          />
 
           <div className='grid max-w-[560px] gap-[30px] border-t-2 border-[#e5e7f0] pt-9 sm:grid-cols-3'>
             {content.stats.map((stat) => (

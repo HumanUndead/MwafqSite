@@ -42,7 +42,7 @@ export function ReservationStatusTimeline({
                 'relative z-2 box-border size-5 shrink-0 rounded-full border-2 bg-white',
                 isPast && 'border-[#00a8f1] bg-[#00a8f1]',
                 isCurrent &&
-                  'border-[#00a8f1] bg-[radial-gradient(circle_at_center,#00a8f1_0_4px,#fff_4.5px)]',
+                  'border-[#00a8f1] [background-image:radial-gradient(circle_at_center,#00a8f1_0_4px,#fff_4.5px)]',
                 !isPast && !isCurrent && 'border-[#e5e7f0]'
               )}
             />

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { hasLocale, type Locale } from '@/i18n/config';
-import { getDictionary } from '@/i18n/dictionaries';
 import { FooterSection } from '@/modules/home/components/FooterSection';
 import { getHomePageContent } from '@/modules/home/server/homeContentService';
 import { withAuthenticatedHeaderState } from '@/modules/auth/server/headerAuth';
@@ -23,9 +22,8 @@ export default async function MarketingLayout({
     notFound();
   }
 
-  const dictionary = await getDictionary(locale);
   const currentUser = await getCurrentUser();
-  const content = await getHomePageContent(locale as Locale, dictionary);
+  const content = await getHomePageContent(locale as Locale);
   const headerContent = withAuthenticatedHeaderState(
     content.header,
     currentUser,

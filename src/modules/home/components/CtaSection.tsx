@@ -1,7 +1,6 @@
 import type { Locale } from '@/i18n/config';
-import { buttonVariants } from '@/shared/lib/variants';
 import type { HomeFinalCtaContent } from '../home.types';
-import { CmsLink } from './CmsLink';
+import { HomeActionLinks } from './HomeActionLinks';
 
 interface Props {
   locale: Locale;
@@ -29,30 +28,14 @@ export function CtaSection({ locale, content }: Props) {
       <p className='relative z-10 mx-auto mb-9 max-w-[560px] text-[16.5px] text-white/78'>
         {content.body}
       </p>
-      <div className='relative z-10 flex flex-wrap justify-center gap-3.5'>
-        <CmsLink
-          locale={locale}
-          href={content.primaryAction.path}
-          className={buttonVariants({
-            variant: 'brandInverse',
-            size: 'hero',
-            shape: 'pill',
-          })}
-        >
-          {content.primaryAction.label}
-        </CmsLink>
-        <CmsLink
-          locale={locale}
-          href={content.secondaryAction.path}
-          className={buttonVariants({
-            variant: 'brandGhost',
-            size: 'hero',
-            shape: 'pill',
-          })}
-        >
-          {content.secondaryAction.label}
-        </CmsLink>
-      </div>
+      <HomeActionLinks
+        locale={locale}
+        primary={content.primaryAction}
+        secondary={content.secondaryAction}
+        primaryVariant='brandInverse'
+        secondaryVariant='brandGhost'
+        className='relative z-10 flex flex-wrap justify-center gap-3.5'
+      />
     </section>
   );
 }

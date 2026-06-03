@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@source '../**/*.{js,ts,jsx,tsx,mdx}';
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -45,6 +47,12 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --opacity-55: 0.55;
+  --opacity-70: 0.7;
+  --duration-250: 250ms;
+  --duration-280: 280ms;
+  --duration-400: 400ms;
+  --backdrop-saturate-150: 1.5;
 }
 
 * {

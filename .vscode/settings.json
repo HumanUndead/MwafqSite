@@ -18,5 +18,12 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "tailwindCSS.experimental.configFile": "src/app/globals.css",
+  "tailwindCSS.classRegex": [
+    ["cn\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
+    ["(?:className|class)\\s*[:=]\\s*(?:'|\")([^'\"]*)"]
+  ],
+  "css.validate": false,
+  "tailwindCSS.validate": true
 }

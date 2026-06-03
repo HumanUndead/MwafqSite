@@ -13,7 +13,7 @@ export function StorySection({ content }: Props) {
     >
       <div
         aria-hidden='true'
-        className='pointer-events-none absolute inset-0 opacity-70 bg-[linear-gradient(#eef0f7_1px,transparent_1px),linear-gradient(90deg,#eef0f7_1px,transparent_1px)] bg-size-[60px_60px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_70%)]'
+        className='pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(#eef0f7_1px,transparent_1px),linear-gradient(90deg,#eef0f7_1px,transparent_1px)] [background-size:60px_60px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_70%)]'
       />
 
       <span

@@ -1,7 +1,7 @@
 import type { Locale } from '@/i18n/config';
 import type { HomeBusinessContent } from '../home.types';
-import { CmsLink } from './CmsLink';
 import { Eyebrow } from './Eyebrow';
+import { HomeActionLinks } from './HomeActionLinks';
 
 interface Props {
   locale: Locale;
@@ -76,22 +76,15 @@ export function B2BSection({ locale, content }: Props) {
                 </li>
               ))}
             </ul>
-            <div className='flex flex-wrap gap-3.5'>
-              <CmsLink
-                locale={locale}
-                href={content.primaryAction.path}
-                className='inline-flex items-center gap-2 rounded-full bg-[#00a8f1] px-[30px] py-4 text-[14.5px] font-semibold text-white transition hover:bg-[#0090d1]'
-              >
-                {content.primaryAction.label}
-              </CmsLink>
-              <CmsLink
-                locale={locale}
-                href={content.secondaryAction.path}
-                className='inline-flex items-center gap-2 rounded-full border-2 border-white/30 bg-transparent px-[30px] py-4 text-[14.5px] font-semibold text-white transition hover:border-white/60'
-              >
-                {content.secondaryAction.label}
-              </CmsLink>
-            </div>
+            <HomeActionLinks
+              locale={locale}
+              primary={content.primaryAction}
+              secondary={content.secondaryAction}
+              primaryVariant='brand'
+              secondaryVariant='brandOutline'
+              primaryClassName='inline-flex items-center gap-2 rounded-full bg-[#00a8f1] px-[30px] py-4 text-[14.5px] font-semibold text-white transition hover:bg-[#0090d1]'
+              secondaryClassName='inline-flex items-center gap-2 rounded-full border-2 border-white/30 bg-transparent px-[30px] py-4 text-[14.5px] font-semibold text-white transition hover:border-white/60'
+            />
           </div>
 
           <div className='rounded-[32px_4px_32px_4px] border-2 border-[#e5e7f0] bg-white p-[30px] text-[#1e2364]'>
