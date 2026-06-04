@@ -78,7 +78,7 @@ function mapHasLayout(map: L.Map): boolean {
 function isMapOperational(map: L.Map | null): map is L.Map {
   if (!map) return false;
   if (!mapHasLayout(map)) return false;
-  return map.getPane('mapPane');
+  return !!map.getPane('mapPane');
 }
 
 function runMapViewOp(map: L.Map, op: () => void): boolean {

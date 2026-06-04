@@ -32,7 +32,7 @@ export function MilestonesSection({ content }: Props) {
             className='pointer-events-none absolute left-0 right-0 top-[80px] hidden h-[2px] bg-[#e5e7f0] lg:block'
           />
 
-          <div className='relative z-[2] grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6'>
+          <div className='relative z-2 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6'>
             {items.map((milestone, index) => {
               const isActive = index === lastIndex;
               return (
