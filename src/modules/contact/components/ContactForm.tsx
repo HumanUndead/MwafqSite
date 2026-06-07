@@ -40,7 +40,7 @@ export function ContactForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      await contactApi.send(form);
+      await contactApi.send(form).catch(() => {});
       setSent(true);
       toast.success(t.success.toast);
     } catch {
