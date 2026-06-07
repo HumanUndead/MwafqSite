@@ -26,7 +26,7 @@ const PROTECTED_PATTERNS = [
 const AUTH_PATHS = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
 const PUBLIC_FILE = /\.[^/]+$/;
 
-export function proxy(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const token = request.cookies.get(authTokenCookieName)?.value;
   const authSession = request.cookies.get(authSessionCookieName)?.value;
   const isAuthenticated = Boolean(authSession || token);
@@ -60,8 +60,8 @@ export function proxy(request: NextRequest) {
 
   if (isProtected && !isAuthenticated) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = localizePathname(ROUTES.LOGIN, localeFromPath);
-    redirectUrl.searchParams.set('redirect', pathname);
+    redirectUrl.pathname = localizePathname(ROUTES.HOME, localeFromPath);
+    redirectUrl.search = '';
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -90,3 +90,4 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
+

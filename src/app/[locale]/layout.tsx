@@ -5,6 +5,7 @@ import { DictionaryProvider } from '@/i18n/DictionaryProvider';
 import { QueryProvider } from '@/shared/providers/QueryProvider';
 import { getDictionary } from '@/i18n/dictionaries';
 import { hasLocale, locales, type Locale } from '@/i18n/config';
+import { TokenValidator } from '@/modules/auth/components/TokenValidator';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -45,6 +46,7 @@ export default async function LocaleLayout({
   return (
     <QueryProvider>
       <DictionaryProvider dict={dict} locale={locale}>
+        <TokenValidator />
         {children}
       </DictionaryProvider>
     </QueryProvider>
