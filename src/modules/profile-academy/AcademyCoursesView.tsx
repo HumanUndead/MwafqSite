@@ -135,7 +135,11 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
                   </span>
                 </span>
                 <motion.a
-                  href={`/${locale}/courses/${course.courseId}`}
+                  href={
+                    course.enrollmentId && course.courseId
+                      ? `/${locale}/courses/learn/${course.enrollmentId}/${course.courseId}`
+                      : `/${locale}/courses/${course.courseId}`
+                  }
                   className={cn(
                     'inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#00a8f1] px-4 py-2',
                     'text-xs font-bold text-white no-underline'

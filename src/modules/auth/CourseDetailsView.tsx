@@ -17,6 +17,8 @@ import { getTranslations } from '@/i18n/server';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 import { CourseCarousel } from './CourseCarousel';
+import { EnrollButton } from '@/modules/academy/components/EnrollButton';
+import type { CoursePaymentSettings } from '@/modules/academy/types/payment.types';
 import type { CourseLesson, CourseListItem } from './course.types';
 import {
   formatCourseDuration,
@@ -55,6 +57,7 @@ export type CourseDetailsViewProps = {
   course: CourseListItem;
   lecturesDuration: number;
   lessons: CourseLesson[];
+  paymentSettings?: CoursePaymentSettings | null;
 };
 
 export async function CourseDetailsView({
@@ -63,6 +66,7 @@ export async function CourseDetailsView({
   course,
   lecturesDuration,
   lessons,
+  paymentSettings,
 }: CourseDetailsViewProps) {
   const lecturesDurationInHours = Math.ceil(lecturesDuration / 60);
   const t = await getTranslations('academyCourseDetails');
@@ -247,23 +251,28 @@ export async function CourseDetailsView({
                 <div className='flex min-w-0 items-center justify-between gap-2.5 border-t-2 border-[#eef0f7] px-[22px] pb-[22px] pt-3.5'>
                   <span className='inline-flex items-baseline gap-1.5 font-extrabold text-[#1e2364]'>
                     <span className='text-2xl leading-none tracking-[-0.5px]'>
-                      14.99
+                      {paymentSettings?.price ?? '—'}
                     </span>
                     <span className='text-[13px] font-bold text-[#6b7196]'>
-                      DJ
+                      SAR
                     </span>
                   </span>
-                  <Link
-                    href='#'
-                    className='group/enroll inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#00a8f1] px-4 py-2 text-xs font-bold text-white transition-[gap] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:gap-2'
-                  >
-                    {t.enrollNow}
-                    <ArrowRight
-                      className='size-3 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/enroll:translate-x-1 rtl:-scale-x-100 rtl:group-hover/enroll:-translate-x-1'
-                      strokeWidth={2.4}
-                      aria-hidden
-                    />
-                  </Link>
+                  <EnrollButton
+                    courseId={course.id}
+                    courseTitle={title}
+                    paymentSettings={paymentSettings}
+                    className='w-auto whitespace-nowrap rounded-full bg-[#00a8f1] px-4 py-2 text-xs font-bold text-white hover:bg-[#0098db]'
+                    label={
+                      <>
+                        {t.enrollNow}
+                        <ArrowRight
+                          className='size-3 rtl:-scale-x-100'
+                          strokeWidth={2.4}
+                          aria-hidden
+                        />
+                      </>
+                    }
+                  />
                 </div>
               </div>
             </ScrollReveal>

@@ -21,6 +21,8 @@ const PROTECTED_PREFIXES = [
 
 const PROTECTED_PATTERNS = [
   /^\/services\/\d+\/buy(\/|$)/,
+  /^\/courses\/learn(\/|$)/,
+  /^\/courses\/payment\/callback(\/|$)/,
 ];
 
 const AUTH_PATHS = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];

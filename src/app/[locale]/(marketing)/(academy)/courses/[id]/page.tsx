@@ -54,6 +54,7 @@ export default async function CourseDetailsPage({ params }: PageProps) {
         course={course}
         lecturesDuration={lecturesDuration}
         lessons={lessons}
+        paymentSettings={courseView.paymentSettings}
       />
     </MarketingStickyHeaderOffset>
   );
