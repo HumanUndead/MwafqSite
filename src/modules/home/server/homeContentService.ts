@@ -35,8 +35,8 @@ import {
   FOOTER_ARTICLE_RANKS,
   FOOTER_CHILD_CATEGORY_RANKS,
   HEADER_ARTICLE_RANKS,
-  HERO_ARTICLE_RANKS,
   HERO_CHILD_CATEGORY_RANKS,
+  HERO_WORDS_ARTICLE_RANKS,
   HOME_CONTENT_API_BASE_URL,
   HOME_CONTENT_CACHE_TAG,
   HOME_CONTENT_REVALIDATE_SECONDS,
@@ -495,20 +495,23 @@ function mapHeroContent(
     return fallback;
   }
 
-  const contentArticle = getArticleByRank(
-    heroCategory,
-    HERO_ARTICLE_RANKS.content
-  );
-  const contentTranslation = contentArticle
-    ? getArticleTranslation(contentArticle, langId)
-    : null;
   const wordsCategory = getChildCategoryByRank(
     heroCategory,
     HERO_CHILD_CATEGORY_RANKS.words
   );
-  const wordsArticle = getArticleByRank(wordsCategory, 1);
-  const wordsTranslation = wordsArticle
-    ? getArticleTranslation(wordsArticle, langId)
+  const rotatingWordsArticle = getArticleByRank(
+    wordsCategory,
+    HERO_WORDS_ARTICLE_RANKS.rotatingWords
+  );
+  const contentArticle = getArticleByRank(
+    wordsCategory,
+    HERO_WORDS_ARTICLE_RANKS.content
+  );
+  const contentTranslation = contentArticle
+    ? getArticleTranslation(contentArticle, langId)
+    : null;
+  const rotatingWordsTranslation = rotatingWordsArticle
+    ? getArticleTranslation(rotatingWordsArticle, langId)
     : null;
   const actionsCategory = getChildCategoryByRank(
     heroCategory,
@@ -561,11 +564,11 @@ function mapHeroContent(
     titleLead: trimToNull(contentTranslation?.name) ?? fallback.titleLead,
     titleMiddle:
       trimToNull(contentTranslation?.extraInfo) ?? fallback.titleMiddle,
-    rotatingWords: wordsTranslation
+    rotatingWords: rotatingWordsTranslation
       ? [
-          trimToNull(wordsTranslation.name),
-          trimToNull(wordsTranslation.shortDescription),
-          trimToNull(wordsTranslation.extraInfo),
+          trimToNull(rotatingWordsTranslation.name),
+          trimToNull(rotatingWordsTranslation.shortDescription),
+          trimToNull(rotatingWordsTranslation.extraInfo),
         ].filter((word): word is string => Boolean(word))
       : fallback.rotatingWords,
     subtitle: trimToNull(contentTranslation?.description) ?? fallback.subtitle,

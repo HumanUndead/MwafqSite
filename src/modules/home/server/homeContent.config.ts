@@ -1,9 +1,8 @@
-const DEFAULT_HOME_CONTENT_API_BASE_URL = 'https://productionapi.mwafq.com';
 import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 
 export const HOME_CONTENT_API_BASE_URL = MWAFQ_API_BASE_URL;
 
-export const HOME_CONTENT_ROOT_CATEGORY_ID = 101;
+export const HOME_CONTENT_ROOT_CATEGORY_ID = 161;
 export const HOME_CONTENT_REVALIDATE_SECONDS = 60 * 10;
 export const HOME_CONTENT_CACHE_TAG = `home-content-${HOME_CONTENT_ROOT_CATEGORY_ID}`;
 
@@ -70,8 +69,9 @@ export const HEADER_ARTICLE_RANKS = {
   localeSwitch: 100,
 } as const;
 
-export const HERO_ARTICLE_RANKS = {
-  content: 1,
+export const HERO_WORDS_ARTICLE_RANKS = {
+  rotatingWords: 1,
+  content: 2,
 } as const;
 
 export const SERVICES_ARTICLE_RANKS = {
