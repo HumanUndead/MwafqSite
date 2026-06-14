@@ -43,26 +43,20 @@ interface Props {
 export function HeroSection({ locale, content, isRtl }: Props) {
   const hasRotatingWords = content.rotatingWords.length > 0;
   const hasSecondLine = Boolean(content.titleMiddle || hasRotatingWords);
-  const badgeImages =
-    content.badgeImages.length > 0
-      ? content.badgeImages
-      : [
-          { src: '/demo-assets/img1.jpg', alt: content.badge },
-          { src: '/demo-assets/img2.jpg', alt: content.badge },
-          { src: '/demo-assets/img3.jpg', alt: content.badge },
-        ];
+  const badgeImages = [
+    { src: '/demo-assets/img1.jpg', alt: content.badge },
+    { src: '/demo-assets/img2.jpg', alt: content.badge },
+    { src: '/demo-assets/img3.jpg', alt: content.badge },
+  ];
 
   return (
-    <section
-      id='home'
-      className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-20 md:px-7'
-    >
+    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-20 md:px-7'>
       <div
-        className='pointer-events-none absolute inset-0 opacity-55 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:24px_24px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
+        className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
         aria-hidden='true'
       />
       <div className='relative mx-auto grid max-w-[1320px] items-center gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
-        <div className='-translate-y-10'>
+        <div>
           <span className='mb-6 inline-flex items-center gap-2.5 rounded-full border-2 border-[#e5e7f0] bg-white px-4 py-2 text-[13px] font-semibold tracking-[0.4px] text-[#1e2364]'>
             <span
               className={`flex items-center ${isRtl ? 'flex-row-reverse' : ''}`}
@@ -72,7 +66,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                   key={`${image.src}-${index}`}
                   src={image.src ?? ''}
                   alt=''
-                  className={`${index === 1 ? '-mx-[11px]' : ''} h-[22px] w-[22px] rounded-full border-2 object-cover ${
+                  className={`${index === 1 ? 'mx-[-11px]' : ''} size-[22px] rounded-full border-2 object-cover ${
                     index === 0
                       ? 'border-[#00a8f1]'
                       : index === 1
@@ -138,12 +132,12 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
-              className={`absolute z-[5] hidden items-center gap-[14px] rounded-[18px] border-2 border-[#1e2364] bg-white md:flex ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
+              className={`absolute z-5 hidden items-center gap-[14px] rounded-[18px] border-2 border-[#1e2364] bg-white md:flex ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
               style={{ padding: '12px 18px 12px 12px' }}
             >
               <span
                 aria-hidden='true'
-                className='block h-[46px] w-[46px] flex-shrink-0 rounded-[12px] bg-[#fbfcff]'
+                className='block h-[46px] w-[46px] shrink-0 rounded-[12px] bg-[#fbfcff]'
                 style={{
                   backgroundImage: `url("${floatingCardSprite}")`,
                   backgroundRepeat: 'no-repeat',
@@ -212,7 +206,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                     <div
                       className={`mb-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-[14px] ${phoneTileStyles[index]?.icon ?? 'bg-white text-[#1e2364]'}`}
                     >
-                      <div className='[transform:scale(0.78)]'>
+                      <div className='transform-[scale(0.78)]'>
                         {getServiceIconByKey(tile.iconKey) ?? <CarIcon />}
                       </div>
                     </div>
@@ -228,7 +222,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
               <div className='mt-auto flex items-center gap-2.5 rounded-[14px] bg-[#1e2364] px-3.5 py-[11px] text-white'>
                 <span
-                  className='h-2 w-2 flex-shrink-0 rounded-full bg-[#00a8f1] shadow-[0_0_0_3px_rgba(0,168,241,0.25)] animate-[phLivePulse_1.6s_ease-in-out_infinite]'
+                  className='h-2 w-2 shrink-0 rounded-full bg-[#00a8f1] shadow-[0_0_0_3px_rgba(0,168,241,0.25)] animate-[phLivePulse_1.6s_ease-in-out_infinite]'
                   aria-hidden='true'
                 />
                 <span className='flex flex-1 items-baseline gap-1.5'>
@@ -239,7 +233,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                     {content.liveBookingsLabel}
                   </span>
                 </span>
-                <span className='flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[8px] bg-white/[0.14]'>
+                <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-[8px] bg-white/[0.14]'>
                   <ArrowIcon />
                 </span>
               </div>

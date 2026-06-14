@@ -36,7 +36,7 @@ export function Header({ locale, content }: HeaderProps) {
         'max-[980px]:w-[calc(100%-24px)] max-[980px]:pl-4 max-[980px]:pr-2.5',
         'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3 max-[560px]:pr-2',
         isScrolled &&
-        'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150'
+          'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150'
       )}
     >
       <CmsLink
@@ -46,7 +46,7 @@ export function Header({ locale, content }: HeaderProps) {
         aria-label={content.brandLabel}
       >
         <Image
-          src={'/demo-assets/logo.svg'} 
+          src={'/demo-assets/logo.svg'}
           alt={content.brandLabel}
           width={200}
           height={200}
@@ -84,7 +84,7 @@ export function Header({ locale, content }: HeaderProps) {
           type='button'
           aria-label='Toggle dark mode'
         >
-          <SunIcon className='size-[18px]' />
+          <SunIcon className='size-4.5' />
         </button>
 
         <div title={content.localeSwitchLabel ?? undefined}>
@@ -104,7 +104,7 @@ export function Header({ locale, content }: HeaderProps) {
           <CmsLink
             locale={locale}
             href={content.signInAction.path}
-            className='inline-flex h-10 shrink-0 max-[560px]:h-9 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] px-[18px] max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background,color] duration-280 ease-out hover:bg-[#233567]'
+            className='inline-flex h-10 shrink-0 max-[560px]:h-9 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] px-4.5 max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background,color] duration-280 ease-out hover:bg-[#233567]'
           >
             <span>{content.signInAction.label}</span>
           </CmsLink>

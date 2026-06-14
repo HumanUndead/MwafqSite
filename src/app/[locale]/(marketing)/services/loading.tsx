@@ -1,5 +1,6 @@
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 import { Spinner } from '@/shared/components/ui/Spinner';
+import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 
 export default function ServicesLoading() {
   return (
@@ -11,3 +12,4 @@ export default function ServicesLoading() {
     </MarketingStickyHeaderOffset>
   );
 }
+MWAFQ_API_BASE_URL
