@@ -7,19 +7,12 @@ import type {
   AcademyMyCoursesPage,
 } from '../types/academy.types';
 
-const DEFAULT_IMAGE =
-  'https://loremflickr.com/640/400/medical,training/all?lock=academy';
-
 function resolveImageSrc(course: AcademyCourse): string {
   const path =
     course.fullAttachmentsPath || course.lastLecture?.fullAttachmentsPath || '';
 
-  if (!path) {
-    return DEFAULT_IMAGE;
-  }
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
-  }
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
   return path.startsWith('/') ? path : `/${path}`;
 }
 

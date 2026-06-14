@@ -15,11 +15,17 @@ import {
 type AcademyFilterProps = {
   categories: readonly CourseCategoryListItem[];
   locale: Locale;
+  onSearch?: (query: string, categoryId: string) => void;
 };
 
-export function AcademyFilter({ categories, locale }: AcademyFilterProps) {
+export function AcademyFilter({ categories, locale, onSearch }: AcademyFilterProps) {
   const t = useTranslations('academyCourses');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
+
+  const handleSearch = () => {
+    onSearch?.(searchQuery, selectedCategoryId);
+  };
 
   return (
     <PageFilterSection
@@ -35,6 +41,7 @@ export function AcademyFilter({ categories, locale }: AcademyFilterProps) {
         id='bk-section-trigger'
         label={t.filter.sectionLabel}
         placeholder={t.filter.sectionPlaceholder}
+        onValueChange={setSelectedCategoryId}
       />
 
       <PageFilterSearchField
@@ -45,11 +52,19 @@ export function AcademyFilter({ categories, locale }: AcademyFilterProps) {
         placeholder={t.filter.searchPlaceholder}
       />
 
-      <PageFilterSearchButton
-        href='#featuredCourses'
-        label={t.filter.searchBtn}
-        className='max-[1024px]:col-span-2 max-[1024px]:w-full'
-      />
+      {onSearch ? (
+        <PageFilterSearchButton
+          onClick={handleSearch}
+          label={t.filter.searchBtn}
+          className='max-[1024px]:col-span-2 max-[1024px]:w-full'
+        />
+      ) : (
+        <PageFilterSearchButton
+          href='#featuredCourses'
+          label={t.filter.searchBtn}
+          className='max-[1024px]:col-span-2 max-[1024px]:w-full'
+        />
+      )}
     </PageFilterSection>
   );
 }

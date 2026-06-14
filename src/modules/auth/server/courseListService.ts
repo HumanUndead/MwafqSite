@@ -1,32 +1,29 @@
 import 'server-only';
 
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
-import type { CourseListItem } from '../course.types';
-import {
-  PaginatedResponse,
-  UpstreamApiResponse,
-} from '@/shared/types/api.types';
 import queryString from 'query-string';
+
+import type { CourseListItem } from '../course.types';
+import type { PaginatedResponse } from '@/shared/types/api.types';
+import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 
 export async function fetchCourseList({
   categoryId,
   featured,
+  keyword,
   pageNumber = 1,
   pageSize = 10,
 }: {
   categoryId?: number;
   featured?: boolean;
+  keyword?: string;
   pageNumber?: number;
   pageSize?: number;
 }): Promise<PaginatedResponse<CourseListItem>> {
   const params = queryString.stringify(
-    { categoryId, featured, pageNumber, pageSize },
-    { skipNull: true }
+    { categoryId, featured, keyword, pageNumber, pageSize, status: true },
+    { skipNull: true, skipEmptyString: true }
   );
-  const url = new URL(`/api/Academy/Course/List?${params}`, MWAFQ_API_BASE_URL);
-  const response = await fetch(url.toString());
-  const body = (await response.json()) as UpstreamApiResponse<
-    PaginatedResponse<CourseListItem>
-  >;
-  return body.value;
+  return fetchWithErrorHandling<PaginatedResponse<CourseListItem>>(
+    `/api/Academy/Course/List?${params}`
+  );
 }

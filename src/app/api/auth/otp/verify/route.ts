@@ -152,10 +152,6 @@ export async function GET(request: NextRequest) {
 
     const upstreamCode = extractUpstreamCode(payload);
 
-    console.log('[auth/otp/verify] Upstream response:', {
-      status: upstreamResponse.status,
-      payload,
-    });
     if (upstreamResponse.status >= 400 || hasUpstreamFailure(payload)) {
       return NextResponse.json(
         {
