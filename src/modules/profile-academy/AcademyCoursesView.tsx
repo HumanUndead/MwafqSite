@@ -56,11 +56,13 @@ function CourseCard({ course, locale, t, rtl: _rtl, ctaArrowShift }: CourseCardP
       initial='rest'
       whileHover='hover'
     >
-      <div className='relative flex h-[180px] items-center justify-center overflow-hidden bg-[#1e2364]'>
+      <div className='relative flex h-45 items-center justify-center overflow-hidden bg-[#1e2364]'>
         {errored ? (
-          <img
+          <Image
             src='/demo-assets/logo.svg'
             alt={course.imageAlt}
+            width={80}
+            height={80}
             className='h-20 w-20 object-contain brightness-0 invert opacity-30'
           />
         ) : (
@@ -151,7 +153,7 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
 
   return (
     <section className='relative pt-2'>
-      <ScrollReveal className='mb-[22px] flex flex-wrap items-center justify-between gap-4'>
+      <ScrollReveal className='mb-5.5 flex flex-wrap items-center justify-between gap-4'>
         <h2 className='text-[clamp(22px,2vw,28px)] font-extrabold leading-[1.15] tracking-[-0.6px] text-[#1e2364]'>
           {t.title}
         </h2>
@@ -168,7 +170,7 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
             whileTap={{ scale: 0.96 }}
             transition={sectionArrowTransition}
           >
-            <ChevronRightSmIcon className='size-[14px] rotate-180 rtl:rotate-0' />
+            <ChevronRightSmIcon className='size-3.5 rotate-180 rtl:rotate-0' />
           </motion.button>
           <motion.button
             type='button'
@@ -178,12 +180,12 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
             whileTap={{ scale: 0.96 }}
             transition={sectionArrowTransition}
           >
-            <ChevronRightSmIcon className='size-[14px] rtl:rotate-180' />
+            <ChevronRightSmIcon className='size-3.5 rtl:rotate-180' />
           </motion.button>
         </div>
       </ScrollReveal>
 
-      <div className='grid grid-cols-3 gap-[22px] pb-1 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1'>
+      <div className='grid grid-cols-3 gap-5.5 pb-1 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1'>
         {rows.map((course) => (
           <ScrollReveal
             key={course.id}

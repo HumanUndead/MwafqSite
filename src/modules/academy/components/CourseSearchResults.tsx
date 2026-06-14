@@ -25,8 +25,8 @@ type CourseSearchResultsProps = {
 function CourseCardSkeleton() {
   return (
     <div className='animate-pulse rounded-[20px] border-2 border-[#e5e7f0] bg-white overflow-hidden'>
-      <div className='h-[200px] bg-[#e5e7f0]' />
-      <div className='p-[22px] space-y-3'>
+      <div className='h-50 bg-[#e5e7f0]' />
+      <div className='p-5.5 space-y-3'>
         <div className='h-4 bg-[#e5e7f0] rounded w-3/4' />
         <div className='h-3 bg-[#e5e7f0] rounded w-full' />
         <div className='h-3 bg-[#e5e7f0] rounded w-2/3' />
@@ -56,12 +56,14 @@ function CourseCard({
   const [errored, setErrored] = useState(!course.fullImagePath);
 
   return (
-    <article className='group relative flex min-h-full flex-col overflow-hidden rounded-[20px] border-2 border-[#e5e7f0] bg-white transition-all duration-[0.4s] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-[#00a8f1] hover:bg-[#fbfcff]'>
-      <div className='relative flex h-[200px] items-center justify-center overflow-hidden bg-[#1e2364] max-[640px]:h-40'>
+    <article className='group relative flex min-h-full flex-col overflow-hidden rounded-[20px] border-2 border-[#e5e7f0] bg-white transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-[#00a8f1] hover:bg-[#fbfcff]'>
+      <div className='relative flex h-50 items-center justify-center overflow-hidden bg-[#1e2364] max-[640px]:h-40'>
         {errored ? (
-          <img
+          <Image
             src='/demo-assets/logo.svg'
             alt={title}
+            width={80}
+            height={80}
             className='h-20 w-20 object-contain brightness-0 invert opacity-30'
           />
         ) : (
@@ -75,16 +77,16 @@ function CourseCard({
           />
         )}
       </div>
-      <div className='flex flex-1 flex-col gap-2.5 px-[22px] pb-3.5 pt-[22px]'>
-        <h3 className='min-h-[44px] text-[17px] font-extrabold leading-[1.3] tracking-[-0.3px] text-[#1e2364]'>
+      <div className='flex flex-1 flex-col gap-2.5 px-5.5 pb-3.5 pt-5.5'>
+        <h3 className='min-h-11 text-[17px] font-extrabold leading-[1.3] tracking-[-0.3px] text-[#1e2364]'>
           {title}
         </h3>
         <p
-          className='min-h-[38px] text-[13px] leading-[1.55] text-[#6b7196]'
+          className='min-h-9.5 text-[13px] leading-[1.55] text-[#6b7196]'
           dangerouslySetInnerHTML={{ __html: description }}
         />
       </div>
-      <div className='flex items-center justify-between gap-2.5 border-t-2 border-[#eef0f7] px-[22px] pb-[22px] pt-3.5'>
+      <div className='flex items-center justify-between gap-2.5 border-t-2 border-[#eef0f7] px-5.5 pb-5.5 pt-3.5'>
         <span className='inline-flex items-center gap-1.5 text-[13px] font-bold text-[#1e2364]'>
           <span className='inline-flex text-[#1e2364]'>
             <StarFilledSmIcon className='size-3.5' />
@@ -125,8 +127,8 @@ export function CourseSearchResults({
   const error = isError;
 
   return (
-    <section className='py-[30px] last:pb-[120px]'>
-      <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
+    <section className='py-7.5 last:pb-30'>
+      <div className='mx-auto max-w-330 px-4 md:px-7'>
         <AnimatePresence mode='wait'>
           {loading ? (
             <motion.div

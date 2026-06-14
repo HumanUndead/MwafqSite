@@ -12,7 +12,8 @@
       "Bash(python -c \"import sys,base64; print\\(base64.b64decode\\(sys.stdin.read\\(\\)\\).decode\\(\\)\\)\")",
       "WebFetch(domain:github.com)",
       "Bash(uv --version)",
-      "Bash(pipx --version)"
+      "Bash(pipx --version)",
+      "Bash(npm run *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"
