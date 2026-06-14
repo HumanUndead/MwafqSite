@@ -2,23 +2,38 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 
 import { localeToLangId, type Locale } from '@/i18n/config';
 import { useTranslations } from '@/i18n/DictionaryProvider';
-import { getTranslationName } from '@/shared/lib/getTranslationName';
+import type { CourseListItem } from '@/modules/auth/course.types';
 import {
   ChevronRightSmIcon,
   StarFilledSmIcon,
 } from '@/shared/components/icons/academy';
-import type { CourseListItem } from './course.types';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+import { getTranslationName } from '@/shared/lib/getTranslationName';
+import { fetchCourseListClient } from '@/modules/academy/api/courseListApi';
+
+type CourseSearchResultsProps = {
+  query: string;
+  categoryId: string;
+  locale: Locale;
+};
+
+function CourseCardSkeleton() {
+  return (
+    <div className='animate-pulse rounded-[20px] border-2 border-[#e5e7f0] bg-white overflow-hidden'>
+      <div className='h-[200px] bg-[#e5e7f0]' />
+      <div className='p-[22px] space-y-3'>
+        <div className='h-4 bg-[#e5e7f0] rounded w-3/4' />
+        <div className='h-3 bg-[#e5e7f0] rounded w-full' />
+        <div className='h-3 bg-[#e5e7f0] rounded w-2/3' />
+      </div>
+    </div>
+  );
+}
 
 function CourseCard({
   course,
@@ -27,10 +42,7 @@ function CourseCard({
 }: {
   course: CourseListItem;
   locale: Locale;
-  labels: {
-    enrollNow: string;
-    reviewsCount: string;
-  };
+  labels: { enrollNow: string; reviewsCount: string };
 }) {
   const title = getTranslationName(course.translations, locale);
   const langId = localeToLangId[locale];
@@ -91,48 +103,72 @@ function CourseCard({
   );
 }
 
-export type CourseCarouselClientProps = {
-  categoryName: string;
-  courses: readonly CourseListItem[];
-  locale: Locale;
-};
-
-export function CourseCarouselClient({
-  categoryName,
-  courses,
+export function CourseSearchResults({
+  query,
+  categoryId,
   locale,
-}: CourseCarouselClientProps) {
+}: CourseSearchResultsProps) {
   const t = useTranslations('academyCourses');
 
-  return (
-    <Carousel opts={{ align: 'start' }}>
-      <section className='py-[30px] last:pb-[120px]'>
-        <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
-          <div className='mb-[26px] flex flex-wrap items-center justify-between gap-4'>
-            <div className='flex flex-wrap items-center gap-3.5'>
-              <h2 className='text-[clamp(24px,2.4vw,30px)] font-extrabold leading-[1.15] tracking-[-0.6px] text-[#1e2364]'>
-                {categoryName}
-              </h2>
-            </div>
-            <div className='mt-7 flex items-center justify-center gap-2'>
-              <CarouselPrevious
-                aria-label={t.carousel.previous}
-                className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] '
-              />
-              <CarouselNext
-                aria-label={t.carousel.next}
-                className='static size-10 translate-y-0 rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1] '
-              />
-            </div>
-          </div>
+  const { data, isPending, isError } = useQuery({
+    queryKey: ['academy-courses', query, categoryId],
+    queryFn: () =>
+      fetchCourseListClient({
+        keyword: query || undefined,
+        categoryId: categoryId ? Number(categoryId) : undefined,
+        pageSize: 30,
+      }),
+  });
 
-          <CarouselContent className='ml-[-22px]'>
-            {courses?.map((course) => (
-              <CarouselItem
-                key={course.id}
-                className='pl-[22px] basis-full sm:basis-1/2 lg:basis-1/3'
-              >
+  const courses = data?.data ?? [];
+  const loading = isPending;
+  const error = isError;
+
+  return (
+    <section className='py-[30px] last:pb-[120px]'>
+      <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
+        <AnimatePresence mode='wait'>
+          {loading ? (
+            <motion.div
+              key='skeleton'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
+            >
+              {Array.from({ length: 6 }).map((_, i) => (
+                <CourseCardSkeleton key={i} />
+              ))}
+            </motion.div>
+          ) : error ? (
+            <motion.p
+              key='error'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className='py-16 text-center text-[15px] text-[#6b7196]'
+            >
+              {t.search.error}
+            </motion.p>
+          ) : courses.length === 0 ? (
+            <motion.p
+              key='empty'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className='py-16 text-center text-[15px] text-[#6b7196]'
+            >
+              {t.search.noResults}
+            </motion.p>
+          ) : (
+            <motion.div
+              key='results'
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
+            >
+              {courses.map((course) => (
                 <CourseCard
+                  key={course.id}
                   course={course}
                   locale={locale}
                   labels={{
@@ -140,11 +176,11 @@ export function CourseCarouselClient({
                     reviewsCount: t.carousel.reviewsCount,
                   }}
                 />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </div>
-      </section>
-    </Carousel>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
   );
 }

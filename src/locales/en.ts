@@ -3,6 +3,12 @@ const en = {
     title: 'Mwafq',
     description: 'Your trusted platform',
   },
+  notFound: {
+    code: '404',
+    title: 'Page not found',
+    message: "The page you're looking for doesn't exist or has been moved.",
+    cta: 'Back to home',
+  },
   localeSwitcher: {
     label: 'Language',
     locales: {
@@ -457,6 +463,10 @@ const en = {
       reviewsCount: '({{count}})',
       previous: 'Previous courses',
       next: 'Next courses',
+    },
+    search: {
+      noResults: 'No courses found. Try different keywords or category.',
+      error: 'Failed to load courses. Please try again.',
     },
   },
   academyEnroll: {

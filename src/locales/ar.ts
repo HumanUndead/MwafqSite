@@ -3,6 +3,12 @@ const ar = {
     title: 'موفق',
     description: 'منصتك الموثوقة',
   },
+  notFound: {
+    code: '404',
+    title: 'الصفحة غير موجودة',
+    message: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
+    cta: 'العودة إلى الرئيسية',
+  },
   localeSwitcher: {
     label: 'اللغة',
     locales: {
@@ -448,6 +454,10 @@ const ar = {
       reviewsCount: '({{count}})',
       previous: 'الدورات السابقة',
       next: 'الدورات التالية',
+    },
+    search: {
+      noResults: 'لا توجد دورات. جرّب كلمات أو تصنيفاً مختلفاً.',
+      error: 'تعذّر تحميل الدورات. يرجى المحاولة مجدداً.',
     },
   },
   academyEnroll: {
