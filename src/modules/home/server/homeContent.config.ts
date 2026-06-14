@@ -2,7 +2,7 @@ import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 
 export const HOME_CONTENT_API_BASE_URL = MWAFQ_API_BASE_URL;
 
-export const HOME_CONTENT_ROOT_CATEGORY_ID = 161;
+export const HOME_CONTENT_ROOT_CATEGORY_ID = 159;
 export const HOME_CONTENT_REVALIDATE_SECONDS = 60 * 10;
 export const HOME_CONTENT_CACHE_TAG = `home-content-${HOME_CONTENT_ROOT_CATEGORY_ID}`;
 
