@@ -48,7 +48,7 @@ export function NotFoundView({
 
         {/* Divider */}
         <motion.div
-          className='h-[3px] w-16 rounded-full bg-[#00a8f1]'
+          className='h-0.75 w-16 rounded-full bg-[#00a8f1]'
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.45, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
@@ -64,7 +64,7 @@ export function NotFoundView({
           <h1 className='text-[clamp(20px,2.5vw,28px)] font-extrabold tracking-[-0.5px] text-[#1e2364]'>
             {title}
           </h1>
-          <p className='max-w-[420px] text-[15px] leading-[1.6] text-[#6b7196]'>
+          <p className='max-w-105 text-[15px] leading-[1.6] text-[#6b7196]'>
             {message}
           </p>
         </motion.div>

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import Image from 'next/image';
@@ -26,9 +25,9 @@ interface Props {
 
 export function FooterSection({ locale, content }: Props) {
   return (
-    <footer id='contact' className='bg-[#eeeeef] px-4 pb-7 pt-[80px] md:px-7'>
-      <div className='mx-auto max-w-[1320px]'>
-        <div className='mb-[50px] grid gap-[60px] border-b border-[#1e2364]/10 pb-0 xl:grid-cols-[2.6fr_1fr_1fr_1.4fr]'>
+    <footer id='contact' className='bg-[#eeeeef] px-4 pb-7 pt-20 md:px-7'>
+      <div className='mx-auto max-w-330'>
+        <div className='mb-12.5 grid gap-15 border-b border-[#1e2364]/10 pb-0 xl:grid-cols-[2.6fr_1fr_1fr_1.4fr]'>
           <div className='flex flex-col'>
             <CmsLink locale={locale} href={content.brandPath} className='w-fit'>
               <Image
@@ -46,7 +45,7 @@ export function FooterSection({ locale, content }: Props) {
             </p>
           </div>
 
-          <div className='ml-0 flex flex-col xl:ml-[150px]'>
+          <div className='ml-0 flex flex-col xl:ml-37.5'>
             <h3 className='text-xs font-bold uppercase tracking-[0.18em] text-[#1e2364]'>
               {content.pages.title}
             </h3>
@@ -65,7 +64,7 @@ export function FooterSection({ locale, content }: Props) {
             </ul>
           </div>
 
-          <div className='flex flex-col xl:ml-[70px]'>
+          <div className='flex flex-col xl:ml-17.5'>
             <h3 className='text-xs font-bold uppercase tracking-[0.18em] text-[#1e2364]'>
               {content.help.title}
             </h3>
@@ -113,18 +112,18 @@ export function FooterSection({ locale, content }: Props) {
             <p className='mt-auto pt-6 text-[11px] font-bold uppercase tracking-[0.14em] text-[rgba(30,35,100,0.5)]'>
               {content.newsletterEyebrow}
             </p>
-            <div className='mt-3 flex w-full max-w-[360px] items-end gap-3'>
+            <div className='mt-3 flex w-full max-w-90 items-end gap-3'>
               <Input
                 type='email'
                 placeholder={content.newsletterPlaceholder}
-                className='h-[38px] flex-1 border-0 bg-transparent px-0 text-[15px] text-[#1e2364] placeholder:font-medium placeholder:text-[rgba(30,35,100,0.42)]'
+                className='h-9.5 flex-1 border-0 bg-transparent px-0 text-[15px] text-[#1e2364] placeholder:font-medium placeholder:text-[rgba(30,35,100,0.42)]'
               />
               <Button
                 type='button'
                 variant='ghost'
                 size='icon'
                 aria-label={content.newsletterAction}
-                className='h-[38px] text-[22px] font-bold text-[#00a8f1] hover:translate-x-1'
+                className='h-9.5 text-[22px] font-bold text-[#00a8f1] hover:translate-x-1'
               >
                 →
               </Button>

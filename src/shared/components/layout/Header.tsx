@@ -12,7 +12,6 @@ import { MenuHamburgerIcon, SunIcon } from '@/shared/components/icons/layout';
 import { cn } from '@/shared/lib/cn';
 import Image from 'next/image';
 import { HeaderUserMenu } from '@/shared/components/layout/HeaderUserMenu';
-
 interface HeaderProps {
   locale: Locale;
   content: HomeHeaderContent;

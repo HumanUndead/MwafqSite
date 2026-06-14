@@ -36,7 +36,7 @@ export function CourseCard({
       onClick={() => onSelect(id)}
       aria-pressed={isSelected}
       className={cn(
-        'h-auto w-full flex-col overflow-hidden rounded-[14px] border-2 bg-white p-0 font-normal whitespace-normal text-start transition-all duration-250',
+        'h-auto w-full flex-col overflow-hidden rounded-3.5 border-2 bg-white p-0 font-normal whitespace-normal text-start transition-all duration-250',
         isSelected
           ? 'border-[#00a8f1] shadow-[inset_0_0_0_1px_#00a8f1]'
           : 'border-[#e5e7f0] hover:-translate-y-0.5 hover:border-[#00a8f1]'
@@ -56,7 +56,7 @@ export function CourseCard({
         <span
           aria-hidden
           className={cn(
-            'absolute inset-e-2.5 top-2.5 inline-flex size-[26px] items-center justify-center rounded-full bg-[#00a8f1] text-white transition-all duration-250',
+            'absolute inset-e-2.5 top-2.5 inline-flex size-6.5 items-center justify-center rounded-full bg-[#00a8f1] text-white transition-all duration-250',
             isSelected ? 'scale-100 opacity-100' : 'scale-[0.6] opacity-0'
           )}
         >
@@ -69,16 +69,16 @@ export function CourseCard({
           {name}
         </span>
         {description ? (
-          <span className='block text-[12px] font-medium leading-relaxed text-[#6b7196]'>
+          <span className='block text-xs font-medium leading-relaxed text-[#6b7196]'>
             {description}
           </span>
         ) : null}
         {price ? (
           <div className='mt-1.5 flex items-center justify-end gap-1'>
-            <span className='text-[18px] font-extrabold leading-none tracking-[-0.4px] text-[#1e2364]'>
+            <span className='text-lg font-extrabold leading-none tracking-[-0.4px] text-[#1e2364]'>
               {price}
             </span>
-            <SarIcon className='size-[15px] text-[#1e2364]' />
+            <SarIcon className='size-3.75 text-[#1e2364]' />
           </div>
         ) : null}
       </div>
