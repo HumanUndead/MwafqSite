@@ -304,7 +304,7 @@ export function CreditCardForm({
           <span className='flex items-center gap-1'>
             {payLabel} {displayAmount}
             <SarIcon
-              className='inline size-[9px]'
+              className='inline size-2.25'
               style={{ color: 'white' }}
               aria-hidden
             />

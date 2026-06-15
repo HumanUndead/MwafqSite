@@ -11,7 +11,7 @@ interface Props {
 
 export function AcademySection({ locale, content }: Props) {
   return (
-    <section className='relative mt-20 overflow-hidden rounded-t-[60px] bg-white pb-[50px] pt-[90px]'>
+    <section className='relative mt-20 overflow-hidden rounded-t-[60px] bg-white pb-10 pt-16'>
       <div
         className='pointer-events-none absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] [background-size:32px_32px]'
         aria-hidden='true'

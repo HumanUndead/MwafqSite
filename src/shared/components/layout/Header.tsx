@@ -30,10 +30,10 @@ export function Header({ locale, content }: HeaderProps) {
   return (
     <header
       className={cn(
-        'fixed left-1/2 top-4.5 z-200 flex w-[calc(100%-40px)] max-w-7xl -translate-x-1/2 items-center justify-between rounded-[80px] border-2 border-transparent py-2 pl-5.5 pr-3.5',
+        'fixed left-1/2 top-4 z-200 flex w-[calc(100%-40px)] max-w-350 -translate-x-1/2 items-center justify-between rounded-[80px] border-2 border-transparent py-2.5 pl-5 pr-3',
         'transition-[background,border-color,backdrop-filter] duration-250 ease-in-out',
         'max-[980px]:w-[calc(100%-24px)] max-[980px]:pl-4 max-[980px]:pr-2.5',
-        'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3 max-[560px]:pr-2',
+        'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3.5 max-[560px]:pr-2',
         isScrolled &&
           'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150'
       )}
@@ -52,15 +52,15 @@ export function Header({ locale, content }: HeaderProps) {
           className={cn(
             'block w-auto transition-[height] duration-250 ease-in-out',
             isScrolled
-              ? 'h-14 max-[980px]:h-13 max-[560px]:h-11.5'
-              : 'h-22 max-[980px]:h-16 max-[560px]:h-13'
+              ? 'h-12 max-[980px]:h-11 max-[560px]:h-10'
+              : 'h-16 max-[980px]:h-14 max-[560px]:h-12'
           )}
           loading='eager'
         />
       </CmsLink>
 
       <nav
-        className='flex items-center gap-1 max-[980px]:hidden'
+        className='flex items-center max-[980px]:hidden'
         aria-label='Main navigation'
       >
         {content.navLinks.map((item) => (
@@ -68,49 +68,61 @@ export function Header({ locale, content }: HeaderProps) {
             key={`${item.label}-${item.path ?? 'no-path'}`}
             locale={locale}
             href={item.path}
-            className='group inline-block whitespace-nowrap px-4 py-2.5'
+            className='group inline-block whitespace-nowrap px-3.5 py-2.5'
           >
-            <span className='inline-block origin-center scale-[0.909] text-[17.6px] font-bold text-[#1e2364] transition-[transform,color] duration-280 ease-out group-hover:scale-100 group-hover:text-[#00a8f1] backface-hidden will-change-transform'>
+            <span className='inline-block origin-center text-[17px] font-bold text-[#1e2364]/80 transition-colors duration-200 ease-out group-hover:text-[#00a8f1]'>
               {item.label}
             </span>
           </CmsLink>
         ))}
       </nav>
 
-      <div className='flex flex-nowrap items-center gap-2.5'>
-        <button
-          className='inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:hidden'
+      <div className='flex flex-nowrap items-center gap-2'>
+        {/* Separator */}
+        <div
+          className='mr-1 h-5 w-px bg-[#1e2364]/15 max-[980px]:hidden'
+          aria-hidden='true'
+        />
+
+        {/* <button
+          className='inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#1e2364]/60 transition-colors duration-200 hover:bg-[#1e2364]/8 hover:text-[#1e2364] max-[980px]:hidden'
           type='button'
           aria-label='Toggle dark mode'
         >
           <SunIcon className='size-4.5' />
-        </button>
+        </button> */}
 
         <div title={content.localeSwitchLabel ?? undefined}>
-          <LanguageSwitcher
-            className='flex gap-1 rounded-[30px] border-0 bg-[#f2f2f2] p-1.5'
-            optionClassName='min-w-12 max-[560px]:min-w-[42px] rounded-full min-h-10 max-[560px]:min-h-9 px-4 max-[560px]:px-3 text-[13.5px] max-[560px]:text-xs font-semibold'
-            activeOptionClassName='bg-[#1e2364] text-[#f2f2f2]'
-            inactiveOptionClassName='text-[#1e2364] hover:bg-[rgba(30,35,100,0.12)]'
-          />
+          <LanguageSwitcher />
         </div>
 
         {content.userMenu ? (
           <HeaderUserMenu locale={locale} menu={content.userMenu} />
         ) : null}
 
+        {hasCmsActionLabel(content.businessSignInAction) ? (
+          <CmsLink
+            locale={locale}
+            target='_blank'
+            href={content.businessSignInAction.path}
+            className='inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-[50px] border-2 border-[#00a8f1] px-5 text-[14px] font-semibold text-[#00a8f1] transition-[background,color] duration-200 hover:bg-[#00a8f1] hover:text-white max-[980px]:hidden'
+          >
+            <span>{content.businessSignInAction.label}</span>
+          </CmsLink>
+        ) : null}
+
         {hasCmsActionLabel(content.signInAction) ? (
           <CmsLink
             locale={locale}
             href={content.signInAction.path}
-            className='inline-flex h-10 shrink-0 max-[560px]:h-9 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] px-4.5 max-[560px]:px-3.5 text-[14.5px] max-[560px]:text-xs font-semibold text-white transition-[background,color] duration-280 ease-out hover:bg-[#233567]'
+            className='inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] px-5 max-[560px]:px-4 text-[14px] max-[560px]:text-[13px] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567]'
           >
             <span>{content.signInAction.label}</span>
           </CmsLink>
         ) : null}
 
         <button
-          className='hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#1e2364] transition-[background,color] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#1e2364] hover:text-[#f2f2f2] max-[980px]:inline-flex'
+          className='hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1e2364]/8 text-[#1e2364] transition-colors duration-200 hover:bg-[#1e2364] hover:text-white max-[980px]:inline-flex'
           type='button'
           aria-label='Open menu'
         >

@@ -11,7 +11,7 @@ interface Props {
 
 export function ServicesSection({ locale, content }: Props) {
   return (
-    <section id='services' className='relative px-4 py-[120px] md:px-7'>
+    <section id='services' className='relative px-4 py-20 md:px-7'>
       <div
         className='pointer-events-none absolute inset-0 [background-image:radial-gradient(circle,rgba(30,35,100,0.05)_1px,transparent_1.2px)] [background-size:24px_24px]'
         aria-hidden='true'

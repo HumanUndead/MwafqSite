@@ -2,34 +2,23 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/shared/lib/cn';
-import { localeLabels, locales } from './config';
-import { useLocale, useTranslations } from './DictionaryProvider';
+import { locales } from './config';
+import { useLocale } from './DictionaryProvider';
 import { localizePathname } from './routing';
 
 interface LanguageSwitcherProps {
   className?: string;
-  optionClassName?: string;
-  activeOptionClassName?: string;
-  inactiveOptionClassName?: string;
 }
 
-export function LanguageSwitcher({
-  className,
-  optionClassName,
-  activeOptionClassName,
-  inactiveOptionClassName,
-}: LanguageSwitcherProps = {}) {
+export function LanguageSwitcher({ className }: LanguageSwitcherProps = {}) {
   const locale = useLocale();
-  const t = useTranslations('localeSwitcher');
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const switchLocale = (nextLocale: (typeof locales)[number]) => {
-    if (nextLocale === locale) {
-      return;
-    }
+  const nextLocale = locales.find((l) => l !== locale) ?? locales[0];
 
+  const switchLocale = () => {
     const nextPathname = localizePathname(pathname, nextLocale);
     const query = searchParams.toString();
     router.replace(query ? `${nextPathname}?${query}` : nextPathname);
@@ -37,30 +26,32 @@ export function LanguageSwitcher({
   };
 
   return (
-    <div
+    <button
+      type='button'
+      onClick={switchLocale}
+      aria-label={`Switch to ${nextLocale.toUpperCase()}`}
       className={cn(
-        'flex items-center gap-0.5 rounded-lg border border-gray-200 p-0.5',
+        'flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[13.5px] font-bold tracking-wide text-[#1e2364]/65 transition-colors duration-200 hover:bg-[#1e2364]/8 hover:text-[#1e2364]',
         className
       )}
-      aria-label={t.label}
     >
-      {locales.map((loc) => (
-        <button
-          key={loc}
-          onClick={() => switchLocale(loc)}
-          className={cn(
-            'cursor-pointer rounded-md px-3 py-1.5 text-xs font-semibold transition-colors select-none',
-            optionClassName,
-            loc === locale
-              ? cn('bg-blue-600 text-white', activeOptionClassName)
-              : cn('text-gray-500 hover:text-gray-900', inactiveOptionClassName)
-          )}
-          aria-current={loc === locale ? 'true' : undefined}
-          type='button'
-        >
-          {localeLabels[loc]}
-        </button>
-      ))}
-    </div>
+      <svg
+        viewBox='0 0 20 20'
+        fill='none'
+        stroke='currentColor'
+        strokeWidth='1.6'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        className='size-4 shrink-0'
+        aria-hidden='true'
+      >
+        <circle cx='10' cy='10' r='8' />
+        <path d='M10 2C10 2 7 6 7 10s3 8 3 8' />
+        <path d='M10 2C10 2 13 6 13 10s-3 8-3 8' />
+        <path d='M2 10h16' />
+        <path d='M2.5 7h15M2.5 13h15' />
+      </svg>
+      {nextLocale.toUpperCase()}
+    </button>
   );
 }

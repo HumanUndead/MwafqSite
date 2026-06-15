@@ -9,7 +9,7 @@ export function StatsSection({ content }: Props) {
   return (
     <section
       id='academy'
-      className='relative bg-white px-4 pb-[50px] pt-[70px] md:px-7'
+      className='relative bg-white px-4 pb-10 pt-14 md:px-7'
     >
       <div
         className='pointer-events-none absolute inset-0 [background-image:linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.18]'
@@ -23,10 +23,10 @@ export function StatsSection({ content }: Props) {
         <h2 className='relative z-10 mx-auto mb-9 text-center text-[clamp(28px,3.6vw,44px)] font-extrabold uppercase leading-[1.05] tracking-[-0.5px] text-[#1e2364]'>
           {content.title}
         </h2>
-        <div className='relative z-10 grid gap-8 px-7 pt-[60px] sm:grid-cols-2 lg:grid-cols-4'>
+        <div className='relative z-10 grid gap-8 px-0 pt-10 sm:grid-cols-2 sm:px-7 sm:pt-15 lg:grid-cols-4'>
           {content.items.map((stat) => (
             <div key={stat.label} className='px-6 py-[18px] text-center'>
-              <div className='text-[60px] font-extrabold leading-none tracking-[-2px] text-[#00a8f1]'>
+              <div className='text-[clamp(36px,5vw,60px)] font-extrabold leading-none tracking-[-2px] text-[#00a8f1]'>
                 <CountUp
                   value={stat.value}
                   suffix={stat.suffix}

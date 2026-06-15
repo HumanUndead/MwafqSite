@@ -33,6 +33,7 @@ export interface HomeHeaderContent {
   signInAction: HomeActionContent | null;
   userMenu: HomeHeaderUserMenuContent | null;
   localeSwitchLabel: string | null;
+  businessSignInAction: HomeActionContent | null;
 }
 
 export interface HomeHeroStatContent {

@@ -136,12 +136,12 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
           className={
             isDesktop
               ? 'sticky top-0 flex h-screen items-center overflow-hidden'
-              : 'flex min-h-screen items-center overflow-hidden'
+              : 'py-12'
           }
         >
           <div className='w-full py-9'>
-            <div className='mx-auto max-w-[1320px] px-7'>
-              <div className='grid grid-cols-2 items-center gap-20'>
+            <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
+              <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:items-center lg:gap-20'>
                 <div>
                   <span className='relative mb-7 inline-block px-[30px] py-3 text-[17px] font-bold uppercase leading-none tracking-[2.2px] text-[#00a8f1] before:absolute before:left-0 before:top-0 before:h-[18px] before:w-[18px] before:border-l-4 before:border-t-4 before:border-current after:absolute after:bottom-0 after:right-0 after:h-[18px] after:w-[18px] after:border-b-4 after:border-r-4 after:border-current'>
                     {content.eyebrow}
@@ -164,7 +164,7 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
 
                 <div
                   ref={viewportRef}
-                  className='relative max-h-[78vh] overflow-hidden'
+                  className={isDesktop ? 'relative max-h-[78vh] overflow-hidden' : 'relative'}
                 >
                   <div
                     ref={listRef}
@@ -173,14 +173,14 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                     {steps.map((step) => (
                       <div
                         key={step.num}
-                        className='relative overflow-hidden rounded-[22px] border-2 border-[#e5e7f0] bg-white px-12 py-12 transition-all duration-400 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:origin-top before:scale-y-0 before:bg-[#00a8f1] before:transition-transform before:duration-500 hover:border-[#1e2364] hover:before:scale-y-100'
+                        className='relative overflow-hidden rounded-[22px] border-2 border-[#e5e7f0] bg-white px-6 py-6 transition-all duration-400 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:origin-top before:scale-y-0 before:bg-[#00a8f1] before:transition-transform before:duration-500 hover:border-[#1e2364] hover:before:scale-y-100 md:px-12 md:py-12'
                       >
                         <div className='flex items-start gap-6'>
-                          <div className='min-w-[96px] text-[64px] font-light italic leading-none text-[rgba(30,35,100,0.3)] transition-colors duration-400'>
+                          <div className='min-w-12 text-[clamp(36px,5vw,64px)] font-light italic leading-none text-[rgba(30,35,100,0.3)] transition-colors duration-400 md:min-w-24'>
                             {step.num}
                           </div>
                           <div>
-                            <h3 className='mb-3.5 text-[27px] font-bold tracking-[-0.4px] text-[#1e2364]'>
+                            <h3 className='mb-3.5 text-[clamp(18px,2.5vw,27px)] font-bold tracking-[-0.4px] text-[#1e2364]'>
                               {step.title}
                             </h3>
                             <p className='text-[16.5px] leading-[1.65] text-[#6b7196]'>

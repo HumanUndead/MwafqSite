@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CircleCheck, Clock } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 import {
@@ -152,17 +151,11 @@ export function PackageCard({
         {price ? (
           <span className='inline-flex items-baseline gap-1 text-[20px] font-extrabold text-[#1e2364]'>
             {formatPrice(price)}
-            <SarIcon className='inline-block h-[14px] w-[12px]' />
+            <SarIcon className='inline-block h-3.5 w-3' />
           </span>
         ) : (
           <span />
         )}
-        <BuyNowButton
-          href={buyHref}
-          label={t.buyNow}
-          locale={locale}
-          size='card'
-        />
       </CardFooter>
     </MotionCard>
   ) : (
@@ -179,60 +172,28 @@ export function PackageCard({
         <motion.div className='absolute inset-0 z-0' {...mediaMotion}>
           {image}
         </motion.div>
-        {tagLabel ? (
-          <span
-            className={cn(
-              'absolute top-3.5 z-10 rounded-[30px] border border-[rgba(0,222,201,0.35)] bg-[rgba(0,222,201,0.18)] px-3 py-[5px] text-[10.5px] font-bold uppercase tracking-[0.6px] text-[#00dec9]',
-              isAr ? 'inset-s-3.5' : 'inset-e-3.5'
-            )}
-          >
-            {tagLabel}
-          </span>
-        ) : null}
       </Link>
 
-      <CardContent className='flex flex-1 flex-col gap-2.5 px-[22px] pt-[22px] pb-[18px]'>
+      <CardContent className='flex flex-1 flex-col gap-2.5 px-5.5 pt-5.5 pb-4.5'>
         <Link href={packageDetailHref} className='block'>
           <CardTitle className='min-h-11 text-[18px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
             {title}
           </CardTitle>
         </Link>
         <CardDescription
-          className='min-h-[38px] text-[12.5px] leading-[1.55] text-[#6b7196]'
+          className='min-h-9.5 text-[12.5px] leading-[1.55] text-[#6b7196]'
           dangerouslySetInnerHTML={{ __html: desc ?? '' }}
         />
-
-        <div
-          className='flex items-center gap-3.5 pt-1.5 text-[12px] text-[#6b7196]'
-          aria-label={title}
-        >
-          <span className='inline-flex items-center gap-[5px]'>
-            <Clock
-              className='size-[13px] shrink-0 text-[#00a8f1]'
-              strokeWidth={2}
-              aria-hidden
-            />
-            {pkg.sla} {t.min}
-          </span>
-          <span className='inline-flex items-center gap-[5px]'>
-            <CircleCheck
-              className='size-[13px] shrink-0 text-[#00a8f1]'
-              strokeWidth={2}
-              aria-hidden
-            />
-            {pkg.serviceGroupServices.length} {t.tests}
-          </span>
-        </div>
       </CardContent>
 
-      <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-[22px] pt-4 pb-[22px]'>
+      <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-5.5 pt-4 pb-5.5'>
         {price ? (
           <span className='inline-flex items-baseline gap-1 font-extrabold'>
             <span className='text-[24px] leading-none tracking-[-0.5px] text-[#1e2364]'>
               {formatPrice(price)}
             </span>
             <span
-              className='inline-flex h-5 w-[18px] translate-y-0.5 text-[#1e2364]'
+              className='inline-flex h-5 w-4.5 translate-y-0.5 text-[#1e2364]'
               aria-label={t.sarAriaLabel}
             >
               <SarIcon className='h-full w-full' />
@@ -241,12 +202,6 @@ export function PackageCard({
         ) : (
           <span />
         )}
-        <BuyNowButton
-          href={buyHref}
-          label={t.buyNow}
-          locale={locale}
-          size='card'
-        />
       </CardFooter>
     </MotionCard>
   );

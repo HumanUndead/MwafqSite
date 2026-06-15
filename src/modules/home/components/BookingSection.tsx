@@ -359,7 +359,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
   return (
     <section
       id='booking'
-      className='relative z-50 px-4 pb-[60px] pt-[100px] md:px-7'
+      className='relative z-50 px-4 pb-16 pt-20 md:px-7'
     >
       <div
         aria-hidden='true'

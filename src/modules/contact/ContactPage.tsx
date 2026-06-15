@@ -1,5 +1,4 @@
 import type { Locale } from '@/i18n/config';
-import type { Dictionary } from '@/locales/types';
 import {
   MailIcon,
   MapPinIcon,
@@ -7,10 +6,11 @@ import {
 } from '@/shared/components/icons/contact';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { ContactForm } from './components/ContactForm';
+import type { ContactPageContent } from './types/contactContent';
 
 interface Props {
   locale: Locale;
-  content: Dictionary['contact'];
+  content: ContactPageContent;
 }
 
 const infoIcons = [MailIcon, PhoneIcon, MapPinIcon];
@@ -74,7 +74,7 @@ export function ContactPage({ content }: Props) {
           {/* Form card */}
           <ScrollReveal transitionDelay={0.12}>
             <div className='rounded-[28px] border-2 border-[#e5e7f0] bg-white px-8 py-10 shadow-sm'>
-              <ContactForm />
+              <ContactForm content={content.form} />
             </div>
           </ScrollReveal>
         </div>

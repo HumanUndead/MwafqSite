@@ -13,15 +13,15 @@ export function AppShowcaseSection({ locale, content }: Props) {
   return (
     <section
       id='app'
-      className='sticky top-[-100px] flex min-h-screen items-center border-t-2 border-[#e5e7f0] bg-[#eeeeef] pb-[200px]'
+      className='sticky top-[-100px] flex min-h-screen items-center border-t-2 border-[#e5e7f0] bg-[#eeeeef] pb-30'
     >
       <div
         className='pointer-events-none absolute inset-0 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:26px_26px] opacity-55 [mask-image:radial-gradient(circle_at_70%_50%,#000_0%,transparent_70%)]'
         aria-hidden='true'
       />
-      <div className='relative z-10 mx-auto w-full max-w-[1320px] px-4 py-[120px] md:px-7'>
+      <div className='relative z-10 mx-auto w-full max-w-[1320px] px-4 py-16 md:px-7 lg:py-30'>
         <div className='grid items-center gap-[60px] lg:grid-cols-[1.1fr_1fr]'>
-          <div className='relative h-[600px] overflow-hidden rounded-[32px] [perspective:1500px]'>
+          <div className='relative hidden h-150 overflow-hidden rounded-[32px] perspective-[1500px] lg:block'>
             <div
               className='absolute left-1/2 top-1/2 h-[560px] w-[380px] [transform-style:preserve-3d] animate-[stackShowcase_9s_ease-in-out_infinite]'
               id='phones'

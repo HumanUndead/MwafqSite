@@ -26,7 +26,7 @@ export function B2BSection({ locale, content }: Props) {
   return (
     <section
       id='b2b'
-      className='relative overflow-hidden border-t-2 border-[#e5e7f0] px-4 py-[140px] text-white md:px-7'
+      className='relative overflow-hidden border-t-2 border-[#e5e7f0] px-4 py-20 text-white md:px-7'
       style={{
         background:
           'radial-gradient(circle at 80% 25%, rgba(0,168,241,0.42), transparent 45%), radial-gradient(circle at 18% 78%, rgba(116,47,136,0.45), transparent 45%), radial-gradient(circle at 50% 60%, rgba(35,53,103,0.25), transparent 50%), #1e2364',
@@ -37,7 +37,7 @@ export function B2BSection({ locale, content }: Props) {
         aria-hidden='true'
       />
       <div className='relative z-10 mx-auto max-w-[1320px]'>
-        <div className='grid items-center gap-20 lg:grid-cols-[1fr_1.1fr]'>
+        <div className='grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20'>
           <div>
             <Eyebrow dark>{content.eyebrow}</Eyebrow>
             <h2 className='mb-7 text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-white'>
@@ -100,7 +100,7 @@ export function B2BSection({ locale, content }: Props) {
               ))}
             </div>
 
-            <div className='mb-[22px] grid grid-cols-3 gap-3.5'>
+            <div className='mb-[22px] grid grid-cols-3 gap-2 sm:gap-3.5'>
               {content.metrics.map((metric, index) => (
                 <div
                   key={`${metric.label}-${index}`}

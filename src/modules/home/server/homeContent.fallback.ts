@@ -48,6 +48,7 @@ export function buildEmptyHomeFallback(): HomePageContent {
       signInAction: EMPTY_ACTION,
       userMenu: null,
       localeSwitchLabel: null,
+      businessSignInAction: EMPTY_ACTION,
     },
     hero: {
       badge: '',
