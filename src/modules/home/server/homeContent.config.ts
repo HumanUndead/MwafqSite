@@ -3,7 +3,7 @@ import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 export const HOME_CONTENT_API_BASE_URL = MWAFQ_API_BASE_URL;
 
 export const HOME_CONTENT_ROOT_CATEGORY_ID = 159;
-export const HOME_CONTENT_REVALIDATE_SECONDS = 60 * 10;
+export const HOME_CONTENT_REVALIDATE_SECONDS = 1;
 export const HOME_CONTENT_CACHE_TAG = `home-content-${HOME_CONTENT_ROOT_CATEGORY_ID}`;
 
 export const HOME_SECTION_RANKS = {
@@ -65,8 +65,9 @@ export const FOOTER_CHILD_CATEGORY_RANKS = {
 export const HEADER_ARTICLE_RANKS = {
   brand: 1,
   primaryAction: 80,
-  signIn: 90,
+  signInIndividual: 90,
   localeSwitch: 100,
+  signInBusiness: 110,
 } as const;
 
 export const HERO_WORDS_ARTICLE_RANKS = {

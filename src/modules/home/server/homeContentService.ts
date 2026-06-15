@@ -334,12 +334,12 @@ function extractIconKey(image: string | null | undefined): string | null {
 function toActionContent(
   article: RecursiveArticleDto | null,
   langId: number,
-  fallback: HomeActionContent
+  fallback?: HomeActionContent
 ): HomeActionContent {
   if (!article) {
     return {
       label: '',
-      path: trimToNull(fallback.path),
+      path: trimToNull(fallback?.path),
     };
   }
 
@@ -347,14 +347,14 @@ function toActionContent(
 
   return {
     label: trimToNull(translation.name) ?? '',
-    path: trimToNull(article.path) ?? trimToNull(fallback.path),
+    path: trimToNull(article.path) ?? trimToNull(fallback?.path),
   };
 }
 
 function toOptionalActionContent(
   article: RecursiveArticleDto | null,
   langId: number,
-  fallback: HomeActionContent
+  fallback?: HomeActionContent
 ): HomeActionContent | null {
   const action = toActionContent(article, langId, fallback);
   return action.label.trim() ? action : null;
@@ -435,11 +435,15 @@ function mapHeaderContent(
   );
   const signInArticle = getArticleByRank(
     headerCategory,
-    HEADER_ARTICLE_RANKS.signIn
+    HEADER_ARTICLE_RANKS.signInIndividual
   );
   const localeSwitchArticle = getArticleByRank(
     headerCategory,
     HEADER_ARTICLE_RANKS.localeSwitch
+  );
+  const businessSignInArticle = getArticleByRank(
+    headerCategory,
+    HEADER_ARTICLE_RANKS.signInBusiness
   );
   const navLinks = getVisibleArticles(headerCategory)
     .filter(
@@ -470,6 +474,11 @@ function mapHeaderContent(
       signInArticle,
       langId,
       fallback.signInAction ?? { label: '', path: null }
+    ),
+    businessSignInAction: toOptionalActionContent(
+      businessSignInArticle,
+      langId,
+      fallback.businessSignInAction ?? { label: '', path: null }
     ),
     userMenu: fallback.userMenu,
     localeSwitchLabel:

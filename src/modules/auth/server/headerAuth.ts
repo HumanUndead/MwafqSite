@@ -49,6 +49,7 @@ export function withAuthenticatedHeaderState(
     ...content,
     primaryAction: null,
     signInAction: null,
+    businessSignInAction: null,
     userMenu: {
       greeting,
       avatarSrc,

@@ -6,7 +6,7 @@ interface Props {
 
 export function TestimonialSection({ content }: Props) {
   return (
-    <section className='relative overflow-hidden bg-white py-[265px_0_140px] pb-[140px] pt-[265px]'>
+    <section className='relative overflow-hidden bg-white pb-20 pt-20'>
       <div
         className='pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(#eef0f7_1px,transparent_1px),linear-gradient(90deg,#eef0f7_1px,transparent_1px)] [background-size:60px_60px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_70%)]'
         aria-hidden='true'

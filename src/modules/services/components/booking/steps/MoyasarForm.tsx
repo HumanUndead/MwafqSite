@@ -10,14 +10,6 @@ export interface MoyasarPaymentResult {
   message?: string | null;
 }
 
-declare global {
-  interface Window {
-    Moyasar?: {
-      init: (config: MoyasarInitConfig) => void;
-    };
-  }
-}
-
 interface MoyasarInitConfig {
   element: HTMLElement | string;
   amount: number;
@@ -70,7 +62,7 @@ export function MoyasarForm({
       if (!window.Moyasar || !containerRef.current) return;
       initializedRef.current = true;
       containerRef.current.innerHTML = '';
-      window.Moyasar.init({
+      const config: MoyasarInitConfig = {
         element: containerRef.current,
         amount,
         currency: 'SAR',
@@ -82,8 +74,9 @@ export function MoyasarForm({
         save_card: false,
         language: locale === 'ar' ? 'ar' : 'en',
         on_completed: onCompleted,
-        on_failure: (err) => onFailure?.(err.message ?? ''),
-      });
+        on_failure: (err: { message: string }) => onFailure?.(err.message ?? ''),
+      };
+      (window.Moyasar.init as (config: MoyasarInitConfig) => void)(config);
     }
 
     if (window.Moyasar) {

@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from '@/i18n/DictionaryProvider';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { toast } from '@/shared/components/feedback/Toast';
 import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
 import { cn } from '@/shared/lib/cn';
 import { inputVariants, labelVariants } from '@/shared/lib/variants';
+import type { ContactFormContent } from '../types/contactContent';
 import { contactApi } from '../api/contactApi';
 
 interface ContactFormState {
@@ -20,8 +20,7 @@ interface ContactFormState {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function ContactForm() {
-  const t = useTranslations('contact');
+export function ContactForm({ content }: { content: ContactFormContent }) {
   const [form, setForm] = useState<ContactFormState>({
     name: '',
     email: '',
@@ -42,9 +41,9 @@ export function ContactForm() {
     try {
       await contactApi.send(form).catch(() => {});
       setSent(true);
-      toast.success(t.success.toast);
+      toast.success(content.success.title);
     } catch {
-      toast.error(t.errors.submit);
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -63,8 +62,8 @@ export function ContactForm() {
           <span className='flex h-16 w-16 items-center justify-center rounded-full bg-[#00a8f1]/10 text-3xl'>
             ✓
           </span>
-          <p className='text-xl font-bold text-[#1e2364]'>{t.success.title}</p>
-          <p className='text-sm text-[#6b7196]'>{t.success.description}</p>
+          <p className='text-xl font-bold text-[#1e2364]'>{content.success.title}</p>
+          <p className='text-sm text-[#6b7196]'>{content.success.description}</p>
         </motion.div>
       ) : (
         <motion.form
@@ -77,10 +76,10 @@ export function ContactForm() {
         >
           <ScrollReveal transitionDelay={0.05}>
             <Input
-              label={t.form.nameLabel}
+              label={content.name.label}
               value={form.name}
               onChange={update('name')}
-              placeholder={t.form.namePlaceholder}
+              placeholder={content.name.placeholder}
               autoComplete='name'
               required
             />
@@ -89,11 +88,11 @@ export function ContactForm() {
           <div className='grid gap-5 sm:grid-cols-2'>
             <ScrollReveal transitionDelay={0.1}>
               <Input
-                label={t.form.emailLabel}
+                label={content.email.label}
                 type='email'
                 value={form.email}
                 onChange={update('email')}
-                placeholder={t.form.emailPlaceholder}
+                placeholder={content.email.placeholder}
                 autoComplete='email'
                 required
               />
@@ -101,11 +100,11 @@ export function ContactForm() {
 
             <ScrollReveal transitionDelay={0.15}>
               <Input
-                label={t.form.phoneLabel}
+                label={content.phone.label}
                 type='tel'
                 value={form.phone}
                 onChange={update('phone')}
-                placeholder={t.form.phonePlaceholder}
+                placeholder={content.phone.placeholder}
                 autoComplete='tel'
               />
             </ScrollReveal>
@@ -113,11 +112,11 @@ export function ContactForm() {
 
           <ScrollReveal transitionDelay={0.2}>
             <div className='flex flex-col gap-1'>
-              <label className={labelVariants()}>{t.form.messageLabel}</label>
+              <label className={labelVariants()}>{content.message.label}</label>
               <textarea
                 value={form.message}
                 onChange={update('message')}
-                placeholder={t.form.messagePlaceholder}
+                placeholder={content.message.placeholder}
                 rows={5}
                 required
                 className={cn(inputVariants(), 'resize-none leading-relaxed')}
@@ -133,7 +132,7 @@ export function ContactForm() {
               size='lg'
               className='w-full rounded-[14px]'
             >
-              {t.form.submit}
+              {content.submit}
             </Button>
           </ScrollReveal>
         </motion.form>
