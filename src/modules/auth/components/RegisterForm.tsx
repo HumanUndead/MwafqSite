@@ -193,7 +193,7 @@ function PasswordRequirementList({
   );
 }
 
-export function RegisterForm() {
+export function RegisterForm({ onComplete }: { onComplete?: () => void }) {
   const locale = useLocale();
   const auth = useTranslations('auth');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -207,7 +207,7 @@ export function RegisterForm() {
     isOtpModalOpen,
     verificationTarget,
     step,
-  } = useRegister();
+  } = useRegister(onComplete);
   const [form, setForm] = useState<RegisterDto>({
     firstName: '',
     lastName: '',

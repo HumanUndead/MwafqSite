@@ -14,7 +14,7 @@ import type { RegisterDto } from '../types/auth.types';
 
 type RegisterStep = 'form' | 'otp' | 'done';
 
-export function useRegister() {
+export function useRegister(onOtpVerified?: () => void) {
   const locale = useLocale();
   const auth = useTranslations('auth');
   const router = useRouter();
@@ -60,10 +60,14 @@ export function useRegister() {
       const response = await otpApi.verifyUserNameOtp(verificationTarget, otp);
       setUser(response.data.user);
       setIsOtpModalOpen(false);
-      setStep('done');
       toast.success(auth.register.verifiedSuccess);
-      router.push(getLocalizedRoute(locale, ROUTES.HOME));
-      router.refresh();
+      if (onOtpVerified) {
+        onOtpVerified();
+      } else {
+        setStep('done');
+        router.push(getLocalizedRoute(locale, ROUTES.HOME));
+        router.refresh();
+      }
     } catch (err) {
       const message = getLocalizedAuthErrorMessage(
         err,

@@ -1,6 +1,7 @@
 export { TokenValidator } from './components/TokenValidator';
 export { LoginForm } from './components/LoginForm';
 export { RegisterForm } from './components/RegisterForm';
+export { RegisterFlow } from './components/RegisterFlow';
 export { ForgotPasswordForm } from './components/ForgotPasswordForm';
 export { OtpModal } from './components/OtpModal';
 export { ForgotPasswordView } from './components/ForgotPasswordView';

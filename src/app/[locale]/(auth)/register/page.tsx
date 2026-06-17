@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { hasLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
-import { RegisterForm } from '@/modules/auth';
+import { RegisterFlow } from '@/modules/auth';
 import { AuthSplitShell } from '@/modules/auth/components/AuthSplitShell';
 import { getRegisterPageContent } from '@/modules/auth/server/registerPageContentService';
 
@@ -25,8 +25,9 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
       aside={content}
       title={dictionary.auth.register.title}
       subtitle={dictionary.auth.register.description}
+      wideForm
     >
-      <RegisterForm />
+      <RegisterFlow />
     </AuthSplitShell>
   );
 }

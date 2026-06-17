@@ -11,6 +11,7 @@ interface AuthSplitShellProps {
   children: ReactNode;
   cardClassName?: string;
   centered?: boolean;
+  wideForm?: boolean;
 }
 
 export function AuthSplitShell({
@@ -21,6 +22,7 @@ export function AuthSplitShell({
   children,
   cardClassName,
   centered = false,
+  wideForm = false,
 }: AuthSplitShellProps) {
   const isArabic = locale === 'ar';
 
@@ -88,7 +90,7 @@ export function AuthSplitShell({
           </div>
         ) : null}
 
-        <div className='w-full max-w-[460px] flex-none'>
+        <div className={cn('w-full flex-none', wideForm ? 'max-w-190' : 'max-w-115')}>
           <div
             className={cn(
               'rounded-[28px] border-2 border-[#1e2364] bg-white px-5 py-7 shadow-[0_24px_80px_rgba(30,35,100,0.08)] sm:px-7 sm:py-9',

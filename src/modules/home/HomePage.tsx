@@ -27,7 +27,8 @@ export async function HomePage({ locale }: Props) {
       <TickerSection content={content.companies} />
       <ServicesSection locale={locale} content={content.services} />
       <WhySection content={content.why} isRtl={rtl} />
-      <BookingSection locale={locale} content={content.booking} /> // TODO: replace to the services screen.
+      <BookingSection locale={locale} content={content.booking} />
+      {/* // TODO: replace to the services screen. */}
       <StepsSection locale={locale} content={content.steps} />
       <div>
         <AppShowcaseSection locale={locale} content={content.app} />
