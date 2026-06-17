@@ -8,6 +8,7 @@ import type {
   HomeAppContent,
   HomeBookingContent,
   HomeBusinessContent,
+  HomeCompaniesContent,
   HomeFinalCtaContent,
   HomeFooterContent,
   HomeHeaderContent,
@@ -31,6 +32,7 @@ import {
   BOOKING_CHILD_CATEGORY_RANKS,
   BUSINESS_ARTICLE_RANKS,
   BUSINESS_CHILD_CATEGORY_RANKS,
+  COMPANIES_CATEGORY_ID,
   FINAL_CTA_ARTICLE_RANKS,
   FOOTER_ARTICLE_RANKS,
   FOOTER_CHILD_CATEGORY_RANKS,
@@ -1458,6 +1460,7 @@ function mapFooterContent(
 
 function buildHomePageContent(
   rootCategory: RecursiveArticleCategoryDto | null,
+  companiesCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomePageContent {
   const fallback = buildEmptyHomeFallback();
@@ -1465,6 +1468,7 @@ function buildHomePageContent(
   return {
     header: mapHeaderContent(fallback.header, rootCategory, langId),
     hero: mapHeroContent(fallback.hero, rootCategory, langId),
+    companies: mapCompaniesContent(companiesCategory),
     services: mapServicesContent(fallback.services, rootCategory, langId),
     why: mapWhyContent(fallback.why, rootCategory, langId),
     booking: mapBookingContent(fallback.booking, rootCategory, langId),
@@ -1482,6 +1486,59 @@ function buildHomePageContent(
     footer: mapFooterContent(fallback.footer, rootCategory, langId),
   };
 }
+
+function mapCompaniesContent(
+  category: RecursiveArticleCategoryDto | null
+): HomeCompaniesContent {
+  return {
+    items: getVisibleArticles(category)
+      .filter((article) => article.image)
+      .map((article) => ({
+        id: article.id,
+        imageSrc: resolveCmsAssetUrl(article.image),
+      })),
+  };
+}
+
+const fetchCompaniesCategoryTree = cache(
+  async (): Promise<RecursiveArticleCategoryDto | null> => {
+    const endpoint = new URL(
+      '/api/General/ArticleCategory/GetRecursiveById',
+      HOME_CONTENT_API_BASE_URL
+    );
+
+    endpoint.searchParams.set('Id', String(COMPANIES_CATEGORY_ID));
+
+    try {
+      const response = await fetch(endpoint.toString(), {
+        cache: 'force-cache',
+        next: {
+          revalidate: HOME_CONTENT_REVALIDATE_SECONDS,
+          tags: [HOME_CONTENT_CACHE_TAG],
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const payload =
+        (await response.json()) as RecursiveArticleCategoryResponse;
+
+      if (!payload.isSuccess || !payload.value) {
+        return null;
+      }
+
+      return payload.value;
+    } catch (error) {
+      console.error(
+        '[home-content] Failed to fetch companies category.',
+        error
+      );
+      return null;
+    }
+  }
+);
 
 const fetchHomeContentTree = cache(
   async (): Promise<RecursiveArticleCategoryDto | null> => {
@@ -1526,8 +1583,11 @@ const fetchHomeContentTree = cache(
 export const getHomePageContent = cache(
   async (locale: Locale): Promise<HomePageContent> => {
     const langId = localeToLangId[locale];
-    const rootCategory = await fetchHomeContentTree();
+    const [rootCategory, companiesCategory] = await Promise.all([
+      fetchHomeContentTree(),
+      fetchCompaniesCategoryTree(),
+    ]);
 
-    return buildHomePageContent(rootCategory, langId);
+    return buildHomePageContent(rootCategory, companiesCategory, langId);
   }
 );

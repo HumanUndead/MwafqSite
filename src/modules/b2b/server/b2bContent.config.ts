@@ -2,6 +2,7 @@ import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 
 export const B2B_CONTENT_API_BASE_URL = MWAFQ_API_BASE_URL;
 export const B2B_CONTENT_ROOT_CATEGORY_ID = 140;
+export const B2B_COMPANIES_CATEGORY_ID = 197;
 export const B2B_CONTENT_REVALIDATE_SECONDS = 60 * 10;
 export const B2B_CONTENT_CACHE_TAG = `b2b-content-${B2B_CONTENT_ROOT_CATEGORY_ID}`;
 

@@ -1,6 +1,6 @@
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
-import type { Dictionary } from '@/locales/types';
+import type { B2BPageContent } from '@/modules/b2b/server/b2bContentService';
 import { TickerSection } from '@/modules/home/components/TickerSection';
 import { B2BHeroSection } from './components/B2BHeroSection';
 import { B2BWhySection } from './components/B2BWhySection';
@@ -10,7 +10,7 @@ import { B2BFinalCtaSection } from './components/B2BFinalCtaSection';
 
 interface Props {
   locale: Locale;
-  content: Dictionary['b2b'];
+  content: B2BPageContent;
 }
 
 export function B2BPage({ locale, content }: Props) {
@@ -19,7 +19,7 @@ export function B2BPage({ locale, content }: Props) {
   return (
     <>
       <B2BHeroSection locale={locale} content={content.hero} isRtl={rtl} />
-      <TickerSection />
+      <TickerSection content={content.companies} />
       <B2BWhySection content={content.why} />
       <B2BServicesSection content={content.services} />
       <B2BStepsSection content={content.steps} />

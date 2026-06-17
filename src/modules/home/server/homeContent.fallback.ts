@@ -70,6 +70,9 @@ export function buildEmptyHomeFallback(): HomePageContent {
       liveBookingsLabel: '',
       floatingCards: [],
     },
+    companies: {
+      items: [],
+    },
     services: {
       eyebrow: '',
       title: '',

@@ -3,8 +3,11 @@ import 'server-only';
 import { cache } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/locales/types';
+import type { HomeCompaniesContent } from '@/modules/home/home.types';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import {
+  B2B_COMPANIES_CATEGORY_ID,
+  B2B_CONTENT_API_BASE_URL,
   B2B_CONTENT_CACHE_TAG,
   B2B_CONTENT_REVALIDATE_SECONDS,
   B2B_CONTENT_ROOT_CATEGORY_ID,
@@ -105,6 +108,13 @@ function getChildCategoryByRank(
   rank: number
 ): CategoryDto | null {
   return getVisibleChildren(category).find((c) => c.rank === rank) ?? null;
+}
+
+function getChildCategoryById(
+  category: CategoryDto | null,
+  id: number
+): CategoryDto | null {
+  return category?.children.find((c) => c.id === id) ?? null;
 }
 
 function getArticleByRank(
@@ -451,13 +461,42 @@ function mapFinalCtaContent(
   };
 }
 
+// ─── Companies ────────────────────────────────────────────────────────────────
+
+function resolveCmsAssetUrl(value: string | null | undefined): string | null {
+  const trimmed = (value ?? '').trim().replace(/\\/g, '/');
+  if (!trimmed) return null;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  const base = B2B_CONTENT_API_BASE_URL.replace(/\/+$/, '');
+  return `${base}/${trimmed.replace(/^\/+/, '')}`;
+}
+
+function mapB2BCompaniesContent(
+  rootCategory: CategoryDto | null
+): HomeCompaniesContent {
+  const category = getChildCategoryById(rootCategory, B2B_COMPANIES_CATEGORY_ID);
+  if (!category) return { items: [] };
+  return {
+    items: category.articles
+      .filter((article) => article.published && article.image)
+      .map((article) => ({
+        id: article.id,
+        imageSrc: resolveCmsAssetUrl(article.image),
+      })),
+  };
+}
+
 // ─── Build ────────────────────────────────────────────────────────────────────
+
+export type B2BPageContent = Dictionary['b2b'] & {
+  companies: HomeCompaniesContent;
+};
 
 function buildB2BContent(
   dict: Dictionary,
   rootCategory: CategoryDto | null,
   langId: number
-): Dictionary['b2b'] {
+): B2BPageContent {
   return {
     meta: dict.b2b.meta,
     hero: mapHeroContent(rootCategory, langId),
@@ -465,6 +504,7 @@ function buildB2BContent(
     services: mapServicesContent(rootCategory, langId),
     steps: mapStepsContent(rootCategory, langId),
     finalCta: mapFinalCtaContent(rootCategory, langId),
+    companies: mapB2BCompaniesContent(rootCategory),
   };
 }
 
@@ -489,7 +529,7 @@ const fetchB2BContentTree = cache(async (): Promise<CategoryDto | null> => {
 export async function getB2BPageContent(
   locale: Locale,
   dict: Dictionary
-): Promise<Dictionary['b2b']> {
+): Promise<B2BPageContent> {
   const langId = localeToLangId[locale];
   const rootCategory = await fetchB2BContentTree();
   return buildB2BContent(dict, rootCategory, langId);

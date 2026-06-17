@@ -276,9 +276,19 @@ export interface HomeFooterContent {
   contact: HomeFooterGroupContent;
 }
 
+export interface HomeCompanyItemContent {
+  id: number;
+  imageSrc: string | null;
+}
+
+export interface HomeCompaniesContent {
+  items: HomeCompanyItemContent[];
+}
+
 export interface HomePageContent {
   header: HomeHeaderContent;
   hero: HomeHeroContent;
+  companies: HomeCompaniesContent;
   services: HomeServicesContent;
   why: HomeWhyContent;
   booking: HomeBookingContent;

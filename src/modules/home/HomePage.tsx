@@ -24,7 +24,7 @@ export async function HomePage({ locale }: Props) {
   return (
     <main className='bg-[#eeeeef] text-[#1e2364]'>
       <HeroSection content={content.hero} isRtl={rtl} locale={locale} />
-      <TickerSection />
+      <TickerSection content={content.companies} />
       <ServicesSection locale={locale} content={content.services} />
       <WhySection content={content.why} isRtl={rtl} />
       <BookingSection locale={locale} content={content.booking} />
