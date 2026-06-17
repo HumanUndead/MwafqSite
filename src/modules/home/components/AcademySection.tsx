@@ -22,12 +22,12 @@ export function AcademySection({ locale, content }: Props) {
             <Eyebrow>{content.eyebrow}</Eyebrow>
             <h2 className='text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
               {content.title}
-              {content.accent ? (
+              {content.accent && (
                 <>
-                  <br />
+                  {' '}
                   <span className='text-[#00a8f1]'>{content.accent}</span>
                 </>
-              ) : null}
+              )}
             </h2>
           </div>
         </div>
@@ -73,11 +73,6 @@ export function AcademySection({ locale, content }: Props) {
                     ({course.ratingCount})
                   </span>
                 </div>
-                {content.ctaLabel.trim() ? (
-                  <span className='inline-flex items-center gap-1.5 text-[13px] font-bold text-[#00a8f1] transition-[gap] duration-300 group-hover:gap-3'>
-                    {content.ctaLabel}
-                  </span>
-                ) : null}
               </div>
             </CmsLink>
           ))}

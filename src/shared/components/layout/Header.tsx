@@ -154,7 +154,7 @@ export function Header({ locale, content }: HeaderProps) {
           <CmsLink
             locale={locale}
             href={content.signInAction.path}
-            className='inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] px-5 max-[560px]:px-4 text-[14px] max-[560px]:text-[13px] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567]'
+            className='inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] px-5 text-[14px] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567] max-[980px]:hidden'
           >
             <span>{content.signInAction.label}</span>
           </CmsLink>
@@ -219,30 +219,17 @@ export function Header({ locale, content }: HeaderProps) {
               })}
             </nav>
 
-            {(hasCmsActionLabel(content.businessSignInAction) ||
-              hasCmsActionLabel(content.signInAction)) && (
+            {hasCmsActionLabel(content.businessSignInAction) && (
               <div className='mt-5 flex flex-col gap-3 border-t border-[#1e2364]/10 pt-5'>
-                {hasCmsActionLabel(content.businessSignInAction) && (
-                  <CmsLink
-                    locale={locale}
-                    target='_blank'
-                    href={content.businessSignInAction.path}
-                    className='flex h-11 items-center justify-center rounded-[50px] border-2 border-[#00a8f1] text-[15px] font-semibold text-[#00a8f1] transition-[background,color] duration-200 hover:bg-[#00a8f1] hover:text-white'
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {content.businessSignInAction.label}
-                  </CmsLink>
-                )}
-                {hasCmsActionLabel(content.signInAction) && (
-                  <CmsLink
-                    locale={locale}
-                    href={content.signInAction.path}
-                    className='flex h-11 items-center justify-center rounded-[50px] bg-[#1e2364] text-[15px] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567]'
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {content.signInAction.label}
-                  </CmsLink>
-                )}
+                <CmsLink
+                  locale={locale}
+                  target='_blank'
+                  href={content.businessSignInAction.path}
+                  className='flex h-11 items-center justify-center rounded-[50px] border-2 border-[#00a8f1] text-[15px] font-semibold text-[#00a8f1] transition-[background,color] duration-200 hover:bg-[#00a8f1] hover:text-white'
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {content.businessSignInAction.label}
+                </CmsLink>
               </div>
             )}
           </motion.div>

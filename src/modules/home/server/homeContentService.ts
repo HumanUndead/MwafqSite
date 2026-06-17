@@ -48,7 +48,6 @@ import {
   STATS_ARTICLE_RANKS,
   STEPS_ARTICLE_RANKS,
   STEPS_CHILD_CATEGORY_RANKS,
-  TESTIMONIAL_ARTICLE_RANKS,
   WHY_ARTICLE_RANKS,
 } from './homeContent.config';
 import { buildEmptyHomeFallback } from './homeContent.fallback';
@@ -1287,31 +1286,30 @@ function mapBusinessContent(
 }
 
 function mapTestimonialContent(
-  fallback: HomeTestimonialContent,
+  fallback: HomeTestimonialContent[],
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
-): HomeTestimonialContent {
+): HomeTestimonialContent[] {
   const testimonialCategory = getChildCategoryByRank(
     rootCategory,
     HOME_SECTION_RANKS.testimonial
   );
-  const article = getArticleByRank(
-    testimonialCategory,
-    TESTIMONIAL_ARTICLE_RANKS.content
-  );
+  const articles = getVisibleArticles(testimonialCategory);
 
-  if (!article) {
+  if (articles.length === 0) {
     return fallback;
   }
 
-  const translation = getArticleTranslation(article, langId);
-
-  return {
-    quote: trimToNull(translation.name) ?? fallback.quote,
-    highlight: trimToNull(translation.extraInfo) ?? fallback.highlight,
-    author: trimToNull(translation.shortDescription) ?? fallback.author,
-    role: trimToNull(translation.description) ?? fallback.role,
-  };
+  return articles.map((article) => {
+    const translation = getArticleTranslation(article, langId);
+    const fb = fallback[0] ?? { quote: '', highlight: '', author: '', role: '' };
+    return {
+      quote: trimToNull(translation.name) ?? fb.quote,
+      highlight: trimToNull(translation.extraInfo) ?? fb.highlight,
+      author: trimToNull(translation.shortDescription) ?? fb.author,
+      role: trimToNull(translation.description) ?? fb.role,
+    };
+  });
 }
 
 function mapFinalCtaContent(

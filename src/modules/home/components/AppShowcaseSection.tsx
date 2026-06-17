@@ -116,14 +116,14 @@ export function AppShowcaseSection({ locale, content }: Props) {
             <Eyebrow>{content.eyebrow}</Eyebrow>
             <h2 className='mb-7 text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
               {content.title}
-              {content.accent ? (
+              {content.accent && (
                 <>
-                  <br />
+                  {' '}
                   <span className='font-normal italic opacity-55'>
                     {content.accent}
                   </span>
                 </>
-              ) : null}
+              )}
             </h2>
             <p className='text-[16px] leading-[1.65] text-[#6b7196]'>
               {content.body}

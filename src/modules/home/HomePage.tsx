@@ -36,7 +36,7 @@ export async function HomePage({ locale }: Props) {
         <StatsSection content={content.stats} />
       </div>
       <B2BSection locale={locale} content={content.business} />
-      <TestimonialSection content={content.testimonial} />
+      <TestimonialSection items={content.testimonial} />
       <CtaSection locale={locale} content={content.finalCta} />
     </main>
   );

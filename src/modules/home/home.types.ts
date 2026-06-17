@@ -297,7 +297,7 @@ export interface HomePageContent {
   academy: HomeAcademyContent;
   stats: HomeStatsContent;
   business: HomeBusinessContent;
-  testimonial: HomeTestimonialContent;
+  testimonial: HomeTestimonialContent[];
   finalCta: HomeFinalCtaContent;
   footer: HomeFooterContent;
 }

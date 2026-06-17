@@ -142,12 +142,14 @@ export function buildEmptyHomeFallback(): HomePageContent {
       primaryAction: { ...EMPTY_ACTION },
       secondaryAction: { ...EMPTY_ACTION },
     },
-    testimonial: {
-      quote: '',
-      highlight: '',
-      author: '',
-      role: '',
-    },
+    testimonial: [
+      {
+        quote: '',
+        highlight: '',
+        author: '',
+        role: '',
+      },
+    ],
     finalCta: {
       title: '',
       highlight: '',

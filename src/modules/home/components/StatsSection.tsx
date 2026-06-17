@@ -23,9 +23,10 @@ export function StatsSection({ content }: Props) {
         <h2 className='relative z-10 mx-auto mb-9 text-center text-[clamp(28px,3.6vw,44px)] font-extrabold uppercase leading-[1.05] tracking-[-0.5px] text-[#1e2364]'>
           {content.title}
         </h2>
-        <div className='relative z-10 grid gap-8 px-0 pt-10 sm:grid-cols-2 sm:px-7 sm:pt-15 lg:grid-cols-4'>
+
+        <div className='relative z-10 w-full grid gap-8 px-0 pt-10 sm:grid-cols-2 sm:px-7 sm:pt-15 lg:grid-cols-3'>
           {content.items.map((stat) => (
-            <div key={stat.label} className='px-6 py-[18px] text-center'>
+            <div key={stat.label} className='text-center flex-1'>
               <div className='text-[clamp(36px,5vw,60px)] font-extrabold leading-none tracking-[-2px] text-[#00a8f1]'>
                 <CountUp
                   value={stat.value}

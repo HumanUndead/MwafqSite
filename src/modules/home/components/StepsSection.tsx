@@ -147,8 +147,7 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                     {content.eyebrow}
                   </span>
                   <h2 className='text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
-                    {content.title}
-                    <br />
+                    {content.title}{' '}
                     <span className='text-[#00a8f1]'>{content.highlight}</span>
                   </h2>
                   {content.cta.label.trim() ? (
@@ -164,7 +163,11 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
 
                 <div
                   ref={viewportRef}
-                  className={isDesktop ? 'relative max-h-[78vh] overflow-hidden' : 'relative'}
+                  className={
+                    isDesktop
+                      ? 'relative max-h-[78vh] overflow-hidden'
+                      : 'relative'
+                  }
                 >
                   <div
                     ref={listRef}
