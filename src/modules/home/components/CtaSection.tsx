@@ -9,7 +9,7 @@ interface Props {
 
 export function CtaSection({ locale, content }: Props) {
   return (
-    <section className='relative flex min-h-screen flex-col items-center justify-center bg-[#1e2364] px-6 md:px-15 py-20 text-center'>
+    <section className='relative flex min-h-[70vh] md:min-h-screen flex-col items-center justify-center bg-[#1e2364] px-6 md:px-15 py-16 md:py-20 text-center'>
       <div
         aria-hidden='true'
         className='pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:26px_26px] [mask-image:radial-gradient(circle_at_50%_50%,transparent_25%,#000_75%)]'

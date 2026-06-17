@@ -145,7 +145,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
           className={
             isDesktop
               ? 'sticky top-0 z-10 flex h-screen items-center justify-center overflow-hidden'
-              : 'flex min-h-screen items-center justify-center overflow-hidden'
+              : 'flex py-16 items-center justify-center overflow-hidden'
           }
         >
           <div

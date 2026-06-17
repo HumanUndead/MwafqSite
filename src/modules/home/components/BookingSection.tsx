@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/i18n/config';
+import type { CountryItem } from '@/app/api/general/countries/route';
 import type { HomeBookingContent } from '../home.types';
 import { CmsLink } from './CmsLink';
 
@@ -346,6 +347,159 @@ function ExamSelect({
   );
 }
 
+function CountrySelect({
+  locale,
+  value,
+  onChange,
+  placeholder,
+}: {
+  locale: Locale;
+  value: string;
+  onChange: (nextValue: string) => void;
+  placeholder: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [countries, setCountries] = useState<CountryItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/general/countries?culture=${locale}`)
+      .then((res) => res.json())
+      .then((payload) => {
+        if (payload.success) setCountries(payload.data);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [locale]);
+
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (event.key === 'Escape') setOpen(false);
+    }
+    function onClick(event: MouseEvent) {
+      if (!wrapRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('click', onClick);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('click', onClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (open) {
+      setQuery('');
+      setTimeout(() => searchRef.current?.focus(), 0);
+    }
+  }, [open]);
+
+  const filtered = query.trim()
+    ? countries.filter((c) =>
+        c.name.toLowerCase().includes(query.trim().toLowerCase())
+      )
+    : countries;
+
+  return (
+    <div ref={wrapRef} className='relative w-full'>
+      <button
+        type='button'
+        aria-haspopup='listbox'
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className={[
+          'flex h-12 w-full items-center justify-between gap-2 rounded-lg border bg-white px-3 text-left text-sm font-[inherit] shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] transition-[border-color,box-shadow]',
+          open
+            ? 'border-[#00a8f1] shadow-[0_0_0_3px_rgba(0,168,241,0.20)]'
+            : 'border-[#e5e7f0]',
+        ].join(' ')}
+      >
+        <span
+          className={`flex-1 truncate text-left ${value ? 'text-[#1e2364]' : 'text-[rgba(30,35,100,0.45)]'}`}
+        >
+          {value || placeholder}
+        </span>
+        <svg
+          className={`flex-shrink-0 text-[rgba(30,35,100,0.55)] transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
+          width='16'
+          height='16'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          aria-hidden='true'
+        >
+          <polyline points='6 9 12 15 18 9' />
+        </svg>
+      </button>
+      {open ? (
+        <div
+          role='listbox'
+          className='absolute left-0 top-[calc(100%+4px)] z-[100] w-full rounded-lg border border-[#e5e7f0] bg-white shadow-[0_10px_15px_-3px_rgba(0,0,0,0.05)]'
+        >
+          <div className='border-b border-[#e5e7f0] p-1.5'>
+            <input
+              ref={searchRef}
+              type='text'
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className='h-8 w-full rounded-md bg-[rgba(30,35,100,0.04)] px-2.5 text-sm text-[#1e2364] outline-none placeholder:text-[rgba(30,35,100,0.35)] focus:ring-1 focus:ring-[#00a8f1]'
+              placeholder='Search…'
+            />
+          </div>
+          <ul className='max-h-60 list-none overflow-y-auto p-1'>
+            {loading ? (
+              <li className='py-3 text-center text-[13px] text-[rgba(30,35,100,0.45)]'>
+                Loading…
+              </li>
+            ) : filtered.length === 0 ? (
+              <li className='py-3 text-center text-[13px] text-[rgba(30,35,100,0.45)]'>
+                No results
+              </li>
+            ) : (
+              filtered.map((country) => (
+                <li
+                  key={country.id}
+                  role='option'
+                  aria-selected={value === country.name}
+                  onClick={() => {
+                    onChange(country.name);
+                    setOpen(false);
+                  }}
+                  className='relative flex cursor-pointer select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm text-[#1e2364] transition-colors hover:bg-[rgba(0,168,241,0.08)]'
+                >
+                  {value === country.name ? (
+                    <span className='absolute left-2 flex h-3.5 w-3.5 items-center justify-center text-[#1e2364]'>
+                      <svg
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2.5'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        className='h-3.5 w-3.5'
+                      >
+                        <polyline points='20 6 9 17 4 12' />
+                      </svg>
+                    </span>
+                  ) : null}
+                  {country.name}
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 interface BookingSectionProps {
   locale: Locale;
   content: HomeBookingContent;
@@ -359,7 +513,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
   return (
     <section
       id='booking'
-      className='relative z-50 px-4 pb-16 pt-20 md:px-7'
+      className='relative z-50 px-4 pb-10 pt-12 md:pb-16 md:pt-20 md:px-7'
     >
       <div
         aria-hidden='true'
@@ -409,11 +563,11 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
               <label className='mb-2 ml-1.5 block text-[13px] font-bold text-[#1e2364]'>
                 {content.fields.city.label}
               </label>
-              <input
+              <CountrySelect
+                locale={locale}
                 value={city}
-                onChange={(event) => setCity(event.target.value)}
+                onChange={setCity}
                 placeholder={content.fields.city.placeholder}
-                className='h-12 w-full rounded-lg border border-[#e5e7f0] bg-white px-3 text-sm text-[#1e2364] shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] outline-none placeholder:text-[rgba(30,35,100,0.45)] focus:border-[#00a8f1] focus:shadow-[0_0_0_3px_rgba(0,168,241,0.20)]'
               />
             </div>
             <div>

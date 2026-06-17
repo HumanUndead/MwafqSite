@@ -136,10 +136,10 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
           className={
             isDesktop
               ? 'sticky top-0 flex h-screen items-center overflow-hidden'
-              : 'py-12'
+              : 'py-6'
           }
         >
-          <div className='w-full py-9'>
+          <div className='w-full py-5 md:py-9'>
             <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
               <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:items-center lg:gap-20'>
                 <div>
