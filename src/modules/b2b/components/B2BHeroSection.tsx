@@ -17,17 +17,17 @@ const floatingMeta = [
 ];
 
 const statusPillStyles: Record<string, string> = {
-  done: 'bg-[#00dec9]/15 text-[#00867a]',
-  active: 'bg-[#00a8f1]/15 text-[#00a8f1]',
-  wait: 'bg-[#6f8fcf]/20 text-[#4a6cb8]',
+  done: 'bg-[#00dec9]/15 text-[#00897b]',
+  active: 'bg-[#ff9800]/20 text-[#e65100]',
+  wait: 'bg-[#78909c]/15 text-[#546e7a]',
 };
 
 export function B2BHeroSection({ locale, content, isRtl }: Props) {
-  const employees = content.phone.employees;
+  const employees = content.phone.employees.slice(0, 3);
   const statusLabels: Record<string, string> = {
-    done: content.phone.statusDone,
-    active: content.phone.statusActive,
-    wait: content.phone.statusWait,
+    done: content.phone.statusCompleted,
+    active: content.phone.statusInProgress,
+    wait: content.phone.statusScheduled,
   };
 
   return (
@@ -107,6 +107,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
             </div>
           </div>
 
+          {/* Right column — dashboard mockup + floating cards */}
           <div className='relative mx-auto h-[560px] w-full max-w-[560px]'>
             {content.floatingCards.slice(0, 3).map((card, index) => (
               <div
@@ -119,9 +120,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
                 >
                   <FloatingIcon index={index} />
                 </span>
-                <div
-                  className={isRtl ? '-mr-2.5 text-right' : '-ml-2.5 text-left'}
-                >
+                <div className={isRtl ? '-mr-2.5 text-right' : '-ml-2.5 text-left'}>
                   <strong className='block text-[15px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
                     {card.title}
                   </strong>
@@ -132,86 +131,77 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
               </div>
             ))}
 
-            <div className='absolute left-1/2 top-1/2 z-[2] h-[540px] w-[260px] animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
-              <div className='absolute left-1/2 top-[18px] z-10 h-[22px] w-[84px] -translate-x-1/2 rounded-[14px] bg-[#1e2364]' />
-
-              <div className='absolute inset-[14px] flex flex-col gap-2.5 overflow-hidden rounded-[36px] border-2 border-[#e5e7f0] bg-white px-3 pb-5 pt-9'>
-                <div className='mt-3.5 flex items-center justify-between'>
-                  <div>
-                    <p className='text-[11.5px] font-medium leading-none text-[#6b7196]'>
-                      {content.phone.greeting}
-                    </p>
-                    <p className='mt-1.5 text-[15px] font-extrabold leading-none tracking-[-0.3px] text-[#1e2364]'>
-                      {content.phone.name}
-                    </p>
-                  </div>
-                  <div className='relative flex h-9 w-9 items-center justify-center rounded-[11px] border-2 border-[#1e2364] bg-white text-[#1e2364]'>
-                    <svg
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='2.2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      className='h-3.5 w-3.5'
-                      aria-hidden='true'
-                    >
-                      <path d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9' />
-                      <path d='M13.73 21a2 2 0 0 1-3.46 0' />
-                    </svg>
-                    <span className='absolute right-[-3px] top-[-3px] h-2 w-2 rounded-full border-2 border-white bg-[#00dec9]' />
-                  </div>
+            {/* Dashboard mockup */}
+            <div className='absolute left-1/2 top-1/2 z-[2] w-full lg:w-[90%] animate-[phoneFloat_6s_ease-in-out_infinite] overflow-hidden rounded-[18px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
+              {/* Browser chrome */}
+              <div className='flex items-center gap-2 border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-3 py-2'>
+                <div className='flex gap-1.5'>
+                  <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                  <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                  <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
                 </div>
+              </div>
 
-                <div className='flex items-center gap-3 rounded-[18px] bg-[#1e2364] px-3.5 py-3 text-white'>
-                  <span className='flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-[11px] bg-white/15'>
-                    <svg
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='2.4'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      className='h-4 w-4'
-                      aria-hidden='true'
-                    >
-                      <line x1='12' y1='5' x2='12' y2='19' />
-                      <line x1='5' y1='12' x2='19' y2='12' />
-                    </svg>
+              {/* Dashboard body */}
+              <div className='flex flex-col gap-3 p-3'>
+                {/* Tab bar */}
+                <div className='flex gap-0.5 rounded-full bg-[#f4f4f6] p-1'>
+                  <span className='flex-1 rounded-full bg-white py-1 text-center text-[10px] font-extrabold text-[#1e2364] shadow-sm'>
+                    {content.phone.tabOverview}
                   </span>
-                  <div>
-                    <strong className='block text-[12.5px] font-extrabold leading-tight'>
-                      {content.phone.bulkTitle}
-                    </strong>
-                    <span className='text-[10.5px] opacity-80'>
-                      {content.phone.bulkSubtitle}
-                    </span>
-                  </div>
+                  <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
+                    {content.phone.tabEmployees}
+                  </span>
+                  <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
+                    {content.phone.tabReports}
+                  </span>
                 </div>
 
-                <div className='px-0.5 text-[11.5px] font-extrabold tracking-[-0.1px] text-[#1e2364]'>
-                  {content.phone.sectionTitle}
+                {/* Stat cards */}
+                <div className='grid grid-cols-3 gap-2'>
+                  <StatCard
+                    value='248'
+                    label={content.phone.statEmployeesLabel}
+                    numColor='#1565c0'
+                    barColor='#1e88e5'
+                    bars={[8, 12, 6, 14, 10, 16, 18]}
+                  />
+                  <StatCard
+                    value='96%'
+                    label={content.phone.statClearedLabel}
+                    numColor='#00897b'
+                    barColor='#00dec9'
+                    bars={[6, 10, 8, 16, 12, 14, 18]}
+                  />
+                  <StatCard
+                    value='12'
+                    label={content.phone.statPendingLabel}
+                    numColor='#e65100'
+                    barColor='#ff9800'
+                    bars={[10, 14, 8, 12, 6, 16, 10]}
+                  />
                 </div>
 
+                {/* Employee rows */}
                 <ul className='flex flex-col gap-2'>
                   {employees.map((emp, idx) => (
                     <li
                       key={`${emp.initials}-${idx}`}
-                      className='grid grid-cols-[auto_1fr_auto] items-center gap-2.5 rounded-[18px] border-2 border-[#1e2364] bg-white px-2.5 py-2'
+                      className='flex items-center gap-2.5 rounded-[14px] border border-[#e5e7f0] px-3 py-2.5'
                     >
-                      <span className='inline-flex h-[30px] w-[30px] items-center justify-center rounded-[11px] bg-[#00dec9]/20 text-[10.5px] font-extrabold text-[#1e2364]'>
+                      <span className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f6] text-[9.5px] font-extrabold text-[#1e2364]'>
                         {emp.initials}
                       </span>
-                      <div>
-                        <strong className='block text-[11.5px] font-extrabold leading-tight tracking-[-0.1px] text-[#1e2364]'>
+                      <div className='min-w-0 flex-1'>
+                        <strong className='block truncate text-[11px] font-extrabold leading-tight text-[#1e2364]'>
                           {emp.name}
                         </strong>
-                        <span className='text-[10px] font-medium text-[#6b7196]'>
-                          {emp.type}
+                        <span className='block truncate text-[9.5px] text-[#6b7196]'>
+                          {emp.type} · {emp.city}
                         </span>
                       </div>
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[9.5px] font-bold tracking-[0.2px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
+                        className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
                       >
                         {statusLabels[emp.status] ?? emp.status}
                       </span>
@@ -224,6 +214,49 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
         </div>
       </div>
     </section>
+  );
+}
+
+function StatCard({
+  value,
+  label,
+  numColor,
+  barColor,
+  bars,
+}: {
+  value: string;
+  label: string;
+  numColor: string;
+  barColor: string;
+  bars: number[];
+}) {
+  const max = Math.max(...bars);
+  return (
+    <div className='rounded-[12px] border border-[#e5e7f0] p-2.5'>
+      <p
+        className='text-[18px] font-extrabold leading-none'
+        style={{ color: numColor }}
+      >
+        {value}
+      </p>
+      <p className='mt-0.5 text-[9px] text-[#6b7196]'>{label}</p>
+      <svg viewBox='0 0 64 20' className='mt-2 w-full' aria-hidden='true'>
+        {bars.map((val, i) => {
+          const h = Math.round((val / max) * 20);
+          return (
+            <rect
+              key={i}
+              x={i * 9 + 0.5}
+              y={20 - h}
+              width='7'
+              height={h}
+              rx='1.5'
+              fill={barColor}
+            />
+          );
+        })}
+      </svg>
+    </div>
   );
 }
 

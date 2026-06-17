@@ -475,11 +475,7 @@ const fetchB2BContentTree = cache(async (): Promise<CategoryDto | null> => {
     return await fetchWithErrorHandling<CategoryDto | null>(
       `/api/General/ArticleCategory/GetRecursiveById?Id=${B2B_CONTENT_ROOT_CATEGORY_ID}`,
       {
-        cache: 'force-cache',
-        next: {
-          revalidate: B2B_CONTENT_REVALIDATE_SECONDS,
-          tags: [B2B_CONTENT_CACHE_TAG],
-        },
+        cache: 'no-store',
       }
     );
   } catch (error) {
