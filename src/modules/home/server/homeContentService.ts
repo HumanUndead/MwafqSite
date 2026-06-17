@@ -1551,11 +1551,7 @@ const fetchHomeContentTree = cache(
 
     try {
       const response = await fetch(endpoint.toString(), {
-        cache: 'force-cache',
-        next: {
-          revalidate: HOME_CONTENT_REVALIDATE_SECONDS,
-          tags: [HOME_CONTENT_CACHE_TAG],
-        },
+        cache: 'no-store',
       });
 
       if (!response.ok) {

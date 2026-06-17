@@ -57,29 +57,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       />
       <div className='relative mx-auto grid max-w-[1320px] items-center gap-10 lg:gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
         <div>
-          <span className='mb-6 inline-flex items-center gap-2.5 rounded-full border-2 border-[#e5e7f0] bg-white px-4 py-2 text-[13px] font-semibold tracking-[0.4px] text-[#1e2364]'>
-            <span
-              className={`flex items-center ${isRtl ? 'flex-row-reverse' : ''}`}
-            >
-              {badgeImages.slice(0, 3).map((image, index) => (
-                <img
-                  key={`${image.src}-${index}`}
-                  src={image.src ?? ''}
-                  alt=''
-                  className={`${index === 1 ? 'mx-[-11px]' : ''} size-[22px] rounded-full border-2 object-cover ${
-                    index === 0
-                      ? 'border-[#00a8f1]'
-                      : index === 1
-                        ? 'border-[#742f88]'
-                        : 'border-[#00dec9]'
-                  }`}
-                />
-              ))}
-            </span>
-            <span>{content.badge}</span>
-          </span>
-
-          <h1 className='mb-5 md:mb-7 text-[clamp(44px,6.5vw,92px)] font-extrabold leading-[1.05] tracking-[-2.6px] text-[#1e2364]'>
+          <h1 className='mb-5 md:mb-7 text-[clamp(44px,6.5vw,63px)] font-extrabold leading-[1.50] tracking-[-2.6px] text-[#1e2364]'>
             <span className='block whitespace-nowrap'>{content.titleLead}</span>
             {hasSecondLine ? (
               <span className='block'>

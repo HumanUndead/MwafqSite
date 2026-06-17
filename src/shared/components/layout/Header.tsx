@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
 import { resolveCmsHref } from '@/modules/home/cmsHref';
 import type { Locale } from '@/i18n/config';
 import { LanguageSwitcher } from '@/i18n/LanguageSwitcher';
@@ -11,6 +12,7 @@ import type { HomeHeaderContent } from '@/modules/home/home.types';
 import { CmsLink } from '@/modules/home/components/CmsLink';
 import { hasCmsActionLabel } from '@/modules/home/lib/hasCmsActionLabel';
 import { MenuHamburgerIcon, SunIcon } from '@/shared/components/icons/layout';
+import { XMarkIcon } from '@/shared/components/icons/reservations';
 import { cn } from '@/shared/lib/cn';
 import Image from 'next/image';
 import { HeaderUserMenu } from '@/shared/components/layout/HeaderUserMenu';
@@ -22,6 +24,7 @@ interface HeaderProps {
 export function Header({ locale, content }: HeaderProps) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   function isNavLinkActive(href: string | null | undefined): boolean {
     const resolved = resolveCmsHref(locale, href);
@@ -38,7 +41,19 @@ export function Header({ locale, content }: HeaderProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   return (
+    <>
     <header
       className={cn(
         'fixed left-1/2 top-4 z-200 flex w-[calc(100%-40px)] max-w-350 -translate-x-1/2 items-center justify-between rounded-[80px] border-2 border-transparent py-2.5 pl-5 pr-3',
@@ -148,11 +163,92 @@ export function Header({ locale, content }: HeaderProps) {
         <button
           className='hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1e2364]/8 text-[#1e2364] transition-colors duration-200 hover:bg-[#1e2364] hover:text-white max-[980px]:inline-flex'
           type='button'
-          aria-label='Open menu'
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
         >
-          <MenuHamburgerIcon className='size-5' />
+          {isMobileMenuOpen ? (
+            <XMarkIcon className='size-5' />
+          ) : (
+            <MenuHamburgerIcon className='size-5' />
+          )}
         </button>
       </div>
     </header>
+
+    <AnimatePresence>
+      {isMobileMenuOpen && (
+        <>
+          <motion.div
+            key='mobile-backdrop'
+            className='fixed inset-0 z-[150] bg-black/30'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          <motion.div
+            key='mobile-menu'
+            className='fixed inset-x-0 top-0 z-[160] rounded-b-[32px] bg-white px-5 pb-8 pt-24 shadow-2xl max-[560px]:pt-20'
+            initial={{ y: '-100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '-100%' }}
+            transition={{ type: 'spring', stiffness: 350, damping: 38 }}
+          >
+            <nav className='flex flex-col gap-1' aria-label='Mobile navigation'>
+              {content.navLinks.map((item) => {
+                const active = isNavLinkActive(item.path);
+                return (
+                  <CmsLink
+                    key={`mobile-${item.label}-${item.path ?? 'no-path'}`}
+                    locale={locale}
+                    href={item.path}
+                    className={cn(
+                      'flex items-center rounded-xl px-4 py-3 text-[17px] font-bold transition-colors duration-200',
+                      active
+                        ? 'bg-[#00a8f1]/10 text-[#00a8f1]'
+                        : 'text-[#1e2364]/80 hover:bg-[#1e2364]/6 hover:text-[#1e2364]'
+                    )}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </CmsLink>
+                );
+              })}
+            </nav>
+
+            {(hasCmsActionLabel(content.businessSignInAction) ||
+              hasCmsActionLabel(content.signInAction)) && (
+              <div className='mt-5 flex flex-col gap-3 border-t border-[#1e2364]/10 pt-5'>
+                {hasCmsActionLabel(content.businessSignInAction) && (
+                  <CmsLink
+                    locale={locale}
+                    target='_blank'
+                    href={content.businessSignInAction.path}
+                    className='flex h-11 items-center justify-center rounded-[50px] border-2 border-[#00a8f1] text-[15px] font-semibold text-[#00a8f1] transition-[background,color] duration-200 hover:bg-[#00a8f1] hover:text-white'
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {content.businessSignInAction.label}
+                  </CmsLink>
+                )}
+                {hasCmsActionLabel(content.signInAction) && (
+                  <CmsLink
+                    locale={locale}
+                    href={content.signInAction.path}
+                    className='flex h-11 items-center justify-center rounded-[50px] bg-[#1e2364] text-[15px] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567]'
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {content.signInAction.label}
+                  </CmsLink>
+                )}
+              </div>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+    </>
   );
 }

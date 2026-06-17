@@ -26,8 +26,7 @@ export async function fetchCourseCategoryList(
   return fetchWithErrorHandling<PaginatedResponse<CourseCategoryListItem>>(
     `/api/Academy/CourseCategory/List?${query}`,
     {
-      cache: 'force-cache',
-      next: { revalidate: 300, tags: [`course-category-list-${query}`] },
+      cache: 'no-store',
     }
   );
 }

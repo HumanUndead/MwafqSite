@@ -10,7 +10,7 @@ export const marketingHeaderOffsetVariants = {
   /** Standard marketing hero (about, contact). */
   hero: 'pt-40 sm:pt-44',
   /** Taller hero (B2B). */
-  heroSpacious: 'pt-44 sm:pt-52 lg:pt-[210px]',
+  heroSpacious: 'pt-44 sm:pt-52 lg:pt-44',
   /** Home landing hero. */
   home: 'pt-44',
   /** Detail pages with breadcrumb (course, service group, profile). */

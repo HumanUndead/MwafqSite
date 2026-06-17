@@ -238,11 +238,7 @@ const fetchRegisterPageContentTree = cache(
 
     try {
       const response = await fetch(endpoint.toString(), {
-        cache: 'force-cache',
-        next: {
-          revalidate: REGISTER_PAGE_CONTENT_REVALIDATE_SECONDS,
-          tags: [REGISTER_PAGE_CONTENT_CACHE_TAG],
-        },
+        cache: 'no-store',
       });
 
       // if (!response.ok) {

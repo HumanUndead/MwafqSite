@@ -607,11 +607,7 @@ const fetchAboutContentTree = cache(async (): Promise<CategoryDto | null> => {
     return await fetchWithErrorHandling<CategoryDto | null>(
       `/api/General/ArticleCategory/GetRecursiveById?Id=${ABOUT_CONTENT_ROOT_CATEGORY_ID}`,
       {
-        cache: 'force-cache',
-        next: {
-          revalidate: ABOUT_CONTENT_REVALIDATE_SECONDS,
-          tags: [ABOUT_CONTENT_CACHE_TAG],
-        },
+        cache: 'no-store',
       }
     );
   } catch (error) {

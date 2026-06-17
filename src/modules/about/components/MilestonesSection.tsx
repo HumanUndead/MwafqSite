@@ -36,7 +36,10 @@ export function MilestonesSection({ content }: Props) {
             {items.map((milestone, index) => {
               const isActive = index === lastIndex;
               return (
-                <div key={milestone.year} className='px-3 text-center'>
+                <div
+                  key={milestone.year}
+                  className='px-3 gap-5 text-center flex flex-row'
+                >
                   <div className='relative mx-auto mb-5 inline-flex'>
                     <span
                       className={[
@@ -55,12 +58,15 @@ export function MilestonesSection({ content }: Props) {
                       />
                     ) : null}
                   </div>
-                  <h3 className='mb-2 text-[17px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                    {milestone.title}
-                  </h3>
-                  <p className='text-[14px] leading-[1.55] text-[#6b7196]'>
-                    {milestone.body}
-                  </p>
+
+                  <div className='text-start'>
+                    <h3 className='mb-2 text-[17px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
+                      {milestone.title}
+                    </h3>
+                    <p className='text-[14px] leading-[1.55] text-[#6b7196]'>
+                      {milestone.body}
+                    </p>
+                  </div>
                 </div>
               );
             })}
