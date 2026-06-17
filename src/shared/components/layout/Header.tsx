@@ -3,6 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { resolveCmsHref } from '@/modules/home/cmsHref';
 import type { Locale } from '@/i18n/config';
 import { LanguageSwitcher } from '@/i18n/LanguageSwitcher';
 import type { HomeHeaderContent } from '@/modules/home/home.types';
@@ -18,7 +20,16 @@ interface HeaderProps {
 }
 
 export function Header({ locale, content }: HeaderProps) {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+
+  function isNavLinkActive(href: string | null | undefined): boolean {
+    const resolved = resolveCmsHref(locale, href);
+    if (!resolved) return false;
+    const target = resolved.split('#')[0].replace(/\/$/, '') || '/';
+    const current = pathname.replace(/\/$/, '') || '/';
+    return current === target || (target.length > 3 && current.startsWith(target + '/'));
+  }
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 30);
     onScroll();
@@ -63,18 +74,31 @@ export function Header({ locale, content }: HeaderProps) {
         className='flex items-center max-[980px]:hidden'
         aria-label='Main navigation'
       >
-        {content.navLinks.map((item) => (
-          <CmsLink
-            key={`${item.label}-${item.path ?? 'no-path'}`}
-            locale={locale}
-            href={item.path}
-            className='group inline-block whitespace-nowrap px-3.5 py-2.5'
-          >
-            <span className='inline-block origin-center text-[17px] font-bold text-[#1e2364]/80 transition-colors duration-200 ease-out group-hover:text-[#00a8f1]'>
-              {item.label}
-            </span>
-          </CmsLink>
-        ))}
+        {content.navLinks.map((item) => {
+          const active = isNavLinkActive(item.path);
+          return (
+            <CmsLink
+              key={`${item.label}-${item.path ?? 'no-path'}`}
+              locale={locale}
+              href={item.path}
+              className='group relative inline-block whitespace-nowrap px-3.5 py-2.5'
+            >
+              <span
+                className={cn(
+                  'inline-block origin-center text-[17px] font-bold transition-colors duration-200 ease-out',
+                  active
+                    ? 'text-[#00a8f1]'
+                    : 'text-[#1e2364]/80 group-hover:text-[#00a8f1]'
+                )}
+              >
+                {item.label}
+              </span>
+              {active && (
+                <span className='absolute bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#00a8f1]' />
+              )}
+            </CmsLink>
+          );
+        })}
       </nav>
 
       <div className='flex flex-nowrap items-center gap-2'>

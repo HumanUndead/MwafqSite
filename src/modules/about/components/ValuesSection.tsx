@@ -16,9 +16,9 @@ export function ValuesSection({ content }: Props) {
   return (
     <section className='bg-[#eeeeef] px-4 py-20 sm:px-7 sm:py-[110px]'>
       <div className='mx-auto max-w-[1320px]'>
-        <div className='mx-auto mb-12 max-w-[780px] text-center'>
+        <div className='mb-12 max-w-[780px]'>
           <div className='inline-block'>
-            <Eyebrow>{content.eyebrow}</Eyebrow>
+            <Eyebrow>{content.eyebrow}</Eyebrow> 
           </div>
         </div>
 
