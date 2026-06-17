@@ -50,12 +50,12 @@ export function HeroSection({ locale, content, isRtl }: Props) {
   ];
 
   return (
-    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-20 pt-0 md:px-7'>
+    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-12 pt-0 md:pb-20 md:px-7'>
       <div
         className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
         aria-hidden='true'
       />
-      <div className='relative mx-auto grid max-w-[1320px] items-center gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
+      <div className='relative mx-auto grid max-w-[1320px] items-center gap-10 lg:gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
         <div>
           <span className='mb-6 inline-flex items-center gap-2.5 rounded-full border-2 border-[#e5e7f0] bg-white px-4 py-2 text-[13px] font-semibold tracking-[0.4px] text-[#1e2364]'>
             <span
@@ -79,7 +79,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             <span>{content.badge}</span>
           </span>
 
-          <h1 className='mb-7 text-[clamp(44px,6.5vw,92px)] font-extrabold leading-[1.05] tracking-[-2.6px] text-[#1e2364]'>
+          <h1 className='mb-5 md:mb-7 text-[clamp(44px,6.5vw,92px)] font-extrabold leading-[1.05] tracking-[-2.6px] text-[#1e2364]'>
             <span className='block whitespace-nowrap'>{content.titleLead}</span>
             {hasSecondLine ? (
               <span className='block'>
@@ -96,7 +96,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             ) : null}
           </h1>
 
-          <p className='mb-9 max-w-[540px] text-[17.5px] leading-[1.45] text-[#6b7196]'>
+          <p className='mb-6 md:mb-9 max-w-[540px] text-[17.5px] leading-[1.45] text-[#6b7196]'>
             {content.subtitle}
           </p>
 
@@ -106,7 +106,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             secondary={content.secondaryAction}
             primaryVariant='brand'
             secondaryVariant='brandOutline'
-            className='mb-11 flex flex-wrap gap-3.5'
+            className='mb-8 md:mb-11 flex flex-wrap gap-3.5'
             primaryTrailing={<ArrowIcon />}
           />
 

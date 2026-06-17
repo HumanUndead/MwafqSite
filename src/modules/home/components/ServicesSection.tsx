@@ -11,13 +11,13 @@ interface Props {
 
 export function ServicesSection({ locale, content }: Props) {
   return (
-    <section id='services' className='relative px-4 py-20 md:px-7'>
+    <section id='services' className='relative px-4 py-12 md:py-20 md:px-7'>
       <div
         className='pointer-events-none absolute inset-0 [background-image:radial-gradient(circle,rgba(30,35,100,0.05)_1px,transparent_1.2px)] [background-size:24px_24px]'
         aria-hidden='true'
       />
       <div className='relative mx-auto max-w-[1320px]'>
-        <div className='mb-[60px] flex flex-wrap items-end justify-start gap-[50px]'>
+        <div className='mb-10 md:mb-[60px] flex flex-wrap items-end justify-start gap-[50px]'>
           <div className='max-w-[620px]'>
             <Eyebrow>{content.eyebrow}</Eyebrow>
             <h2 className='text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
