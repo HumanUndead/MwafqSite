@@ -9,6 +9,14 @@ interface LoginPageProps {
   searchParams: Promise<{ redirect?: string }>;
 }
 
+// Only allow internal, single-slash relative paths to avoid open redirects.
+function sanitizeRedirect(redirect?: string): string | undefined {
+  if (!redirect || !redirect.startsWith('/') || redirect.startsWith('//')) {
+    return undefined;
+  }
+  return redirect;
+}
+
 export default async function LoginPage({ params, searchParams }: LoginPageProps) {
   const [{ locale }, { redirect }] = await Promise.all([params, searchParams]);
 
@@ -25,7 +33,7 @@ export default async function LoginPage({ params, searchParams }: LoginPageProps
       subtitle={dictionary.auth.login.welcomeBack}
       centered
     >
-      <LoginForm redirectTo={redirect} />
+      <LoginForm redirectTo={sanitizeRedirect(redirect)} />
     </AuthSplitShell>
   );
 }
