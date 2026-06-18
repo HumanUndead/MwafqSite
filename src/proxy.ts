@@ -61,9 +61,11 @@ export default function proxy(request: NextRequest) {
   );
 
   if (isProtected && !isAuthenticated) {
+    const returnTo = request.nextUrl.pathname + request.nextUrl.search;
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = localizePathname(ROUTES.HOME, localeFromPath);
+    redirectUrl.pathname = localizePathname(ROUTES.LOGIN, localeFromPath);
     redirectUrl.search = '';
+    redirectUrl.searchParams.set('redirect', returnTo);
     return NextResponse.redirect(redirectUrl);
   }
 
