@@ -259,6 +259,7 @@ function mapHeroContent(
     return {
       initials: deriveInitials(name),
       name,
+      city: '',
       type:
         trimToNull(localized.extraInfo) ?? trimToNull(english.extraInfo) ?? '',
       status: normalizeStatus(english.shortDescription),
@@ -303,7 +304,7 @@ function mapHeroContent(
       statusActive: '',
       statusWait: '',
       employees,
-    },
+    } as any,
     floatingCards,
   };
 }
@@ -537,10 +538,7 @@ const fetchB2BCompaniesCategoryTree = cache(
         }
       );
     } catch (error) {
-      console.error(
-        '[b2b-content] Failed to fetch companies category.',
-        error
-      );
+      console.error('[b2b-content] Failed to fetch companies category.', error);
       return null;
     }
   }

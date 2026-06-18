@@ -11,6 +11,7 @@ import {
 import { isRtl, type Locale } from '@/i18n/config';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/components/ui/Button';
+import BotIcon from '@/shared/components/icons/Bot';
 
 // Box size in px — drives both the rendered size (via style) and the
 // center-based positioning math, so the two can never drift apart.
@@ -167,11 +168,12 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
           aria-label={label}
           style={{ transform: rtl ? 'scaleX(1)' : 'scaleX(-1)' }}
           className={cn(
-            'pointer-events-auto block h-full w-full rounded-[28px] bg-transparent bg-contain bg-center bg-no-repeat p-0 hover:bg-transparent',
-            'outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0',
-            "[background-image:url('/demo-assets/character3.png')]"
+            'pointer-events-auto block size-full rounded-[28px] bg-transparent p-0 hover:bg-transparent',
+            'outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0'
           )}
-        />
+        >
+          <BotIcon className='size-full' />
+        </Button>
       </div>
     </motion.div>,
     document.body
