@@ -171,5 +171,6 @@ export function buildEmptyHomeFallback(): HomePageContent {
       help: { title: '', links: [] },
       contact: { title: '', links: [] },
     },
+    sectionOrder: [],
   };
 }
