@@ -1,4 +1,5 @@
 import { isRtl, type Locale } from '@/i18n/config';
+import type { HomePageContent, HomeSectionKey } from './home.types';
 import { AcademySection } from './components/AcademySection';
 import { AppShowcaseSection } from './components/AppShowcaseSection';
 import { B2BSection } from './components/B2BSection';
@@ -16,26 +17,66 @@ interface Props {
   locale: Locale;
 }
 
+function renderSection(
+  key: HomeSectionKey,
+  content: HomePageContent,
+  locale: Locale,
+  rtl: boolean
+) {
+  switch (key) {
+    case 'hero':
+      return (
+        <HeroSection
+          key={key}
+          content={content.hero}
+          isRtl={rtl}
+          locale={locale}
+        />
+      );
+    case 'companies':
+      return <TickerSection key={key} content={content.companies} />;
+    case 'services':
+      return (
+        <ServicesSection key={key} locale={locale} content={content.services} />
+      );
+    case 'why':
+      return <WhySection key={key} content={content.why} isRtl={rtl} />;
+    case 'booking':
+      return (
+        <BookingSection key={key} locale={locale} content={content.booking} />
+      );
+    case 'steps':
+      return <StepsSection key={key} locale={locale} content={content.steps} />;
+    case 'app':
+      return (
+        <AppShowcaseSection key={key} locale={locale} content={content.app} />
+      );
+    case 'academy':
+      return (
+        <AcademySection key={key} locale={locale} content={content.academy} />
+      );
+    case 'stats':
+      return <StatsSection key={key} content={content.stats} />;
+    case 'business':
+      return (
+        <B2BSection key={key} locale={locale} content={content.business} />
+      );
+    case 'testimonial':
+      return <TestimonialSection key={key} items={content.testimonial} />;
+    default:
+      return null;
+  }
+}
+
 export async function HomePage({ locale }: Props) {
   const content = await getHomePageContent(locale);
   const rtl = isRtl(locale);
 
   return (
     <main className='bg-[#eeeeef] text-[#1e2364]'>
-      <HeroSection content={content.hero} isRtl={rtl} locale={locale} />
-      <TickerSection content={content.companies} />
-      <ServicesSection locale={locale} content={content.services} />
-      <WhySection content={content.why} isRtl={rtl} />
-      <BookingSection locale={locale} content={content.booking} />
-      {/* // TODO: replace to the services screen. */}
-      <StepsSection locale={locale} content={content.steps} />
-      <div>
-        <AppShowcaseSection locale={locale} content={content.app} />
-        <AcademySection locale={locale} content={content.academy} />
-        <StatsSection content={content.stats} />
-      </div>
-      <B2BSection locale={locale} content={content.business} />
-      <TestimonialSection items={content.testimonial} />
+      {content.sectionOrder.map((key) =>
+        renderSection(key, content, locale, rtl)
+      )}
     </main>
   );
 }

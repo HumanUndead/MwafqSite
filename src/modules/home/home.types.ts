@@ -285,6 +285,19 @@ export interface HomeCompaniesContent {
   items: HomeCompanyItemContent[];
 }
 
+export type HomeSectionKey =
+  | 'hero'
+  | 'companies'
+  | 'services'
+  | 'why'
+  | 'booking'
+  | 'steps'
+  | 'app'
+  | 'academy'
+  | 'stats'
+  | 'business'
+  | 'testimonial';
+
 export interface HomePageContent {
   header: HomeHeaderContent;
   hero: HomeHeroContent;
@@ -300,4 +313,5 @@ export interface HomePageContent {
   testimonial: HomeTestimonialContent[];
   finalCta: HomeFinalCtaContent;
   footer: HomeFooterContent;
+  sectionOrder: HomeSectionKey[];
 }
