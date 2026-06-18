@@ -3,7 +3,6 @@ import { AcademySection } from './components/AcademySection';
 import { AppShowcaseSection } from './components/AppShowcaseSection';
 import { B2BSection } from './components/B2BSection';
 import { BookingSection } from './components/BookingSection';
-import { CtaSection } from './components/CtaSection';
 import { HeroSection } from './components/HeroSection';
 import { ServicesSection } from './components/ServicesSection';
 import { StatsSection } from './components/StatsSection';
@@ -37,7 +36,6 @@ export async function HomePage({ locale }: Props) {
       </div>
       <B2BSection locale={locale} content={content.business} />
       <TestimonialSection items={content.testimonial} />
-      <CtaSection locale={locale} content={content.finalCta} />
     </main>
   );
 }
