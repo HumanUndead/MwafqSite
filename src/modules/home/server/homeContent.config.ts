@@ -7,60 +7,63 @@ export const COMPANIES_CATEGORY_ID = 196;
 export const HOME_CONTENT_REVALIDATE_SECONDS = 1;
 export const HOME_CONTENT_CACHE_TAG = `home-content-${HOME_CONTENT_ROOT_CATEGORY_ID}`;
 
-export const HOME_SECTION_RANKS = {
-  header: 10,
-  hero: 20,
-  services: 30,
-  why: 40,
-  booking: 50,
-  steps: 60,
-  app: 70,
-  academy: 80,
-  stats: 90,
-  business: 100,
-  testimonial: 110,
-  finalCta: 120,
-  footer: 130,
+export const HOME_SECTION_IDS = {
+  hero: 161,
+  services: 162,
+  why: 163,
+  booking: 164,
+  steps: 165,
+  app: 166,
+  academy: 167,
+  stats: 168,
+  business: 169,
+  testimonial: 170,
 } as const;
 
-export const HERO_CHILD_CATEGORY_RANKS = {
-  words: 10,
-  actions: 20,
-  metrics: 30,
-  phoneUi: 40,
-  phoneTiles: 50,
-  floatingCards: 60,
+export const HERO_CHILD_CATEGORY_IDS = {
+  words: 177,
+  actions: 183,
+  metrics: 188,
+  phoneUi: 191,
+  phoneTiles: 193,
+  floatingCards: 194,
 } as const;
 
-export const BOOKING_CHILD_CATEGORY_RANKS = {
-  fields: 10,
-  options: 20,
+export const BOOKING_CHILD_CATEGORY_IDS = {
+  fields: 174,
+  options: 180,
 } as const;
 
-export const STEPS_CHILD_CATEGORY_RANKS = {
-  first: 10,
-  second: 20,
-  third: 30,
+export const STEPS_CHILD_CATEGORY_IDS = {
+  first: 178,
+  second: 184,
+  third: 189,
 } as const;
 
-export const APP_CHILD_CATEGORY_RANKS = {
-  schedule: 10,
-  status: 20,
-  reports: 30,
-  points: 40,
-  links: 50,
+export const APP_CHILD_CATEGORY_IDS = {
+  schedule: 173,
+  status: 179,
+  reports: 185,
+  points: 190,
+  links: 192,
 } as const;
 
-export const BUSINESS_CHILD_CATEGORY_RANKS = {
-  tabs: 10,
-  metrics: 20,
-  employees: 30,
+export const BUSINESS_CHILD_CATEGORY_IDS = {
+  tabs: 175,
+  metrics: 181,
+  employees: 186,
 } as const;
 
-export const FOOTER_CHILD_CATEGORY_RANKS = {
-  pages: 10,
-  help: 20,
-  contact: 30,
+// These categories were removed from the home API tree but their mapping
+// functions are kept for reuse in other areas (e.g. layout, dedicated pages).
+export const HEADER_CATEGORY_ID = 160;
+export const FINAL_CTA_CATEGORY_ID = 171;
+export const FOOTER_CATEGORY_ID = 172;
+
+export const FOOTER_CHILD_CATEGORY_IDS = {
+  pages: 176,
+  help: 182,
+  contact: 187,
 } as const;
 
 export const HEADER_ARTICLE_RANKS = {
@@ -69,6 +72,18 @@ export const HEADER_ARTICLE_RANKS = {
   signInIndividual: 90,
   localeSwitch: 100,
   signInBusiness: 110,
+} as const;
+
+export const FINAL_CTA_ARTICLE_RANKS = {
+  content: 1,
+  primaryAction: 10,
+  secondaryAction: 20,
+} as const;
+
+export const FOOTER_ARTICLE_RANKS = {
+  brand: 1,
+  newsletter: 2,
+  copyright: 3,
 } as const;
 
 export const HERO_WORDS_ARTICLE_RANKS = {
@@ -117,14 +132,3 @@ export const TESTIMONIAL_ARTICLE_RANKS = {
   content: 1,
 } as const;
 
-export const FINAL_CTA_ARTICLE_RANKS = {
-  content: 1,
-  primaryAction: 10,
-  secondaryAction: 20,
-} as const;
-
-export const FOOTER_ARTICLE_RANKS = {
-  brand: 1,
-  newsletter: 2,
-  copyright: 3,
-} as const;

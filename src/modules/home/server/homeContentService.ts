@@ -27,78 +27,39 @@ import type {
 import {
   ACADEMY_ARTICLE_RANKS,
   APP_ARTICLE_RANKS,
-  APP_CHILD_CATEGORY_RANKS,
+  APP_CHILD_CATEGORY_IDS,
   BOOKING_ARTICLE_RANKS,
-  BOOKING_CHILD_CATEGORY_RANKS,
+  BOOKING_CHILD_CATEGORY_IDS,
   BUSINESS_ARTICLE_RANKS,
-  BUSINESS_CHILD_CATEGORY_RANKS,
+  BUSINESS_CHILD_CATEGORY_IDS,
   COMPANIES_CATEGORY_ID,
   FINAL_CTA_ARTICLE_RANKS,
+  FINAL_CTA_CATEGORY_ID,
   FOOTER_ARTICLE_RANKS,
-  FOOTER_CHILD_CATEGORY_RANKS,
+  FOOTER_CATEGORY_ID,
+  FOOTER_CHILD_CATEGORY_IDS,
   HEADER_ARTICLE_RANKS,
-  HERO_CHILD_CATEGORY_RANKS,
+  HEADER_CATEGORY_ID,
+  HERO_CHILD_CATEGORY_IDS,
   HERO_WORDS_ARTICLE_RANKS,
   HOME_CONTENT_API_BASE_URL,
   HOME_CONTENT_CACHE_TAG,
   HOME_CONTENT_REVALIDATE_SECONDS,
   HOME_CONTENT_ROOT_CATEGORY_ID,
-  HOME_SECTION_RANKS,
+  HOME_SECTION_IDS,
   SERVICES_ARTICLE_RANKS,
   STATS_ARTICLE_RANKS,
   STEPS_ARTICLE_RANKS,
-  STEPS_CHILD_CATEGORY_RANKS,
+  STEPS_CHILD_CATEGORY_IDS,
   WHY_ARTICLE_RANKS,
 } from './homeContent.config';
 import { buildEmptyHomeFallback } from './homeContent.fallback';
+import type {
+  RecursiveArticleCategoryDto,
+  RecursiveArticleCategoryResponse,
+  RecursiveArticleDto,
+} from './articleCategory.dto';
 import { stripHtmlToNull } from '@/shared/lib/text';
-
-interface ArticleCategoryTranslationDto {
-  id: number;
-  articleCategoryId: number;
-  name: string;
-  description: string | null;
-  langId: number;
-}
-
-interface ArticleTranslationDto {
-  id: number;
-  articleId: number;
-  langId: number;
-  name: string;
-  description: string | null;
-  shortDescription: string | null;
-  extraInfo: string | null;
-}
-
-interface RecursiveArticleDto {
-  id: number;
-  articleCategoryId: number;
-  rank: number;
-  published: boolean;
-  image: string | null;
-  images: string | null | undefined;
-  path: string | null | undefined;
-  translations: ArticleTranslationDto[];
-}
-
-interface RecursiveArticleCategoryDto {
-  id: number;
-  rank: number;
-  published: boolean;
-  parentId: number | null;
-  image: string | null;
-  hasChild: boolean;
-  hasArticle: boolean;
-  translations: ArticleCategoryTranslationDto[];
-  children: RecursiveArticleCategoryDto[];
-  articles: RecursiveArticleDto[];
-}
-
-interface RecursiveArticleCategoryResponse {
-  value: RecursiveArticleCategoryDto | null;
-  isSuccess: boolean;
-}
 
 interface CmsTranslationSnapshot {
   name: string;
@@ -160,12 +121,12 @@ function getVisibleArticles(
   return sortByRank(category.articles.filter((article) => article.published));
 }
 
-function getChildCategoryByRank(
+function getChildCategoryById(
   category: RecursiveArticleCategoryDto | null,
-  rank: number
+  id: number
 ): RecursiveArticleCategoryDto | null {
   return (
-    getVisibleChildren(category).find((child) => child.rank === rank) ?? null
+    getVisibleChildren(category).find((child) => child.id === id) ?? null
   );
 }
 
@@ -413,102 +374,24 @@ function mapHeroStats(
   });
 }
 
-function mapHeaderContent(
-  fallback: HomeHeaderContent,
-  rootCategory: RecursiveArticleCategoryDto | null,
-  langId: number
-): HomeHeaderContent {
-  const headerCategory = getChildCategoryByRank(
-    rootCategory,
-    HOME_SECTION_RANKS.header
-  );
-
-  if (!headerCategory) {
-    return fallback;
-  }
-
-  const brandArticle = getArticleByRank(
-    headerCategory,
-    HEADER_ARTICLE_RANKS.brand
-  );
-  const primaryArticle = getArticleByRank(
-    headerCategory,
-    HEADER_ARTICLE_RANKS.primaryAction
-  );
-  const signInArticle = getArticleByRank(
-    headerCategory,
-    HEADER_ARTICLE_RANKS.signInIndividual
-  );
-  const localeSwitchArticle = getArticleByRank(
-    headerCategory,
-    HEADER_ARTICLE_RANKS.localeSwitch
-  );
-  const businessSignInArticle = getArticleByRank(
-    headerCategory,
-    HEADER_ARTICLE_RANKS.signInBusiness
-  );
-  const navLinks = getVisibleArticles(headerCategory)
-    .filter(
-      (article) =>
-        article.rank >= 10 && article.rank < HEADER_ARTICLE_RANKS.primaryAction
-    )
-    .map((article) => toLinkItemContent(article, langId))
-    .filter((link) => link.label.trim().length > 0);
-
-  const brandTranslation = brandArticle
-    ? getArticleTranslation(brandArticle, langId)
-    : null;
-
-  return {
-    brandLabel: trimToNull(brandTranslation?.name) ?? fallback.brandLabel,
-    brandDescription:
-      trimToNull(brandTranslation?.description) ?? fallback.brandDescription,
-    brandPath: trimToNull(brandArticle?.path) ?? fallback.brandPath,
-    brandImageSrc:
-      resolveCmsAssetUrl(brandArticle?.image) ?? fallback.brandImageSrc,
-    navLinks: navLinks.length > 0 ? navLinks : fallback.navLinks,
-    primaryAction: toOptionalActionContent(
-      primaryArticle,
-      langId,
-      fallback.primaryAction ?? { label: '', path: null }
-    ),
-    signInAction: toOptionalActionContent(
-      signInArticle,
-      langId,
-      fallback.signInAction ?? { label: '', path: null }
-    ),
-    businessSignInAction: toOptionalActionContent(
-      businessSignInArticle,
-      langId,
-      fallback.businessSignInAction ?? { label: '', path: null }
-    ),
-    userMenu: fallback.userMenu,
-    localeSwitchLabel:
-      trimToNull(
-        localeSwitchArticle
-          ? getArticleTranslation(localeSwitchArticle, langId).name
-          : null
-      ) ?? fallback.localeSwitchLabel,
-  };
-}
 
 function mapHeroContent(
   fallback: HomeHeroContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeHeroContent {
-  const heroCategory = getChildCategoryByRank(
+  const heroCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.hero
+    HOME_SECTION_IDS.hero
   );
 
   if (!heroCategory) {
     return fallback;
   }
 
-  const wordsCategory = getChildCategoryByRank(
+  const wordsCategory = getChildCategoryById(
     heroCategory,
-    HERO_CHILD_CATEGORY_RANKS.words
+    HERO_CHILD_CATEGORY_IDS.words
   );
   const rotatingWordsArticle = getArticleByRank(
     wordsCategory,
@@ -524,30 +407,30 @@ function mapHeroContent(
   const rotatingWordsTranslation = rotatingWordsArticle
     ? getArticleTranslation(rotatingWordsArticle, langId)
     : null;
-  const actionsCategory = getChildCategoryByRank(
+  const actionsCategory = getChildCategoryById(
     heroCategory,
-    HERO_CHILD_CATEGORY_RANKS.actions
+    HERO_CHILD_CATEGORY_IDS.actions
   );
   const primaryAction = getArticleByRank(actionsCategory, 10);
   const secondaryAction = getArticleByRank(actionsCategory, 20);
-  const metricsCategory = getChildCategoryByRank(
+  const metricsCategory = getChildCategoryById(
     heroCategory,
-    HERO_CHILD_CATEGORY_RANKS.metrics
+    HERO_CHILD_CATEGORY_IDS.metrics
   );
-  const phoneUiCategory = getChildCategoryByRank(
+  const phoneUiCategory = getChildCategoryById(
     heroCategory,
-    HERO_CHILD_CATEGORY_RANKS.phoneUi
+    HERO_CHILD_CATEGORY_IDS.phoneUi
   );
   const greetingArticle = getArticleByRank(phoneUiCategory, 10);
   const servicesArticle = getArticleByRank(phoneUiCategory, 20);
   const liveArticle = getArticleByRank(phoneUiCategory, 30);
-  const phoneTilesCategory = getChildCategoryByRank(
+  const phoneTilesCategory = getChildCategoryById(
     heroCategory,
-    HERO_CHILD_CATEGORY_RANKS.phoneTiles
+    HERO_CHILD_CATEGORY_IDS.phoneTiles
   );
-  const floatingCardsCategory = getChildCategoryByRank(
+  const floatingCardsCategory = getChildCategoryById(
     heroCategory,
-    HERO_CHILD_CATEGORY_RANKS.floatingCards
+    HERO_CHILD_CATEGORY_IDS.floatingCards
   );
 
   const greetingTranslation = greetingArticle
@@ -638,9 +521,9 @@ function mapServicesContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeServicesContent {
-  const servicesCategory = getChildCategoryByRank(
+  const servicesCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.services
+    HOME_SECTION_IDS.services
   );
 
   if (!servicesCategory) {
@@ -682,9 +565,9 @@ function mapWhyContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeWhyContent {
-  const whyCategory = getChildCategoryByRank(
+  const whyCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.why
+    HOME_SECTION_IDS.why
   );
 
   if (!whyCategory) {
@@ -723,9 +606,9 @@ function mapBookingContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeBookingContent {
-  const bookingCategory = getChildCategoryByRank(
+  const bookingCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.booking
+    HOME_SECTION_IDS.booking
   );
 
   if (!bookingCategory) {
@@ -739,13 +622,13 @@ function mapBookingContent(
   const headerTranslation = headerArticle
     ? getArticleTranslation(headerArticle, langId)
     : null;
-  const fieldsCategory = getChildCategoryByRank(
+  const fieldsCategory = getChildCategoryById(
     bookingCategory,
-    BOOKING_CHILD_CATEGORY_RANKS.fields
+    BOOKING_CHILD_CATEGORY_IDS.fields
   );
-  const optionsCategory = getChildCategoryByRank(
+  const optionsCategory = getChildCategoryById(
     bookingCategory,
-    BOOKING_CHILD_CATEGORY_RANKS.options
+    BOOKING_CHILD_CATEGORY_IDS.options
   );
   const examField = getArticleByRank(fieldsCategory, 10);
   const cityField = getArticleByRank(fieldsCategory, 20);
@@ -810,9 +693,9 @@ function mapStepsContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeStepsContent {
-  const stepsCategory = getChildCategoryByRank(
+  const stepsCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.steps
+    HOME_SECTION_IDS.steps
   );
 
   if (!stepsCategory) {
@@ -828,9 +711,9 @@ function mapStepsContent(
     ? getArticleTranslation(headerArticle, langId)
     : null;
   const stepCategories = [
-    getChildCategoryByRank(stepsCategory, STEPS_CHILD_CATEGORY_RANKS.first),
-    getChildCategoryByRank(stepsCategory, STEPS_CHILD_CATEGORY_RANKS.second),
-    getChildCategoryByRank(stepsCategory, STEPS_CHILD_CATEGORY_RANKS.third),
+    getChildCategoryById(stepsCategory, STEPS_CHILD_CATEGORY_IDS.first),
+    getChildCategoryById(stepsCategory, STEPS_CHILD_CATEGORY_IDS.second),
+    getChildCategoryById(stepsCategory, STEPS_CHILD_CATEGORY_IDS.third),
   ];
 
   return {
@@ -910,9 +793,9 @@ function mapAppContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeAppContent {
-  const appCategory = getChildCategoryByRank(
+  const appCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.app
+    HOME_SECTION_IDS.app
   );
 
   if (!appCategory) {
@@ -923,25 +806,25 @@ function mapAppContent(
   const headerTranslation = headerArticle
     ? getArticleTranslation(headerArticle, langId)
     : null;
-  const scheduleCategory = getChildCategoryByRank(
+  const scheduleCategory = getChildCategoryById(
     appCategory,
-    APP_CHILD_CATEGORY_RANKS.schedule
+    APP_CHILD_CATEGORY_IDS.schedule
   );
-  const statusCategory = getChildCategoryByRank(
+  const statusCategory = getChildCategoryById(
     appCategory,
-    APP_CHILD_CATEGORY_RANKS.status
+    APP_CHILD_CATEGORY_IDS.status
   );
-  const reportsCategory = getChildCategoryByRank(
+  const reportsCategory = getChildCategoryById(
     appCategory,
-    APP_CHILD_CATEGORY_RANKS.reports
+    APP_CHILD_CATEGORY_IDS.reports
   );
-  const pointsCategory = getChildCategoryByRank(
+  const pointsCategory = getChildCategoryById(
     appCategory,
-    APP_CHILD_CATEGORY_RANKS.points
+    APP_CHILD_CATEGORY_IDS.points
   );
-  const linksCategory = getChildCategoryByRank(
+  const linksCategory = getChildCategoryById(
     appCategory,
-    APP_CHILD_CATEGORY_RANKS.links
+    APP_CHILD_CATEGORY_IDS.links
   );
 
   const scheduleHeader = getArticleByRank(scheduleCategory, 1);
@@ -1078,9 +961,9 @@ function mapAcademyContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeAcademyContent {
-  const academyCategory = getChildCategoryByRank(
+  const academyCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.academy
+    HOME_SECTION_IDS.academy
   );
 
   if (!academyCategory) {
@@ -1136,9 +1019,9 @@ function mapStatsContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeStatsContent {
-  const statsCategory = getChildCategoryByRank(
+  const statsCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.stats
+    HOME_SECTION_IDS.stats
   );
 
   if (!statsCategory) {
@@ -1184,9 +1067,9 @@ function mapBusinessContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeBusinessContent {
-  const businessCategory = getChildCategoryByRank(
+  const businessCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.business
+    HOME_SECTION_IDS.business
   );
 
   if (!businessCategory) {
@@ -1213,21 +1096,21 @@ function mapBusinessContent(
       article.rank >= BUSINESS_ARTICLE_RANKS.pointStart &&
       article.rank < BUSINESS_ARTICLE_RANKS.primaryAction
   );
-  const tabsCategory = getChildCategoryByRank(
+  const tabsCategory = getChildCategoryById(
     businessCategory,
-    BUSINESS_CHILD_CATEGORY_RANKS.tabs
+    BUSINESS_CHILD_CATEGORY_IDS.tabs
   );
   const tabsArticle = getArticleByRank(tabsCategory, 1);
   const tabsTranslation = tabsArticle
     ? getArticleTranslation(tabsArticle, langId)
     : null;
-  const metricsCategory = getChildCategoryByRank(
+  const metricsCategory = getChildCategoryById(
     businessCategory,
-    BUSINESS_CHILD_CATEGORY_RANKS.metrics
+    BUSINESS_CHILD_CATEGORY_IDS.metrics
   );
-  const employeesCategory = getChildCategoryByRank(
+  const employeesCategory = getChildCategoryById(
     businessCategory,
-    BUSINESS_CHILD_CATEGORY_RANKS.employees
+    BUSINESS_CHILD_CATEGORY_IDS.employees
   );
 
   return {
@@ -1291,9 +1174,9 @@ function mapTestimonialContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeTestimonialContent[] {
-  const testimonialCategory = getChildCategoryByRank(
+  const testimonialCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.testimonial
+    HOME_SECTION_IDS.testimonial
   );
   const articles = getVisibleArticles(testimonialCategory);
 
@@ -1318,14 +1201,90 @@ function mapTestimonialContent(
   });
 }
 
-function mapFinalCtaContent(
+export function mapHeaderContent(
+  fallback: HomeHeaderContent,
+  rootCategory: RecursiveArticleCategoryDto | null,
+  langId: number
+): HomeHeaderContent {
+  const headerCategory = getChildCategoryById(rootCategory, HEADER_CATEGORY_ID);
+
+  if (!headerCategory) {
+    return fallback;
+  }
+
+  const brandArticle = getArticleByRank(
+    headerCategory,
+    HEADER_ARTICLE_RANKS.brand
+  );
+  const primaryArticle = getArticleByRank(
+    headerCategory,
+    HEADER_ARTICLE_RANKS.primaryAction
+  );
+  const signInArticle = getArticleByRank(
+    headerCategory,
+    HEADER_ARTICLE_RANKS.signInIndividual
+  );
+  const localeSwitchArticle = getArticleByRank(
+    headerCategory,
+    HEADER_ARTICLE_RANKS.localeSwitch
+  );
+  const businessSignInArticle = getArticleByRank(
+    headerCategory,
+    HEADER_ARTICLE_RANKS.signInBusiness
+  );
+  const navLinks = getVisibleArticles(headerCategory)
+    .filter(
+      (article) =>
+        article.rank >= 10 && article.rank < HEADER_ARTICLE_RANKS.primaryAction
+    )
+    .map((article) => toLinkItemContent(article, langId))
+    .filter((link) => link.label.trim().length > 0);
+
+  const brandTranslation = brandArticle
+    ? getArticleTranslation(brandArticle, langId)
+    : null;
+
+  return {
+    brandLabel: trimToNull(brandTranslation?.name) ?? fallback.brandLabel,
+    brandDescription:
+      trimToNull(brandTranslation?.description) ?? fallback.brandDescription,
+    brandPath: trimToNull(brandArticle?.path) ?? fallback.brandPath,
+    brandImageSrc:
+      resolveCmsAssetUrl(brandArticle?.image) ?? fallback.brandImageSrc,
+    navLinks: navLinks.length > 0 ? navLinks : fallback.navLinks,
+    primaryAction: toOptionalActionContent(
+      primaryArticle,
+      langId,
+      fallback.primaryAction ?? { label: '', path: null }
+    ),
+    signInAction: toOptionalActionContent(
+      signInArticle,
+      langId,
+      fallback.signInAction ?? { label: '', path: null }
+    ),
+    businessSignInAction: toOptionalActionContent(
+      businessSignInArticle,
+      langId,
+      fallback.businessSignInAction ?? { label: '', path: null }
+    ),
+    userMenu: fallback.userMenu,
+    localeSwitchLabel:
+      trimToNull(
+        localeSwitchArticle
+          ? getArticleTranslation(localeSwitchArticle, langId).name
+          : null
+      ) ?? fallback.localeSwitchLabel,
+  };
+}
+
+export function mapFinalCtaContent(
   fallback: HomeFinalCtaContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeFinalCtaContent {
-  const finalCtaCategory = getChildCategoryByRank(
+  const finalCtaCategory = getChildCategoryById(
     rootCategory,
-    HOME_SECTION_RANKS.finalCta
+    FINAL_CTA_CATEGORY_ID
   );
 
   if (!finalCtaCategory) {
@@ -1388,15 +1347,12 @@ function mapFooterGroup(
   };
 }
 
-function mapFooterContent(
+export function mapFooterContent(
   fallback: HomeFooterContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeFooterContent {
-  const footerCategory = getChildCategoryByRank(
-    rootCategory,
-    HOME_SECTION_RANKS.footer
-  );
+  const footerCategory = getChildCategoryById(rootCategory, FOOTER_CATEGORY_ID);
 
   if (!footerCategory) {
     return fallback;
@@ -1442,20 +1398,17 @@ function mapFooterContent(
     copyrightBody:
       trimToNull(copyrightTranslation?.description) ?? fallback.copyrightBody,
     pages: mapFooterGroup(
-      getChildCategoryByRank(footerCategory, FOOTER_CHILD_CATEGORY_RANKS.pages),
+      getChildCategoryById(footerCategory, FOOTER_CHILD_CATEGORY_IDS.pages),
       langId,
       fallback.pages
     ),
     help: mapFooterGroup(
-      getChildCategoryByRank(footerCategory, FOOTER_CHILD_CATEGORY_RANKS.help),
+      getChildCategoryById(footerCategory, FOOTER_CHILD_CATEGORY_IDS.help),
       langId,
       fallback.help
     ),
     contact: mapFooterGroup(
-      getChildCategoryByRank(
-        footerCategory,
-        FOOTER_CHILD_CATEGORY_RANKS.contact
-      ),
+      getChildCategoryById(footerCategory, FOOTER_CHILD_CATEGORY_IDS.contact),
       langId,
       fallback.contact
     ),
@@ -1470,7 +1423,7 @@ function buildHomePageContent(
   const fallback = buildEmptyHomeFallback();
 
   return {
-    header: mapHeaderContent(fallback.header, rootCategory, langId),
+    header: fallback.header,
     hero: mapHeroContent(fallback.hero, rootCategory, langId),
     companies: mapCompaniesContent(companiesCategory),
     services: mapServicesContent(fallback.services, rootCategory, langId),
@@ -1486,8 +1439,8 @@ function buildHomePageContent(
       rootCategory,
       langId
     ),
-    finalCta: mapFinalCtaContent(fallback.finalCta, rootCategory, langId),
-    footer: mapFooterContent(fallback.footer, rootCategory, langId),
+    finalCta: fallback.finalCta,
+    footer: fallback.footer,
   };
 }
 
