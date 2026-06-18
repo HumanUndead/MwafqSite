@@ -2,7 +2,6 @@ import { isRtl, type Locale } from '@/i18n/config';
 import type { HomePageContent, HomeSectionKey } from './home.types';
 import { AcademySection } from './components/AcademySection';
 import { AppShowcaseSection } from './components/AppShowcaseSection';
-import { B2BSection } from './components/B2BSection';
 import { BookingSection } from './components/BookingSection';
 import { HeroSection } from './components/HeroSection';
 import { ServicesSection } from './components/ServicesSection';
@@ -57,10 +56,6 @@ function renderSection(
       );
     case 'stats':
       return <StatsSection key={key} content={content.stats} />;
-    case 'business':
-      return (
-        <B2BSection key={key} locale={locale} content={content.business} />
-      );
     case 'testimonial':
       return <TestimonialSection key={key} items={content.testimonial} />;
     default:

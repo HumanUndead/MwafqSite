@@ -233,10 +233,6 @@ const en = {
           title: 'Municipality Certificates',
           body: 'Renew health certificates for food handlers, public-service workers, and licensees in a single batch.',
         },
-        {
-          title: 'Occupational Health',
-          body: 'Workplace health screenings and periodic checks trusted by 500+ employers across the Kingdom.',
-        },
       ],
     },
     steps: {

@@ -58,7 +58,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       <div className='relative mx-auto grid max-w-[1320px] gap-10 lg:gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
         <div className='order-1'>
           <h1 className='mb-5 md:mb-7 text-[clamp(44px,6.5vw,63px)] font-extrabold leading-[1.50] tracking-[-2.6px] text-[#1e2364]'>
-            <span className='block whitespace-nowrap'>{content.titleLead}</span>
+            <span className='block sm:whitespace-nowrap'>{content.titleLead}</span>
             {hasSecondLine ? (
               <span className='block'>
                 {content.titleMiddle ? (
@@ -90,7 +90,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
         </div>
 
-        <div className='relative mx-auto order-2 h-[560px] w-full max-w-[560px] lg:row-span-2 lg:self-center'>
+        <div className='relative mx-auto order-2 h-100 w-full max-w-140 overflow-hidden sm:h-120 sm:overflow-visible lg:h-140 lg:row-span-2 lg:self-center'>
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
@@ -203,17 +203,17 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           </div>
         </div>
 
-        <div className='order-3 grid grid-cols-3 gap-7.5 border-t-2 border-[#e5e7f0] pt-9'>
+        <div className='order-3 grid grid-cols-3 gap-4 border-t-2 border-[#e5e7f0] pt-9 sm:gap-7.5'>
           {content.stats.map((stat) => (
             <div key={stat.label}>
-              <div className='inline-flex items-baseline gap-0.5 whitespace-nowrap text-[30px] font-extrabold leading-none tracking-[-1px] text-[#1e2364]'>
+              <div className='inline-flex items-baseline gap-0.5 whitespace-nowrap text-[22px] font-extrabold leading-none tracking-[-1px] text-[#1e2364] sm:text-[28px] md:text-[30px]'>
                 <CountUp
                   value={stat.value}
                   suffix={stat.suffix}
                   decimals={stat.decimals}
                 />
               </div>
-              <p className='mt-1.5 text-[12.5px] font-medium tracking-[0.4px] text-[#6b7196]'>
+              <p className='mt-1.5 text-[11px] font-medium tracking-[0.4px] text-[#6b7196] sm:text-[12.5px]'>
                 {stat.label}
               </p>
             </div>
