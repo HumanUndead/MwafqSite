@@ -17,6 +17,7 @@ import type {
   AboutWhyContent,
 } from '@/modules/about/types/aboutContent';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
+import { stripHtmlToNull } from '@/shared/lib/text';
 import {
   ABOUT_B2B_ARTICLE_RANKS,
   ABOUT_CONTENT_CACHE_TAG,
@@ -160,15 +161,6 @@ function trimToNull(value: string | null | undefined): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
-function stripHtmlToNull(value: string | null | undefined): string | null {
-  if (!value) return null;
-  const stripped = value
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return stripped.length > 0 ? stripped : null;
-}
 
 function getCategoryTranslation(
   category: CategoryDto | null,

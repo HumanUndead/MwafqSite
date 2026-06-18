@@ -51,6 +51,7 @@ import {
   WHY_ARTICLE_RANKS,
 } from './homeContent.config';
 import { buildEmptyHomeFallback } from './homeContent.fallback';
+import { stripHtmlToNull } from '@/shared/lib/text';
 
 interface ArticleCategoryTranslationDto {
   id: number;
@@ -186,7 +187,7 @@ function getArticleTranslation(
 
   return {
     name: translation?.name ?? '',
-    description: translation?.description ?? null,
+    description: stripHtmlToNull(translation?.description) ?? null,
     shortDescription: translation?.shortDescription ?? null,
     extraInfo: translation?.extraInfo ?? null,
   };
@@ -1302,7 +1303,12 @@ function mapTestimonialContent(
 
   return articles.map((article) => {
     const translation = getArticleTranslation(article, langId);
-    const fb = fallback[0] ?? { quote: '', highlight: '', author: '', role: '' };
+    const fb = fallback[0] ?? {
+      quote: '',
+      highlight: '',
+      author: '',
+      role: '',
+    };
     return {
       quote: trimToNull(translation.name) ?? fb.quote,
       highlight: trimToNull(translation.extraInfo) ?? fb.highlight,
