@@ -5,6 +5,7 @@ import type { Locale } from '@/i18n/config';
 import type { CountryItem } from '@/app/api/general/countries/route';
 import type { HomeBookingContent } from '../home.types';
 import { CmsLink } from './CmsLink';
+import { BookingMascot } from './BookingMascot';
 
 const MONTHS = [
   'January',
@@ -509,19 +510,20 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
   const [exam, setExam] = useState('');
   const [city, setCity] = useState('');
   const [date, setDate] = useState<DateVal | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   return (
     <section
       id='booking'
       className='relative z-50 px-4 pb-10 pt-12 md:pb-16 md:pt-20 md:px-7'
     >
-      <div
-        aria-hidden='true'
-        className="pointer-events-none absolute left-[9%] top-[6px] z-[6] hidden h-[320px] w-[190px] [animation:mascotFloat_7s_cubic-bezier(0.45,0,0.55,1)_infinite,mascotSway_9s_cubic-bezier(0.45,0,0.55,1)_infinite] [background-image:url('/demo-assets/character3.svg')] [background-position:center] [background-repeat:no-repeat] [background-size:contain] [transform:scaleX(-1)] xl:block"
-      />
+      <BookingMascot locale={locale} cardRef={cardRef} label={content.title} />
 
       <div className='relative mx-auto max-w-[1100px]'>
-        <div className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-14 pb-[90px] pt-[46px] text-center'>
+        <div
+          ref={cardRef}
+          className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-14 pb-[90px] pt-[46px] text-center'
+        >
           <div
             aria-hidden='true'
             className='pointer-events-none absolute -inset-px right-0 top-0 h-[120px] w-[120px]'
