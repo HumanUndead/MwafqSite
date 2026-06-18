@@ -17,6 +17,7 @@ import type {
   HomeImageContent,
   HomeLinkItemContent,
   HomePageContent,
+  HomeSectionKey,
   HomeServicesContent,
   HomeStatsContent,
   HomeStatsItemContent,
@@ -1415,6 +1416,32 @@ export function mapFooterContent(
   };
 }
 
+const SECTION_ORDER_IDS: { key: HomeSectionKey; id: number }[] = [
+  { key: 'hero', id: HOME_SECTION_IDS.hero },
+  { key: 'companies', id: COMPANIES_CATEGORY_ID },
+  { key: 'services', id: HOME_SECTION_IDS.services },
+  { key: 'why', id: HOME_SECTION_IDS.why },
+  { key: 'booking', id: HOME_SECTION_IDS.booking },
+  { key: 'steps', id: HOME_SECTION_IDS.steps },
+  { key: 'app', id: HOME_SECTION_IDS.app },
+  { key: 'academy', id: HOME_SECTION_IDS.academy },
+  { key: 'stats', id: HOME_SECTION_IDS.stats },
+  { key: 'business', id: HOME_SECTION_IDS.business },
+  { key: 'testimonial', id: HOME_SECTION_IDS.testimonial },
+];
+
+function buildSectionOrder(
+  rootCategory: RecursiveArticleCategoryDto | null
+): HomeSectionKey[] {
+  const children = getVisibleChildren(rootCategory);
+  return SECTION_ORDER_IDS.map(({ key, id }) => ({
+    key,
+    rank: children.find((c) => c.id === id)?.rank ?? 9999,
+  }))
+    .sort((a, b) => a.rank - b.rank)
+    .map(({ key }) => key);
+}
+
 function buildHomePageContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   companiesCategory: RecursiveArticleCategoryDto | null,
@@ -1441,6 +1468,7 @@ function buildHomePageContent(
     ),
     finalCta: fallback.finalCta,
     footer: fallback.footer,
+    sectionOrder: buildSectionOrder(rootCategory),
   };
 }
 
