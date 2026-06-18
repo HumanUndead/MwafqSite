@@ -130,18 +130,6 @@ export function buildEmptyHomeFallback(): HomePageContent {
       title: '',
       items: [],
     },
-    business: {
-      eyebrow: '',
-      title: '',
-      accent: '',
-      body: '',
-      points: [],
-      tabs: [],
-      metrics: [],
-      employees: [],
-      primaryAction: { ...EMPTY_ACTION },
-      secondaryAction: { ...EMPTY_ACTION },
-    },
     testimonial: [
       {
         quote: '',

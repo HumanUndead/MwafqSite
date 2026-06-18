@@ -16,7 +16,6 @@ export const HOME_SECTION_IDS = {
   app: 166,
   academy: 167,
   stats: 168,
-  business: 169,
   testimonial: 170,
 } as const;
 
@@ -46,12 +45,6 @@ export const APP_CHILD_CATEGORY_IDS = {
   reports: 185,
   points: 190,
   links: 192,
-} as const;
-
-export const BUSINESS_CHILD_CATEGORY_IDS = {
-  tabs: 175,
-  metrics: 181,
-  employees: 186,
 } as const;
 
 // These categories were removed from the home API tree but their mapping
@@ -119,13 +112,6 @@ export const ACADEMY_ARTICLE_RANKS = {
 
 export const STATS_ARTICLE_RANKS = {
   header: 1,
-} as const;
-
-export const BUSINESS_ARTICLE_RANKS = {
-  header: 1,
-  pointStart: 10,
-  primaryAction: 50,
-  secondaryAction: 60,
 } as const;
 
 export const TESTIMONIAL_ARTICLE_RANKS = {

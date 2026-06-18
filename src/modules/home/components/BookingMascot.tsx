@@ -60,11 +60,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
 
   // Only run on xl+, mirroring the original desktop-only mascot.
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1280px)');
-    const apply = () => setEnabled(mq.matches);
-    apply();
-    mq.addEventListener('change', apply);
-    return () => mq.removeEventListener('change', apply);
+    setEnabled(true);
   }, []);
 
   useEffect(() => {
@@ -86,18 +82,22 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
 
       if (card) {
         const rect = card.getBoundingClientRect();
-        const startAt = window.innerHeight * 0.95; // begin docking
-        const endAt = window.innerHeight * 0.3; // fully docked
-        const p = clamp((startAt - rect.top) / (startAt - endAt), 0, 1);
-        const eased = p * p * (3 - 2 * p); // smoothstep
+        // Only dock while the card is still in (or entering) the viewport.
+        // Once rect.bottom <= 0 the card is fully above — stay parked so the
+        // mascot remains visible as the user scrolls down the rest of the page.
+        if (rect.bottom > 0) {
+          const startAt = window.innerHeight * 0.95; // begin docking
+          const endAt = window.innerHeight * 0.3; // fully docked
+          const p = clamp((startAt - rect.top) / (startAt - endAt), 0, 1);
+          const eased = p * p * (3 - 2 * p); // smoothstep
 
-        // Dock onto the card's start-side top corner (flips with language).
-        const dockX = rtl ? rect.right - 30 : rect.left + 30;
-        const dockY = rect.top + 70;
+          const dockX = rtl ? rect.right - 30 : rect.left + 30;
+          const dockY = rect.top + 70;
 
-        cx = lerp(parkCenterX(), dockX, eased);
-        cy = lerp(parkCenterY(), dockY, eased);
-        sc = lerp(PARK_SCALE, DOCK_SCALE, eased);
+          cx = lerp(parkCenterX(), dockX, eased);
+          cy = lerp(parkCenterY(), dockY, eased);
+          sc = lerp(PARK_SCALE, DOCK_SCALE, eased);
+        }
       }
 
       xBase.set(cx - W / 2);
@@ -156,9 +156,9 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
     >
       <div
         className={cn(
-          'relative h-full w-full',
+          'relative flex h-full w-full flex-col items-center gap-1',
           !reduced &&
-            'animate-[mascotFloat_7s_cubic-bezier(0.45,0,0.55,1)_infinite,mascotSway_9s_cubic-bezier(0.45,0,0.55,1)_infinite]'
+            'animate-[mascotFloat_4s_cubic-bezier(0.45,0,0.55,1)_infinite,mascotSway_9s_cubic-bezier(0.45,0,0.55,1)_infinite]'
         )}
       >
         <Button
@@ -166,14 +166,21 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
           variant='ghost'
           onClick={goToBooking}
           aria-label={label}
-          style={{ transform: rtl ? 'scaleX(1)' : 'scaleX(-1)' }}
+          style={{ transform: rtl ? 'scaleX(1)' : 'scaleX(-1)', width: W, height: 140 }}
           className={cn(
-            'pointer-events-auto block size-full rounded-[28px] bg-transparent p-0 hover:bg-transparent',
+            'pointer-events-auto block shrink-0 rounded-[28px] bg-transparent p-0 hover:bg-transparent',
             'outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0'
           )}
         >
           <BotIcon className='size-full' />
         </Button>
+        <span className='pointer-events-none relative overflow-hidden rounded-full bg-gradient-to-r from-violet-500 via-indigo-500 to-cyan-400 px-4 py-[7px] text-[15px] font-extrabold tracking-wide text-white animate-[mascotBadgeGlow_2s_ease-in-out_infinite]'>
+          <span
+            aria-hidden
+            className='absolute inset-0 animate-[mascotBadgeShimmer_2.8s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/50 to-transparent'
+          />
+          ✨ Book Now
+        </span>
       </div>
     </motion.div>,
     document.body

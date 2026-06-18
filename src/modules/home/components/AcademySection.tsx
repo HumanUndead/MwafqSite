@@ -11,13 +11,13 @@ interface Props {
 
 export function AcademySection({ locale, content }: Props) {
   return (
-    <section className='relative mt-20 overflow-hidden rounded-t-[60px] bg-white pb-10 pt-16'>
+    <section className='relative mt-10 overflow-hidden rounded-t-[40px] bg-white pb-10 pt-10 md:mt-20 md:rounded-t-[60px] md:pt-16'>
       <div
         className='pointer-events-none absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] [background-size:32px_32px]'
         aria-hidden='true'
       />
       <div className='relative mx-auto max-w-[1320px] px-4 md:px-7'>
-        <div className='mb-[60px] flex flex-wrap items-end justify-start gap-[50px]'>
+        <div className='mb-8 flex flex-wrap items-end justify-start gap-12.5 md:mb-15'>
           <div>
             <Eyebrow>{content.eyebrow}</Eyebrow>
             <h2 className='text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>

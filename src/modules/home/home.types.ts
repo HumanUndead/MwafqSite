@@ -295,7 +295,6 @@ export type HomeSectionKey =
   | 'app'
   | 'academy'
   | 'stats'
-  | 'business'
   | 'testimonial';
 
 export interface HomePageContent {
@@ -309,7 +308,6 @@ export interface HomePageContent {
   app: HomeAppContent;
   academy: HomeAcademyContent;
   stats: HomeStatsContent;
-  business: HomeBusinessContent;
   testimonial: HomeTestimonialContent[];
   finalCta: HomeFinalCtaContent;
   footer: HomeFooterContent;

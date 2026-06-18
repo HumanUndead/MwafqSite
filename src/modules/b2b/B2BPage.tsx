@@ -1,6 +1,7 @@
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
 import type { B2BPageContent } from '@/modules/b2b/server/b2bContentService';
+import { B2BSection } from '@/modules/home/components/B2BSection';
 import { TickerSection } from '@/modules/home/components/TickerSection';
 import { B2BFinalCtaSection } from './components/B2BFinalCtaSection';
 import { B2BHeroSection } from './components/B2BHeroSection';
@@ -22,6 +23,7 @@ export function B2BPage({ locale, content }: Props) {
       <TickerSection content={content.companies} />
       <B2BWhySection content={content.why} />
       <B2BServicesSection content={content.services} />
+      <B2BSection locale={locale} content={content.business} />
       <B2BStepsSection content={content.steps} />
       <B2BFinalCtaSection locale={locale} content={content.finalCta} />
     </>

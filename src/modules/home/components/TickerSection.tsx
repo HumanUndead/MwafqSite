@@ -11,8 +11,8 @@ export function TickerSection({ content }: Props) {
   const doubled = [...items, ...items];
 
   return (
-    <div className='relative flex h-[100px] items-center overflow-x-clip overflow-y-visible border-b-2 border-t-2 border-[#e5e7f0] bg-white'>
-      <div className='flex w-max animate-[marquee_40s_linear_infinite] items-center hover:[animation-play-state:paused]'>
+    <div className='group relative flex h-17.5 items-center overflow-x-clip overflow-y-visible border-b-2 border-t-2 border-[#e5e7f0] bg-white sm:h-25'>
+      <div className='flex w-max animate-[marquee_40s_linear_infinite] items-center group-hover:paused'>
         {doubled.map(
           (item, i) =>
             item.imageSrc && (
@@ -21,7 +21,7 @@ export function TickerSection({ content }: Props) {
                 src={item.imageSrc + '_200x200.webp'}
                 alt={i < items.length ? 'Partner logo' : ''}
                 aria-hidden={i >= items.length || undefined}
-                className='mr-20 block h-[130px] w-auto flex-shrink-0 object-contain opacity-80 grayscale brightness-0 [filter:grayscale(1)_brightness(0)_invert(0.55)] transition-[opacity,transform,filter] duration-300 hover:opacity-100 hover:scale-[1.04] hover:[filter:grayscale(1)_brightness(0)_invert(0.35)]'
+                className='mr-10 block h-22.5 w-auto shrink-0 object-contain opacity-80 filter-[grayscale(1)_brightness(0)_invert(0.55)] transition-[opacity,transform,filter] duration-300 hover:scale-[1.04] hover:opacity-100 hover:filter-[grayscale(1)_brightness(0)_invert(0.35)] sm:mr-20 sm:h-32.5'
               />
             )
         )}

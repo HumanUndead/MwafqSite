@@ -298,14 +298,14 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
   return (
     <section
       id='booking'
-      className='relative z-50 px-4 pb-10 pt-12 md:pb-16 md:pt-20 md:px-7'
+      className='relative z-50 px-4 pb-2 pt-4 md:pb-4 md:pt-6 md:px-7'
     >
       <BookingMascot locale={locale} cardRef={cardRef} label={content.title} />
 
       <div className='relative mx-auto max-w-[1100px]'>
         <div
           ref={cardRef}
-          className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-14 pb-[90px] pt-[46px] text-center'
+          className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-5 pb-16 pt-8 text-center sm:px-10 sm:pb-17.5 sm:pt-10 md:px-14 md:pb-22.5 md:pt-11.5'
         >
           <div
             aria-hidden='true'
@@ -325,7 +325,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
             {content.eyebrow}
           </span>
 
-          <h2 className='relative z-10 mx-auto mb-9 text-[clamp(28px,3.4vw,42px)] font-extrabold leading-[1.1] tracking-[-1.2px] text-[#1e2364]'>
+          <h2 className='relative z-10 mx-auto mb-6 text-[clamp(24px,3.4vw,42px)] font-extrabold leading-[1.1] tracking-[-1.2px] text-[#1e2364] md:mb-9'>
             {content.title}
           </h2>
 
@@ -360,7 +360,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
               type='button'
               onClick={handleSearch}
               disabled={!canSearch}
-              className='inline-flex h-12 items-center gap-2 rounded-full bg-[#1e2364] px-[22px] text-[14px] font-semibold text-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] transition hover:bg-[#233567] disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:bg-[#1e2364]'
+              className='inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1e2364] px-5.5 text-[14px] font-semibold text-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] transition hover:bg-[#233567] disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:bg-[#1e2364] md:w-auto'
             >
               <svg
                 width='16'
@@ -380,7 +380,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
             </button>
           </form>
 
-          <div className='absolute bottom-10 left-14 right-14 z-[2] flex items-start gap-1'>
+          <div className='absolute bottom-5 left-5 right-5 z-2 flex items-start gap-1 sm:bottom-7 sm:left-10 sm:right-10 md:bottom-10 md:left-14 md:right-14'>
             <div
               aria-hidden='true'
               className='mt-[3px] h-2.5 w-2.5 flex-shrink-0'
