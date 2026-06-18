@@ -472,12 +472,11 @@ function resolveCmsAssetUrl(value: string | null | undefined): string | null {
 }
 
 function mapB2BCompaniesContent(
-  rootCategory: CategoryDto | null
+  companiesCategory: CategoryDto | null
 ): HomeCompaniesContent {
-  const category = getChildCategoryById(rootCategory, B2B_COMPANIES_CATEGORY_ID);
-  if (!category) return { items: [] };
+  if (!companiesCategory) return { items: [] };
   return {
-    items: category.articles
+    items: companiesCategory.articles
       .filter((article) => article.published && article.image)
       .map((article) => ({
         id: article.id,
@@ -495,6 +494,7 @@ export type B2BPageContent = Dictionary['b2b'] & {
 function buildB2BContent(
   dict: Dictionary,
   rootCategory: CategoryDto | null,
+  companiesCategory: CategoryDto | null,
   langId: number
 ): B2BPageContent {
   return {
@@ -504,7 +504,7 @@ function buildB2BContent(
     services: mapServicesContent(rootCategory, langId),
     steps: mapStepsContent(rootCategory, langId),
     finalCta: mapFinalCtaContent(rootCategory, langId),
-    companies: mapB2BCompaniesContent(rootCategory),
+    companies: mapB2BCompaniesContent(companiesCategory),
   };
 }
 
@@ -524,6 +524,28 @@ const fetchB2BContentTree = cache(async (): Promise<CategoryDto | null> => {
   }
 });
 
+const fetchB2BCompaniesCategoryTree = cache(
+  async (): Promise<CategoryDto | null> => {
+    try {
+      return await fetchWithErrorHandling<CategoryDto | null>(
+        `/api/General/ArticleCategory/GetRecursiveById?Id=${B2B_COMPANIES_CATEGORY_ID}`,
+        {
+          next: {
+            revalidate: B2B_CONTENT_REVALIDATE_SECONDS,
+            tags: [B2B_CONTENT_CACHE_TAG],
+          },
+        }
+      );
+    } catch (error) {
+      console.error(
+        '[b2b-content] Failed to fetch companies category.',
+        error
+      );
+      return null;
+    }
+  }
+);
+
 // ─── Export ───────────────────────────────────────────────────────────────────
 
 export async function getB2BPageContent(
@@ -531,6 +553,9 @@ export async function getB2BPageContent(
   dict: Dictionary
 ): Promise<B2BPageContent> {
   const langId = localeToLangId[locale];
-  const rootCategory = await fetchB2BContentTree();
-  return buildB2BContent(dict, rootCategory, langId);
+  const [rootCategory, companiesCategory] = await Promise.all([
+    fetchB2BContentTree(),
+    fetchB2BCompaniesCategoryTree(),
+  ]);
+  return buildB2BContent(dict, rootCategory, companiesCategory, langId);
 }
