@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
-import { hasLocale, type Locale } from '@/i18n/config';
+import { hasLocale } from '@/i18n/config';
 import { withAuthenticatedHeaderState } from '@/modules/auth/server/headerAuth';
 import { getCurrentUser } from '@/modules/auth/server/authSession';
 import { FooterSection } from '@/modules/home/components/FooterSection';
@@ -16,7 +16,7 @@ export default async function AuthLayout({
   children,
   params,
 }: AuthLayoutProps) {
-  const { locale } = (await params) as { locale: Locale };
+  const { locale } = await params;
 
   if (!hasLocale(locale)) {
     notFound();
