@@ -39,12 +39,18 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const culture = request.nextUrl.searchParams.get('culture');
+  const pagesize = request.nextUrl.searchParams.get('pagesize') ?? '100';
+
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(authTokenCookieName)?.value;
 
     const url = new URL('/api/General/City/List', MWAFQ_API_BASE_URL);
     url.searchParams.set('countryId', countryId);
+    url.searchParams.set('pagenumber', '1');
+    url.searchParams.set('pagesize', pagesize);
+    if (culture) url.searchParams.set('culture', culture);
 
     const headers: Record<string, string> = { Accept: 'application/json' };
     if (token) headers['Authorization'] = `Bearer ${token}`;

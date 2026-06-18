@@ -1,15 +1,53 @@
+import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
+import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
+import {
+  getServiceGroupBuyPath,
+  plainTextFromHtml,
+} from '@/modules/services/booking.shared';
+import { getTranslation } from '@/shared/lib/getTranslationName';
 import type { HomeServicesContent } from '../home.types';
-import { CmsLink } from './CmsLink';
 import { Eyebrow } from './Eyebrow';
-import { ArrowIcon, getServiceIconByKey } from './Icons';
+import { ArrowIcon } from './Icons';
 
 interface Props {
   locale: Locale;
   content: HomeServicesContent;
 }
 
-export function ServicesSection({ locale, content }: Props) {
+interface ServiceCard {
+  id: number;
+  title: string;
+  description: string;
+}
+
+async function getServiceCards(locale: Locale): Promise<ServiceCard[]> {
+  try {
+    const page = await fetchServiceGroupsList({
+      pageNumber: 1,
+      pageSize: 8,
+    });
+
+    return (page.data ?? [])
+      .map((group) => {
+        const translation = getTranslation(group.translations, locale);
+        return {
+          id: group.id,
+          title: translation?.name?.trim() ?? '',
+          description: translation?.description
+            ? plainTextFromHtml(translation.description)
+            : '',
+        };
+      })
+      .filter((card) => card.title.length > 0);
+  } catch {
+    return [];
+  }
+}
+
+export async function ServicesSection({ locale, content }: Props) {
+  const services = await getServiceCards(locale);
+
   return (
     <section id='services' className='relative px-4 py-12 md:py-20 md:px-7'>
       <div
@@ -38,28 +76,31 @@ export function ServicesSection({ locale, content }: Props) {
         </div>
 
         <div className='grid gap-[18px] sm:grid-cols-2 xl:grid-cols-4'>
-          {content.items.map((service) => (
-            <CmsLink
-              key={`${service.title}-${service.path ?? 'no-path'}`}
-              locale={locale}
-              href={service.path}
-              className="group relative block rounded-[16px] bg-white p-[24px_20px_20px] transition-transform duration-300 hover:-translate-y-1.5 after:absolute after:bottom-0 after:right-0 rtl:after:right-auto rtl:after:left-0 after:h-0 after:w-0 after:rounded-[10px] after:bg-[#eeeeef] after:content-[''] after:[transform:translate(50%,50%)] rtl:after:[transform:translate(-50%,50%)] after:transition-[width,height] after:duration-300 hover:after:h-16 hover:after:w-16"
+          {services.map((service) => (
+            <Link
+              key={service.id}
+              href={getServiceGroupBuyPath(locale, service.id)}
+              className='group relative flex flex-col overflow-hidden rounded-[18px] border border-[#e7e8f0] bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#00a8f1]/40 hover:shadow-[0_20px_40px_-20px_rgba(30,35,100,0.35)]'
             >
-              <div className='absolute right-5 top-6 rtl:right-auto rtl:left-5'>
-                <div className='flex h-8 w-8 items-center justify-center'>
-                  {getServiceIconByKey(service.iconKey)}
-                </div>
-              </div>
-              <h3 className='flex min-h-8 items-center pr-12 text-[16px] font-extrabold leading-[1.2] tracking-[-0.3px] text-[#1e2364] rtl:pl-12 rtl:pr-0'>
+              <span
+                aria-hidden='true'
+                className='absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-[#00a8f1] to-[#00dec9] transition-transform duration-300 group-hover:scale-x-100'
+              />
+              <h3 className='text-[17px] font-extrabold leading-[1.25] tracking-[-0.3px] text-[#1e2364]'>
                 {service.title}
               </h3>
-              <p className='mt-2 text-[12.5px] leading-[1.55] text-[#6b7196]'>
-                {service.description}
-              </p>
-              <span className='absolute bottom-3 right-3 z-3 text-[#1e2364] transition-transform duration-300 group-hover:translate-y-2 group-hover:translate-x-2 rtl:left-3 rtl:right-auto rtl:group-hover:-translate-x-2 rtl:transform-[scaleX(-1)]'>
-                <ArrowIcon />
+              {service.description && (
+                <p className='mt-2.5 line-clamp-3 text-[13px] leading-[1.55] text-[#6b7196]'>
+                  {service.description}
+                </p>
+              )}
+              <span className='mt-auto flex items-center gap-1.5 pt-5 text-[13px] font-semibold text-[#1e2364]'>
+                {locale === 'ar' ? 'احجز الآن' : 'Book now'}
+                <span className='text-[#00a8f1] transition-transform duration-300 group-hover:translate-x-1 rtl:transform-[scaleX(-1)] rtl:group-hover:-translate-x-1'>
+                  <ArrowIcon />
+                </span>
               </span>
-            </CmsLink>
+            </Link>
           ))}
         </div>
       </div>
