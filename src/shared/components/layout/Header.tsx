@@ -56,10 +56,10 @@ export function Header({ locale, content }: HeaderProps) {
     <>
     <header
       className={cn(
-        'fixed left-1/2 top-4 z-200 flex w-[calc(100%-40px)] max-w-350 -translate-x-1/2 items-center justify-between rounded-[80px] border-2 border-transparent py-2.5 pl-5 pr-3',
+        'fixed left-1/2 top-4 z-200 flex w-[calc(100%-40px)] max-w-350 -translate-x-1/2 items-center justify-between rounded-[80px] border-2 border-transparent py-2.5 px-5',
         'transition-[background,border-color,backdrop-filter] duration-250 ease-in-out',
-        'max-[980px]:w-[calc(100%-24px)] max-[980px]:pl-4 max-[980px]:pr-2.5',
-        'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:pl-3.5 max-[560px]:pr-2',
+        'max-[980px]:w-[calc(100%-24px)] max-[980px]:px-4',
+        'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:px-3.5',
         isScrolled &&
           'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150'
       )}
@@ -78,8 +78,8 @@ export function Header({ locale, content }: HeaderProps) {
           className={cn(
             'block w-auto transition-[height] duration-250 ease-in-out',
             isScrolled
-              ? 'h-12 max-[980px]:h-11 max-[560px]:h-10'
-              : 'h-16 max-[980px]:h-14 max-[560px]:h-12'
+              ? 'h-11 max-[980px]:h-10 max-[560px]:h-9'
+              : 'h-14 max-[980px]:h-12 max-[560px]:h-11'
           )}
           loading='eager'
         />
