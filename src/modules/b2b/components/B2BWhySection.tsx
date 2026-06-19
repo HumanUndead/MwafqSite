@@ -8,7 +8,7 @@ const icons = [BulkIcon, ReportsIcon, ShieldIcon, RefreshIcon];
 
 export function B2BWhySection({ content }: Props) {
   return (
-    <section id='why' className='bg-[#eeeeef] px-4 py-24 sm:px-7 sm:py-[150px]'>
+    <section id='why' className='bg-[#eeeeef] px-4 py-12 sm:px-7 sm:py-20'>
       <div className='mx-auto max-w-[1320px]'>
         <div className='mx-auto mb-14 max-w-[760px] text-center'>
           <h2 className='text-[clamp(30px,4.2vw,52px)] font-extrabold leading-[1.1] tracking-[-1.4px] text-[#1e2364]'>

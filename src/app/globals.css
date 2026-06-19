@@ -86,6 +86,16 @@ body {
   }
 }
 
+@keyframes floatRotate {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(2deg);
+  }
+}
+
 @keyframes floatSoft {
   0%,
   100% {

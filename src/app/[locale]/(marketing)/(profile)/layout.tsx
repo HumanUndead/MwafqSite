@@ -22,9 +22,9 @@ export default async function ProfileLayout({
 
   return (
     <MarketingStickyHeaderOffset variant='detail'>
-      <div className='mx-auto mb-[66px] grid min-h-[500px] grid-cols-12 gap-6 py-20 max-w-[1280px]'>
+      <div className='mx-auto mb-16.5 grid min-h-125 grid-cols-12 gap-6 pb-20 pt-6 max-w-7xl'>
         <ProfileSidebar locale={locale} />
-        <div className='col-span-9 flex flex-col gap-6'>{children}</div>
+        <div className='col-span-9 max-[1100px]:col-span-12 flex flex-col gap-6'>{children}</div>
       </div>
     </MarketingStickyHeaderOffset>
   );

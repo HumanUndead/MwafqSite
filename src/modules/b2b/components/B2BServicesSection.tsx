@@ -13,7 +13,7 @@ export function B2BServicesSection({ content }: Props) {
   return (
     <section
       id='services'
-      className='bg-[#eeeeef] px-4 pb-24 sm:px-7 sm:pb-[110px]'
+      className='bg-[#eeeeef] px-4 pb-12 sm:px-7 sm:pb-20'
     >
       <div className='mx-auto max-w-[1320px]'>
         <div className='mx-auto mb-14 max-w-[760px] text-center'>

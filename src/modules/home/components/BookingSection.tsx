@@ -240,9 +240,12 @@ function CitySelect({
     const controller = new AbortController();
     const timer = setTimeout(() => {
       setLoading(true);
-      fetch(`/api/general/cities?countryId=${KSA_COUNTRY_ID}&culture=${locale}`, {
-        signal: controller.signal,
-      })
+      fetch(
+        `/api/general/cities?countryId=${KSA_COUNTRY_ID}&culture=${locale}`,
+        {
+          signal: controller.signal,
+        }
+      )
         .then((res) => res.json())
         .then((payload) => {
           if (payload.success) setCities(payload.data);
@@ -302,7 +305,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
     >
       <BookingMascot locale={locale} cardRef={cardRef} label={content.title} />
 
-      <div className='relative mx-auto max-w-[1100px]'>
+      <div className='relative mx-auto max-w-275'>
         <div
           ref={cardRef}
           className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-5 pb-16 pt-8 text-center sm:px-10 sm:pb-17.5 sm:pt-10 md:px-14 md:pb-22.5 md:pt-11.5'

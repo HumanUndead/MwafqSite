@@ -17,7 +17,8 @@
       "Bash(npx eslint *)",
       "PowerShell(pm2 list)",
       "PowerShell(pm2 logs mwafqsite --lines 20 --nostream 2>&1)",
-      "PowerShell(taskkill /F /IM \"node.exe\" /T 2>&1; Remove-Item -Recurse -Force \"$env:USERPROFILE\\\\.pm2\\\\rpc.sock\" -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force \"$env:USERPROFILE\\\\.pm2\\\\pub.sock\" -ErrorAction SilentlyContinue; Write-Host \"Done\")"
+      "PowerShell(taskkill /F /IM \"node.exe\" /T 2>&1; Remove-Item -Recurse -Force \"$env:USERPROFILE\\\\.pm2\\\\rpc.sock\" -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force \"$env:USERPROFILE\\\\.pm2\\\\pub.sock\" -ErrorAction SilentlyContinue; Write-Host \"Done\")",
+      "PowerShell(npx eslint src/modules/b2b/components/B2BHeroSection.tsx)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"
