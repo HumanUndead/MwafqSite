@@ -90,7 +90,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
         </div>
 
-        <div className='relative mx-auto order-2 h-100 w-full max-w-140 overflow-hidden sm:h-120 sm:overflow-visible lg:h-140 lg:row-span-2 lg:self-center'>
+        <div className='relative mx-auto order-2 h-150 w-full max-w-140 overflow-hidden sm:h-120 sm:overflow-visible lg:h-140 lg:row-span-2 lg:self-center'>
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
@@ -118,7 +118,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             </div>
           ))}
 
-          <div className='absolute left-1/2 top-1/2 h-[540px] w-[260px] animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
+          <div className='absolute left-1/2 top-1/2 h-135 w-65 animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
             <div className='absolute left-1/2 top-[18px] z-10 h-[22px] w-[84px] -translate-x-1/2 rounded-[14px] bg-[#1e2364]' />
             <div className='absolute inset-[14px] flex flex-col gap-[10px] overflow-hidden rounded-[36px] border-2 border-[#e5e7f0] bg-white px-[13px] pb-[14px] pt-6'>
               <div className='mt-3.5 flex items-center justify-between'>

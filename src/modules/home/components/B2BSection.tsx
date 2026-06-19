@@ -26,7 +26,7 @@ export function B2BSection({ locale, content }: Props) {
   return (
     <section
       id='b2b'
-      className='relative overflow-hidden border-t-2 border-[#e5e7f0] px-4 py-12 md:py-20 text-white md:px-7'
+      className='relative overflow-hidden border-t-2 border-[#e5e7f0] px-4 py-8 md:py-14 text-white md:px-7'
       style={{
         background:
           'radial-gradient(circle at 80% 25%, rgba(0,168,241,0.42), transparent 45%), radial-gradient(circle at 18% 78%, rgba(116,47,136,0.45), transparent 45%), radial-gradient(circle at 50% 60%, rgba(35,53,103,0.25), transparent 50%), #1e2364',
