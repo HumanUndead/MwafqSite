@@ -11,9 +11,9 @@ interface Props {
 }
 
 const floatingMeta = [
-  'right-0 top-[6%] animate-[floatSoft_5s_ease-in-out_infinite] rtl:right-auto rtl:left-0',
-  'left-0 top-[44%] animate-[floatTilt_6s_ease-in-out_0.3s_infinite] rtl:left-auto rtl:right-0',
-  'right-2 bottom-[6%] animate-[floatSoft_5.5s_ease-in-out_0.6s_infinite] rtl:right-auto rtl:left-2',
+  'right-0 top-[6%] origin-right animate-[floatSoft_5s_ease-in-out_infinite] max-[640px]:scale-[0.78] rtl:right-auto rtl:left-0 rtl:origin-left',
+  'left-0 top-[44%] origin-left animate-[floatTilt_6s_ease-in-out_0.3s_infinite] max-[640px]:scale-[0.78] rtl:left-auto rtl:right-0 rtl:origin-right',
+  'right-2 bottom-[6%] origin-right animate-[floatSoft_5.5s_ease-in-out_0.6s_infinite] max-[640px]:scale-[0.78] rtl:right-auto rtl:left-2 rtl:origin-left',
 ];
 
 const statusPillStyles: Record<string, string> = {
@@ -33,15 +33,15 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
   return (
     <section
       id='home'
-      className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-20 sm:px-7'
+      className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-6 sm:px-7 sm:pb-10'
     >
       <div
         aria-hidden='true'
-        className='pointer-events-none absolute inset-0 opacity-55 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:24px_24px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
+        className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:24px_24px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
       />
 
-      <div className='relative z-[2] mx-auto max-w-[1320px]'>
-        <div className='grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-[60px]'>
+      <div className='relative z-2 mx-auto max-w-330'>
+        <div className='grid grid-cols-1 items-center gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-15'>
           <div className='lg:-translate-y-10'>
             <span className='mb-2 inline-block text-[clamp(40px,5.6vw,72px)] font-extrabold leading-none tracking-[-2.2px] text-[#1e2364]'>
               {content.eyebrow}
@@ -51,7 +51,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
               <span className='block'>{content.headingAccent}</span>
             </h1>
 
-            <p className='mb-9 max-w-[540px] text-[clamp(15.5px,1.3vw,17.5px)] leading-[1.65] text-[#6b7196]'>
+            <p className='mb-9 max-w-135 text-[clamp(15.5px,1.3vw,17.5px)] leading-[1.65] text-[#6b7196]'>
               {content.lead}
             </p>
 
@@ -108,11 +108,11 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
           </div>
 
           {/* Right column — dashboard mockup + floating cards */}
-          <div className='relative mx-auto h-[560px] w-full max-w-[560px]'>
+          <div className='relative mx-auto w-full max-w-140 lg:h-140'>
             {content.floatingCards.slice(0, 3).map((card, index) => (
               <div
                 key={card.title || index}
-                className={`absolute z-[5] hidden items-center gap-3 rounded-[18px] border-2 border-[#1e2364] bg-white px-3 py-3 pr-5 sm:flex ${floatingMeta[index]}`}
+                className={`absolute z-[5] flex items-center gap-3 rounded-[18px] border-2 border-[#1e2364] bg-white px-3 py-3 pr-5 ${floatingMeta[index]}`}
               >
                 <span
                   aria-hidden='true'
@@ -120,7 +120,9 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
                 >
                   <FloatingIcon index={index} />
                 </span>
-                <div className={isRtl ? '-mr-2.5 text-right' : '-ml-2.5 text-left'}>
+                <div
+                  className={isRtl ? '-mr-2.5 text-right' : '-ml-2.5 text-left'}
+                >
                   <strong className='block text-[15px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
                     {card.title}
                   </strong>
@@ -131,83 +133,85 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
               </div>
             ))}
 
-            {/* Dashboard mockup */}
-            <div className='absolute left-1/2 top-1/2 z-[2] w-full lg:w-[90%] animate-[phoneFloat_6s_ease-in-out_infinite] overflow-hidden rounded-[18px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
-              {/* Browser chrome */}
-              <div className='flex items-center gap-2 border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-3 py-2'>
-                <div className='flex gap-1.5'>
-                  <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
-                  <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
-                  <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
-                </div>
-              </div>
-
-              {/* Dashboard body */}
-              <div className='flex flex-col gap-3 p-3'>
-                {/* Tab bar */}
-                <div className='flex gap-0.5 rounded-full bg-[#f4f4f6] p-1'>
-                  <span className='flex-1 rounded-full bg-white py-1 text-center text-[10px] font-extrabold text-[#1e2364] shadow-sm'>
-                    {content.phone.tabOverview}
-                  </span>
-                  <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
-                    {content.phone.tabEmployees}
-                  </span>
-                  <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
-                    {content.phone.tabReports}
-                  </span>
+            {/* Dashboard mockup — wrapper centers, inner card animates */}
+            <div className='relative z-2 mx-auto w-full lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[90%] lg:-translate-x-1/2 lg:-translate-y-1/2'>
+              <div className='animate-[floatRotate_6s_ease-in-out_infinite] overflow-hidden rounded-[18px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
+                {/* Browser chrome */}
+                <div className='flex items-center gap-2 border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-3 py-2'>
+                  <div className='flex gap-1.5'>
+                    <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                    <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                    <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                  </div>
                 </div>
 
-                {/* Stat cards */}
-                <div className='grid grid-cols-3 gap-2'>
-                  <StatCard
-                    value='248'
-                    label={content.phone.statEmployeesLabel}
-                    numColor='#1565c0'
-                    barColor='#1e88e5'
-                    bars={[8, 12, 6, 14, 10, 16, 18]}
-                  />
-                  <StatCard
-                    value='96%'
-                    label={content.phone.statClearedLabel}
-                    numColor='#00897b'
-                    barColor='#00dec9'
-                    bars={[6, 10, 8, 16, 12, 14, 18]}
-                  />
-                  <StatCard
-                    value='12'
-                    label={content.phone.statPendingLabel}
-                    numColor='#e65100'
-                    barColor='#ff9800'
-                    bars={[10, 14, 8, 12, 6, 16, 10]}
-                  />
-                </div>
+                {/* Dashboard body */}
+                <div className='flex flex-col gap-3 p-3'>
+                  {/* Tab bar */}
+                  <div className='flex gap-0.5 rounded-full bg-[#f4f4f6] p-1'>
+                    <span className='flex-1 rounded-full bg-white py-1 text-center text-[10px] font-extrabold text-[#1e2364] shadow-sm'>
+                      {content.phone.tabOverview}
+                    </span>
+                    <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
+                      {content.phone.tabEmployees}
+                    </span>
+                    <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
+                      {content.phone.tabReports}
+                    </span>
+                  </div>
 
-                {/* Employee rows */}
-                <ul className='flex flex-col gap-2'>
-                  {employees.map((emp, idx) => (
-                    <li
-                      key={`${emp.initials}-${idx}`}
-                      className='flex items-center gap-2.5 rounded-[14px] border border-[#e5e7f0] px-3 py-2.5'
-                    >
-                      <span className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f6] text-[9.5px] font-extrabold text-[#1e2364]'>
-                        {emp.initials}
-                      </span>
-                      <div className='min-w-0 flex-1'>
-                        <strong className='block truncate text-[11px] font-extrabold leading-tight text-[#1e2364]'>
-                          {emp.name}
-                        </strong>
-                        <span className='block truncate text-[9.5px] text-[#6b7196]'>
-                          {emp.type} · {emp.city}
-                        </span>
-                      </div>
-                      <span
-                        className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
+                  {/* Stat cards */}
+                  <div className='grid grid-cols-3 gap-2'>
+                    <StatCard
+                      value='248'
+                      label={content.phone.statEmployeesLabel}
+                      numColor='#1565c0'
+                      barColor='#1e88e5'
+                      bars={[8, 12, 6, 14, 10, 16, 18]}
+                    />
+                    <StatCard
+                      value='96%'
+                      label={content.phone.statClearedLabel}
+                      numColor='#00897b'
+                      barColor='#00dec9'
+                      bars={[6, 10, 8, 16, 12, 14, 18]}
+                    />
+                    <StatCard
+                      value='12'
+                      label={content.phone.statPendingLabel}
+                      numColor='#e65100'
+                      barColor='#ff9800'
+                      bars={[10, 14, 8, 12, 6, 16, 10]}
+                    />
+                  </div>
+
+                  {/* Employee rows */}
+                  <ul className='flex flex-col gap-2'>
+                    {employees.map((emp, idx) => (
+                      <li
+                        key={`${emp.initials}-${idx}`}
+                        className='flex items-center gap-2.5 rounded-[14px] border border-[#e5e7f0] px-3 py-2.5'
                       >
-                        {statusLabels[emp.status] ?? emp.status}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                        <span className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f6] text-[9.5px] font-extrabold text-[#1e2364]'>
+                          {emp.initials}
+                        </span>
+                        <div className='min-w-0 flex-1'>
+                          <strong className='block truncate text-[11px] font-extrabold leading-tight text-[#1e2364]'>
+                            {emp.name}
+                          </strong>
+                          <span className='block truncate text-[9.5px] text-[#6b7196]'>
+                            {emp.type} · {emp.city}
+                          </span>
+                        </div>
+                        <span
+                          className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
+                        >
+                          {statusLabels[emp.status] ?? emp.status}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

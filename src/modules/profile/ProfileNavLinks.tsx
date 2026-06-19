@@ -14,7 +14,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
 const navBase =
-  'flex w-full items-center gap-3 rounded-[18px] px-4 py-[14px] text-left text-[14.5px] font-semibold no-underline transition-colors duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]';
+  'flex min-[1101px]:w-full max-[1100px]:grow max-[1100px]:shrink max-[1100px]:basis-[calc(50%-12px)] max-[640px]:basis-full items-center gap-3 rounded-[18px] px-4 py-[14px] max-[1100px]:px-3 max-[1100px]:py-3 text-left text-[14.5px] font-semibold no-underline transition-colors duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]';
 
 const navActive = 'bg-[#1e2364] text-white hover:bg-[#1e2364] hover:text-white';
 

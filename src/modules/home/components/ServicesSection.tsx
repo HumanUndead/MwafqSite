@@ -80,25 +80,29 @@ export async function ServicesSection({ locale, content }: Props) {
             <Link
               key={service.id}
               href={getServiceGroupBuyPath(locale, service.id)}
-              className='group relative flex flex-col overflow-hidden rounded-[18px] border border-[#e7e8f0] bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#00a8f1]/40 hover:shadow-[0_20px_40px_-20px_rgba(30,35,100,0.35)]'
+              className='group relative flex flex-col rounded-[20px] bg-white pb-8 pl-[28px] pr-[28px] pt-[38px] transition-transform duration-300 hover:-translate-y-[6px]'
             >
+              {/* Concave corner notch — page-bg square anchored at corner creates the carved look */}
               <span
                 aria-hidden='true'
-                className='absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-[#00a8f1] to-[#00dec9] transition-transform duration-300 group-hover:scale-x-100'
+                className='pointer-events-none absolute bottom-0 right-0 z-[1] h-0 w-0 translate-x-1/2 translate-y-1/2 rounded-[14px] bg-[#eeeeef] transition-[width,height] duration-[350ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:h-24 group-hover:w-24'
               />
-              <h3 className='text-[17px] font-extrabold leading-[1.25] tracking-[-0.3px] text-[#1e2364]'>
+
+              <h3 className='text-[20px] font-extrabold leading-[1.2] tracking-[-0.3px] text-[#1e2364]'>
                 {service.title}
               </h3>
               {service.description && (
-                <p className='mt-2.5 line-clamp-3 text-[13px] leading-[1.55] text-[#6b7196]'>
+                <p className='mt-3 line-clamp-3 text-[13.5px] leading-[1.55] text-[#6b7196]'>
                   {service.description}
                 </p>
               )}
-              <span className='mt-auto flex items-center gap-1.5 pt-5 text-[13px] font-semibold text-[#1e2364]'>
-                {locale === 'ar' ? 'احجز الآن' : 'Book now'}
-                <span className='text-[#00a8f1] transition-transform duration-300 group-hover:translate-x-1 rtl:transform-[scaleX(-1)] rtl:group-hover:-translate-x-1'>
-                  <ArrowIcon />
-                </span>
+
+              {/* Arrow — bottom-right, slides into the notch on hover */}
+              <span
+                aria-hidden='true'
+                className='pointer-events-none absolute bottom-3.5 right-3.5 z-[3] text-[#1e2364] transition-transform duration-[350ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 group-hover:translate-y-2'
+              >
+                <ArrowIcon />
               </span>
             </Link>
           ))}

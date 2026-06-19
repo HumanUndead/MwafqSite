@@ -12,7 +12,7 @@ export function B2BFinalCtaSection({ locale, content }: Props) {
   return (
     <section
       id='cta'
-      className='relative border-y-2 border-[#e5e7f0] bg-[#1e2364] px-6 py-24 text-center sm:px-[60px] sm:py-[100px]'
+      className='relative border-y-2 border-[#e5e7f0] bg-[#1e2364] px-6 py-12 text-center sm:px-[60px] sm:py-20'
     >
       <div className='mx-auto max-w-[760px]'>
         <h2 className='mx-auto mb-5 max-w-[720px] text-[clamp(30px,4.6vw,56px)] font-extrabold leading-[1.06] tracking-[-1.6px] text-white'>

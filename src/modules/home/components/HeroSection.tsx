@@ -55,10 +55,10 @@ export function HeroSection({ locale, content, isRtl }: Props) {
         className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
         aria-hidden='true'
       />
-      <div className='relative mx-auto grid max-w-[1320px] items-center gap-10 lg:gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
-        <div>
+      <div className='relative mx-auto grid max-w-[1320px] gap-10 lg:gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
+        <div className='order-1'>
           <h1 className='mb-5 md:mb-7 text-[clamp(44px,6.5vw,63px)] font-extrabold leading-[1.50] tracking-[-2.6px] text-[#1e2364]'>
-            <span className='block whitespace-nowrap'>{content.titleLead}</span>
+            <span className='block sm:whitespace-nowrap'>{content.titleLead}</span>
             {hasSecondLine ? (
               <span className='block'>
                 {content.titleMiddle ? (
@@ -88,29 +88,13 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             primaryTrailing={<ArrowIcon />}
           />
 
-          <div className='grid max-w-[560px] gap-[30px] border-t-2 border-[#e5e7f0] pt-9 sm:grid-cols-3'>
-            {content.stats.map((stat) => (
-              <div key={stat.label}>
-                <div className='inline-flex items-baseline gap-0.5 whitespace-nowrap text-[30px] font-extrabold leading-none tracking-[-1px] text-[#1e2364]'>
-                  <CountUp
-                    value={stat.value}
-                    suffix={stat.suffix}
-                    decimals={stat.decimals}
-                  />
-                </div>
-                <p className='mt-1.5 text-[12.5px] font-medium tracking-[0.4px] text-[#6b7196]'>
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
 
-        <div className='relative mx-auto h-[560px] w-full max-w-[560px]'>
+        <div className='relative mx-auto order-2 h-150 w-full max-w-140 overflow-hidden sm:h-120 sm:overflow-visible lg:h-140 lg:row-span-2 lg:self-center'>
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
-              className={`absolute z-5 hidden items-center gap-[14px] rounded-[18px] border-2 border-[#1e2364] bg-white md:flex ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
+              className={`absolute z-5 flex items-center gap-[14px] rounded-[18px] border-2 border-[#1e2364] bg-white max-[560px]:scale-[0.72] ${index === 1 ? 'max-[560px]:origin-left' : 'max-[560px]:origin-right'} ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
               style={{ padding: '12px 18px 12px 12px' }}
             >
               <span
@@ -134,7 +118,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             </div>
           ))}
 
-          <div className='absolute left-1/2 top-1/2 h-[540px] w-[260px] animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
+          <div className='absolute left-1/2 top-1/2 h-135 w-65 animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
             <div className='absolute left-1/2 top-[18px] z-10 h-[22px] w-[84px] -translate-x-1/2 rounded-[14px] bg-[#1e2364]' />
             <div className='absolute inset-[14px] flex flex-col gap-[10px] overflow-hidden rounded-[36px] border-2 border-[#e5e7f0] bg-white px-[13px] pb-[14px] pt-6'>
               <div className='mt-3.5 flex items-center justify-between'>
@@ -217,6 +201,23 @@ export function HeroSection({ locale, content, isRtl }: Props) {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className='order-3 grid grid-cols-3 gap-4 border-t-2 border-[#e5e7f0] pt-9 sm:gap-7.5'>
+          {content.stats.map((stat) => (
+            <div key={stat.label}>
+              <div className='inline-flex items-baseline gap-0.5 whitespace-nowrap text-[22px] font-extrabold leading-none tracking-[-1px] text-[#1e2364] sm:text-[28px] md:text-[30px]'>
+                <CountUp
+                  value={stat.value}
+                  suffix={stat.suffix}
+                  decimals={stat.decimals}
+                />
+              </div>
+              <p className='mt-1.5 text-[11px] font-medium tracking-[0.4px] text-[#6b7196] sm:text-[12.5px]'>
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

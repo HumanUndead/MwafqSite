@@ -7,7 +7,6 @@ import type {
   HomeActionContent,
   HomeAppContent,
   HomeBookingContent,
-  HomeBusinessContent,
   HomeCompaniesContent,
   HomeFinalCtaContent,
   HomeFooterContent,
@@ -17,6 +16,7 @@ import type {
   HomeImageContent,
   HomeLinkItemContent,
   HomePageContent,
+  HomeSectionKey,
   HomeServicesContent,
   HomeStatsContent,
   HomeStatsItemContent,
@@ -30,8 +30,6 @@ import {
   APP_CHILD_CATEGORY_IDS,
   BOOKING_ARTICLE_RANKS,
   BOOKING_CHILD_CATEGORY_IDS,
-  BUSINESS_ARTICLE_RANKS,
-  BUSINESS_CHILD_CATEGORY_IDS,
   COMPANIES_CATEGORY_ID,
   FINAL_CTA_ARTICLE_RANKS,
   FINAL_CTA_CATEGORY_ID,
@@ -1062,113 +1060,6 @@ function mapStatsContent(
   };
 }
 
-function mapBusinessContent(
-  fallback: HomeBusinessContent,
-  rootCategory: RecursiveArticleCategoryDto | null,
-  langId: number
-): HomeBusinessContent {
-  const businessCategory = getChildCategoryById(
-    rootCategory,
-    HOME_SECTION_IDS.business
-  );
-
-  if (!businessCategory) {
-    return fallback;
-  }
-
-  const headerArticle = getArticleByRank(
-    businessCategory,
-    BUSINESS_ARTICLE_RANKS.header
-  );
-  const primaryActionArticle = getArticleByRank(
-    businessCategory,
-    BUSINESS_ARTICLE_RANKS.primaryAction
-  );
-  const secondaryActionArticle = getArticleByRank(
-    businessCategory,
-    BUSINESS_ARTICLE_RANKS.secondaryAction
-  );
-  const headerTranslation = headerArticle
-    ? getArticleTranslation(headerArticle, langId)
-    : null;
-  const pointArticles = getVisibleArticles(businessCategory).filter(
-    (article) =>
-      article.rank >= BUSINESS_ARTICLE_RANKS.pointStart &&
-      article.rank < BUSINESS_ARTICLE_RANKS.primaryAction
-  );
-  const tabsCategory = getChildCategoryById(
-    businessCategory,
-    BUSINESS_CHILD_CATEGORY_IDS.tabs
-  );
-  const tabsArticle = getArticleByRank(tabsCategory, 1);
-  const tabsTranslation = tabsArticle
-    ? getArticleTranslation(tabsArticle, langId)
-    : null;
-  const metricsCategory = getChildCategoryById(
-    businessCategory,
-    BUSINESS_CHILD_CATEGORY_IDS.metrics
-  );
-  const employeesCategory = getChildCategoryById(
-    businessCategory,
-    BUSINESS_CHILD_CATEGORY_IDS.employees
-  );
-
-  return {
-    eyebrow:
-      trimToNull(headerTranslation?.shortDescription) ?? fallback.eyebrow,
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    accent: trimToNull(headerTranslation?.extraInfo) ?? fallback.accent,
-    body: trimToNull(headerTranslation?.description) ?? fallback.body,
-    points:
-      pointArticles.length > 0
-        ? pointArticles.map(
-            (article) =>
-              trimToNull(getArticleTranslation(article, langId).name) ?? ''
-          )
-        : fallback.points,
-    tabs: tabsTranslation
-      ? [
-          trimToNull(tabsTranslation.name),
-          trimToNull(tabsTranslation.shortDescription),
-          trimToNull(tabsTranslation.extraInfo),
-        ].filter((tab): tab is string => Boolean(tab))
-      : fallback.tabs,
-    metrics:
-      getVisibleArticles(metricsCategory).length > 0
-        ? getVisibleArticles(metricsCategory).map((article) => {
-            const translation = getArticleTranslation(article, langId);
-
-            return {
-              value: trimToNull(translation.name) ?? '',
-              label: trimToNull(translation.description) ?? '',
-            };
-          })
-        : fallback.metrics,
-    employees:
-      getVisibleArticles(employeesCategory).length > 0
-        ? getVisibleArticles(employeesCategory).map((article) => {
-            const translation = getArticleTranslation(article, langId);
-
-            return {
-              name: trimToNull(translation.name) ?? '',
-              exam: trimToNull(translation.description) ?? '',
-              status: trimToNull(translation.shortDescription) ?? '',
-            };
-          })
-        : fallback.employees,
-    primaryAction: toActionContent(
-      primaryActionArticle,
-      langId,
-      fallback.primaryAction
-    ),
-    secondaryAction: toActionContent(
-      secondaryActionArticle,
-      langId,
-      fallback.secondaryAction
-    ),
-  };
-}
-
 function mapTestimonialContent(
   fallback: HomeTestimonialContent[],
   rootCategory: RecursiveArticleCategoryDto | null,
@@ -1415,6 +1306,31 @@ export function mapFooterContent(
   };
 }
 
+const SECTION_ORDER_IDS: { key: HomeSectionKey; id: number }[] = [
+  { key: 'hero', id: HOME_SECTION_IDS.hero },
+  { key: 'companies', id: COMPANIES_CATEGORY_ID },
+  { key: 'services', id: HOME_SECTION_IDS.services },
+  { key: 'why', id: HOME_SECTION_IDS.why },
+  { key: 'booking', id: HOME_SECTION_IDS.booking },
+  { key: 'steps', id: HOME_SECTION_IDS.steps },
+  { key: 'app', id: HOME_SECTION_IDS.app },
+  { key: 'academy', id: HOME_SECTION_IDS.academy },
+  { key: 'stats', id: HOME_SECTION_IDS.stats },
+  { key: 'testimonial', id: HOME_SECTION_IDS.testimonial },
+];
+
+function buildSectionOrder(
+  rootCategory: RecursiveArticleCategoryDto | null
+): HomeSectionKey[] {
+  const children = getVisibleChildren(rootCategory);
+  return SECTION_ORDER_IDS.map(({ key, id }) => ({
+    key,
+    rank: children.find((c) => c.id === id)?.rank ?? 9999,
+  }))
+    .sort((a, b) => a.rank - b.rank)
+    .map(({ key }) => key);
+}
+
 function buildHomePageContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   companiesCategory: RecursiveArticleCategoryDto | null,
@@ -1433,7 +1349,6 @@ function buildHomePageContent(
     app: mapAppContent(fallback.app, rootCategory, langId),
     academy: mapAcademyContent(fallback.academy, rootCategory, langId),
     stats: mapStatsContent(fallback.stats, rootCategory, langId),
-    business: mapBusinessContent(fallback.business, rootCategory, langId),
     testimonial: mapTestimonialContent(
       fallback.testimonial,
       rootCategory,
@@ -1441,6 +1356,7 @@ function buildHomePageContent(
     ),
     finalCta: fallback.finalCta,
     footer: fallback.footer,
+    sectionOrder: buildSectionOrder(rootCategory),
   };
 }
 

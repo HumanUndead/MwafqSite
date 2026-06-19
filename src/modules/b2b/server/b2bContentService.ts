@@ -3,9 +3,12 @@ import 'server-only';
 import { cache } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/locales/types';
-import type { HomeCompaniesContent } from '@/modules/home/home.types';
+import type { HomeActionContent, HomeBusinessContent, HomeCompaniesContent } from '@/modules/home/home.types';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import {
+  B2B_BUSINESS_ARTICLE_RANKS,
+  B2B_BUSINESS_CATEGORY_ID,
+  B2B_BUSINESS_CHILD_CATEGORY_IDS,
   B2B_COMPANIES_CATEGORY_ID,
   B2B_CONTENT_API_BASE_URL,
   B2B_CONTENT_CACHE_TAG,
@@ -259,6 +262,7 @@ function mapHeroContent(
     return {
       initials: deriveInitials(name),
       name,
+      city: '',
       type:
         trimToNull(localized.extraInfo) ?? trimToNull(english.extraInfo) ?? '',
       status: normalizeStatus(english.shortDescription),
@@ -303,7 +307,7 @@ function mapHeroContent(
       statusActive: '',
       statusWait: '',
       employees,
-    },
+    } as any,
     floatingCards,
   };
 }
@@ -461,6 +465,95 @@ function mapFinalCtaContent(
   };
 }
 
+// ─── Business section ─────────────────────────────────────────────────────────
+
+const EMPTY_BUSINESS: HomeBusinessContent = {
+  eyebrow: '',
+  title: '',
+  accent: '',
+  body: '',
+  points: [],
+  tabs: [],
+  metrics: [],
+  employees: [],
+  primaryAction: { label: '', path: null },
+  secondaryAction: { label: '', path: null },
+};
+
+function toBusinessAction(
+  article: ArticleDto | null,
+  langId: number,
+  fallback: HomeActionContent
+): HomeActionContent {
+  if (!article) return { label: fallback.label, path: trimToNull(fallback.path) };
+  const t = getArticleTranslation(article, langId);
+  return {
+    label: trimToNull(t.name) ?? '',
+    path: trimToNull(article.path) ?? trimToNull(fallback.path),
+  };
+}
+
+function mapBusinessContent(
+  businessCategory: CategoryDto | null,
+  langId: number
+): HomeBusinessContent {
+  if (!businessCategory) return EMPTY_BUSINESS;
+
+  const headerArticle = getArticleByRank(businessCategory, B2B_BUSINESS_ARTICLE_RANKS.header);
+  const primaryActionArticle = getArticleByRank(businessCategory, B2B_BUSINESS_ARTICLE_RANKS.primaryAction);
+  const secondaryActionArticle = getArticleByRank(businessCategory, B2B_BUSINESS_ARTICLE_RANKS.secondaryAction);
+  const headerT = headerArticle ? getArticleTranslation(headerArticle, langId) : null;
+
+  const pointArticles = getVisibleArticles(businessCategory).filter(
+    (a) =>
+      a.rank >= B2B_BUSINESS_ARTICLE_RANKS.pointStart &&
+      a.rank < B2B_BUSINESS_ARTICLE_RANKS.primaryAction
+  );
+
+  const tabsCategory = getChildCategoryById(businessCategory, B2B_BUSINESS_CHILD_CATEGORY_IDS.tabs);
+  const tabsArticle = getArticleByRank(tabsCategory, 1);
+  const tabsT = tabsArticle ? getArticleTranslation(tabsArticle, langId) : null;
+
+  const metricsCategory = getChildCategoryById(businessCategory, B2B_BUSINESS_CHILD_CATEGORY_IDS.metrics);
+  const employeesCategory = getChildCategoryById(businessCategory, B2B_BUSINESS_CHILD_CATEGORY_IDS.employees);
+
+  return {
+    eyebrow: trimToNull(headerT?.shortDescription) ?? EMPTY_BUSINESS.eyebrow,
+    title: trimToNull(headerT?.name) ?? EMPTY_BUSINESS.title,
+    accent: trimToNull(headerT?.extraInfo) ?? EMPTY_BUSINESS.accent,
+    body: stripHtmlTags(headerT?.description) ?? EMPTY_BUSINESS.body,
+    points:
+      pointArticles.length > 0
+        ? pointArticles.map((a) => trimToNull(getArticleTranslation(a, langId).name) ?? '')
+        : EMPTY_BUSINESS.points,
+    tabs: tabsT
+      ? [trimToNull(tabsT.name), trimToNull(tabsT.shortDescription), trimToNull(tabsT.extraInfo)].filter(
+          (t): t is string => Boolean(t)
+        )
+      : EMPTY_BUSINESS.tabs,
+    metrics:
+      getVisibleArticles(metricsCategory).length > 0
+        ? getVisibleArticles(metricsCategory).map((a) => {
+            const t = getArticleTranslation(a, langId);
+            return { value: trimToNull(t.name) ?? '', label: trimToNull(t.description) ?? '' };
+          })
+        : EMPTY_BUSINESS.metrics,
+    employees:
+      getVisibleArticles(employeesCategory).length > 0
+        ? getVisibleArticles(employeesCategory).map((a) => {
+            const t = getArticleTranslation(a, langId);
+            return {
+              name: trimToNull(t.name) ?? '',
+              exam: trimToNull(t.description) ?? '',
+              status: trimToNull(t.shortDescription) ?? '',
+            };
+          })
+        : EMPTY_BUSINESS.employees,
+    primaryAction: toBusinessAction(primaryActionArticle, langId, EMPTY_BUSINESS.primaryAction),
+    secondaryAction: toBusinessAction(secondaryActionArticle, langId, EMPTY_BUSINESS.secondaryAction),
+  };
+}
+
 // ─── Companies ────────────────────────────────────────────────────────────────
 
 function resolveCmsAssetUrl(value: string | null | undefined): string | null {
@@ -489,12 +582,14 @@ function mapB2BCompaniesContent(
 
 export type B2BPageContent = Dictionary['b2b'] & {
   companies: HomeCompaniesContent;
+  business: HomeBusinessContent;
 };
 
 function buildB2BContent(
   dict: Dictionary,
   rootCategory: CategoryDto | null,
   companiesCategory: CategoryDto | null,
+  business: HomeBusinessContent,
   langId: number
 ): B2BPageContent {
   return {
@@ -505,6 +600,7 @@ function buildB2BContent(
     steps: mapStepsContent(rootCategory, langId),
     finalCta: mapFinalCtaContent(rootCategory, langId),
     companies: mapB2BCompaniesContent(companiesCategory),
+    business,
   };
 }
 
@@ -537,10 +633,7 @@ const fetchB2BCompaniesCategoryTree = cache(
         }
       );
     } catch (error) {
-      console.error(
-        '[b2b-content] Failed to fetch companies category.',
-        error
-      );
+      console.error('[b2b-content] Failed to fetch companies category.', error);
       return null;
     }
   }
@@ -557,5 +650,6 @@ export async function getB2BPageContent(
     fetchB2BContentTree(),
     fetchB2BCompaniesCategoryTree(),
   ]);
-  return buildB2BContent(dict, rootCategory, companiesCategory, langId);
+  const businessCategory = getChildCategoryById(rootCategory, B2B_BUSINESS_CATEGORY_ID);
+  return buildB2BContent(dict, rootCategory, companiesCategory, mapBusinessContent(businessCategory, langId), langId);
 }
