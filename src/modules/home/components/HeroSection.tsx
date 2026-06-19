@@ -57,10 +57,12 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       />
       <div className='relative mx-auto grid max-w-[1320px] gap-10 lg:gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
         <div className='order-1'>
-          <h1 className='mb-5 md:mb-7 text-[clamp(30px,6.5vw,63px)] font-extrabold leading-[1.50] tracking-[-2.6px] text-[#1e2364]'>
-            <span className='block sm:whitespace-nowrap'>{content.titleLead}</span>
+          <h1 className='mb-5 md:mb-7 text-[clamp(30px,6.5vw,53px)] font-extrabold tracking-[-2.6px] text-[#1e2364]'>
+            <span className='block sm:whitespace-nowrap'>
+              {content.titleLead}
+            </span>
             {hasSecondLine ? (
-              <span className='inline-block whitespace-nowrap'>
+              <span className='inline-block'> {/* whitespace-nowrap */}
                 {content.titleMiddle ? (
                   <>
                     {content.titleMiddle}
@@ -87,7 +89,6 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             className='mb-8 md:mb-11 flex flex-wrap gap-3.5'
             primaryTrailing={<ArrowIcon />}
           />
-
         </div>
 
         <div className='relative mx-auto order-2 h-150 w-full max-w-140 overflow-hidden sm:h-120 sm:overflow-visible lg:h-140 lg:row-span-2 lg:self-center'>

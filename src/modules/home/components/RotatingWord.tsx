@@ -119,7 +119,7 @@ export function RotatingWord({ words }: Props) {
   }
 
   return (
-    <span className='relative px-2 inline-flex font-normal italic text-sky-500'>
+    <span className='relative px-2 inline-flex font-normal italic text-sky-500 min-w-[200px]'>
       <span>{displayText}</span>
       <motion.span
         aria-hidden='true'
