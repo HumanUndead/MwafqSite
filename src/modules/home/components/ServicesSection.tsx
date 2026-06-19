@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
+import { isRtl } from '@/i18n/config';
 import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
 import {
   getServiceGroupBuyPath,
   plainTextFromHtml,
 } from '@/modules/services/booking.shared';
+import { cn } from '@/shared/lib/cn';
 import { getTranslation } from '@/shared/lib/getTranslationName';
 import type { HomeServicesContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
@@ -47,6 +49,7 @@ async function getServiceCards(locale: Locale): Promise<ServiceCard[]> {
 
 export async function ServicesSection({ locale, content }: Props) {
   const services = await getServiceCards(locale);
+  const rtl = isRtl(locale);
 
   return (
     <section id='services' className='relative px-4 py-12 md:py-20 md:px-7'>
@@ -80,12 +83,15 @@ export async function ServicesSection({ locale, content }: Props) {
             <Link
               key={service.id}
               href={getServiceGroupBuyPath(locale, service.id)}
-              className='group relative flex flex-col rounded-[20px] bg-white pb-8 pl-[28px] pr-[28px] pt-[38px] transition-transform duration-300 hover:-translate-y-[6px]'
+              className='group relative flex flex-col overflow-hidden rounded-[20px] bg-white pb-8 pl-7 pr-7 pt-9.5 transition-transform duration-300 hover:-translate-y-1.5'
             >
               {/* Concave corner notch — page-bg square anchored at corner creates the carved look */}
               <span
                 aria-hidden='true'
-                className='pointer-events-none absolute bottom-0 right-0 z-[1] h-0 w-0 translate-x-1/2 translate-y-1/2 rounded-[14px] bg-[#eeeeef] transition-[width,height] duration-[350ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:h-24 group-hover:w-24'
+                className={cn(
+                  'pointer-events-none absolute bottom-0 inset-e-0 z-1 h-0 w-0 translate-y-1/2 rounded-[14px] bg-[#eeeeef] transition-[width,height] duration-350 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:h-24 group-hover:w-24',
+                  rtl ? '-translate-x-1/2' : 'translate-x-1/2'
+                )}
               />
 
               <h3 className='text-[20px] font-extrabold leading-[1.2] tracking-[-0.3px] text-[#1e2364]'>
@@ -100,9 +106,12 @@ export async function ServicesSection({ locale, content }: Props) {
               {/* Arrow — bottom-right, slides into the notch on hover */}
               <span
                 aria-hidden='true'
-                className='pointer-events-none absolute bottom-3.5 right-3.5 z-[3] text-[#1e2364] transition-transform duration-[350ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 group-hover:translate-y-2'
+                className={cn(
+                  'pointer-events-none absolute bottom-3.5 inset-e-3.5 z-3 text-[#1e2364] transition-transform duration-350 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-y-2',
+                  rtl ? 'group-hover:-translate-x-2' : 'group-hover:translate-x-2'
+                )}
               >
-                <ArrowIcon />
+                <ArrowIcon className={rtl ? 'rotate-180' : undefined} />
               </span>
             </Link>
           ))}

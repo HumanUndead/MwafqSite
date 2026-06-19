@@ -51,7 +51,7 @@ function buildMonthCaption(locale: string) {
           onClick={() => previousMonth && goToMonth(previousMonth)}
           className={navBtnClass}
         >
-          <ChevronLeft className='size-3.5' />
+          <ChevronLeft className='size-3.5 rtl:rotate-180' />
         </button>
         <span className='select-none text-[16px] font-semibold tracking-[-0.2px] text-[#1e2364]'>
           {label}
@@ -63,7 +63,7 @@ function buildMonthCaption(locale: string) {
           onClick={() => nextMonth && goToMonth(nextMonth)}
           className={navBtnClass}
         >
-          <ChevronRight className='size-3.5' />
+          <ChevronRight className='size-3.5 rtl:rotate-180' />
         </button>
       </div>
     );

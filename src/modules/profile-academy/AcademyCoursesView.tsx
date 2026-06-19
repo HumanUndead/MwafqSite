@@ -132,7 +132,7 @@ function CourseCard({ course, locale, t, rtl: _rtl, ctaArrowShift }: CourseCardP
             }}
             transition={{ duration: 0.3, ease: EASE }}
           >
-            <ChevronRightSmIcon className='size-3' />
+            <ChevronRightSmIcon className='size-3 rtl:rotate-180' />
           </motion.span>
         </motion.a>
       </div>

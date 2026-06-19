@@ -87,7 +87,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             primaryVariant='brand'
             secondaryVariant='brandOutline'
             className='mb-8 md:mb-11 flex flex-wrap gap-3.5'
-            primaryTrailing={<ArrowIcon />}
+            primaryTrailing={<ArrowIcon className={isRtl ? 'rotate-180' : undefined} />}
           />
         </div>
 
@@ -197,7 +197,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                   </span>
                 </span>
                 <span className='flex h-6 w-6 shrink-0 items-center justify-center rounded-[8px] bg-white/[0.14]'>
-                  <ArrowIcon />
+                  <ArrowIcon className={isRtl ? 'rotate-180' : undefined} />
                 </span>
               </div>
             </div>

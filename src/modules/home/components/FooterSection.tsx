@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/shared/components/ui/Button';
 import type { Locale } from '@/i18n/config';
+import { isRtl } from '@/i18n/config';
 import {
   SocialInstagramIcon,
   SocialLinkedInIcon,
@@ -94,6 +95,8 @@ function AccordionSection({
 }
 
 export function FooterSection({ locale, content }: Props) {
+  const rtl = isRtl(locale);
+
   return (
     <footer id='contact' className='bg-[#eeeeef] px-5 pb-0 pt-0 md:px-7'>
       <div className='mx-auto max-w-330'>
@@ -221,9 +224,12 @@ export function FooterSection({ locale, content }: Props) {
                 <Button
                   type='button'
                   aria-label={content.newsletterAction}
-                  className='h-9 shrink-0 rounded-full bg-[#1e2364] px-5 text-[13px] font-bold text-white hover:bg-[#233567] xl:h-10 xl:w-10 xl:rounded-none xl:bg-transparent xl:p-0 xl:text-[22px] xl:text-[#00a8f1] xl:hover:bg-transparent xl:hover:translate-x-1'
+                  className={cn(
+                    'h-9 shrink-0 rounded-full bg-[#1e2364] px-5 text-[13px] font-bold text-white hover:bg-[#233567] xl:h-10 xl:w-10 xl:rounded-none xl:bg-transparent xl:p-0 xl:text-[22px] xl:text-[#00a8f1] xl:hover:bg-transparent',
+                    rtl ? 'xl:hover:-translate-x-1' : 'xl:hover:translate-x-1'
+                  )}
                 >
-                  →
+                  <span className={cn('inline-block', rtl && 'rotate-180')}>→</span>
                 </Button>
               </div>
             </div>

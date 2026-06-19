@@ -65,7 +65,7 @@ export default function ReservationDetailsView({
         >
           <ChevronRightSmIcon
             className={cn(
-              'size-4 rotate-180 transition-transform duration-250',
+              'size-4 rotate-180 transition-transform duration-250 rtl:rotate-0',
               rtl ? 'group-hover:translate-x-1' : 'group-hover:-translate-x-1'
             )}
           />
