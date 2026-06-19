@@ -180,6 +180,20 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
         >
           <BotIcon className='size-full' />
         </Button>
+        <motion.span
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.55, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          aria-hidden
+          className={cn(
+            'pointer-events-none absolute top-5 whitespace-nowrap',
+            'rounded-full bg-[#00a8f1] px-2.5 py-1.25',
+            'text-xl font-semibold leading-none text-white shadow-md',
+            rtl ? 'right-full me-2' : 'left-full ms-2'
+          )}
+        >
+          {rtl ? 'احجز الآن' : 'Book Now!'}
+        </motion.span>
       </div>
     </motion.div>,
     document.body
