@@ -10,7 +10,7 @@ export function StorySection({ content }: Props) {
     <section className='bg-white'>
     <div
       id='story'
-      className='relative overflow-hidden mx-auto max-w-7xl px-4 py-24 sm:px-7 sm:py-32 lg:py-40'
+      className='relative overflow-hidden mx-auto max-w-7xl px-4 py-12 sm:px-7 sm:py-16'
     >
       <div
         aria-hidden='true'

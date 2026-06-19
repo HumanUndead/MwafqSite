@@ -14,9 +14,9 @@ const valueIcons = [TrustIcon, SpeedIcon, CareIcon];
 
 export function ValuesSection({ content }: Props) {
   return (
-    <section className='bg-[#eeeeef] px-4 py-20 sm:px-7 sm:py-[110px]'>
+    <section className='bg-[#eeeeef] px-4 py-12 sm:px-7 sm:py-16'>
       <div className='mx-auto max-w-[1320px]'>
-        <div className='mb-12 max-w-[780px]'>
+        <div className='max-w-[780px]'>
           <div className='inline-block'>
             <Eyebrow>{content.eyebrow}</Eyebrow> 
           </div>

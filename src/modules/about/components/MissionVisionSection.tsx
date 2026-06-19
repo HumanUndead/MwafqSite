@@ -10,7 +10,7 @@ interface Props {
 
 export function MissionVisionSection({ content }: Props) {
   return (
-    <section className='bg-[#eeeeef] px-4 py-20 sm:px-7 sm:pb-16 sm:pt-20'>
+    <section className='bg-[#eeeeef] px-4 py-10 sm:px-7 sm:py-12'>
       <div className='mx-auto max-w-[1320px]'>
         <div className='grid gap-5 lg:grid-cols-2'>
           <MvCard

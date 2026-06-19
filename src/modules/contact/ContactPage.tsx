@@ -61,7 +61,7 @@ export function ContactPage({ content }: Props) {
                       <p className='text-xs font-semibold uppercase tracking-[1.5px] text-[#6b7196]'>
                         {item.label}
                       </p>
-                      <p className='mt-1 text-[15px] font-medium text-[#1e2364]'>
+                      <p dir={Icon === PhoneIcon ? 'ltr' : 'rtl'} className='mt-1 text-[15px] font-medium text-[#1e2364]'>
                         {item.value}
                       </p>
                     </div>

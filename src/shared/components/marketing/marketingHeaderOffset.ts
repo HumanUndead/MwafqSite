@@ -8,7 +8,7 @@ export const marketingHeaderOffsetVariants = {
   /** Filter hero card (academy courses, services list). */
   filter: 'pt-[180px] max-[980px]:pt-[150px]',
   /** Standard marketing hero (about, contact). */
-  hero: 'pt-40 sm:pt-44',
+  hero: 'pt-24 sm:pt-28',
   /** Taller hero (B2B). */
   heroSpacious: 'pt-36 sm:pt-40 lg:pt-44',
   /** Home landing hero. */

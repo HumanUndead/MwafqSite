@@ -9,7 +9,7 @@ export function HowItWorksSection({ content }: Props) {
   return (
     <section
       id='how'
-      className='border-y-2 border-[#e5e7f0] bg-white px-4 py-20 sm:px-7 sm:py-[110px]'
+      className='border-y-2 border-[#e5e7f0] bg-white px-4 py-12 sm:px-7 sm:py-16'
     >
       <div className='mx-auto max-w-[1320px]'>
         <div className='mb-12 flex flex-col items-start gap-8 sm:mb-14 sm:flex-row sm:items-end sm:gap-12'>

@@ -9,7 +9,7 @@ export function WhyMwafqSection({ content }: Props) {
   return (
     <section
       id='why'
-      className='border-y-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 py-20 sm:px-7 sm:py-[110px]'
+      className='border-y-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 py-12 sm:px-7 sm:py-16'
     >
       <div className='mx-auto max-w-[1320px]'>
         <div className='grid items-start gap-10 lg:grid-cols-2 lg:gap-[70px]'>

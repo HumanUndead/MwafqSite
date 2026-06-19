@@ -9,7 +9,7 @@ export function WhatWeDoSection({ content }: Props) {
   return (
     <section
       id='what'
-      className='bg-[#eeeeef] px-4 py-20 sm:px-7 sm:py-[110px]'
+      className='bg-[#eeeeef] px-4 py-12 sm:px-7 sm:py-16'
     >
       <div className='mx-auto max-w-[1320px]'>
         <div className='mb-12 max-w-[720px]'>

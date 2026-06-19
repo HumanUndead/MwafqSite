@@ -7,7 +7,7 @@ interface Props {
 
 export function AboutStatsSection({ items }: Props) {
   return (
-    <section className='border-y-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 py-14 sm:px-7 sm:py-[70px]'>
+    <section className='border-y-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 py-8 sm:px-7 sm:py-10'>
       <div className='mx-auto max-w-[1320px]'>
         <div className='grid grid-cols-2 text-center lg:grid-cols-4'>
           {items.map((stat, index) => {

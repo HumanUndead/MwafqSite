@@ -12,7 +12,7 @@ export function MilestonesSection({ content }: Props) {
   return (
     <section
       id='milestones'
-      className='bg-[#eeeeef] px-4 py-20 sm:px-7 sm:py-[110px]'
+      className='bg-[#eeeeef] px-4 py-12 sm:px-7 sm:py-16'
     >
       <div className='mx-auto max-w-[1320px]'>
         <div className='mb-14 max-w-[780px]'>
@@ -40,7 +40,7 @@ export function MilestonesSection({ content }: Props) {
                   key={milestone.year}
                   className='px-3 gap-5 text-center flex flex-row'
                 >
-                  <div className='relative mx-auto mb-5 inline-flex'>
+                  <div className='relative mx-auto mb-5 flex h-19.5 w-19.5 items-center justify-center'>
                     <span
                       className={[
                         'inline-flex h-[78px] w-[78px] items-center justify-center rounded-full border-2 text-[15px] font-extrabold tracking-[0.5px]',

@@ -15,7 +15,7 @@ export function AboutFinalCtaSection({ locale, content }: Props) {
   const showActions = primaryLabel.length > 0 || secondaryLabel.length > 0;
 
   return (
-    <section className='relative border-t-2 border-[#e5e7f0] bg-white px-7 py-24 text-center sm:py-[100px]'>
+    <section className='relative border-t-2 border-[#e5e7f0] bg-white px-7 py-12 text-center sm:py-16'>
       <div className='mx-auto max-w-[760px]'>
         <h2 className='mb-5 text-[clamp(34px,5vw,60px)] font-extrabold leading-[1.05] tracking-[-1.8px] text-[#1e2364]'>
           {content.titleLead}{' '}

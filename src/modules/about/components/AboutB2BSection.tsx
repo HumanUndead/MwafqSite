@@ -11,7 +11,7 @@ interface Props {
 
 export function AboutB2BSection({ locale, content }: Props) {
   return (
-    <section className='relative overflow-hidden border-y-2 border-[#e5e7f0] bg-[#1e2364] px-4 py-20 text-white sm:px-7 sm:py-[90px]'>
+    <section className='relative overflow-hidden border-y-2 border-[#e5e7f0] bg-[#1e2364] px-4 py-12 text-white sm:px-7 sm:py-16'>
       <div className='relative z-2 mx-auto max-w-[1320px]'>
         <div className='grid items-center gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-[50px]'>
           <div>
