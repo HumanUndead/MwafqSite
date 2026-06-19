@@ -57,10 +57,10 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       />
       <div className='relative mx-auto grid max-w-[1320px] gap-10 lg:gap-[60px] lg:grid-cols-[1.05fr_1fr]'>
         <div className='order-1'>
-          <h1 className='mb-5 md:mb-7 text-[clamp(44px,6.5vw,63px)] font-extrabold leading-[1.50] tracking-[-2.6px] text-[#1e2364]'>
+          <h1 className='mb-5 md:mb-7 text-[clamp(30px,6.5vw,63px)] font-extrabold leading-[1.50] tracking-[-2.6px] text-[#1e2364]'>
             <span className='block sm:whitespace-nowrap'>{content.titleLead}</span>
             {hasSecondLine ? (
-              <span className='block'>
+              <span className='inline-block whitespace-nowrap'>
                 {content.titleMiddle ? (
                   <>
                     {content.titleMiddle}
