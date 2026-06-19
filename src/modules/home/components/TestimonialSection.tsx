@@ -70,17 +70,22 @@ export function TestimonialSection({ items }: Props) {
               <CarouselItem key={i}>
                 <div className='relative z-10 mx-auto max-w-[980px] text-center'>
                   <div className='mb-9 text-[clamp(26px,3.5vw,44px)] font-light italic leading-[1.3] tracking-[-1px] text-[#1e2364]'>
-                    {item.quote}{' '}
-                    <em className='not-italic font-semibold text-[#00a8f1]'>
-                      {item.highlight}
-                    </em>
+                    {item.quote}
+                    {item.highlight && (
+                      <>
+                        {' '}
+                        <em className='not-italic font-semibold text-[#00a8f1]'>
+                          {item.highlight}
+                        </em>
+                      </>
+                    )}
                   </div>
                   <div className='inline-flex items-center gap-3.5'>
                     <div
                       className='h-14 w-14 rounded-full bg-[#f2f3f7]'
                       aria-hidden='true'
                     />
-                    <div className='text-left'>
+                    <div className='text-start'>
                       <strong className='block text-[14.5px] text-[#1e2364]'>
                         {item.author}
                       </strong>
