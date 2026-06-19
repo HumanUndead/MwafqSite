@@ -200,7 +200,7 @@ export function FooterSection({ locale, content }: Props) {
                           <EmailIcon />
                         ))}
                     </span>
-                    <span>{link.label}</span>
+                    <span dir={link.iconKey === 'icon-phone' ? 'ltr' : undefined}>{link.label}</span>
                   </CmsLink>
                 ))}
               </div>

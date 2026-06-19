@@ -8,7 +8,7 @@ import { useSectionScrollCapture } from './useSectionScrollCapture';
 const CARD_W = 96;
 const GAP = 26;
 const TITLE_W = 268;
-const STEP_SCROLL_DISTANCE = 320;
+const STEP_SCROLL_DISTANCE = 500;
 const ITEM_COUNT = 4;
 const SCENE_DISTANCE = STEP_SCROLL_DISTANCE * ITEM_COUNT;
 const ROW_W = 4 * CARD_W + 3 * GAP + TITLE_W;

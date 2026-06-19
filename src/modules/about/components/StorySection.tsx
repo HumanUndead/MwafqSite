@@ -20,14 +20,14 @@ export function StorySection({ content }: Props) {
       <div className='relative z-2 text-center'>
         <span
           aria-hidden='true'
-          className='pointer-events-none absolute top-0 block h-14 w-14 text-[#00a8f1]/85 sm:h-22.5 sm:w-22.5'
+          className='pointer-events-none absolute top-0 start-0 block h-14 w-14 text-[#00a8f1]/85 rtl:scale-x-[-1] sm:h-22.5 sm:w-22.5'
         >
           <CornerBracketIcon className='h-full w-full' />
         </span>
 
         <span
           aria-hidden='true'
-          className='pointer-events-none absolute bottom-0 right-0 block h-14 w-14 rotate-180 text-[#00a8f1]/85 sm:h-22.5 sm:w-22.5'
+          className='pointer-events-none absolute bottom-0 end-0 block h-14 w-14 rotate-180 text-[#00a8f1]/85 rtl:scale-x-[-1] sm:h-22.5 sm:w-22.5'
         >
           <CornerBracketIcon className='h-full w-full' />
         </span>

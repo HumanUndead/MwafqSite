@@ -20,7 +20,7 @@ export function AboutHero({ content }: Props) {
       <div className='relative z-2 mx-auto max-w-[1320px]'>
         <div className='grid items-center gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-[60px]'>
           <div className='flex w-full flex-col items-start gap-9'>
-            <h1 className='text-[clamp(32px,4.9vw,67px)] font-extrabold leading-[1.02] tracking-[-2px] text-[#1e2364]'>
+            <h1 className='text-[clamp(32px,4.9vw,67px)] font-extrabold md:tracking-[-2px] text-[#1e2364]'>
               <span className='block'>{content.headingTop}</span>
               <span className='-mt-3.5 block pb-4'>
                 <span className='text-[clamp(23px,3.5vw,48px)] font-normal italic leading-[1.1] tracking-[-1.2px] text-[#1e2364]/55'>
