@@ -44,7 +44,7 @@ export function B2BServicesSection({ content }: Props) {
                   'bg-gradient-to-br from-[#1e2364] to-[#0d1540]',
                   isFeatured
                     ? 'flex flex-col px-10 pb-12 pt-10 sm:row-span-2'
-                    : 'flex items-start gap-5 px-8 py-8',
+                    : 'flex items-center gap-5 px-8 py-7',
                 )}
               >
                 {/* Accent top stripe — featured only */}
