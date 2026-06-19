@@ -41,7 +41,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
       />
 
       <div className='relative z-2 mx-auto max-w-330'>
-        <div className='grid items-center gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-15'>
+        <div className='grid grid-cols-1 items-center gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-15'>
           <div className='lg:-translate-y-10'>
             <span className='mb-2 inline-block text-[clamp(40px,5.6vw,72px)] font-extrabold leading-none tracking-[-2.2px] text-[#1e2364]'>
               {content.eyebrow}

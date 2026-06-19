@@ -16,11 +16,14 @@ import BotIcon from '@/shared/components/icons/Bot';
 // Box size in px — drives both the rendered size (via style) and the
 // center-based positioning math, so the two can never drift apart.
 const W = 100;
-const H = 170;
+const H = 140;
 // Parked = small companion at the side; docked = full size on the card.
 const PARK_SCALE = 0.62;
 const DOCK_SCALE = 1;
 const PARK_MARGIN = 24; // gap from the viewport side while parked
+// Below this width the side gutters collapse, so the mascot drops to the
+// bottom corner instead of floating mid-screen over the content.
+const XL_BREAKPOINT = 1280;
 const SPRING = { stiffness: 200, damping: 30, mass: 0.6 };
 
 interface BookingMascotProps {
@@ -70,7 +73,10 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
       rtl
         ? window.innerWidth - PARK_MARGIN - (W * PARK_SCALE) / 2
         : PARK_MARGIN + (W * PARK_SCALE) / 2;
-    const parkCenterY = () => window.innerHeight * 0.42;
+    const parkCenterY = () =>
+      window.innerWidth >= XL_BREAKPOINT
+        ? window.innerHeight * 0.42
+        : window.innerHeight - PARK_MARGIN - (H * PARK_SCALE) / 2;
 
     // Position by the mascot's CENTER (Framer scales about center), so the
     // math stays symmetric for LTR/RTL.
@@ -156,7 +162,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
     >
       <div
         className={cn(
-          'relative flex h-full w-full flex-col items-center gap-1',
+          'relative flex h-full w-full flex-col items-center',
           !reduced &&
             'animate-[mascotFloat_4s_cubic-bezier(0.45,0,0.55,1)_infinite,mascotSway_9s_cubic-bezier(0.45,0,0.55,1)_infinite]'
         )}
@@ -166,7 +172,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
           variant='ghost'
           onClick={goToBooking}
           aria-label={label}
-          style={{ transform: rtl ? 'scaleX(1)' : 'scaleX(-1)', width: W, height: 140 }}
+          style={{ transform: rtl ? 'scaleX(1)' : 'scaleX(-1)', width: W, height: H }}
           className={cn(
             'pointer-events-auto block shrink-0 rounded-[28px] bg-transparent p-0 hover:bg-transparent',
             'outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0'
@@ -174,13 +180,6 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
         >
           <BotIcon className='size-full' />
         </Button>
-        <span className='pointer-events-none relative overflow-hidden rounded-full bg-gradient-to-r from-violet-500 via-indigo-500 to-cyan-400 px-4 py-[7px] text-[15px] font-extrabold tracking-wide text-white animate-[mascotBadgeGlow_2s_ease-in-out_infinite]'>
-          <span
-            aria-hidden
-            className='absolute inset-0 animate-[mascotBadgeShimmer_2.8s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/50 to-transparent'
-          />
-          ✨ Book Now
-        </span>
       </div>
     </motion.div>,
     document.body
