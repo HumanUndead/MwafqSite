@@ -10,6 +10,8 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import { cn } from '@/shared/lib/cn';
+import { useLocale } from '@/i18n/DictionaryProvider';
+import { isRtl } from '@/i18n/config';
 
 interface Props {
   items: HomeTestimonialContent[];
@@ -35,8 +37,14 @@ function CarouselDots({ count, current }: { count: number; current: number }) {
 }
 
 export function TestimonialSection({ items }: Props) {
+  const locale = useLocale();
+  const rtl = isRtl(locale);
   const [current, setCurrent] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+
+  const validItems = items.filter(
+    (item) => item.quote?.trim() || item.author?.trim()
+  );
 
   const onSelect = useCallback((embla: CarouselApi) => {
     if (!embla) return;
@@ -51,7 +59,7 @@ export function TestimonialSection({ items }: Props) {
     [onSelect]
   );
 
-  if (items.length === 0) return null;
+  if (validItems.length === 0) return null;
 
   return (
     <section className='relative overflow-hidden bg-white py-12 md:py-20'>
@@ -61,12 +69,12 @@ export function TestimonialSection({ items }: Props) {
       />
       <div className='relative mx-auto max-w-[1320px] px-4 md:px-7'>
         <Carousel
-          opts={{ loop: items.length > 1 }}
+          opts={{ loop: validItems.length > 1, direction: rtl ? 'rtl' : 'ltr' }}
           setApi={handleSetApi}
           className='w-full'
         >
           <CarouselContent>
-            {items.map((item, i) => (
+            {validItems.map((item, i) => (
               <CarouselItem key={i}>
                 <div className='relative z-10 mx-auto max-w-[980px] text-center'>
                   <div className='mb-9 text-[clamp(26px,3.5vw,44px)] font-light italic leading-[1.3] tracking-[-1px] text-[#1e2364]'>
@@ -98,8 +106,8 @@ export function TestimonialSection({ items }: Props) {
               </CarouselItem>
             ))}
           </CarouselContent>
-          {items.length > 1 && (
-            <CarouselDots count={items.length} current={current} />
+          {validItems.length > 1 && (
+            <CarouselDots count={validItems.length} current={current} />
           )}
         </Carousel>
       </div>
