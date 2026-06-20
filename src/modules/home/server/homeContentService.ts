@@ -1241,7 +1241,8 @@ function mapFooterGroup(
 export function mapFooterContent(
   fallback: HomeFooterContent,
   rootCategory: RecursiveArticleCategoryDto | null,
-  langId: number
+  langId: number,
+  socialMediaCategory: RecursiveArticleCategoryDto | null = null
 ): HomeFooterContent {
   const footerCategory = getChildCategoryById(rootCategory, FOOTER_CATEGORY_ID);
 
@@ -1303,6 +1304,13 @@ export function mapFooterContent(
       langId,
       fallback.contact
     ),
+    socialLinks: getVisibleArticles(socialMediaCategory).map((article) => {
+      const translation = getArticleTranslation(article, langId);
+      return {
+        name: trimToNull(translation.name) ?? '',
+        path: trimToNull(article.path),
+      };
+    }),
   };
 }
 

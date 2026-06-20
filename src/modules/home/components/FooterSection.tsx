@@ -7,9 +7,8 @@ import { Button } from '@/shared/components/ui/Button';
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
 import {
-  SocialInstagramIcon,
-  SocialLinkedInIcon,
-  SocialTwitterIcon,
+  getSocialIcon,
+  getSocialIconStyle,
 } from '@/shared/components/icons/home/SocialIcons';
 import { cn } from '@/shared/lib/cn';
 import type { HomeFooterContent } from '../home.types';
@@ -26,23 +25,13 @@ interface Props {
   content: HomeFooterContent;
 }
 
-const socialLinks = [
-  {
-    label: 'Twitter',
-    Icon: SocialTwitterIcon,
-    iconCls: 'bg-[#00a8f1] text-white hover:bg-[#0096d9]',
-  },
-  {
-    label: 'Instagram',
-    Icon: SocialInstagramIcon,
-    iconCls: 'bg-[#1e2364] text-white hover:bg-[#2a3280]',
-  },
-  {
-    label: 'LinkedIn',
-    Icon: SocialLinkedInIcon,
-    iconCls: 'bg-[#00dec9] text-[#1e2364] hover:bg-[#00c9b8]',
-  },
-] as const;
+function toExternalHref(path: string | null): string | null {
+  if (!path) return null;
+  const trimmed = path.trim();
+  if (!trimmed) return null;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+}
 
 // Accordion section — collapses on mobile, always expanded on xl.
 function AccordionSection({
@@ -121,21 +110,29 @@ export function FooterSection({ locale, content }: Props) {
               {content.brandBody}
             </p>
             {/* Social icons — mobile only, centered with brand colors */}
-            <div className='mt-6 flex justify-center gap-4 xl:hidden'>
-              {socialLinks.map(({ label, Icon, iconCls }) => (
-                <a
-                  key={label}
-                  href='#contact'
-                  aria-label={label}
-                  className={cn(
-                    'flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-200 hover:scale-110',
-                    iconCls
-                  )}
-                >
-                  <Icon className='h-5 w-5' />
-                </a>
-              ))}
-            </div>
+            {content.socialLinks.length > 0 && (
+              <div className='mt-6 flex justify-center gap-4 xl:hidden'>
+                {content.socialLinks.map(({ name, path }) => {
+                  const Icon = getSocialIcon(name);
+                  const href = toExternalHref(path);
+                  return (
+                    <a
+                      key={name}
+                      href={href ?? '#contact'}
+                      target={href ? '_blank' : undefined}
+                      rel={href ? 'noopener noreferrer' : undefined}
+                      aria-label={name}
+                      className={cn(
+                        'flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-200 hover:scale-110',
+                        getSocialIconStyle(name)
+                      )}
+                    >
+                      <Icon className='h-5 w-5' />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* ── Pages + Help: xl:contents → each accordion becomes a direct grid col ── */}
@@ -243,21 +240,29 @@ export function FooterSection({ locale, content }: Props) {
             {content.copyrightLabel} {content.copyrightBody}
           </p>
           {/* Social icons — desktop only */}
-          <div className='hidden items-center gap-2.5 xl:flex'>
-            {socialLinks.map(({ label, Icon, iconCls }) => (
-              <a
-                key={label}
-                href='#contact'
-                aria-label={label}
-                className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-200 hover:-translate-y-0.5',
-                  iconCls
-                )}
-              >
-                <Icon className='h-4 w-4' />
-              </a>
-            ))}
-          </div>
+          {content.socialLinks.length > 0 && (
+            <div className='hidden items-center gap-2.5 xl:flex'>
+              {content.socialLinks.map(({ name, path }) => {
+                const Icon = getSocialIcon(name);
+                const href = toExternalHref(path);
+                return (
+                  <a
+                    key={name}
+                    href={href ?? '#contact'}
+                    target={href ? '_blank' : undefined}
+                    rel={href ? 'noopener noreferrer' : undefined}
+                    aria-label={name}
+                    className={cn(
+                      'flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-200 hover:-translate-y-0.5',
+                      getSocialIconStyle(name)
+                    )}
+                  >
+                    <Icon className='h-4 w-4' />
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
 
       </div>

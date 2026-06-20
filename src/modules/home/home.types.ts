@@ -261,6 +261,11 @@ export interface HomeFooterGroupContent {
   links: HomeLinkItemContent[];
 }
 
+export interface HomeSocialLinkContent {
+  name: string;
+  path: string | null;
+}
+
 export interface HomeFooterContent {
   brandLabel: string;
   brandBody: string;
@@ -274,6 +279,7 @@ export interface HomeFooterContent {
   pages: HomeFooterGroupContent;
   help: HomeFooterGroupContent;
   contact: HomeFooterGroupContent;
+  socialLinks: HomeSocialLinkContent[];
 }
 
 export interface HomeCompanyItemContent {

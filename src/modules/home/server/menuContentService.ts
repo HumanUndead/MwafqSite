@@ -12,6 +12,7 @@ import {
   MENU_CONTENT_CACHE_TAG,
   MENU_CONTENT_REVALIDATE_SECONDS,
   MENU_ITEMS_ROOT_CATEGORY_ID,
+  SOCIAL_MEDIA_CATEGORY_ID,
 } from './menuContent.config';
 import { buildEmptyHomeFallback } from './homeContent.fallback';
 import { mapFooterContent, mapHeaderContent } from './homeContentService';
@@ -62,15 +63,54 @@ const fetchMenuItemsTree = cache(
   }
 );
 
+const fetchSocialMediaCategoryTree = cache(
+  async (): Promise<RecursiveArticleCategoryDto | null> => {
+    const endpoint = new URL(
+      '/api/General/ArticleCategory/GetRecursiveById',
+      MENU_CONTENT_API_BASE_URL
+    );
+
+    endpoint.searchParams.set('Id', String(SOCIAL_MEDIA_CATEGORY_ID));
+
+    try {
+      const response = await fetch(endpoint.toString(), {
+        next: {
+          revalidate: MENU_CONTENT_REVALIDATE_SECONDS,
+          tags: [MENU_CONTENT_CACHE_TAG],
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const payload =
+        (await response.json()) as RecursiveArticleCategoryResponse;
+
+      if (!payload.isSuccess || !payload.value) {
+        return null;
+      }
+
+      return payload.value;
+    } catch (error) {
+      console.error('[menu-content] Failed to fetch social media category.', error);
+      return null;
+    }
+  }
+);
+
 export const getMenuContent = cache(
   async (locale: Locale): Promise<MenuContent> => {
     const langId = localeToLangId[locale];
     const fallback = buildEmptyHomeFallback();
-    const menuCategory = await fetchMenuItemsTree();
+    const [menuCategory, socialMediaCategory] = await Promise.all([
+      fetchMenuItemsTree(),
+      fetchSocialMediaCategoryTree(),
+    ]);
 
     return {
       header: mapHeaderContent(fallback.header, menuCategory, langId),
-      footer: mapFooterContent(fallback.footer, menuCategory, langId),
+      footer: mapFooterContent(fallback.footer, menuCategory, langId, socialMediaCategory),
     };
   }
 );
