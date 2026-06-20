@@ -167,26 +167,26 @@ export function PackageCard({
     >
       <Link
         href={packageDetailHref}
-        className='relative block aspect-square w-full shrink-0 overflow-hidden bg-[#1e2364]'
+        className='relative block aspect-4/3 w-full shrink-0 overflow-hidden bg-[#1e2364]'
       >
         <motion.div className='absolute inset-0 z-0' {...mediaMotion}>
           {image}
         </motion.div>
       </Link>
 
-      <CardContent className='flex flex-1 flex-col gap-2.5 px-5.5 pt-5.5 pb-4.5'>
+      <CardContent className='flex flex-1 flex-col gap-2 px-5 pt-4 pb-3'>
         <Link href={packageDetailHref} className='block'>
-          <CardTitle className='min-h-11 text-[18px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
+          <CardTitle className='min-h-15 text-[17px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
             {title}
           </CardTitle>
         </Link>
         <CardDescription
-          className='min-h-9.5 text-[12.5px] leading-[1.55] text-[#6b7196]'
+          className='text-[12px] leading-normal text-[#6b7196]'
           dangerouslySetInnerHTML={{ __html: desc ?? '' }}
         />
       </CardContent>
 
-      <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-5.5 pt-4 pb-5.5'>
+      <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-5 pt-3 pb-4'>
         {price ? (
           <span className='inline-flex items-baseline gap-1 font-extrabold'>
             <span className='text-[24px] leading-none tracking-[-0.5px] text-[#1e2364]'>
