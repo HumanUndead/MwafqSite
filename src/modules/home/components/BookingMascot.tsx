@@ -44,6 +44,8 @@ function lerp(from: number, to: number, t: number) {
 
 export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
   const rtl = isRtl(locale);
+  // Mascot lives on the reading-END side: right for LTR (en), left for RTL (ar).
+  const onRight = !rtl;
   const reduced = useReducedMotion();
   // Starts false (so SSR + first render emit nothing) and only flips true
   // client-side via the matchMedia subscription below — gates the portal too.
@@ -70,7 +72,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
     if (!enabled) return;
 
     const parkCenterX = () =>
-      rtl
+      onRight
         ? window.innerWidth - PARK_MARGIN - (W * PARK_SCALE) / 2
         : PARK_MARGIN + (W * PARK_SCALE) / 2;
     const parkCenterY = () =>
@@ -97,7 +99,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
           const p = clamp((startAt - rect.top) / (startAt - endAt), 0, 1);
           const eased = p * p * (3 - 2 * p); // smoothstep
 
-          const dockX = rtl ? rect.right - 30 : rect.left + 30;
+          const dockX = onRight ? rect.right - 30 : rect.left + 30;
           const dockY = rect.top + 70;
 
           cx = lerp(parkCenterX(), dockX, eased);
@@ -112,7 +114,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
     };
 
     // Entrance: start off the start-side edge, then slide to the parked spot.
-    x.jump(rtl ? window.innerWidth + W : -W * 2);
+    x.jump(onRight ? window.innerWidth + W : -W * 2);
     y.jump(parkCenterY() - H / 2);
     scale.jump(PARK_SCALE);
     compute();
@@ -172,7 +174,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
           variant='ghost'
           onClick={goToBooking}
           aria-label={label}
-          style={{ transform: rtl ? 'scaleX(1)' : 'scaleX(-1)', width: W, height: H }}
+          style={{ transform: onRight ? 'scaleX(1)' : 'scaleX(-1)', width: W, height: H }}
           className={cn(
             'pointer-events-auto block shrink-0 rounded-[28px] bg-transparent p-0 hover:bg-transparent',
             'outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0'
@@ -189,7 +191,7 @@ export function BookingMascot({ locale, cardRef, label }: BookingMascotProps) {
             'pointer-events-none absolute top-5 whitespace-nowrap',
             'rounded-full bg-[#00a8f1] px-2.5 py-1.25',
             'text-xl font-semibold leading-none text-white shadow-md',
-            rtl ? 'right-full me-2' : 'left-full ms-2'
+            onRight ? 'right-full me-2' : 'left-full ms-2'
           )}
         >
           {rtl ? 'احجز الآن' : 'Book Now!'}

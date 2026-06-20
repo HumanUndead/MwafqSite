@@ -52,7 +52,7 @@ function renderSection(
       );
     case 'academy':
       return (
-        <AcademySection key={key} locale={locale} content={content.academy} />
+        <AcademySection key={key} content={content.academy} />
       );
     case 'stats':
       return <StatsSection key={key} content={content.stats} />;

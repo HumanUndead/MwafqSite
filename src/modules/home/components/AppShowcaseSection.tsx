@@ -1,6 +1,5 @@
 import type { Locale } from '@/i18n/config';
 import type { HomeAppContent } from '../home.types';
-import { CmsLink } from './CmsLink';
 import { Eyebrow } from './Eyebrow';
 import { CheckIcon, getUtilityIconByKey } from './Icons';
 
@@ -9,7 +8,7 @@ interface Props {
   content: HomeAppContent;
 }
 
-export function AppShowcaseSection({ locale, content }: Props) {
+export function AppShowcaseSection({ content }: Props) {
   return (
     <section
       id='app'
@@ -150,11 +149,10 @@ export function AppShowcaseSection({ locale, content }: Props) {
             </div>
             <div className='mt-[30px] flex flex-wrap gap-3.5'>
               {content.downloadLinks.map((link) => (
-                <CmsLink
+                <span
                   key={`${link.label}-${link.path ?? 'no-path'}`}
-                  locale={locale}
-                  href={link.path}
-                  className={`inline-flex items-center gap-2 rounded-full px-[30px] py-4 text-[15px] font-semibold ${
+                  aria-disabled='true'
+                  className={`pointer-events-none inline-flex items-center gap-2 rounded-full px-[30px] py-4 text-[15px] font-semibold ${
                     link.iconKey === 'icon-apple'
                       ? 'bg-[#1e2364] text-white'
                       : 'border-2 border-[#1e2364] bg-white text-[#1e2364]'
@@ -162,7 +160,7 @@ export function AppShowcaseSection({ locale, content }: Props) {
                 >
                   {getUtilityIconByKey(link.iconKey)}
                   {link.label}
-                </CmsLink>
+                </span>
               ))}
             </div>
           </div>
