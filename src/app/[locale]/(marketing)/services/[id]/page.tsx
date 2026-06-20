@@ -21,10 +21,11 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
     notFound();
   }
 
-  const [locale, serviceGroup, relatedList] = await Promise.all([
+  const [locale, serviceGroup, relatedList, currentUser] = await Promise.all([
     GetLocale(),
     fetchServiceGroupById(numericId, { isMandatoryTest: true }),
     fetchServiceGroupsList({ pageNumber: 1, pageSize: 6 }),
+    getCurrentUser(),
   ]);
 
   const langId = localeToLangId[locale];
@@ -39,6 +40,7 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
         langId={langId}
         serviceGroup={serviceGroup}
         relatedPackages={relatedPackages}
+        isAuthenticated={currentUser !== null}
       />
     </MarketingStickyHeaderOffset>
   );

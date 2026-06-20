@@ -13,7 +13,6 @@ import type {
 } from '@/modules/auth/serviceGroup.types';
 import { PackageCard } from './components/PackageCard';
 import { ServiceGroupDetailImage } from './components/ServiceGroupDetailImage';
-import { useAuthStore } from '../auth';
 
 function SarIcon() {
   return (
@@ -44,6 +43,7 @@ export type ServiceGroupDetailsViewProps = {
   langId: number;
   serviceGroup: ServiceGroupDetail;
   relatedPackages: ServiceGroupListItem[];
+  isAuthenticated: boolean;
 };
 
 export async function ServiceGroupDetailsView({
@@ -51,8 +51,8 @@ export async function ServiceGroupDetailsView({
   langId,
   serviceGroup,
   relatedPackages,
+  isAuthenticated,
 }: ServiceGroupDetailsViewProps) {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const servicesT = await getTranslations('services');
   const t = servicesT.detail;
   const cardsT = servicesT.cards;
@@ -189,7 +189,7 @@ export async function ServiceGroupDetailsView({
       </section>
 
       {relatedPackages.length > 0 ? (
-        <section className='border-t-2 border-[#e5e7f0] pb-25 pt-7.5'>
+        <section className='border-t-2 border-[#e5e7f0] bg-white pb-25 pt-7.5'>
           <div className='mx-auto max-w-330 px-4 md:px-7'>
             <ScrollReveal className='mb-9'>
               <h2 className='text-[clamp(24px,2.8vw,36px)] font-extrabold tracking-[-1px] text-[#1e2364]'>
@@ -197,22 +197,16 @@ export async function ServiceGroupDetailsView({
               </h2>
             </ScrollReveal>
 
-            <div className='grid grid-cols-1 gap-4.5 min-[480px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+            <div className='grid grid-cols-2 gap-5.5 sm:grid-cols-3 lg:grid-cols-4'>
               {relatedPackages.map((pkg, index) => (
-                <ScrollReveal
+                <PackageCard
                   key={pkg.id}
-                  transitionDelay={Math.min(index, 4) * 0.08}
-                >
-                  <PackageCard
-                    pkg={pkg}
-                    locale={locale}
-                    t={cardsT}
-                    variant='related'
-                    withScrollReveal={false}
-                    delay={Math.min(index, 4) * 0.08}
-                    isAuthenticated={isAuthenticated}
-                  />
-                </ScrollReveal>
+                  pkg={pkg}
+                  locale={locale}
+                  t={cardsT}
+                  delay={Math.min(index, 4) * 0.08}
+                  isAuthenticated={isAuthenticated}
+                />
               ))}
             </div>
           </div>
