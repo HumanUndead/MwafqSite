@@ -47,9 +47,7 @@ async function fetchMyReservations(
     },
     { skipNull: true }
   );
-  const url = query
-    ? `/api/client/client/GetMyReservations?${query}`
-    : '/api/client/client/GetMyReservations';
+  const url = `/api/client/client/GetMyReservations?${query}`;
 
   try {
     const page =

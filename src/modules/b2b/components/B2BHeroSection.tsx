@@ -37,7 +37,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
     >
       <div
         aria-hidden='true'
-        className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:24px_24px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
+        className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
       />
 
       <div className='relative z-2 mx-auto max-w-330'>
@@ -112,11 +112,11 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
             {content.floatingCards.slice(0, 3).map((card, index) => (
               <div
                 key={card.title || index}
-                className={`absolute z-[5] flex items-center gap-3 rounded-[18px] border-2 border-[#1e2364] bg-white px-3 py-3 pr-5 ${floatingMeta[index]}`}
+                className={`absolute z-5 flex items-center gap-3 rounded-[18px] border-2 border-[#1e2364] bg-white px-3 py-3 pr-5 ${floatingMeta[index]}`}
               >
                 <span
                   aria-hidden='true'
-                  className='flex h-[46px] w-[46px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[#fbfcff] text-[#1e2364]'
+                  className='flex size-11.5  shrink-0 items-center justify-center rounded-[12px] bg-[#fbfcff] text-[#1e2364]'
                 >
                   <FloatingIcon index={index} />
                 </span>
@@ -192,7 +192,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
                         key={`${emp.initials}-${idx}`}
                         className='flex items-center gap-2.5 rounded-[14px] border border-[#e5e7f0] px-3 py-2.5'
                       >
-                        <span className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f6] text-[9.5px] font-extrabold text-[#1e2364]'>
+                        <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f4f4f6] text-[9.5px] font-extrabold text-[#1e2364]'>
                           {emp.initials}
                         </span>
                         <div className='min-w-0 flex-1'>
@@ -204,7 +204,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
                           </span>
                         </div>
                         <span
-                          className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
+                          className={`shrink-0 rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
                         >
                           {statusLabels[emp.status] ?? emp.status}
                         </span>

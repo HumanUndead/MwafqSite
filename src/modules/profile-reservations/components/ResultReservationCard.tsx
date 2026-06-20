@@ -95,7 +95,7 @@ export function ResultReservationCard({
         <CardFooter
           className={cn(
             reservationCardFooterClass,
-            'translate-y-[5px] max-[380px]:flex-col'
+            'translate-y-1.25 max-[380px]:flex-col'
           )}
         >
           <Link

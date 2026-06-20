@@ -18,7 +18,15 @@
       "PowerShell(pm2 list)",
       "PowerShell(pm2 logs mwafqsite --lines 20 --nostream 2>&1)",
       "PowerShell(taskkill /F /IM \"node.exe\" /T 2>&1; Remove-Item -Recurse -Force \"$env:USERPROFILE\\\\.pm2\\\\rpc.sock\" -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force \"$env:USERPROFILE\\\\.pm2\\\\pub.sock\" -ErrorAction SilentlyContinue; Write-Host \"Done\")",
-      "PowerShell(npx eslint src/modules/b2b/components/B2BHeroSection.tsx)"
+      "PowerShell(npx eslint src/modules/b2b/components/B2BHeroSection.tsx)",
+      "Bash(grep -qiE \"ready|started server|localhost:3000\" /tmp/mwafq-dev.log)",
+      "Bash(break)",
+      "Read(//tmp/**)",
+      "Bash(curl -s http://localhost:3001/en -o /tmp/home.html)",
+      "Bash(curl -s -w 'HTTP %{http_code}\\\\n' http://localhost:3001/en -o C:/Users/kenea/AppData/Local/Temp/claude/c--Users-kenea-MwafqSite/89d01120-50ca-4572-9aff-e4ff7d9746cd/scratchpad/home.html)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri 'http://localhost:3001/en' -UseBasicParsing -TimeoutSec 45; $h = $r.Content; \"bytes: $\\($h.Length\\)\"; foreach\\($m in @\\('id=\"academy\"','Occupational Health','Mwafq Academy','keep care compliant','Browse courses'\\)\\){ $c=\\([regex]::Matches\\($h,[regex]::Escape\\($m\\)\\)\\).Count; \"$c  x  $m\" } } catch { \"ERR: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri 'http://localhost:3000/en' -UseBasicParsing -TimeoutSec 60; $h = $r.Content; \"bytes: $\\($h.Length\\)\"; foreach\\($m in @\\('id=\\\\\"academy\\\\\"','Occupational Health','Mwafq Academy','keep care compliant','Browse courses'\\)\\){ $c=\\([regex]::Matches\\($h,[regex]::Escape\\($m\\)\\)\\).Count; \"$c  x  $m\" } } catch { \"ERR: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(npx prettier --write src/modules/home/components/WhySection.tsx 2>&1)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"

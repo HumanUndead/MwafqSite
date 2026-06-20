@@ -25,7 +25,6 @@ const PROTECTED_PATTERNS = [
   /^\/courses\/payment\/callback(\/|$)/,
 ];
 
-const AUTH_PATHS = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
 const PUBLIC_FILE = /\.[^/]+$/;
 
 export default function proxy(request: NextRequest) {
@@ -56,9 +55,6 @@ export default function proxy(request: NextRequest) {
   const isProtected =
     PROTECTED_PREFIXES.some((prefix) => appPathname.startsWith(prefix)) ||
     PROTECTED_PATTERNS.some((pattern) => pattern.test(appPathname));
-  const isAuthPath = AUTH_PATHS.includes(
-    appPathname as (typeof AUTH_PATHS)[number]
-  );
 
   if (isProtected && !isAuthenticated) {
     const returnTo = request.nextUrl.pathname + request.nextUrl.search;
@@ -66,12 +62,6 @@ export default function proxy(request: NextRequest) {
     redirectUrl.pathname = localizePathname(ROUTES.LOGIN, localeFromPath);
     redirectUrl.search = '';
     redirectUrl.searchParams.set('redirect', returnTo);
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  if (isAuthPath && isAuthenticated) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = localizePathname(ROUTES.DASHBOARD, localeFromPath);
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -94,4 +84,3 @@ export default function proxy(request: NextRequest) {
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
-

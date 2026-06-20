@@ -54,7 +54,10 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const titleResetRef = useRef<number | null>(null);
   const activeStepRef = useRef(0);
+  // `isDesktop` now means "JS-driven scroll animation active" — on for all
+  // viewports. The row is scaled down to fit narrow screens (see `scale`).
   const [isDesktop, setIsDesktop] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [leavingStep, setLeavingStep] = useState<number | null>(null);
   const { progress } = useSectionScrollCapture(stageRef, {
@@ -64,7 +67,8 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
 
   useEffect(() => {
     function syncViewport() {
-      setIsDesktop(window.innerWidth > 880);
+      setIsDesktop(true);
+      setViewportWidth(window.innerWidth);
     }
 
     syncViewport();
@@ -132,6 +136,10 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
   const hiddenTitleX = isRtl ? '120%' : '-120%';
   const items = content.items.slice(0, ITEM_COUNT);
 
+  // Shrink the fixed-width row (ROW_W) to fit narrow screens. 40px = px-5 gutters.
+  const scale =
+    viewportWidth > 0 ? Math.min(1, (viewportWidth - 40) / ROW_W) : 1;
+
   return (
     <section className='relative border-t-2 border-[#e5e7f0] bg-[#f4f4f6] p-0'>
       <div
@@ -144,7 +152,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
         <div
           className={
             isDesktop
-              ? 'sticky top-0 z-10 flex h-screen items-center justify-center overflow-hidden'
+              ? 'sticky top-0 z-10 flex h-[60vh] items-center justify-center overflow-hidden sm:h-screen'
               : 'flex py-16 items-center justify-center overflow-hidden'
           }
         >
@@ -159,17 +167,17 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
             }}
           />
 
-          <div className='relative z-10 mx-auto w-full max-w-[1320px] px-5 sm:px-7'>
+          <div className='relative z-10 mx-auto w-full max-w-330 px-5 sm:px-7'>
             <h2 className='mb-6 text-center text-[clamp(24px,3.6vw,44px)] font-extrabold uppercase tracking-[-0.5px] text-[#1e2364] sm:mb-9'>
               {content.eyebrow}
             </h2>
             {content.title ? (
-              <p className='mx-auto mb-8 max-w-[700px] text-center text-[15px] leading-[1.65] text-[#6b7196] sm:mb-10 sm:text-[16px]'>
+              <p className='mx-auto mb-8 max-w-175 text-center text-[15px] leading-[1.65] text-[#6b7196] sm:mb-10 sm:text-[16px]'>
                 {content.title}
               </p>
             ) : null}
 
-            {/* Mobile layout — 2×2 card grid */}
+            {/* Fallback — pre-hydration / no-JS: static 2×2 card grid */}
             {!isDesktop && (
               <ul
                 className='grid grid-cols-2 gap-4 pb-4 sm:gap-5'
@@ -201,117 +209,130 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
               </ul>
             )}
 
-            {/* Desktop layout — scroll-animated row */}
+            {/* Scroll-animated row — all viewports, scaled to fit width */}
             {isDesktop && (
               <div className='flex flex-col items-center gap-7 pb-2.5 pt-7'>
                 <div
-                  className='relative max-w-full'
-                  style={{ height: CARD_W, width: ROW_W }}
+                  className='relative'
+                  style={{ height: CARD_W * scale, width: ROW_W * scale }}
                 >
-                  {items.map((item, index) => {
-                    const isActive = index === activeStep;
-
-                    return (
-                      <button
-                        key={`${item.title}-${index}`}
-                        type='button'
-                        role='tab'
-                        aria-selected={isActive}
-                        aria-label={item.title}
-                        onClick={() => {
-                          const stage = stageRef.current;
-                          if (!stage) return;
-
-                          const stageTop =
-                            stage.getBoundingClientRect().top + window.scrollY;
-                          const target =
-                            stageTop +
-                            ((index + 0.5) / ITEM_COUNT) * SCENE_DISTANCE;
-
-                          window.scrollTo({
-                            top: Math.round(target),
-                            behavior: 'smooth',
-                          });
-                        }}
-                        className={[
-                          'absolute left-0 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
-                          'transition-[transform,border-color] duration-700 ease-in-out',
-                          isActive
-                            ? 'border-[#1e2364]'
-                            : 'border-[#e5e7f0] hover:border-[#6f8fcf]',
-                        ].join(' ')}
-                        style={{
-                          transform: `translateX(${positions.cards[index]}px)${isActive ? ' translateY(-6px) scale(1.06)' : ''}`,
-                          zIndex: 2,
-                        }}
-                      >
-                        <span
-                          aria-hidden='true'
-                          className={[
-                            'svg-ic',
-                            getWhySpriteClassName(item.iconKey, index),
-                            'h-11 w-11 transition-transform duration-[450ms] ease-in-out',
-                          ].join(' ')}
-                          style={{
-                            transform: isActive ? 'scale(1.26)' : 'scale(1.16)',
-                          }}
-                        />
-                      </button>
-                    );
-                  })}
-
                   <div
-                    aria-live='polite'
-                    className={[
-                      'absolute left-0 top-0 z-[1] flex h-24 items-center',
-                      isRtl
-                        ? 'justify-end text-right'
-                        : 'justify-start text-left',
-                    ].join(' ')}
+                    className='absolute left-0 top-0'
                     style={{
-                      width: TITLE_W,
-                      transform: `translateX(${positions.title}px)`,
-                      transition: 'transform 0.7s ease-in-out',
+                      height: CARD_W,
+                      width: ROW_W,
+                      transform: `scale(${scale})`,
+                      transformOrigin: 'top left',
                     }}
                   >
-                    <div className='relative h-9 w-full overflow-hidden'>
-                      {items.map((item, index) => {
-                        const isActive = index === activeStep;
-                        const isLeaving = index === leavingStep;
+                    {items.map((item, index) => {
+                      const isActive = index === activeStep;
 
-                        return (
+                      return (
+                        <button
+                          key={`${item.title}-${index}`}
+                          type='button'
+                          role='tab'
+                          aria-selected={isActive}
+                          aria-label={item.title}
+                          onClick={() => {
+                            const stage = stageRef.current;
+                            if (!stage) return;
+
+                            const stageTop =
+                              stage.getBoundingClientRect().top +
+                              window.scrollY;
+                            const target =
+                              stageTop +
+                              ((index + 0.5) / ITEM_COUNT) * SCENE_DISTANCE;
+
+                            window.scrollTo({
+                              top: Math.round(target),
+                              behavior: 'smooth',
+                            });
+                          }}
+                          className={[
+                            'absolute left-0 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
+                            'transition-[transform,border-color] duration-700 ease-in-out',
+                            isActive
+                              ? 'border-[#1e2364]'
+                              : 'border-[#e5e7f0] hover:border-[#6f8fcf]',
+                          ].join(' ')}
+                          style={{
+                            transform: `translateX(${positions.cards[index]}px)${isActive ? ' translateY(-6px) scale(1.06)' : ''}`,
+                            zIndex: 2,
+                          }}
+                        >
                           <span
-                            key={`${item.title}-${index}`}
+                            aria-hidden='true'
                             className={[
-                              'absolute bottom-0 top-0 flex items-center whitespace-nowrap text-[22px] font-extrabold leading-none text-[#1e2364]',
-                              isRtl
-                                ? 'justify-end text-right'
-                                : 'justify-start text-left',
+                              'svg-ic',
+                              getWhySpriteClassName(item.iconKey, index),
+                              'h-11 w-11 transition-transform duration-450 ease-in-out',
                             ].join(' ')}
                             style={{
-                              left: isRtl ? 'auto' : 0,
-                              right: isRtl ? 0 : 'auto',
-                              opacity: isActive || isLeaving ? 1 : 0,
                               transform: isActive
-                                ? 'translateX(0)'
-                                : `translateX(${hiddenTitleX})`,
-                              transition: isActive
-                                ? 'transform 0.42s ease-out 0.35s'
-                                : isLeaving
-                                  ? 'transform 0.32s ease-in'
-                                  : 'none',
+                                ? 'scale(1.26)'
+                                : 'scale(1.16)',
                             }}
-                          >
-                            {item.title}
-                          </span>
-                        );
-                      })}
+                          />
+                        </button>
+                      );
+                    })}
+
+                    <div
+                      aria-live='polite'
+                      className={[
+                        'absolute left-0 top-0 z-1 flex h-24 items-center',
+                        isRtl
+                          ? 'justify-end text-right'
+                          : 'justify-start text-left',
+                      ].join(' ')}
+                      style={{
+                        width: TITLE_W,
+                        transform: `translateX(${positions.title}px)`,
+                        transition: 'transform 0.7s ease-in-out',
+                      }}
+                    >
+                      <div className='relative h-9 w-full overflow-hidden'>
+                        {items.map((item, index) => {
+                          const isActive = index === activeStep;
+                          const isLeaving = index === leavingStep;
+
+                          return (
+                            <span
+                              key={`${item.title}-${index}`}
+                              className={[
+                                'absolute bottom-0 top-0 flex items-center whitespace-nowrap text-[22px] font-extrabold leading-none text-[#1e2364]',
+                                isRtl
+                                  ? 'justify-end text-right'
+                                  : 'justify-start text-left',
+                              ].join(' ')}
+                              style={{
+                                left: isRtl ? 'auto' : 0,
+                                right: isRtl ? 0 : 'auto',
+                                opacity: isActive || isLeaving ? 1 : 0,
+                                transform: isActive
+                                  ? 'translateX(0)'
+                                  : `translateX(${hiddenTitleX})`,
+                                transition: isActive
+                                  ? 'transform 0.42s ease-out 0.35s'
+                                  : isLeaving
+                                    ? 'transform 0.32s ease-in'
+                                    : 'none',
+                              }}
+                            >
+                              {item.title}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div
-                  className='flex w-full max-w-[420px] gap-1.5'
+                  className='flex w-full max-w-105 gap-1.5'
                   dir={isRtl ? 'rtl' : 'ltr'}
                   aria-hidden='true'
                 >
@@ -326,7 +347,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                     return (
                       <div
                         key={index}
-                        className='relative h-[3px] flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]'
+                        className='relative h-0.75 flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]'
                       >
                         <div
                           className={[
