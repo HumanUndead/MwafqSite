@@ -12,28 +12,28 @@ export function AppShowcaseSection({ content }: Props) {
   return (
     <section
       id='app'
-      className='sticky top-[-100px] flex min-h-screen items-center border-t-2 border-[#e5e7f0] bg-[#eeeeef] pb-30'
+      className='sticky -top-25 flex min-h-screen items-center border-t-2 border-[#e5e7f0] bg-[#eeeeef] pb-30'
     >
       <div
-        className='pointer-events-none absolute inset-0 [background-image:radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] [background-size:26px_26px] opacity-55 [mask-image:radial-gradient(circle_at_70%_50%,#000_0%,transparent_70%)]'
+        className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[26px_26px] opacity-55 mask-[radial-gradient(circle_at_70%_50%,#000_0%,transparent_70%)]'
         aria-hidden='true'
       />
-      <div className='relative z-10 mx-auto w-full max-w-[1320px] px-4 py-16 md:px-7 lg:py-30'>
-        <div className='grid items-center gap-[60px] lg:grid-cols-[1.1fr_1fr]'>
+      <div className='relative z-10 mx-auto w-full max-w-330 px-4 py-16 md:px-7 lg:py-30'>
+        <div className='grid items-center gap-15 lg:grid-cols-[1.1fr_1fr]'>
           <div className='relative hidden h-150 overflow-hidden rounded-[32px] perspective-[1500px] lg:block'>
             <div
-              className='absolute left-1/2 top-1/2 h-[560px] w-[380px] [transform-style:preserve-3d] animate-[stackShowcase_9s_ease-in-out_infinite]'
+              className='absolute left-1/2 top-1/2 h-140 w-95 transform-3d animate-[stackShowcase_9s_ease-in-out_infinite]'
               id='phones'
             >
-              <div className='device-card absolute -left-10 bottom-[-40px] right-20 top-[140px] overflow-hidden rounded-[28px] border-2 border-[#1e2364] bg-[#1e2364] p-[30px] text-white animate-[cardFloat1_5s_ease-in-out_infinite]'>
+              <div className='device-card absolute -left-10 -bottom-10 right-20 top-35 overflow-hidden rounded-[28px] border-2 border-[#1e2364] bg-[#1e2364] p-7.5 text-white animate-[cardFloat1_5s_ease-in-out_infinite]'>
                 <div className='mb-2.5 text-[11px] font-bold uppercase tracking-[1.2px] text-white/85'>
                   {content.scheduleCard.label}
                 </div>
-                <div className='mb-[18px] text-[20px] font-extrabold tracking-[-0.4px]'>
+                <div className='mb-4.5 text-[20px] font-extrabold tracking-[-0.4px]'>
                   {content.scheduleCard.detail}
                 </div>
                 <div className='flex items-center gap-2.5 rounded-[14px] border-2 border-white bg-white p-3.5'>
-                  <div className='flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] bg-[#1e2364] font-extrabold text-white'>
+                  <div className='flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] bg-[#1e2364] font-extrabold text-white'>
                     {content.scheduleCard.appointment.value}
                   </div>
                   <div>
@@ -51,7 +51,7 @@ export function AppShowcaseSection({ content }: Props) {
                 <div className='mb-2.5 text-[11px] font-bold uppercase tracking-[1.2px] text-white/85'>
                   {content.statusCard.label}
                 </div>
-                <div className='mb-[18px] text-[20px] font-extrabold tracking-[-0.4px]'>
+                <div className='mb-4.5 text-[20px] font-extrabold tracking-[-0.4px]'>
                   {content.statusCard.status}
                 </div>
                 {content.statusCard.detail
@@ -62,7 +62,7 @@ export function AppShowcaseSection({ content }: Props) {
                       className='mb-2 flex items-center gap-3 rounded-[14px] border-2 border-[#1e2364] bg-white px-3.5 py-3 text-[13px] font-bold text-[#1e2364]'
                     >
                       <span
-                        className={`h-2.5 w-2.5 flex-shrink-0 rounded-full ${
+                        className={`h-2.5 w-2.5 shrink-0 rounded-full ${
                           index === 0
                             ? 'bg-[#1e2364]'
                             : index === 1
@@ -76,11 +76,11 @@ export function AppShowcaseSection({ content }: Props) {
                   ))}
               </div>
 
-              <div className='device-card absolute bottom-5 left-[60px] right-[-40px] top-[60px] overflow-hidden rounded-[28px] border-2 border-[#1e2364] bg-white p-[26px] animate-[cardFloat3_6s_ease-in-out_infinite]'>
+              <div className='device-card absolute bottom-5 left-15 -right-10 top-15 overflow-hidden rounded-[28px] border-2 border-[#1e2364] bg-white p-[26px] animate-[cardFloat3_6s_ease-in-out_infinite]'>
                 <div className='mb-2.5 text-[11px] font-bold uppercase tracking-[1.2px] text-[#6b7196]'>
                   {content.reportsCard.label}
                 </div>
-                <div className='mb-[18px] text-[20px] font-extrabold tracking-[-0.4px] text-[#1e2364]'>
+                <div className='mb-4.5 text-[20px] font-extrabold tracking-[-0.4px] text-[#1e2364]'>
                   {content.reportsCard.status}
                 </div>
                 {content.reportsCard.items.map((report, index) => (

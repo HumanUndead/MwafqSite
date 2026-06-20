@@ -1,6 +1,7 @@
 import { isRtl, type Locale } from '@/i18n/config';
 import type { HomePageContent, HomeSectionKey } from './home.types';
 import { AcademySection } from './components/AcademySection';
+import { MwafqAcademySection } from './components/MwafqAcademySection';
 import { AppShowcaseSection } from './components/AppShowcaseSection';
 import { BookingSection } from './components/BookingSection';
 import { HeroSection } from './components/HeroSection';
@@ -51,9 +52,7 @@ function renderSection(
         <AppShowcaseSection key={key} locale={locale} content={content.app} />
       );
     case 'academy':
-      return (
-        <AcademySection key={key} content={content.academy} />
-      );
+      return <AcademySection key={key} content={content.academy} />;
     case 'stats':
       return <StatsSection key={key} content={content.stats} />;
     case 'testimonial':

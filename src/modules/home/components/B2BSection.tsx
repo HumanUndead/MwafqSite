@@ -33,12 +33,12 @@ export function B2BSection({ locale, content }: Props) {
       }}
     >
       <div
-        className='pointer-events-none absolute inset-0 [background-image:radial-gradient(circle,rgba(255,255,255,0.06)_1.2px,transparent_1.2px)] [background-size:24px_24px]'
+        className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.06)_1.2px,transparent_1.2px)] bg-size-[24px_24px]'
         aria-hidden='true'
       />
-      <div className='relative z-10 mx-auto max-w-[1320px]'>
+      <div className='relative z-10 mx-auto max-w-330'>
         <div className='grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20'>
-          <div>
+          <div className='min-w-0'>
             <Eyebrow dark>{content.eyebrow}</Eyebrow>
             <h2 className='mb-7 text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-white'>
               {content.title}
@@ -58,7 +58,7 @@ export function B2BSection({ locale, content }: Props) {
               {content.points.map((point) => (
                 <li
                   key={point}
-                  className='flex items-center gap-3.5 text-[15.5px] text-white/92'
+                  className='flex items-start gap-3.5 text-[15.5px] text-white/92'
                 >
                   <svg
                     viewBox='0 0 24 24'
@@ -67,12 +67,12 @@ export function B2BSection({ locale, content }: Props) {
                     strokeWidth='2.2'
                     strokeLinecap='round'
                     strokeLinejoin='round'
-                    className='h-4 w-4 flex-shrink-0 text-[#00dec9]'
+                    className='mt-1 h-4 w-4 shrink-0 text-[#00dec9]'
                     aria-hidden='true'
                   >
                     <polyline points='20 6 9 17 4 12' />
                   </svg>
-                  {point}
+                  <span className='min-w-0 flex-1'>{point}</span>
                 </li>
               ))}
             </ul>
@@ -87,34 +87,76 @@ export function B2BSection({ locale, content }: Props) {
             />
           </div>
 
-          <div className='rounded-[32px_4px_32px_4px] border-2 border-[#e5e7f0] bg-white p-[30px] text-[#1e2364]'>
-            <div className='mb-[22px] w-fit rounded-full bg-[#f2f2f2] p-[5px]'>
+          <div className='min-w-0 rounded-[24px_4px_24px_4px] border-2 border-[#e5e7f0] bg-white p-5 text-[#1e2364] sm:rounded-[32px_4px_32px_4px] sm:p-7.5'>
+            {/* Tab bar */}
+            <div className='mb-5.5 flex w-fit max-w-full rounded-full bg-[#f2f2f2] p-1.25'>
               {content.tabs.map((tab, index) => (
                 <button
                   key={`${tab}-${index}`}
                   type='button'
-                  className={`rounded-full px-4 py-2 text-[12px] font-semibold ${index === 0 ? 'bg-white text-[#1e2364]' : 'bg-transparent text-[#6b7196]'}`}
+                  className={`shrink-0 rounded-full px-3 py-2 text-[12px] font-semibold sm:px-4 ${index === 0 ? 'bg-white text-[#1e2364]' : 'bg-transparent text-[#6b7196]'}`}
                 >
                   {tab}
                 </button>
               ))}
             </div>
 
-            <div className='mb-[22px] grid grid-cols-3 gap-2 sm:gap-3.5'>
+            {/* Featured course with progress bar */}
+            <div className='mb-5.5 flex items-center gap-3.5 rounded-[16px_4px_16px_4px] border-2 border-[#e5e7f0] bg-[#fbfcff] p-4'>
+              <div
+                className='flex size-12 shrink-0 items-center justify-center rounded-[12px_4px_12px_4px] text-white'
+                style={{
+                  background:
+                    'linear-gradient(135deg, #00a8f1 0%, #2f3567 100%)',
+                }}
+                aria-hidden='true'
+              >
+                <svg
+                  viewBox='0 0 24 24'
+                  fill='currentColor'
+                  className='h-5 w-5'
+                  aria-hidden='true'
+                >
+                  <path d='M8 5v14l11-7z' />
+                </svg>
+              </div>
+              <div className='min-w-0 flex-1'>
+                <div className='mb-1 flex items-center gap-2'>
+                  <span className='rounded-full bg-[rgba(0,168,241,0.12)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.4px] text-[#00a8f1]'>
+                    Continue
+                  </span>
+                  <span className='text-[11px] font-semibold text-[#6b7196]'>
+                    68% complete
+                  </span>
+                </div>
+                <strong className='block truncate text-[13.5px] font-bold tracking-[-0.2px] text-[#1e2364]'>
+                  Occupational Health & Safety Essentials
+                </strong>
+                <div className='mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#e5e7f0]'>
+                  <div
+                    className='h-full rounded-full bg-[#00a8f1]'
+                    style={{ width: '68%' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Metric tiles */}
+            <div className='mb-5.5 grid grid-cols-3 gap-2 sm:gap-3.5'>
               {content.metrics.map((metric, index) => (
                 <div
                   key={`${metric.label}-${index}`}
-                  className='rounded-[16px_4px_16px_4px] border-2 border-[#e5e7f0] bg-white p-[18px]'
+                  className='rounded-[16px_4px_16px_4px] border-2 border-[#e5e7f0] bg-white p-3 sm:p-4.5'
                 >
                   <div
-                    className={`text-[26px] font-extrabold leading-none tracking-[-1px] ${index === 0 ? 'text-[#1e2364]' : index === 1 ? 'text-[#00dec9]' : 'text-[#d9743c]'}`}
+                    className={`text-[20px] font-extrabold leading-none tracking-[-1px] sm:text-[26px] ${index === 0 ? 'text-[#1e2364]' : index === 1 ? 'text-[#00dec9]' : 'text-[#d9743c]'}`}
                   >
                     {metric.value}
                   </div>
-                  <div className='mt-1.5 text-[12px] text-[#6b7196]'>
+                  <div className='mt-1.5 text-[11px] text-[#6b7196] sm:text-[12px]'>
                     {metric.label}
                   </div>
-                  <div className='mt-2.5 flex h-[30px] items-end gap-[3px]'>
+                  <div className='mt-2.5 flex h-7.5 items-end gap-0.75'>
                     {[30, 55, 40, 80, 60, 90, 70].map((height, barIndex) => (
                       <div
                         key={barIndex}
@@ -135,25 +177,32 @@ export function B2BSection({ locale, content }: Props) {
               ))}
             </div>
 
-            {content.employees.map((employee) => (
+            {/* Learner / course rows */}
+            {content.employees.map((employee, index) => (
               <div
                 key={employee.name}
-                className='mb-2 flex items-center gap-3 rounded-[14px] border-2 border-[#e5e7f0] bg-white px-3.5 py-[11px]'
+                className='mb-2 flex items-center gap-3 rounded-[14px] border-2 border-[#e5e7f0] bg-white px-3.5 py-2.75'
               >
                 <div
-                  className='h-[38px] w-[38px] flex-shrink-0 rounded-full bg-[#f2f3f7]'
+                  className='flex size-9.5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white'
+                  style={{
+                    background:
+                      'linear-gradient(135deg, #00a8f1 0%, #2f3567 100%)',
+                  }}
                   aria-hidden='true'
-                />
+                >
+                  {index + 1}
+                </div>
                 <div className='min-w-0 flex-1'>
-                  <strong className='block text-[13px] font-bold tracking-[-0.2px] text-[#1e2364]'>
+                  <strong className='block truncate text-[13px] font-bold tracking-[-0.2px] text-[#1e2364]'>
                     {employee.name}
                   </strong>
-                  <span className='text-[11px] text-[#6b7196]'>
+                  <span className='block truncate text-[11px] text-[#6b7196]'>
                     {employee.exam}
                   </span>
                 </div>
                 <span
-                  className={`rounded-full border-2 px-2.5 py-[5px] text-[10px] font-bold uppercase tracking-[0.4px] ${getStatusClassName(employee.status)}`}
+                  className={`shrink-0 rounded-full border-2 px-2.5 py-1.25 text-[10px] font-bold uppercase tracking-[0.4px] ${getStatusClassName(employee.status)}`}
                 >
                   {employee.status}
                 </span>

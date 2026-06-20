@@ -18,11 +18,10 @@ import { ReservationsExamsPanel } from './components/ReservationsExamsPanel';
 import { ReservationsPanelSkeleton } from './components/ReservationsPanelSkeleton';
 import {
   mapReservationToExamCard,
-  mapReservationToResultCard,
   partitionReservations,
 } from './mapReservations';
 import type { Reservation } from './types/reservation.types';
-import type { TabValue } from './types';
+import type { ResultCardData, TabValue } from './types';
 
 type MyReservationsViewProps = {
   reservations?: Reservation[];
@@ -75,21 +74,22 @@ export default function MyReservationsView({
   }
 
   const getCards = () => {
-    const { exams, results } = partitionReservations(reservations);
+    const { exams } = partitionReservations(reservations);
     return {
       examCards: exams.map(mapReservationToExamCard),
-      resultCards: results.map(mapReservationToResultCard),
     };
   };
-  const { examCards, resultCards } = getCards();
+  const { examCards } = getCards();
+  // Results tab intentionally always empty until results API is ready.
+  const resultCards: ResultCardData[] = [];
 
   return (
     <section className='relative pt-2'>
-      <ScrollReveal className='mx-auto mb-9 max-w-[1200px]'>
+      <ScrollReveal className='mx-auto mb-9 max-w-300'>
         <h1 className='mb-2.5 text-[clamp(30px,4vw,44px)] font-extrabold leading-[1.1] tracking-[-1.4px] text-[#1e2364]'>
           {tab === 'results' ? t.titleResults : t.titleReservations}
         </h1>
-        <p className='max-w-[600px] text-base leading-relaxed text-[#6b7196]'>
+        <p className='max-w-150 text-base leading-relaxed text-[#6b7196]'>
           {t.subtitle}
         </p>
       </ScrollReveal>
@@ -99,15 +99,15 @@ export default function MyReservationsView({
         onValueChange={(next) => {
           setTab(next as TabValue);
         }}
-        className='mx-auto w-full max-w-[1200px] gap-0'
+        className='mx-auto w-full max-w-300 gap-0'
       >
         <ScrollReveal
           transitionDelay={0.12}
-          className='mb-7 flex max-w-[1200px] flex-wrap items-end justify-between gap-6 border-b border-[#e5e7f0] max-[640px]:mb-3.5 max-[640px]:gap-3.5'
+          className='mb-7 flex max-w-300 flex-wrap items-end justify-between gap-6 border-b border-[#e5e7f0] max-[640px]:mb-3.5 max-[640px]:gap-3.5'
         >
           <label
             htmlFor='resSearch'
-            className='group mb-2.5 flex min-w-[320px] max-w-full flex-1 items-center rounded-[28px] border-2 border-[#e5e7f0] bg-white px-[18px] py-[11px] transition-colors duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] focus-within:border-[#00a8f1] max-[640px]:mb-0 max-[640px]:min-w-0 max-[640px]:w-full'
+            className='group mb-2.5 flex min-w-[320px] max-w-full flex-1 items-center rounded-[28px] border-2 border-[#e5e7f0] bg-white px-4.5 py-2.75 transition-colors duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] focus-within:border-[#00a8f1] max-[640px]:mb-0 max-[640px]:min-w-0 max-[640px]:w-full'
           >
             <Input
               id='resSearch'
@@ -117,7 +117,7 @@ export default function MyReservationsView({
               placeholder={t.searchPlaceholder}
               defaultValue=''
               prefix={
-                <ReservationsSearchIcon className='size-[18px] shrink-0 text-[#6b7196] transition-colors group-focus-within:text-[#00a8f1]' />
+                <ReservationsSearchIcon className='size-4.5 shrink-0 text-[#6b7196] transition-colors group-focus-within:text-[#00a8f1]' />
               }
               affixWrapperClassName='h-auto min-h-0 w-full min-w-0 flex-1 border-0 bg-transparent p-0 shadow-none ring-0 focus-within:border-transparent focus-within:ring-0 gap-2.5'
               className={cn(
@@ -151,7 +151,7 @@ export default function MyReservationsView({
           </TabsList>
         </ScrollReveal>
 
-        <div id='reservationsGrid' className='min-h-[200px]'>
+        <div id='reservationsGrid' className='min-h-50'>
           <TabsContent value='exams' className='mt-0 flex-1 outline-none'>
             <ReservationsExamsPanel
               cards={examCards}
@@ -170,15 +170,17 @@ export default function MyReservationsView({
           </TabsContent>
         </div>
 
-        <MwafqPagination
-          page={page}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          className='mt-10'
-          ariaLabel={t.pagination.ariaLabel}
-          previousLabel={t.pagination.previous}
-          nextLabel={t.pagination.next}
-        />
+        {tab !== 'results' && (
+          <MwafqPagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            className='mt-10'
+            ariaLabel={t.pagination.ariaLabel}
+            previousLabel={t.pagination.previous}
+            nextLabel={t.pagination.next}
+          />
+        )}
       </Tabs>
     </section>
   );
