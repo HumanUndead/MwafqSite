@@ -5,9 +5,16 @@ import type { Locale } from '@/i18n/config';
 import type { HomeStepsContent } from '../home.types';
 import { CmsLink } from './CmsLink';
 
-const INITIAL_OFFSET = 200;
-const END_HOLD = 500;
-const EXTRA_LIFT = 100;
+const INITIAL_OFFSET = 24;
+const END_HOLD = 80;
+const EXTRA_LIFT = 16;
+
+function stripArrowFromLabel(label: string): string {
+  return label
+    .replace(/\s*(?:→|←|›|»|➜|➡|->)\s*$/u, '')
+    .replace(/^\s*(?:→|←|›|»|➜|➡|->)\s*/u, '')
+    .trim();
+}
 
 interface StepsSectionProps {
   locale: Locale;
@@ -120,8 +127,10 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
     ...step,
   }));
 
+  const ctaLabel = stripArrowFromLabel(content.cta.label);
+
   return (
-    <section id='how' className='relative p-0'>
+    <section id='how' className='relative mt-8 p-0 min-[981px]:-mt-12'>
       <div
         ref={stageRef}
         className='relative'
@@ -135,11 +144,11 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
         <div
           className={
             isDesktop
-              ? 'sticky top-0 flex h-screen items-center overflow-hidden'
-              : 'py-6'
+              ? 'sticky top-0 flex h-screen items-start overflow-hidden pt-[88px]'
+              : 'py-6 pt-4'
           }
         >
-          <div className='w-full py-2 md:py-4'>
+          <div className='w-full'>
             <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
               <div className='grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:items-center lg:gap-20'>
                 <div>
@@ -150,13 +159,13 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                     {content.title}{' '}
                     <span className='text-[#00a8f1]'>{content.highlight}</span>
                   </h2>
-                  {content.cta.label.trim() ? (
+                  {ctaLabel ? (
                     <CmsLink
                       locale={locale}
                       href={content.cta.path}
-                      className='mt-7 inline-flex items-center gap-2 rounded-full bg-[#1e2364] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#233567]'
+                      className='mt-7 inline-flex items-center rounded-full bg-[#1e2364] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#233567]'
                     >
-                      {content.cta.label}
+                      {ctaLabel}
                     </CmsLink>
                   ) : null}
                 </div>

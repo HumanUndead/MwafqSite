@@ -40,67 +40,76 @@ export function ServiceCard({ href, title, description, rtl, index = 0, compact 
       ? { top: '58%', left: '42%', transform: 'translate(-50%,-50%)' }
       : { top: '58%', left: '58%', transform: 'translate(-50%,-50%)' };
 
+    /* Arrow sits on the horizontal foot of the L, inside the white shape */
+    const arrowStyle = rtl
+      ? { bottom: 12, left: 'calc(42% + 12px)' }
+      : { bottom: 12, right: 'calc(42% + 12px)' };
+
     return (
       <Link
         href={href}
-        className='touch-manipulation transition-[filter,transform] duration-200 active:scale-[0.97] focus-visible:outline-none'
+        className='relative block h-[190px] touch-manipulation transition-transform duration-200 active:scale-[0.97] focus-visible:outline-none'
         style={{
-          clipPath,
           filter: 'drop-shadow(0 1px 0 #e5e7f0) drop-shadow(0 8px 22px rgba(30,35,100,0.13))',
         }}
       >
-        {/* White card body */}
-        <div className='relative h-[190px] w-full bg-white'>
+        {/* L-shaped background — clip only the shape, not the arrow */}
+        <div
+          aria-hidden='true'
+          className='absolute inset-0 bg-white'
+          style={{ clipPath }}
+        />
 
-          {/* Cyan top stripe — full width */}
-          <div className='absolute inset-x-0 top-0 h-[3px] bg-[#00a8f1]' />
+        {/* Cyan top stripe */}
+        <div
+          aria-hidden='true'
+          className='absolute inset-x-0 top-0 z-[1] h-[3px] bg-[#00a8f1]'
+          style={{ clipPath }}
+        />
 
-          {/* L-corner mark (cyan) — top-left for LTR, top-right for RTL */}
-          <div
-            aria-hidden='true'
-            className={cn(
-              'pointer-events-none absolute top-0 z-2 h-7 w-7',
-              rtl ? 'right-0 scale-x-[-1]' : 'left-0'
-            )}
-            style={{ backgroundImage: CORNER_SVG, backgroundSize: '100%', backgroundRepeat: 'no-repeat' }}
-          />
+        {/* L-corner mark */}
+        <div
+          aria-hidden='true'
+          className={cn(
+            'pointer-events-none absolute top-0 z-[2] h-7 w-7',
+            rtl ? 'right-0 scale-x-[-1]' : 'left-0'
+          )}
+          style={{ backgroundImage: CORNER_SVG, backgroundSize: '100%', backgroundRepeat: 'no-repeat' }}
+        />
 
-          {/* Ghost index number — opposite corner from the foot */}
-          <span
-            aria-hidden='true'
-            className={cn(
-              'pointer-events-none absolute top-2 select-none text-[64px] font-black leading-none text-[#1e2364] opacity-[0.04]',
-              rtl ? 'left-3' : 'right-3'
-            )}
-          >
-            {String((typeof index === 'number' ? index : 0) + 1).padStart(2, '0')}
-          </span>
+        {/* Ghost index */}
+        <span
+          aria-hidden='true'
+          className={cn(
+            'pointer-events-none absolute top-2 z-[2] select-none text-[64px] font-black leading-none text-[#1e2364] opacity-[0.04]',
+            rtl ? 'left-3' : 'right-3'
+          )}
+        >
+          {String(index + 1).padStart(2, '0')}
+        </span>
 
-          {/* Inner-corner accent dot — marks the bend of the L */}
-          <div
-            aria-hidden='true'
-            className='pointer-events-none absolute z-10 size-3.5 rounded-full bg-[#00a8f1]/15 ring-2 ring-[#00a8f1]/30'
-            style={innerCornerStyle}
-          />
+        {/* Inner-corner accent dot */}
+        <div
+          aria-hidden='true'
+          className='pointer-events-none absolute z-[2] size-3.5 rounded-full bg-[#00a8f1]/15 ring-2 ring-[#00a8f1]/30'
+          style={innerCornerStyle}
+        />
 
-          {/* Title — upper area, padded away from L-corner */}
-          <div className='absolute inset-x-0 top-8 px-4'>
-            <h3 className='line-clamp-3 text-[12.5px] font-bold leading-[1.35] tracking-[-0.15px] text-[#1e2364]'>
-              {title}
-            </h3>
-          </div>
-
-          {/* Arrow — foot of the L */}
-          <div
-            aria-hidden='true'
-            className={cn(
-              'absolute bottom-3 inline-flex size-8 items-center justify-center rounded-full bg-[#00a8f1] text-white shadow-[0_4px_12px_rgba(0,168,241,0.35)]',
-              rtl ? 'right-3' : 'left-3'
-            )}
-          >
-            <ArrowIcon className={cn('size-3.5', rtl && 'rotate-180')} />
-          </div>
+        {/* Title */}
+        <div className='relative z-10 px-4 pt-8'>
+          <h3 className='line-clamp-3 text-[12.5px] font-bold leading-[1.35] tracking-[-0.15px] text-[#1e2364]'>
+            {title}
+          </h3>
         </div>
+
+        {/* Arrow — inside the L foot: EN right, AR left */}
+        <span
+          aria-hidden='true'
+          className='absolute z-10 inline-flex size-8 items-center justify-center rounded-full bg-[#00a8f1] text-white shadow-[0_4px_12px_rgba(0,168,241,0.35)]'
+          style={arrowStyle}
+        >
+          <ArrowIcon className={cn('size-3.5', rtl && 'rotate-180')} />
+        </span>
       </Link>
     );
   }
@@ -140,7 +149,12 @@ export function ServiceCard({ href, title, description, rtl, index = 0, compact 
         </div>
       )}
 
-      <div className={cn('mt-auto flex items-center border-t-2 border-[#e5e7f0] pt-4', rtl ? 'justify-start' : 'justify-end')}>
+      <div
+        className={cn(
+          'mt-auto flex items-center border-t-2 border-[#e5e7f0] pt-4',
+          rtl ? 'justify-start' : 'justify-end'
+        )}
+      >
         <span
           aria-hidden='true'
           className='inline-flex size-9 items-center justify-center rounded-full border-2 border-[#e5e7f0] bg-[#f7f8fb] text-[#1e2364] transition-all duration-400 group-hover:border-[#00a8f1] group-hover:bg-[#00a8f1] group-hover:text-white group-hover:shadow-md'

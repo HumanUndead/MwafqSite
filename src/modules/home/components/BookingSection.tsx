@@ -301,14 +301,14 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
   return (
     <section
       id='booking'
-      className='relative z-50 px-4 pb-2 pt-4 md:pb-4 md:pt-6 md:px-7'
+      className='relative z-50 px-4 pb-8 pt-2 md:px-7 md:pb-10 md:pt-2 min-[981px]:pb-0 min-[981px]:-mb-6'
     >
       <BookingMascot locale={locale} cardRef={cardRef} label={content.title} />
 
       <div className='relative mx-auto max-w-275'>
         <div
           ref={cardRef}
-          className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-5 pb-16 pt-8 text-center sm:px-10 sm:pb-17.5 sm:pt-10 md:px-14 md:pb-22.5 md:pt-11.5'
+          className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-5 pb-20 pt-8 text-center sm:px-10 sm:pb-16 sm:pt-9 md:px-14 md:pb-18 md:pt-10'
         >
           <div
             aria-hidden='true'

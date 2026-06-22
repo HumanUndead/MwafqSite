@@ -38,18 +38,6 @@ const EMPTY_APP_REPORTS: HomeAppCardReportsContent = {
 
 export function buildEmptyHomeFallback(): HomePageContent {
   return {
-    header: {
-      brandLabel: '',
-      brandDescription: '',
-      brandPath: '#home',
-      brandImageSrc: '/demo-assets/logo.svg',
-      navLinks: [],
-      primaryAction: null,
-      signInAction: EMPTY_ACTION,
-      userMenu: null,
-      localeSwitchLabel: null,
-      businessSignInAction: EMPTY_ACTION,
-    },
     hero: {
       badge: '',
       badgeImages: [],
@@ -144,21 +132,6 @@ export function buildEmptyHomeFallback(): HomePageContent {
       body: '',
       primaryAction: { ...EMPTY_ACTION },
       secondaryAction: { ...EMPTY_ACTION },
-    },
-    footer: {
-      brandLabel: '',
-      brandBody: '',
-      brandPath: '#home',
-      brandImageSrc: '/demo-assets/logo.svg',
-      newsletterPlaceholder: '',
-      newsletterEyebrow: '',
-      newsletterAction: '',
-      copyrightLabel: '',
-      copyrightBody: '',
-      pages: { title: '', links: [] },
-      help: { title: '', links: [] },
-      contact: { title: '', links: [] },
-      socialLinks: [],
     },
     sectionOrder: [],
   };
