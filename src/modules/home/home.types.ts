@@ -277,7 +277,6 @@ export interface HomeFooterContent {
   copyrightLabel: string;
   copyrightBody: string;
   pages: HomeFooterGroupContent;
-  help: HomeFooterGroupContent;
   contact: HomeFooterGroupContent;
   socialLinks: HomeSocialLinkContent[];
 }
@@ -304,7 +303,7 @@ export type HomeSectionKey =
   | 'testimonial';
 
 export interface HomePageContent {
-  header: HomeHeaderContent;
+  // header: HomeHeaderContent;
   hero: HomeHeroContent;
   companies: HomeCompaniesContent;
   services: HomeServicesContent;
@@ -316,6 +315,6 @@ export interface HomePageContent {
   stats: HomeStatsContent;
   testimonial: HomeTestimonialContent[];
   finalCta: HomeFinalCtaContent;
-  footer: HomeFooterContent;
+  // footer: HomeFooterContent;
   sectionOrder: HomeSectionKey[];
 }

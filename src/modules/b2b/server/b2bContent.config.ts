@@ -70,25 +70,24 @@ export const B2B_STEPS_ARTICLE_RANKS = {
 //   index 1 → primary CTA (name)
 //   index 2 → secondary CTA (name)
 
-// Business section (category 169 — formerly part of home, now owned by b2b):
-//   rank 1      → header: eyebrow (shortDescription), title (name), accent (extraInfo), body (description)
-//   ranks 10–49 → bullet points (name)
-//   rank 50     → primary CTA (name / path)
-//   rank 60     → secondary CTA (name / path)
-//   child tabs category     → tabs article rank 1: name / shortDescription / extraInfo
-//   child metrics category  → metric articles: value (name), label (description)
-//   child employees category → employee articles: name (name), exam (description), status (shortDescription)
+// Business section (category 169 — formerly part of home, now owned by b2b).
+// Articles are flat under the category and ranks overlap across piece types,
+// so each piece is referenced by explicit article id (not rank).
+//   header           → eyebrow (shortDescription), title (name), accent (extraInfo), body (description)
+//   tabs             → name / shortDescription / extraInfo (one article, three tab labels)
+//   points           → bullet points (name)
+//   metrics          → value (name), label (description)
+//   employees        → name (name), exam (description), status (shortDescription)
+//   primaryAction    → name / path
+//   secondaryAction  → name / path
 export const B2B_BUSINESS_CATEGORY_ID = 169;
 
-export const B2B_BUSINESS_CHILD_CATEGORY_IDS = {
-  tabs: 175,
-  metrics: 181,
-  employees: 186,
-} as const;
-
-export const B2B_BUSINESS_ARTICLE_RANKS = {
-  header: 1,
-  pointStart: 10,
-  primaryAction: 50,
-  secondaryAction: 60,
+export const B2B_BUSINESS_ARTICLE_IDS = {
+  header: 396,
+  tabs: 409,
+  points: [397, 398, 399, 400],
+  metrics: [406, 407, 408],
+  employees: [403, 404, 405],
+  primaryAction: 401,
+  secondaryAction: 402,
 } as const;

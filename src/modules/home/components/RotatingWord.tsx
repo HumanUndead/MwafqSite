@@ -11,13 +11,14 @@ const REDUCED_MOTION_CYCLE_MS = 3000;
 
 interface Props {
   words: readonly string[];
+  isRtl?: boolean;
 }
 
 function toChars(value: string) {
   return [...value];
 }
 
-export function RotatingWord({ words }: Props) {
+export function RotatingWord({ words, isRtl = false }: Props) {
   const prefersReducedMotion = useReducedMotion();
   const [wordIndex, setWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
@@ -119,7 +120,13 @@ export function RotatingWord({ words }: Props) {
   }
 
   return (
-    <span className='relative px-2 inline-flex font-normal italic text-sky-500 min-w-[200px]'>
+    <span
+      className={
+        isRtl
+          ? 'relative px-1 inline-flex whitespace-nowrap font-normal italic text-sky-500'
+          : 'relative px-1 flex min-h-[1.5em] whitespace-nowrap font-normal italic text-sky-500'
+      }
+    >
       <span>{displayText}</span>
       <motion.span
         aria-hidden='true'

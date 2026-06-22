@@ -34,7 +34,7 @@ export function getServiceGroupBuyPath(
   locale: Locale,
   serviceGroupId: number
 ): string {
-  return `${getLocalizedRoute(locale, ROUTES.SERVICES)}/${serviceGroupId}/buy`;
+  return `${getLocalizedRoute(locale, ROUTES.SERVICES)}/${serviceGroupId}`;
 }
 
 export function plainTextFromHtml(value: string): string {

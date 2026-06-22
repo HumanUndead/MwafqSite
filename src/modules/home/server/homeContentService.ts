@@ -51,13 +51,13 @@ import {
   STEPS_CHILD_CATEGORY_IDS,
   WHY_ARTICLE_RANKS,
 } from './homeContent.config';
-import { buildEmptyHomeFallback } from './homeContent.fallback';
 import type {
   RecursiveArticleCategoryDto,
   RecursiveArticleCategoryResponse,
   RecursiveArticleDto,
 } from './articleCategory.dto';
 import { stripHtmlToNull } from '@/shared/lib/text';
+import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 
 interface CmsTranslationSnapshot {
   name: string;
@@ -123,9 +123,7 @@ function getChildCategoryById(
   category: RecursiveArticleCategoryDto | null,
   id: number
 ): RecursiveArticleCategoryDto | null {
-  return (
-    getVisibleChildren(category).find((child) => child.id === id) ?? null
-  );
+  return getVisibleChildren(category).find((child) => child.id === id) ?? null;
 }
 
 function getArticleByRank(
@@ -294,30 +292,25 @@ function extractIconKey(image: string | null | undefined): string | null {
 
 function toActionContent(
   article: RecursiveArticleDto | null,
-  langId: number,
-  fallback?: HomeActionContent
+  langId: number
 ): HomeActionContent {
   if (!article) {
-    return {
-      label: '',
-      path: trimToNull(fallback?.path),
-    };
+    return { label: '', path: null };
   }
 
   const translation = getArticleTranslation(article, langId);
 
   return {
     label: trimToNull(translation.name) ?? '',
-    path: trimToNull(article.path) ?? trimToNull(fallback?.path),
+    path: trimToNull(article.path),
   };
 }
 
 function toOptionalActionContent(
   article: RecursiveArticleDto | null,
-  langId: number,
-  fallback?: HomeActionContent
+  langId: number
 ): HomeActionContent | null {
-  const action = toActionContent(article, langId, fallback);
+  const action = toActionContent(article, langId);
   return action.label.trim() ? action : null;
 }
 
@@ -336,29 +329,25 @@ function toLinkItemContent(
 
 function mapHeroStats(
   category: RecursiveArticleCategoryDto | null,
-  langId: number,
-  fallbackStats: readonly HomeHeroStatContent[]
+  langId: number
 ): HeroStatSnapshot[] {
   const articles = getVisibleArticles(category);
 
   if (articles.length === 0) {
-    return [...fallbackStats];
+    return [];
   }
 
-  return articles.map((article, index) => {
+  return articles.map((article) => {
     const localized = getArticleTranslation(article, langId);
     const english = getArticleTranslation(article, localeToLangId.en);
     const parsed =
       parseStatValue(localized.name) ?? parseStatValue(english.name);
-    const fallback = fallbackStats[index];
 
     if (!parsed) {
-      return (
-        fallback ?? {
-          value: 0,
-          label: localized.description ?? english.description ?? localized.name,
-        }
-      );
+      return {
+        value: 0,
+        label: localized.description ?? english.description ?? localized.name,
+      };
     }
 
     return {
@@ -366,15 +355,12 @@ function mapHeroStats(
       label:
         trimToNull(localized.description) ??
         trimToNull(english.description) ??
-        fallback?.label ??
         localized.name,
     };
   });
 }
 
-
 function mapHeroContent(
-  fallback: HomeHeroContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeHeroContent {
@@ -384,7 +370,26 @@ function mapHeroContent(
   );
 
   if (!heroCategory) {
-    return fallback;
+    return {
+      badge: '',
+      badgeImages: [],
+      titleLead: '',
+      titleMiddle: '',
+      rotatingWords: [],
+      subtitle: '',
+      primaryAction: { label: '', path: null },
+      secondaryAction: { label: '', path: null },
+      stats: [],
+      phoneGreeting: '',
+      phoneName: '',
+      phoneSearchPlaceholder: '',
+      servicesTitle: '',
+      servicesLink: '',
+      phoneTiles: [],
+      liveBookings: '',
+      liveBookingsLabel: '',
+      floatingCards: [],
+    };
   }
 
   const wordsCategory = getChildCategoryById(
@@ -442,80 +447,53 @@ function mapHeroContent(
     : null;
 
   return {
-    badge: trimToNull(contentTranslation?.shortDescription) ?? fallback.badge,
-    badgeImages:
-      splitImageList(
-        contentArticle?.images,
-        fallback.badge || fallback.titleLead
-      ).length > 0
-        ? splitImageList(
-            contentArticle?.images,
-            fallback.badge || fallback.titleLead
-          )
-        : fallback.badgeImages,
-    titleLead: trimToNull(contentTranslation?.name) ?? fallback.titleLead,
-    titleMiddle:
-      trimToNull(contentTranslation?.extraInfo) ?? fallback.titleMiddle,
+    badge: trimToNull(contentTranslation?.shortDescription) ?? '',
+    badgeImages: splitImageList(
+      contentArticle?.images,
+      contentTranslation?.name ?? ''
+    ),
+    titleLead: trimToNull(contentTranslation?.name) ?? '',
+    titleMiddle: trimToNull(contentTranslation?.extraInfo) ?? '',
     rotatingWords: rotatingWordsTranslation
       ? [
           trimToNull(rotatingWordsTranslation.name),
           trimToNull(rotatingWordsTranslation.shortDescription),
           trimToNull(rotatingWordsTranslation.extraInfo),
         ].filter((word): word is string => Boolean(word))
-      : fallback.rotatingWords,
-    subtitle: trimToNull(contentTranslation?.description) ?? fallback.subtitle,
-    primaryAction: toActionContent(
-      primaryAction,
-      langId,
-      fallback.primaryAction
-    ),
-    secondaryAction: toActionContent(
-      secondaryAction,
-      langId,
-      fallback.secondaryAction
-    ),
-    stats: mapHeroStats(metricsCategory, langId, fallback.stats),
-    phoneGreeting:
-      trimToNull(greetingTranslation?.name) ?? fallback.phoneGreeting,
-    phoneName: trimToNull(greetingTranslation?.extraInfo) ?? fallback.phoneName,
+      : [],
+    subtitle: trimToNull(contentTranslation?.description) ?? '',
+    primaryAction: toActionContent(primaryAction, langId),
+    secondaryAction: toActionContent(secondaryAction, langId),
+    stats: mapHeroStats(metricsCategory, langId),
+    phoneGreeting: trimToNull(greetingTranslation?.name) ?? '',
+    phoneName: trimToNull(greetingTranslation?.extraInfo) ?? '',
     phoneSearchPlaceholder:
-      trimToNull(greetingTranslation?.shortDescription) ??
-      fallback.phoneSearchPlaceholder,
-    servicesTitle:
-      trimToNull(servicesTranslation?.name) ?? fallback.servicesTitle,
-    servicesLink:
-      trimToNull(servicesTranslation?.extraInfo) ?? fallback.servicesLink,
-    phoneTiles:
-      getVisibleArticles(phoneTilesCategory).length > 0
-        ? getVisibleArticles(phoneTilesCategory).map((article) => {
-            const translation = getArticleTranslation(article, langId);
+      trimToNull(greetingTranslation?.shortDescription) ?? '',
+    servicesTitle: trimToNull(servicesTranslation?.name) ?? '',
+    servicesLink: trimToNull(servicesTranslation?.extraInfo) ?? '',
+    phoneTiles: getVisibleArticles(phoneTilesCategory).map((article) => {
+      const translation = getArticleTranslation(article, langId);
 
-            return {
-              title: trimToNull(translation.name) ?? '',
-              subtitle: trimToNull(translation.shortDescription) ?? '',
-              iconKey: extractIconKey(article.image),
-            };
-          })
-        : fallback.phoneTiles,
-    liveBookings: trimToNull(liveTranslation?.name) ?? fallback.liveBookings,
-    liveBookingsLabel:
-      trimToNull(liveTranslation?.description) ?? fallback.liveBookingsLabel,
-    floatingCards:
-      getVisibleArticles(floatingCardsCategory).length > 0
-        ? getVisibleArticles(floatingCardsCategory).map((article) => {
-            const translation = getArticleTranslation(article, langId);
+      return {
+        title: trimToNull(translation.name) ?? '',
+        subtitle: trimToNull(translation.shortDescription) ?? '',
+        iconKey: extractIconKey(article.image),
+      };
+    }),
+    liveBookings: trimToNull(liveTranslation?.name) ?? '',
+    liveBookingsLabel: trimToNull(liveTranslation?.description) ?? '',
+    floatingCards: getVisibleArticles(floatingCardsCategory).map((article) => {
+      const translation = getArticleTranslation(article, langId);
 
-            return {
-              title: trimToNull(translation.name) ?? '',
-              detail: trimToNull(translation.description) ?? '',
-            };
-          })
-        : fallback.floatingCards,
+      return {
+        title: trimToNull(translation.name) ?? '',
+        detail: trimToNull(translation.description) ?? '',
+      };
+    }),
   };
 }
 
 function mapServicesContent(
-  fallback: HomeServicesContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeServicesContent {
@@ -525,7 +503,7 @@ function mapServicesContent(
   );
 
   if (!servicesCategory) {
-    return fallback;
+    return { eyebrow: '', title: '', accent: '', body: '', items: [] };
   }
 
   const headerArticle = getArticleByRank(
@@ -549,27 +527,22 @@ function mapServicesContent(
     });
 
   return {
-    eyebrow:
-      trimToNull(headerTranslation?.shortDescription) ?? fallback.eyebrow,
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    accent: trimToNull(headerTranslation?.extraInfo) ?? fallback.accent,
-    body: trimToNull(headerTranslation?.description) ?? fallback.body,
-    items: items.length > 0 ? items : fallback.items,
+    eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
+    title: trimToNull(headerTranslation?.name) ?? '',
+    accent: trimToNull(headerTranslation?.extraInfo) ?? '',
+    body: trimToNull(headerTranslation?.description) ?? '',
+    items,
   };
 }
 
 function mapWhyContent(
-  fallback: HomeWhyContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeWhyContent {
-  const whyCategory = getChildCategoryById(
-    rootCategory,
-    HOME_SECTION_IDS.why
-  );
+  const whyCategory = getChildCategoryById(rootCategory, HOME_SECTION_IDS.why);
 
   if (!whyCategory) {
-    return fallback;
+    return { eyebrow: '', title: '', items: [] };
   }
 
   const headerArticle = getArticleByRank(whyCategory, WHY_ARTICLE_RANKS.header);
@@ -578,29 +551,23 @@ function mapWhyContent(
     : null;
 
   return {
-    eyebrow:
-      trimToNull(headerTranslation?.shortDescription) ?? fallback.eyebrow,
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    items: (() => {
-      const items = getVisibleArticles(whyCategory)
-        .filter((article) => article.rank !== WHY_ARTICLE_RANKS.header)
-        .map((article) => {
-          const translation = getArticleTranslation(article, langId);
+    eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
+    title: trimToNull(headerTranslation?.name) ?? '',
+    items: getVisibleArticles(whyCategory)
+      .filter((article) => article.rank !== WHY_ARTICLE_RANKS.header)
+      .map((article) => {
+        const translation = getArticleTranslation(article, langId);
 
-          return {
-            title: trimToNull(translation.name) ?? '',
-            description: trimToNull(translation.description) ?? '',
-            iconKey: extractIconKey(article.image),
-          };
-        });
-
-      return items.length > 0 ? items : fallback.items;
-    })(),
+        return {
+          title: trimToNull(translation.name) ?? '',
+          description: trimToNull(translation.description) ?? '',
+          iconKey: extractIconKey(article.image),
+        };
+      }),
   };
 }
 
 function mapBookingContent(
-  fallback: HomeBookingContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeBookingContent {
@@ -610,7 +577,18 @@ function mapBookingContent(
   );
 
   if (!bookingCategory) {
-    return fallback;
+    return {
+      eyebrow: '',
+      title: '',
+      note: '',
+      fields: {
+        exam: { label: '', placeholder: '' },
+        city: { label: '', placeholder: '' },
+        date: { label: '', placeholder: '' },
+        search: { label: '', path: null },
+      },
+      examOptions: [],
+    };
   }
 
   const headerArticle = getArticleByRank(
@@ -634,60 +612,55 @@ function mapBookingContent(
   const searchField = getArticleByRank(fieldsCategory, 40);
 
   return {
-    eyebrow:
-      trimToNull(headerTranslation?.shortDescription) ?? fallback.eyebrow,
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    note: trimToNull(headerTranslation?.description) ?? fallback.note,
+    eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
+    title: trimToNull(headerTranslation?.name) ?? '',
+    note: trimToNull(headerTranslation?.description) ?? '',
     fields: {
       exam: {
         label:
           trimToNull(
             examField ? getArticleTranslation(examField, langId).name : null
-          ) ?? fallback.fields.exam.label,
+          ) ?? '',
         placeholder:
           trimToNull(
             examField
               ? getArticleTranslation(examField, langId).shortDescription
               : null
-          ) ?? fallback.fields.exam.placeholder,
+          ) ?? '',
       },
       city: {
         label:
           trimToNull(
             cityField ? getArticleTranslation(cityField, langId).name : null
-          ) ?? fallback.fields.city.label,
+          ) ?? '',
         placeholder:
           trimToNull(
             cityField
               ? getArticleTranslation(cityField, langId).shortDescription
               : null
-          ) ?? fallback.fields.city.placeholder,
+          ) ?? '',
       },
       date: {
         label:
           trimToNull(
             dateField ? getArticleTranslation(dateField, langId).name : null
-          ) ?? fallback.fields.date.label,
+          ) ?? '',
         placeholder:
           trimToNull(
             dateField
               ? getArticleTranslation(dateField, langId).shortDescription
               : null
-          ) ?? fallback.fields.date.placeholder,
+          ) ?? '',
       },
-      search: toActionContent(searchField, langId, fallback.fields.search),
+      search: toActionContent(searchField, langId),
     },
-    examOptions:
-      getVisibleArticles(optionsCategory).length > 0
-        ? getVisibleArticles(optionsCategory).map(
-            (article) => getArticleTranslation(article, langId).name
-          )
-        : fallback.examOptions,
+    examOptions: getVisibleArticles(optionsCategory).map(
+      (article) => getArticleTranslation(article, langId).name
+    ),
   };
 }
 
 function mapStepsContent(
-  fallback: HomeStepsContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeStepsContent {
@@ -697,7 +670,13 @@ function mapStepsContent(
   );
 
   if (!stepsCategory) {
-    return fallback;
+    return {
+      eyebrow: '',
+      title: '',
+      highlight: '',
+      cta: { label: '', path: null },
+      items: [],
+    };
   }
 
   const headerArticle = getArticleByRank(
@@ -715,89 +694,83 @@ function mapStepsContent(
   ];
 
   return {
-    eyebrow:
-      trimToNull(headerTranslation?.shortDescription) ?? fallback.eyebrow,
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    highlight: trimToNull(headerTranslation?.extraInfo) ?? fallback.highlight,
-    cta: toActionContent(ctaArticle, langId, fallback.cta),
-    items: stepCategories.every(Boolean)
-      ? stepCategories.map((category, index) => {
-          const contentArticle = getArticleByRank(category, 1);
-          const meta1Article = getArticleByRank(category, 10);
-          const meta2Article = getArticleByRank(category, 20);
-          const fallbackItem = fallback.items[index];
+    eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
+    title: trimToNull(headerTranslation?.name) ?? '',
+    highlight: trimToNull(headerTranslation?.extraInfo) ?? '',
+    cta: toActionContent(ctaArticle, langId),
+    items: stepCategories.map((category) => {
+      const contentArticle = getArticleByRank(category, 1);
+      const meta1Article = getArticleByRank(category, 10);
+      const meta2Article = getArticleByRank(category, 20);
 
-          return {
-            title:
-              trimToNull(
-                contentArticle
-                  ? getArticleTranslation(contentArticle, langId).name
-                  : null
-              ) ??
-              fallbackItem?.title ??
-              '',
-            body:
-              trimToNull(
-                contentArticle
-                  ? getArticleTranslation(contentArticle, langId).description
-                  : null
-              ) ??
-              fallbackItem?.body ??
-              '',
-            meta1: {
-              value:
-                trimToNull(
-                  meta1Article
-                    ? getArticleTranslation(meta1Article, langId).name
-                    : null
-                ) ??
-                fallbackItem?.meta1.value ??
-                '',
-              label:
-                trimToNull(
-                  meta1Article
-                    ? getArticleTranslation(meta1Article, langId).description
-                    : null
-                ) ??
-                fallbackItem?.meta1.label ??
-                '',
-            },
-            meta2: {
-              value:
-                trimToNull(
-                  meta2Article
-                    ? getArticleTranslation(meta2Article, langId).name
-                    : null
-                ) ??
-                fallbackItem?.meta2.value ??
-                '',
-              label:
-                trimToNull(
-                  meta2Article
-                    ? getArticleTranslation(meta2Article, langId).description
-                    : null
-                ) ??
-                fallbackItem?.meta2.label ??
-                '',
-            },
-          };
-        })
-      : fallback.items,
+      return {
+        title:
+          trimToNull(
+            contentArticle
+              ? getArticleTranslation(contentArticle, langId).name
+              : null
+          ) ?? '',
+        body:
+          trimToNull(
+            contentArticle
+              ? getArticleTranslation(contentArticle, langId).description
+              : null
+          ) ?? '',
+        meta1: {
+          value:
+            trimToNull(
+              meta1Article
+                ? getArticleTranslation(meta1Article, langId).name
+                : null
+            ) ?? '',
+          label:
+            trimToNull(
+              meta1Article
+                ? getArticleTranslation(meta1Article, langId).description
+                : null
+            ) ?? '',
+        },
+        meta2: {
+          value:
+            trimToNull(
+              meta2Article
+                ? getArticleTranslation(meta2Article, langId).name
+                : null
+            ) ?? '',
+          label:
+            trimToNull(
+              meta2Article
+                ? getArticleTranslation(meta2Article, langId).description
+                : null
+            ) ?? '',
+        },
+      };
+    }),
   };
 }
 
 function mapAppContent(
-  fallback: HomeAppContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeAppContent {
-  const appCategory = getChildCategoryById(
-    rootCategory,
-    HOME_SECTION_IDS.app
-  );
+  const appCategory = getChildCategoryById(rootCategory, HOME_SECTION_IDS.app);
 
   if (!appCategory) {
-    return fallback;
+    return {
+      eyebrow: '',
+      title: '',
+      accent: '',
+      body: '',
+      scheduleCard: {
+        label: '',
+        detail: '',
+        appointment: { value: '', detail: '', location: '', iconKey: null },
+      },
+      statusCard: { label: '', detail: '', status: '' },
+      reportsCard: { label: '', detail: '', status: '', items: [] },
+      points: [],
+      downloadLinks: [],
+    };
   }
 
   const headerArticle = getArticleByRank(appCategory, APP_ARTICLE_RANKS.header);
@@ -834,66 +807,63 @@ function mapAppContent(
   );
 
   return {
-    eyebrow:
-      trimToNull(headerTranslation?.shortDescription) ?? fallback.eyebrow,
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    accent: trimToNull(headerTranslation?.extraInfo) ?? fallback.accent,
-    body: trimToNull(headerTranslation?.description) ?? fallback.body,
+    eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
+    title: trimToNull(headerTranslation?.name) ?? '',
+    accent: trimToNull(headerTranslation?.extraInfo) ?? '',
+    body: trimToNull(headerTranslation?.description) ?? '',
     scheduleCard: {
       label:
         trimToNull(
           scheduleHeader
             ? getArticleTranslation(scheduleHeader, langId).name
             : null
-        ) ?? fallback.scheduleCard.label,
+        ) ?? '',
       detail:
         trimToNull(
           scheduleHeader
             ? getArticleTranslation(scheduleHeader, langId).description
             : null
-        ) ?? fallback.scheduleCard.detail,
+        ) ?? '',
       appointment: {
         value:
           trimToNull(
             scheduleAppointment
               ? getArticleTranslation(scheduleAppointment, langId).name
               : null
-          ) ?? fallback.scheduleCard.appointment.value,
+          ) ?? '',
         detail:
           trimToNull(
             scheduleAppointment
               ? getArticleTranslation(scheduleAppointment, langId).description
               : null
-          ) ?? fallback.scheduleCard.appointment.detail,
+          ) ?? '',
         location:
           trimToNull(
             scheduleAppointment
               ? getArticleTranslation(scheduleAppointment, langId)
                   .shortDescription
               : null
-          ) ?? fallback.scheduleCard.appointment.location,
-        iconKey:
-          extractIconKey(scheduleAppointment?.image) ??
-          fallback.scheduleCard.appointment.iconKey,
+          ) ?? '',
+        iconKey: extractIconKey(scheduleAppointment?.image) ?? null,
       },
     },
     statusCard: {
       label:
         trimToNull(
           statusHeader ? getArticleTranslation(statusHeader, langId).name : null
-        ) ?? fallback.statusCard.label,
+        ) ?? '',
       detail:
         trimToNull(
           statusHeader
             ? getArticleTranslation(statusHeader, langId).description
             : null
-        ) ?? fallback.statusCard.detail,
+        ) ?? '',
       status:
         trimToNull(
           statusHeader
             ? getArticleTranslation(statusHeader, langId).shortDescription
             : null
-        ) ?? fallback.statusCard.status,
+        ) ?? '',
     },
     reportsCard: {
       label:
@@ -901,61 +871,51 @@ function mapAppContent(
           reportsHeader
             ? getArticleTranslation(reportsHeader, langId).name
             : null
-        ) ?? fallback.reportsCard.label,
+        ) ?? '',
       detail:
         trimToNull(
           reportsHeader
             ? getArticleTranslation(reportsHeader, langId).description
             : null
-        ) ?? fallback.reportsCard.detail,
+        ) ?? '',
       status:
         trimToNull(
           reportsHeader
             ? getArticleTranslation(reportsHeader, langId).shortDescription
             : null
-        ) ?? fallback.reportsCard.status,
-      items:
-        reportItems.length > 0
-          ? reportItems.map((article) => {
-              const translation = getArticleTranslation(article, langId);
+        ) ?? '',
+      items: reportItems.map((article) => {
+        const translation = getArticleTranslation(article, langId);
 
-              return {
-                title: trimToNull(translation.name) ?? '',
-                detail: trimToNull(translation.shortDescription) ?? '',
-                badge: trimToNull(translation.extraInfo) ?? '',
-                iconKey: extractIconKey(article.image),
-              };
-            })
-          : fallback.reportsCard.items,
+        return {
+          title: trimToNull(translation.name) ?? '',
+          detail: trimToNull(translation.shortDescription) ?? '',
+          badge: trimToNull(translation.extraInfo) ?? '',
+          iconKey: extractIconKey(article.image),
+        };
+      }),
     },
-    points:
-      getVisibleArticles(pointsCategory).length > 0
-        ? getVisibleArticles(pointsCategory).map((article) => {
-            const translation = getArticleTranslation(article, langId);
+    points: getVisibleArticles(pointsCategory).map((article) => {
+      const translation = getArticleTranslation(article, langId);
 
-            return {
-              title: trimToNull(translation.name) ?? '',
-              detail: trimToNull(translation.description) ?? '',
-            };
-          })
-        : fallback.points,
-    downloadLinks:
-      getVisibleArticles(linksCategory).length > 0
-        ? getVisibleArticles(linksCategory).map((article) => {
-            const translation = getArticleTranslation(article, langId);
+      return {
+        title: trimToNull(translation.name) ?? '',
+        detail: trimToNull(translation.description) ?? '',
+      };
+    }),
+    downloadLinks: getVisibleArticles(linksCategory).map((article) => {
+      const translation = getArticleTranslation(article, langId);
 
-            return {
-              label: trimToNull(translation.name) ?? '',
-              path: trimToNull(article.path),
-              iconKey: extractIconKey(article.image),
-            };
-          })
-        : fallback.downloadLinks,
+      return {
+        label: trimToNull(translation.name) ?? '',
+        path: trimToNull(article.path),
+        iconKey: extractIconKey(article.image),
+      };
+    }),
   };
 }
 
 function mapAcademyContent(
-  fallback: HomeAcademyContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeAcademyContent {
@@ -965,7 +925,7 @@ function mapAcademyContent(
   );
 
   if (!academyCategory) {
-    return fallback;
+    return { eyebrow: '', title: '', accent: '', ctaLabel: '', items: [] };
   }
 
   const headerArticle = getArticleByRank(
@@ -981,39 +941,33 @@ function mapAcademyContent(
     : null;
 
   return {
-    eyebrow:
-      trimToNull(headerTranslation?.shortDescription) ?? fallback.eyebrow,
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    accent: trimToNull(headerTranslation?.extraInfo) ?? fallback.accent,
+    eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
+    title: trimToNull(headerTranslation?.name) ?? '',
+    accent: trimToNull(headerTranslation?.extraInfo) ?? '',
     ctaLabel:
       trimToNull(
         ctaArticle ? getArticleTranslation(ctaArticle, langId).name : null
-      ) ?? fallback.ctaLabel,
-    items: (() => {
-      const items = getVisibleArticles(academyCategory)
-        .filter((article) => article.rank > ACADEMY_ARTICLE_RANKS.cta)
-        .map((article) => {
-          const translation = getArticleTranslation(article, langId);
-          const rating = parseRatingMeta(translation.extraInfo);
+      ) ?? '',
+    items: getVisibleArticles(academyCategory)
+      .filter((article) => article.rank > ACADEMY_ARTICLE_RANKS.cta)
+      .map((article) => {
+        const translation = getArticleTranslation(article, langId);
+        const rating = parseRatingMeta(translation.extraInfo);
 
-          return {
-            title: trimToNull(translation.name) ?? '',
-            detail: trimToNull(translation.description) ?? '',
-            meta: trimToNull(translation.shortDescription) ?? '',
-            ratingValue: rating.ratingValue,
-            ratingCount: rating.ratingCount,
-            path: trimToNull(article.path),
-            iconKey: extractIconKey(article.image),
-          };
-        });
-
-      return items.length > 0 ? items : fallback.items;
-    })(),
+        return {
+          title: trimToNull(translation.name) ?? '',
+          detail: trimToNull(translation.description) ?? '',
+          meta: trimToNull(translation.shortDescription) ?? '',
+          ratingValue: rating.ratingValue,
+          ratingCount: rating.ratingCount,
+          path: trimToNull(article.path),
+          iconKey: extractIconKey(article.image),
+        };
+      }),
   };
 }
 
 function mapStatsContent(
-  fallback: HomeStatsContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeStatsContent {
@@ -1023,7 +977,7 @@ function mapStatsContent(
   );
 
   if (!statsCategory) {
-    return fallback;
+    return { title: '', items: [] };
   }
 
   const headerArticle = getArticleByRank(
@@ -1035,33 +989,30 @@ function mapStatsContent(
     : null;
   const items = getVisibleArticles(statsCategory)
     .filter((article) => article.rank !== STATS_ARTICLE_RANKS.header)
-    .map((article, index) => {
+    .map((article) => {
       const translation = getArticleTranslation(article, langId);
       const english = getArticleTranslation(article, localeToLangId.en);
       const parsed =
         parseStatValue(translation.name) ?? parseStatValue(english.name);
-      const fallbackItem = fallback.items[index];
 
       return {
-        value: parsed?.value ?? fallbackItem?.value ?? 0,
-        suffix: parsed?.suffix ?? fallbackItem?.suffix,
-        decimals: parsed?.decimals ?? fallbackItem?.decimals,
+        value: parsed?.value ?? 0,
+        suffix: parsed?.suffix,
+        decimals: parsed?.decimals,
         label:
           trimToNull(translation.description) ??
           trimToNull(english.description) ??
-          fallbackItem?.label ??
           '',
       } satisfies HomeStatsItemContent;
     });
 
   return {
-    title: trimToNull(headerTranslation?.name) ?? fallback.title,
-    items: items.length > 0 ? items : fallback.items,
+    title: trimToNull(headerTranslation?.name) ?? '',
+    items,
   };
 }
 
 function mapTestimonialContent(
-  fallback: HomeTestimonialContent[],
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeTestimonialContent[] {
@@ -1071,36 +1022,37 @@ function mapTestimonialContent(
   );
   const articles = getVisibleArticles(testimonialCategory);
 
-  if (articles.length === 0) {
-    return fallback;
-  }
-
   return articles.map((article) => {
     const translation = getArticleTranslation(article, langId);
-    const fb = fallback[0] ?? {
-      quote: '',
-      highlight: '',
-      author: '',
-      role: '',
-    };
+
     return {
-      quote: trimToNull(translation.name) ?? fb.quote,
-      highlight: trimToNull(translation.extraInfo) ?? fb.highlight,
-      author: trimToNull(translation.shortDescription) ?? fb.author,
-      role: trimToNull(translation.description) ?? fb.role,
+      quote: trimToNull(translation.name) ?? '',
+      highlight: trimToNull(translation.extraInfo) ?? '',
+      author: trimToNull(translation.shortDescription) ?? '',
+      role: trimToNull(translation.description) ?? '',
     };
   });
 }
 
 export function mapHeaderContent(
-  fallback: HomeHeaderContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeHeaderContent {
   const headerCategory = getChildCategoryById(rootCategory, HEADER_CATEGORY_ID);
 
   if (!headerCategory) {
-    return fallback;
+    return {
+      brandLabel: '',
+      brandDescription: '',
+      brandPath: null,
+      brandImageSrc: null,
+      navLinks: [],
+      primaryAction: null,
+      signInAction: null,
+      businessSignInAction: null,
+      userMenu: null,
+      localeSwitchLabel: null,
+    };
   }
 
   const brandArticle = getArticleByRank(
@@ -1136,40 +1088,27 @@ export function mapHeaderContent(
     : null;
 
   return {
-    brandLabel: trimToNull(brandTranslation?.name) ?? fallback.brandLabel,
-    brandDescription:
-      trimToNull(brandTranslation?.description) ?? fallback.brandDescription,
-    brandPath: trimToNull(brandArticle?.path) ?? fallback.brandPath,
-    brandImageSrc:
-      resolveCmsAssetUrl(brandArticle?.image) ?? fallback.brandImageSrc,
-    navLinks: navLinks.length > 0 ? navLinks : fallback.navLinks,
-    primaryAction: toOptionalActionContent(
-      primaryArticle,
-      langId,
-      fallback.primaryAction ?? { label: '', path: null }
-    ),
-    signInAction: toOptionalActionContent(
-      signInArticle,
-      langId,
-      fallback.signInAction ?? { label: '', path: null }
-    ),
+    brandLabel: trimToNull(brandTranslation?.name) ?? '',
+    brandDescription: trimToNull(brandTranslation?.description) ?? '',
+    brandPath: trimToNull(brandArticle?.path),
+    brandImageSrc: resolveCmsAssetUrl(brandArticle?.image),
+    navLinks,
+    primaryAction: toOptionalActionContent(primaryArticle, langId),
+    signInAction: toOptionalActionContent(signInArticle, langId),
     businessSignInAction: toOptionalActionContent(
       businessSignInArticle,
-      langId,
-      fallback.businessSignInAction ?? { label: '', path: null }
+      langId
     ),
-    userMenu: fallback.userMenu,
-    localeSwitchLabel:
-      trimToNull(
-        localeSwitchArticle
-          ? getArticleTranslation(localeSwitchArticle, langId).name
-          : null
-      ) ?? fallback.localeSwitchLabel,
+    userMenu: null,
+    localeSwitchLabel: trimToNull(
+      localeSwitchArticle
+        ? getArticleTranslation(localeSwitchArticle, langId).name
+        : null
+    ),
   };
 }
 
 export function mapFinalCtaContent(
-  fallback: HomeFinalCtaContent,
   rootCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomeFinalCtaContent {
@@ -1179,7 +1118,13 @@ export function mapFinalCtaContent(
   );
 
   if (!finalCtaCategory) {
-    return fallback;
+    return {
+      title: '',
+      highlight: '',
+      body: '',
+      primaryAction: { label: '', path: null },
+      secondaryAction: { label: '', path: null },
+    };
   }
 
   const contentArticle = getArticleByRank(
@@ -1199,29 +1144,20 @@ export function mapFinalCtaContent(
     : null;
 
   return {
-    title: trimToNull(translation?.name) ?? fallback.title,
-    highlight: trimToNull(translation?.extraInfo) ?? fallback.highlight,
-    body: trimToNull(translation?.description) ?? fallback.body,
-    primaryAction: toActionContent(
-      primaryActionArticle,
-      langId,
-      fallback.primaryAction
-    ),
-    secondaryAction: toActionContent(
-      secondaryActionArticle,
-      langId,
-      fallback.secondaryAction
-    ),
+    title: trimToNull(translation?.name) ?? '',
+    highlight: trimToNull(translation?.extraInfo) ?? '',
+    body: trimToNull(translation?.description) ?? '',
+    primaryAction: toActionContent(primaryActionArticle, langId),
+    secondaryAction: toActionContent(secondaryActionArticle, langId),
   };
 }
 
 function mapFooterGroup(
   category: RecursiveArticleCategoryDto | null,
-  langId: number,
-  fallback: HomeFooterContent['pages']
+  langId: number
 ): HomeFooterContent['pages'] {
   if (!category) {
-    return fallback;
+    return { title: '', links: [] };
   }
 
   const headingArticle = getArticleByRank(category, 1);
@@ -1233,22 +1169,17 @@ function mapFooterGroup(
     .map((article) => toLinkItemContent(article, langId));
 
   return {
-    title: trimToNull(headingTranslation?.name) ?? fallback.title,
-    links: links.length > 0 ? links : fallback.links,
+    title: trimToNull(headingTranslation?.name) ?? '',
+    links,
   };
 }
 
 export function mapFooterContent(
-  fallback: HomeFooterContent,
-  rootCategory: RecursiveArticleCategoryDto | null,
+  rootCategory: RecursiveArticleCategoryDto,
   langId: number,
   socialMediaCategory: RecursiveArticleCategoryDto | null = null
 ): HomeFooterContent {
   const footerCategory = getChildCategoryById(rootCategory, FOOTER_CATEGORY_ID);
-
-  if (!footerCategory) {
-    return fallback;
-  }
 
   const brandArticle = getArticleByRank(
     footerCategory,
@@ -1273,36 +1204,23 @@ export function mapFooterContent(
     : null;
 
   return {
-    brandLabel: trimToNull(brandTranslation?.name) ?? fallback.brandLabel,
-    brandBody: trimToNull(brandTranslation?.description) ?? fallback.brandBody,
-    brandPath: trimToNull(brandArticle?.path) ?? fallback.brandPath,
-    brandImageSrc:
-      resolveCmsAssetUrl(brandArticle?.image) ?? fallback.brandImageSrc,
-    newsletterPlaceholder:
-      trimToNull(newsletterTranslation?.name) ?? fallback.newsletterPlaceholder,
+    brandLabel: trimToNull(brandTranslation?.name) ?? '',
+    brandBody: trimToNull(brandTranslation?.description) ?? '',
+    brandPath: trimToNull(brandArticle?.path),
+    brandImageSrc: resolveCmsAssetUrl(brandArticle?.image),
+    newsletterPlaceholder: trimToNull(newsletterTranslation?.name) ?? '',
     newsletterEyebrow:
-      trimToNull(newsletterTranslation?.shortDescription) ??
-      fallback.newsletterEyebrow,
-    newsletterAction:
-      trimToNull(newsletterTranslation?.extraInfo) ?? fallback.newsletterAction,
-    copyrightLabel:
-      trimToNull(copyrightTranslation?.name) ?? fallback.copyrightLabel,
-    copyrightBody:
-      trimToNull(copyrightTranslation?.description) ?? fallback.copyrightBody,
+      trimToNull(newsletterTranslation?.shortDescription) ?? '',
+    newsletterAction: trimToNull(newsletterTranslation?.extraInfo) ?? '',
+    copyrightLabel: trimToNull(copyrightTranslation?.name) ?? '',
+    copyrightBody: trimToNull(copyrightTranslation?.description) ?? '',
     pages: mapFooterGroup(
       getChildCategoryById(footerCategory, FOOTER_CHILD_CATEGORY_IDS.pages),
-      langId,
-      fallback.pages
-    ),
-    help: mapFooterGroup(
-      getChildCategoryById(footerCategory, FOOTER_CHILD_CATEGORY_IDS.help),
-      langId,
-      fallback.help
+      langId
     ),
     contact: mapFooterGroup(
       getChildCategoryById(footerCategory, FOOTER_CHILD_CATEGORY_IDS.contact),
-      langId,
-      fallback.contact
+      langId
     ),
     socialLinks: getVisibleArticles(socialMediaCategory).map((article) => {
       const translation = getArticleTranslation(article, langId);
@@ -1340,30 +1258,22 @@ function buildSectionOrder(
 }
 
 function buildHomePageContent(
-  rootCategory: RecursiveArticleCategoryDto | null,
+  rootCategory: RecursiveArticleCategoryDto,
   companiesCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomePageContent {
-  const fallback = buildEmptyHomeFallback();
-
   return {
-    header: fallback.header,
-    hero: mapHeroContent(fallback.hero, rootCategory, langId),
+    hero: mapHeroContent(rootCategory, langId),
     companies: mapCompaniesContent(companiesCategory),
-    services: mapServicesContent(fallback.services, rootCategory, langId),
-    why: mapWhyContent(fallback.why, rootCategory, langId),
-    booking: mapBookingContent(fallback.booking, rootCategory, langId),
-    steps: mapStepsContent(fallback.steps, rootCategory, langId),
-    app: mapAppContent(fallback.app, rootCategory, langId),
-    academy: mapAcademyContent(fallback.academy, rootCategory, langId),
-    stats: mapStatsContent(fallback.stats, rootCategory, langId),
-    testimonial: mapTestimonialContent(
-      fallback.testimonial,
-      rootCategory,
-      langId
-    ),
-    finalCta: fallback.finalCta,
-    footer: fallback.footer,
+    services: mapServicesContent(rootCategory, langId),
+    why: mapWhyContent(rootCategory, langId),
+    booking: mapBookingContent(rootCategory, langId),
+    steps: mapStepsContent(rootCategory, langId),
+    app: mapAppContent(rootCategory, langId),
+    academy: mapAcademyContent(rootCategory, langId),
+    stats: mapStatsContent(rootCategory, langId),
+    testimonial: mapTestimonialContent(rootCategory, langId),
+    finalCta: mapFinalCtaContent(rootCategory, langId),
     sectionOrder: buildSectionOrder(rootCategory),
   };
 }
@@ -1422,7 +1332,7 @@ const fetchCompaniesCategoryTree = cache(
 );
 
 const fetchHomeContentTree = cache(
-  async (): Promise<RecursiveArticleCategoryDto | null> => {
+  async (): Promise<RecursiveArticleCategoryDto> => {
     const endpoint = new URL(
       '/api/General/ArticleCategory/GetRecursiveById',
       HOME_CONTENT_API_BASE_URL
@@ -1430,30 +1340,13 @@ const fetchHomeContentTree = cache(
 
     endpoint.searchParams.set('Id', String(HOME_CONTENT_ROOT_CATEGORY_ID));
 
-    try {
-      const response = await fetch(endpoint.toString(), {
-        cache: 'no-store',
-      });
+    const response = await fetchWithErrorHandling<
+      RecursiveArticleCategoryResponse['value']
+    >(endpoint.toString(), {
+      cache: 'no-store',
+    });
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const payload =
-        (await response.json()) as RecursiveArticleCategoryResponse;
-
-      if (!payload.isSuccess || !payload.value) {
-        return null;
-      }
-
-      return payload.value;
-    } catch (error) {
-      console.error(
-        '[home-content] Failed to fetch recursive home content.',
-        error
-      );
-      return null;
-    }
+    return response;
   }
 );
 

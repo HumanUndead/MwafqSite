@@ -12,29 +12,32 @@ export function StatsSection({ content }: Props) {
       className='relative bg-white px-4 pb-10 pt-14 md:px-7'
     >
       <div
-        className='pointer-events-none absolute inset-0 [background-image:linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.18]'
+        className='pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] bg-size-[32px_32px] opacity-[0.18]'
         aria-hidden='true'
       />
       <div
-        className='pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(45deg,transparent_47%,rgba(30,35,100,0.18)_47%,rgba(30,35,100,0.18)_53%,transparent_53%),linear-gradient(-45deg,transparent_47%,rgba(30,35,100,0.18)_47%,rgba(30,35,100,0.18)_53%,transparent_53%)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent_0%,#000_50%,transparent_100%)]'
+        className='pointer-events-none absolute inset-0 opacity-20 bg-[linear-gradient(45deg,transparent_47%,rgba(30,35,100,0.18)_47%,rgba(30,35,100,0.18)_53%,transparent_53%),linear-gradient(-45deg,transparent_47%,rgba(30,35,100,0.18)_47%,rgba(30,35,100,0.18)_53%,transparent_53%)] bg-size-[30px_30px] mask-[linear-gradient(180deg,transparent_0%,#000_50%,transparent_100%)]'
         aria-hidden='true'
       />
-      <div className='relative mx-auto max-w-[1320px]'>
+      <div className='relative mx-auto max-w-330'>
         <h2 className='relative z-10 mx-auto mb-9 text-center text-[clamp(28px,3.6vw,44px)] font-extrabold uppercase leading-[1.05] tracking-[-0.5px] text-[#1e2364]'>
           {content.title}
         </h2>
 
-        <div className='relative z-10 w-full grid gap-8 px-4 pt-10 sm:grid-cols-2 sm:px-7 sm:pt-15 lg:grid-cols-3'>
+        <div className='relative z-10 w-full grid grid-cols-3 gap-0 px-2 pt-8 sm:gap-8 sm:px-7 sm:pt-15'>
           {content.items.map((stat) => (
-            <div key={stat.label} className='text-center flex-1'>
-              <div className='text-[clamp(36px,5vw,60px)] font-extrabold leading-none tracking-[-2px] text-[#00a8f1]'>
+            <div
+              key={stat.label}
+              className='text-center not-last:border-r not-last:border-[#e5e7f0] sm:not-last:border-0'
+            >
+              <div className='text-[clamp(20px,5.5vw,60px)] font-extrabold leading-none tracking-[-1.5px] text-[#00a8f1] sm:tracking-[-2px]'>
                 <CountUp
                   value={stat.value}
                   suffix={stat.suffix}
                   decimals={stat.decimals}
                 />
               </div>
-              <div className='mt-3.5 text-[14.5px] font-bold tracking-[0.5px] text-[#1e2364]'>
+              <div className='mt-2 text-[11px] font-bold leading-tight tracking-[0.3px] text-[#1e2364] sm:mt-3.5 sm:text-[14.5px] sm:tracking-[0.5px]'>
                 {stat.label}
               </div>
             </div>
