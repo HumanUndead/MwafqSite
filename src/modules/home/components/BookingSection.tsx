@@ -83,12 +83,12 @@ function SearchSelect({
         ].join(' ')}
       >
         <span
-          className={`flex-1 truncate text-left ${value ? 'text-[#1e2364]' : 'text-[rgba(30,35,100,0.45)]'}`}
+          className={`flex-1 truncate text-left rtl:text-right ${value ? 'text-[#1e2364]' : 'text-[rgba(30,35,100,0.45)]'}`}
         >
           {value || placeholder}
         </span>
         <svg
-          className={`flex-shrink-0 text-[rgba(30,35,100,0.55)] transition-transform duration-150 ${effectiveOpen ? 'rotate-180' : ''}`}
+          className={`shrink-0 text-[rgba(30,35,100,0.55)] transition-transform duration-150 ${effectiveOpen ? 'rotate-180' : ''}`}
           width='16'
           height='16'
           viewBox='0 0 24 24'
@@ -105,7 +105,7 @@ function SearchSelect({
       {effectiveOpen ? (
         <div
           role='listbox'
-          className='absolute left-0 top-[calc(100%+4px)] z-[100] w-full rounded-lg border border-[#e5e7f0] bg-white shadow-[0_10px_15px_-3px_rgba(0,0,0,0.05)]'
+          className='absolute left-0 top-[calc(100%+4px)] z-100 w-full rounded-lg border border-[#e5e7f0] bg-white shadow-[0_10px_15px_-3px_rgba(0,0,0,0.05)]'
         >
           <div className='border-b border-[#e5e7f0] p-1.5'>
             <input
@@ -312,7 +312,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
         >
           <div
             aria-hidden='true'
-            className='pointer-events-none absolute -inset-px right-0 top-0 h-[120px] w-[120px]'
+            className='pointer-events-none absolute -inset-px right-0 top-0 size-30'
             style={{
               backgroundImage: `url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpolygon points='7.1 14.8 0 14.8 0 0 15.1 0 15.1 7.1 7.1 7.1 7.1 14.8' fill='%2300a8f1' fill-opacity='0.18'/%3E%3Cpolygon points='15.5 23.1 8.4 23.1 8.4 8.3 23.5 8.3 23.5 15.4 15.5 15.4 15.5 23.1' fill='%231e2364' fill-opacity='0.18'/%3E%3C/svg%3E")`,
               backgroundSize: '60px 60px',
@@ -324,7 +324,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
             }}
           />
 
-          <span className="relative left-1/2 mb-3.5 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-[rgba(0,222,201,0.16)] px-3.5 py-[5px] text-[12px] font-bold uppercase tracking-[2px] text-[#007a6e] before:h-[7px] before:w-[7px] before:rounded-full before:bg-[#00dec9] before:shadow-[0_0_8px_#00dec9] before:content-['']">
+          <span className="relative left-1/2 mb-3.5 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-[rgba(0,222,201,0.16)] px-3.5 py-1.25 text-[12px] font-bold uppercase tracking-[2px] text-[#007a6e] before:h-1.75 before:w-1.75 before:rounded-full before:bg-[#00dec9] before:shadow-[0_0_8px_#00dec9] before:content-['']">
             {content.eyebrow}
           </span>
 
@@ -334,10 +334,10 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
 
           <form
             onSubmit={(event) => event.preventDefault()}
-            className='relative z-[5] grid items-end gap-[18px] text-left md:grid-cols-[1.4fr_1.4fr_auto]'
+            className='relative z-5 grid items-end gap-4.5 text-left md:grid-cols-[1.4fr_1.4fr_auto]'
           >
             <div>
-              <label className='mb-2 ml-1.5 block text-[13px] font-bold text-[#1e2364]'>
+              <label className='mb-2 ml-1.5 rtl:text-right block text-[13px] font-bold text-[#1e2364]'>
                 {content.fields.city.label}
               </label>
               <CitySelect
@@ -348,7 +348,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
               />
             </div>
             <div>
-              <label className='mb-2 ml-1.5 block text-[13px] font-bold text-[#1e2364]'>
+              <label className='mb-2 ml-1.5 block rtl:text-right text-[13px] font-bold text-[#1e2364]'>
                 {content.fields.exam.label}
               </label>
               <ServiceSelect
@@ -386,7 +386,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
           <div className='absolute bottom-5 left-5 right-5 z-2 flex items-start gap-1 sm:bottom-7 sm:left-10 sm:right-10 md:bottom-10 md:left-14 md:right-14'>
             <div
               aria-hidden='true'
-              className='mt-[3px] h-2.5 w-2.5 flex-shrink-0'
+              className='mt-0.75 h-2.5 w-2.5 shrink-0'
               style={{
                 backgroundImage: `url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath d='M 0 0 L 30 0 L 30 10 L 10 10 L 10 30 L 0 30 Z' fill='%2300a8f1'/%3E%3C/svg%3E")`,
                 backgroundRepeat: 'no-repeat',

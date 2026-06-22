@@ -1,7 +1,8 @@
 import type { Locale } from '@/i18n/config';
 import type { HomeAppContent } from '../home.types';
+import { cn } from '@/shared/lib/cn';
 import { Eyebrow } from './Eyebrow';
-import { CheckIcon, getUtilityIconByKey } from './Icons';
+import { CheckIcon, getUtilityIconByKey } from '@/shared/components/icons/home';
 
 interface Props {
   locale: Locale;
@@ -62,13 +63,12 @@ export function AppShowcaseSection({ content }: Props) {
                       className='mb-2 flex items-center gap-3 rounded-[14px] border-2 border-[#1e2364] bg-white px-3.5 py-3 text-[13px] font-bold text-[#1e2364]'
                     >
                       <span
-                        className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                          index === 0
-                            ? 'bg-[#1e2364]'
-                            : index === 1
-                              ? 'border border-white/40 bg-[#742f88]'
-                              : 'bg-[#f5b400]'
-                        }`}
+                        className={cn(
+                          'size-2.5 shrink-0 rounded-full',
+                          index === 0 && 'bg-[#1e2364]',
+                          index === 1 && 'border border-white/40 bg-[#742f88]',
+                          index >= 2 && 'bg-[#f5b400]'
+                        )}
                         aria-hidden='true'
                       />
                       {statusLabel.trim()}
@@ -76,7 +76,7 @@ export function AppShowcaseSection({ content }: Props) {
                   ))}
               </div>
 
-              <div className='device-card absolute bottom-5 left-15 -right-10 top-15 overflow-hidden rounded-[28px] border-2 border-[#1e2364] bg-white p-[26px] animate-[cardFloat3_6s_ease-in-out_infinite]'>
+              <div className='device-card absolute bottom-5 left-15 -right-10 top-15 overflow-hidden rounded-[28px] border-2 border-[#1e2364] bg-white p-6.5 animate-[cardFloat3_6s_ease-in-out_infinite]'>
                 <div className='mb-2.5 text-[11px] font-bold uppercase tracking-[1.2px] text-[#6b7196]'>
                   {content.reportsCard.label}
                 </div>
@@ -89,7 +89,7 @@ export function AppShowcaseSection({ content }: Props) {
                     className='mb-2 flex items-center gap-3 rounded-[14px] border-2 border-[#e5e7f0] bg-white px-3.5 py-3'
                   >
                     <div
-                      className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[10px] text-white ${index === 0 ? 'bg-[#1e2364]' : 'bg-[#742f88]'}`}
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] text-white ${index === 0 ? 'bg-[#1e2364]' : 'bg-[#742f88]'}`}
                       aria-hidden='true'
                     >
                       {getUtilityIconByKey(report.iconKey) ?? <CheckIcon />}
@@ -131,9 +131,9 @@ export function AppShowcaseSection({ content }: Props) {
               {content.points.map((point) => (
                 <div
                   key={point.title}
-                  className='flex items-center gap-3.5 rounded-[18px] border-2 border-[#e5e7f0] bg-white px-[22px] py-[18px] transition-[border-color,transform] duration-300 hover:translate-x-[3px] hover:border-[#1e2364]'
+                  className='flex items-center gap-3.5 rounded-[18px] border-2 border-[#e5e7f0] bg-white px-5.5 py-4.5 transition-[border-color,transform] duration-300 hover:translate-x-0.75 hover:border-[#1e2364]'
                 >
-                  <div className='flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00dec9] bg-[rgba(0,222,201,0.10)] text-[#007a6e]'>
+                  <div className='flex size-9.5 shrink-0 items-center justify-center rounded-full border-2 border-[#00dec9] bg-[rgba(0,222,201,0.10)] text-[#007a6e]'>
                     <CheckIcon />
                   </div>
                   <div>
@@ -147,12 +147,12 @@ export function AppShowcaseSection({ content }: Props) {
                 </div>
               ))}
             </div>
-            <div className='mt-[30px] flex flex-wrap gap-3.5'>
+            <div className='mt-7.5 flex flex-wrap gap-3.5'>
               {content.downloadLinks.map((link) => (
                 <span
                   key={`${link.label}-${link.path ?? 'no-path'}`}
                   aria-disabled='true'
-                  className={`pointer-events-none inline-flex items-center gap-2 rounded-full px-[30px] py-4 text-[15px] font-semibold ${
+                  className={`pointer-events-none inline-flex items-center gap-2 rounded-full px-7.5 py-4 text-[15px] font-semibold ${
                     link.iconKey === 'icon-apple'
                       ? 'bg-[#1e2364] text-white'
                       : 'border-2 border-[#1e2364] bg-white text-[#1e2364]'

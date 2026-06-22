@@ -6,9 +6,8 @@ import type { Dictionary } from '@/locales/types';
 import type { HomeActionContent, HomeBusinessContent, HomeCompaniesContent } from '@/modules/home/home.types';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import {
-  B2B_BUSINESS_ARTICLE_RANKS,
+  B2B_BUSINESS_ARTICLE_IDS,
   B2B_BUSINESS_CATEGORY_ID,
-  B2B_BUSINESS_CHILD_CATEGORY_IDS,
   B2B_COMPANIES_CATEGORY_ID,
   B2B_CONTENT_API_BASE_URL,
   B2B_CONTENT_CACHE_TAG,
@@ -127,6 +126,23 @@ function getArticleByRank(
   return getVisibleArticles(category).find((a) => a.rank === rank) ?? null;
 }
 
+function getArticleById(
+  category: CategoryDto | null,
+  id: number
+): ArticleDto | null {
+  return category?.articles.find((a) => a.id === id) ?? null;
+}
+
+// Resolves articles by explicit id, preserving the order of the id list.
+function getArticlesByIds(
+  category: CategoryDto | null,
+  ids: readonly number[]
+): ArticleDto[] {
+  return ids
+    .map((id) => getArticleById(category, id))
+    .filter((a): a is ArticleDto => a !== null);
+}
+
 function getArticleTranslation(
   article: ArticleDto,
   langId: number
@@ -146,10 +162,29 @@ function trimToNull(value: string | null | undefined): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+const HTML_ENTITIES: Record<string, string> = {
+  '&middot;': '·',
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&quot;': '"',
+  '&#39;': "'",
+  '&apos;': "'",
+  '&nbsp;': ' ',
+  '&mdash;': '—',
+  '&ndash;': '–',
+};
+
+function decodeHtmlEntities(value: string): string {
+  return value
+    .replace(/&[a-zA-Z]+;/g, (entity) => HTML_ENTITIES[entity] ?? entity)
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)));
+}
+
 function stripHtmlTags(html: string | null | undefined): string | null {
   const trimmed = trimToNull(html);
   if (!trimmed) return null;
-  const stripped = trimmed.replace(/<[^>]*>/g, '').trim();
+  const stripped = decodeHtmlEntities(trimmed.replace(/<[^>]*>/g, '')).trim();
   return stripped.length > 0 ? stripped : null;
 }
 
@@ -499,23 +534,18 @@ function mapBusinessContent(
 ): HomeBusinessContent {
   if (!businessCategory) return EMPTY_BUSINESS;
 
-  const headerArticle = getArticleByRank(businessCategory, B2B_BUSINESS_ARTICLE_RANKS.header);
-  const primaryActionArticle = getArticleByRank(businessCategory, B2B_BUSINESS_ARTICLE_RANKS.primaryAction);
-  const secondaryActionArticle = getArticleByRank(businessCategory, B2B_BUSINESS_ARTICLE_RANKS.secondaryAction);
+  const headerArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.header);
+  const primaryActionArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.primaryAction);
+  const secondaryActionArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.secondaryAction);
   const headerT = headerArticle ? getArticleTranslation(headerArticle, langId) : null;
 
-  const pointArticles = getVisibleArticles(businessCategory).filter(
-    (a) =>
-      a.rank >= B2B_BUSINESS_ARTICLE_RANKS.pointStart &&
-      a.rank < B2B_BUSINESS_ARTICLE_RANKS.primaryAction
-  );
+  const pointArticles = getArticlesByIds(businessCategory, B2B_BUSINESS_ARTICLE_IDS.points);
 
-  const tabsCategory = getChildCategoryById(businessCategory, B2B_BUSINESS_CHILD_CATEGORY_IDS.tabs);
-  const tabsArticle = getArticleByRank(tabsCategory, 1);
+  const tabsArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.tabs);
   const tabsT = tabsArticle ? getArticleTranslation(tabsArticle, langId) : null;
 
-  const metricsCategory = getChildCategoryById(businessCategory, B2B_BUSINESS_CHILD_CATEGORY_IDS.metrics);
-  const employeesCategory = getChildCategoryById(businessCategory, B2B_BUSINESS_CHILD_CATEGORY_IDS.employees);
+  const metricArticles = getArticlesByIds(businessCategory, B2B_BUSINESS_ARTICLE_IDS.metrics);
+  const employeeArticles = getArticlesByIds(businessCategory, B2B_BUSINESS_ARTICLE_IDS.employees);
 
   return {
     eyebrow: trimToNull(headerT?.shortDescription) ?? EMPTY_BUSINESS.eyebrow,
@@ -532,19 +562,19 @@ function mapBusinessContent(
         )
       : EMPTY_BUSINESS.tabs,
     metrics:
-      getVisibleArticles(metricsCategory).length > 0
-        ? getVisibleArticles(metricsCategory).map((a) => {
+      metricArticles.length > 0
+        ? metricArticles.map((a) => {
             const t = getArticleTranslation(a, langId);
-            return { value: trimToNull(t.name) ?? '', label: trimToNull(t.description) ?? '' };
+            return { value: trimToNull(t.name) ?? '', label: stripHtmlTags(t.description) ?? '' };
           })
         : EMPTY_BUSINESS.metrics,
     employees:
-      getVisibleArticles(employeesCategory).length > 0
-        ? getVisibleArticles(employeesCategory).map((a) => {
+      employeeArticles.length > 0
+        ? employeeArticles.map((a) => {
             const t = getArticleTranslation(a, langId);
             return {
               name: trimToNull(t.name) ?? '',
-              exam: trimToNull(t.description) ?? '',
+              exam: stripHtmlTags(t.description) ?? '',
               status: trimToNull(t.shortDescription) ?? '',
             };
           })

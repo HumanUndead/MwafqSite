@@ -14,8 +14,8 @@ import {
   MENU_ITEMS_ROOT_CATEGORY_ID,
   SOCIAL_MEDIA_CATEGORY_ID,
 } from './menuContent.config';
-import { buildEmptyHomeFallback } from './homeContent.fallback';
 import { mapFooterContent, mapHeaderContent } from './homeContentService';
+import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 
 export interface MenuContent {
   header: HomeHeaderContent;
@@ -28,7 +28,7 @@ const localeToLangId: Record<Locale, number> = {
 };
 
 const fetchMenuItemsTree = cache(
-  async (): Promise<RecursiveArticleCategoryDto | null> => {
+  async (): Promise<RecursiveArticleCategoryDto> => {
     const endpoint = new URL(
       '/api/General/ArticleCategory/GetRecursiveById',
       MENU_CONTENT_API_BASE_URL
@@ -36,30 +36,15 @@ const fetchMenuItemsTree = cache(
 
     endpoint.searchParams.set('Id', String(MENU_ITEMS_ROOT_CATEGORY_ID));
 
-    try {
-      const response = await fetch(endpoint.toString(), {
-        next: {
-          revalidate: MENU_CONTENT_REVALIDATE_SECONDS,
-          tags: [MENU_CONTENT_CACHE_TAG],
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const payload =
-        (await response.json()) as RecursiveArticleCategoryResponse;
-
-      if (!payload.isSuccess || !payload.value) {
-        return null;
-      }
-
-      return payload.value;
-    } catch (error) {
-      console.error('[menu-content] Failed to fetch menu items.', error);
-      return null;
-    }
+    const response = await fetchWithErrorHandling<
+      RecursiveArticleCategoryResponse['value']
+    >(endpoint.toString(), {
+      next: {
+        revalidate: MENU_CONTENT_REVALIDATE_SECONDS,
+        tags: [MENU_CONTENT_CACHE_TAG],
+      },
+    });
+    return response;
   }
 );
 
@@ -93,7 +78,10 @@ const fetchSocialMediaCategoryTree = cache(
 
       return payload.value;
     } catch (error) {
-      console.error('[menu-content] Failed to fetch social media category.', error);
+      console.error(
+        '[menu-content] Failed to fetch social media category.',
+        error
+      );
       return null;
     }
   }
@@ -102,15 +90,14 @@ const fetchSocialMediaCategoryTree = cache(
 export const getMenuContent = cache(
   async (locale: Locale): Promise<MenuContent> => {
     const langId = localeToLangId[locale];
-    const fallback = buildEmptyHomeFallback();
     const [menuCategory, socialMediaCategory] = await Promise.all([
       fetchMenuItemsTree(),
       fetchSocialMediaCategoryTree(),
     ]);
 
     return {
-      header: mapHeaderContent(fallback.header, menuCategory, langId),
-      footer: mapFooterContent(fallback.footer, menuCategory, langId, socialMediaCategory),
+      header: mapHeaderContent(menuCategory, langId),
+      footer: mapFooterContent(menuCategory, langId, socialMediaCategory),
     };
   }
 );

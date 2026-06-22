@@ -41,6 +41,6 @@ export interface RecursiveArticleCategoryDto {
 }
 
 export interface RecursiveArticleCategoryResponse {
-  value: RecursiveArticleCategoryDto | null;
+  value: RecursiveArticleCategoryDto;
   isSuccess: boolean;
 }
