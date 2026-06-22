@@ -1,10 +1,14 @@
 'use client';
 
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
 type ScrollCaptureOptions = {
   enabled: boolean;
   distance: number;
+  stepSize: number;
+  itemCount: number;
+  /** Direct DOM updates — avoids per-frame React re-renders during scroll. */
+  onFrame?: (step: number, subProgress: number) => void;
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -15,14 +19,46 @@ function getSectionTop(section: HTMLElement) {
   return section.getBoundingClientRect().top + window.scrollY;
 }
 
+function computeStepProgress(
+  raw: number,
+  distance: number,
+  stepSize: number,
+  itemCount: number
+) {
+  const isComplete = raw >= distance - 1;
+  const progressValue = isComplete
+    ? itemCount
+    : clamp(raw / stepSize, 0, itemCount);
+  const step = isComplete
+    ? itemCount - 1
+    : Math.min(itemCount - 1, Math.floor(progressValue));
+  const subProgress =
+    isComplete && step === itemCount - 1
+      ? 1
+      : clamp(progressValue - step, 0, 1);
+
+  return { step, subProgress };
+}
+
 export function useSectionScrollCapture(
   sectionRef: RefObject<HTMLElement | null>,
-  { enabled, distance }: ScrollCaptureOptions
+  { enabled, distance, stepSize, itemCount, onFrame }: ScrollCaptureOptions
 ) {
-  const [progress, setProgress] = useState(0);
+  const [step, setStep] = useState(0);
+  const lastStepRef = useRef(0);
+  const onFrameRef = useRef(onFrame);
 
   useEffect(() => {
-    if (!enabled || distance <= 0) return;
+    onFrameRef.current = onFrame;
+  }, [onFrame]);
+
+  useEffect(() => {
+    if (!enabled) {
+      lastStepRef.current = 0;
+      return;
+    }
+
+    if (distance <= 0 || stepSize <= 0) return;
 
     let frameId = 0;
 
@@ -30,8 +66,20 @@ export function useSectionScrollCapture(
       const section = sectionRef.current;
       if (!section) return;
 
-      const next = clamp(window.scrollY - getSectionTop(section), 0, distance);
-      setProgress((prev) => (prev === next ? prev : next));
+      const raw = clamp(window.scrollY - getSectionTop(section), 0, distance);
+      const { step: nextStep, subProgress } = computeStepProgress(
+        raw,
+        distance,
+        stepSize,
+        itemCount
+      );
+
+      onFrameRef.current?.(nextStep, subProgress);
+
+      if (nextStep !== lastStepRef.current) {
+        lastStepRef.current = nextStep;
+        setStep(nextStep);
+      }
     }
 
     function requestSync() {
@@ -53,7 +101,7 @@ export function useSectionScrollCapture(
       window.removeEventListener('scroll', requestSync);
       window.removeEventListener('resize', requestSync);
     };
-  }, [distance, enabled, sectionRef]);
+  }, [distance, enabled, itemCount, sectionRef, stepSize]);
 
-  return { progress };
+  return { step };
 }

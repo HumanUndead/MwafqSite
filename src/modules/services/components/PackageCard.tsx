@@ -63,6 +63,7 @@ type PackageCardProps = {
   /** Set false when a parent already wraps the card in ScrollReveal. */
   withScrollReveal?: boolean;
   isAuthenticated?: boolean;
+  hidePrice?: boolean;
 };
 
 export function PackageCard({
@@ -73,6 +74,7 @@ export function PackageCard({
   variant = 'default',
   withScrollReveal,
   isAuthenticated = false,
+  hidePrice = false,
 }: PackageCardProps) {
   const isRelated = variant === 'related';
   const shouldReveal = withScrollReveal ?? !isRelated;
@@ -147,16 +149,18 @@ export function PackageCard({
         </Link>
       </div>
 
-      <CardFooter className='mt-auto justify-between gap-2 border-t border-[#e5e7f0] bg-transparent px-4 py-3.5'>
-        {price ? (
-          <span className='inline-flex items-baseline gap-1 text-[20px] font-extrabold text-[#1e2364]'>
-            {formatPrice(price)}
-            <SarIcon className='inline-block h-3.5 w-3' />
-          </span>
-        ) : (
-          <span />
-        )}
-      </CardFooter>
+      {!hidePrice ? (
+        <CardFooter className='mt-auto justify-between gap-2 border-t border-[#e5e7f0] bg-transparent px-4 py-3.5'>
+          {price ? (
+            <span className='inline-flex items-baseline gap-1 text-[20px] font-extrabold text-[#1e2364]'>
+              {formatPrice(price)}
+              <SarIcon className='inline-block h-3.5 w-3' />
+            </span>
+          ) : (
+            <span />
+          )}
+        </CardFooter>
+      ) : null}
     </MotionCard>
   ) : (
     <MotionCard
@@ -186,23 +190,25 @@ export function PackageCard({
         />
       </CardContent>
 
-      <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-5 pt-3 pb-4'>
-        {price ? (
-          <span className='inline-flex items-baseline gap-1 font-extrabold'>
-            <span className='text-[24px] leading-none tracking-[-0.5px] text-[#1e2364]'>
-              {formatPrice(price)}
+      {!hidePrice ? (
+        <CardFooter className='mt-auto justify-between gap-2.5 border-t-2 border-[#eef0f7] bg-transparent px-5 pt-3 pb-4'>
+          {price ? (
+            <span className='inline-flex items-baseline gap-1 font-extrabold'>
+              <span className='text-[24px] leading-none tracking-[-0.5px] text-[#1e2364]'>
+                {formatPrice(price)}
+              </span>
+              <span
+                className='inline-flex h-5 w-4.5 translate-y-0.5 text-[#1e2364]'
+                aria-label={t.sarAriaLabel}
+              >
+                <SarIcon className='h-full w-full' />
+              </span>
             </span>
-            <span
-              className='inline-flex h-5 w-4.5 translate-y-0.5 text-[#1e2364]'
-              aria-label={t.sarAriaLabel}
-            >
-              <SarIcon className='h-full w-full' />
-            </span>
-          </span>
-        ) : (
-          <span />
-        )}
-      </CardFooter>
+          ) : (
+            <span />
+          )}
+        </CardFooter>
+      ) : null}
     </MotionCard>
   );
 

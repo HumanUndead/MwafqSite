@@ -16,13 +16,14 @@ interface Props {
   content: HomeServicesContent;
 }
 
-interface ServiceCard {
+interface ServiceCardData {
   id: number;
   title: string;
   description: string;
+  iconKey: string | null;
 }
 
-async function getServiceCards(locale: Locale): Promise<ServiceCard[]> {
+async function getServiceCards(locale: Locale): Promise<ServiceCardData[]> {
   try {
     const page = await fetchServiceGroupsList({
       pageNumber: 1,
@@ -38,6 +39,7 @@ async function getServiceCards(locale: Locale): Promise<ServiceCard[]> {
           description: translation?.description
             ? plainTextFromHtml(translation.description)
             : '',
+          iconKey: group.icon ?? null,
         };
       })
       .filter((card) => card.title.length > 0);
@@ -64,6 +66,7 @@ export async function ServicesSection({ locale, content }: Props) {
               {content.title}
               {content.accent && (
                 <>
+                  {' '}
                   <span className='font-normal italic opacity-55'>
                     {content.accent}
                   </span>
@@ -78,13 +81,15 @@ export async function ServicesSection({ locale, content }: Props) {
 
         {/* Desktop grid */}
         <div className='hidden md:grid grid-cols-2 gap-4.5 xl:grid-cols-4'>
-          {services.map((service) => (
+          {services.map((service, index) => (
             <ServiceCard
               key={service.id}
               href={getServiceGroupBuyPath(locale, service.id)}
               title={service.title}
               description={service.description}
+              iconKey={service.iconKey}
               rtl={rtl}
+              index={index}
             />
           ))}
         </div>
@@ -92,11 +97,13 @@ export async function ServicesSection({ locale, content }: Props) {
         {/* Mobile grid */}
         <div className='md:hidden'>
           <ServicesMobileCarousel
-            services={services.map((s) => ({
+            services={services.map((s, i) => ({
               id: s.id,
               href: getServiceGroupBuyPath(locale, s.id),
               title: s.title,
               description: s.description,
+              iconKey: s.iconKey,
+              index: i,
             }))}
             rtl={rtl}
           />

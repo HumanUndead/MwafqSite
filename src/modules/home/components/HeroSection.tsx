@@ -12,6 +12,7 @@ import {
   getServiceIconByKey,
 } from '@/shared/components/icons/home';
 import { RotatingWord } from './RotatingWord';
+import { cn } from '@/shared/lib/cn';
 
 const phoneTileStyles = [
   { card: 'bg-[#dff5ff]', icon: 'bg-white text-[#27a7e7]' },
@@ -48,17 +49,20 @@ interface Props {
 
 export function HeroSection({ locale, content, isRtl }: Props) {
   const hasRotatingWords = content.rotatingWords.length > 0;
-  const hasSecondLine = Boolean(content.titleMiddle || hasRotatingWords);
-
-  // RTL: flow the whole title inline and keep the last word glued to the
-  // RotatingWord (so it never drops to its own line).
-  const rtlTitle = [content.titleLead, content.titleMiddle]
+  const fullTitle = [content.titleLead, content.titleMiddle]
     .filter(Boolean)
     .join(' ')
     .trim();
-  const rtlWords = rtlTitle ? rtlTitle.split(/\s+/) : [];
-  const rtlHead = rtlWords.slice(0, -1).join(' ');
-  const rtlTail = rtlWords[rtlWords.length - 1] ?? '';
+  const titleWords = fullTitle ? fullTitle.split(/\s+/) : [];
+  const titleTail = hasRotatingWords
+    ? (titleWords[titleWords.length - 1] ?? '')
+    : '';
+  const leadWordCount = content.titleLead.trim()
+    ? content.titleLead.trim().split(/\s+/).length
+    : 0;
+  const titleMiddlePart = hasRotatingWords
+    ? titleWords.slice(leadWordCount, -1).join(' ')
+    : '';
 
   const badgeImages = [
     { src: '/demo-assets/img1.jpg', alt: content.badge },
@@ -67,45 +71,53 @@ export function HeroSection({ locale, content, isRtl }: Props) {
   ];
 
   return (
-    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-12 pt-0 md:pb-20 md:px-7'>
+    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-12 pt-0 md:pb-20 md:px-7 lg:flex lg:min-h-[calc(100vh-104px)] lg:flex-col lg:pb-0'>
       <div
         className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
         aria-hidden='true'
       />
-      <div className='relative mx-auto grid max-w-330 gap-6 lg:gap-15 lg:grid-cols-[1.05fr_1fr]'>
+      <div
+        className={cn(
+          'relative mx-auto grid w-full max-w-330 gap-6 lg:grid-cols-[1.05fr_1fr] lg:pt-8 lg:pb-8',
+          isRtl
+            ? 'lg:flex-1 lg:grid-rows-[1fr_auto] lg:gap-15'
+            : 'lg:grid-rows-[auto_auto] lg:gap-6 lg:items-start'
+        )}
+      >
         <div className='order-1'>
-          <h1 className='mb-5 md:mb-7 text-[clamp(30px,6.5vw,53px)] font-extrabold tracking-[-2.6px] text-[#1e2364]'>
-            {isRtl ? (
+          <h1 className='mb-5 md:mb-7 lg:mb-5 text-[clamp(30px,4.5vw,52px)] font-extrabold tracking-[-2.6px] text-[#1e2364]'>
+            {hasRotatingWords ? (
               <>
-                {rtlHead ? <>{rtlHead} </> : null}
+                {content.titleLead ? (
+                  <span className='block sm:whitespace-nowrap'>
+                    {content.titleLead}
+                  </span>
+                ) : null}
                 <span className='whitespace-nowrap'>
-                  {rtlTail}
-                  {hasRotatingWords ? (
-                    <>
-                      {' '}
-                      <RotatingWord words={content.rotatingWords} isRtl />
-                    </>
-                  ) : null}
+                  {titleMiddlePart ? <>{titleMiddlePart} </> : null}
+                  {titleTail}
+                  {' '}
+                  <RotatingWord
+                    words={content.rotatingWords}
+                    isRtl={isRtl}
+                  />
                 </span>
               </>
             ) : (
               <>
-                <span className='block sm:whitespace-nowrap'>
-                  {content.titleLead}
-                </span>
-                {hasSecondLine ? (
-                  <span className='block'>
-                    {content.titleMiddle ? <>{content.titleMiddle} </> : null}
-                    {hasRotatingWords ? (
-                      <RotatingWord words={content.rotatingWords} />
-                    ) : null}
+                {content.titleLead ? (
+                  <span className='block sm:whitespace-nowrap'>
+                    {content.titleLead}
                   </span>
+                ) : null}
+                {content.titleMiddle ? (
+                  <span className='block'>{content.titleMiddle}</span>
                 ) : null}
               </>
             )}
           </h1>
 
-          <p className='mb-6 md:mb-9 max-w-135 text-[17.5px] leading-[1.45] text-[#6b7196]'>
+          <p className='mb-6 md:mb-9 lg:mb-7 max-w-135 text-[17.5px] leading-[1.45] text-[#6b7196]'>
             {content.subtitle}
           </p>
 
@@ -115,7 +127,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             secondary={content.secondaryAction}
             primaryVariant='brand'
             secondaryVariant='brandOutline'
-            className='mb-8 md:mb-11 flex flex-wrap gap-3.5'
+            className='mb-8 md:mb-11 lg:mb-8 flex flex-wrap gap-3.5'
             primaryTrailing={
               <ArrowIcon className={isRtl ? 'rotate-180' : undefined} />
             }
@@ -228,7 +240,12 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           </div>
         </div>
 
-        <div className='order-3 grid grid-cols-3 gap-4 border-t-2 border-[#e5e7f0] pt-9 sm:gap-7.5'>
+        <div
+          className={cn(
+            'order-3 grid grid-cols-3 gap-4 border-t-2 border-[#e5e7f0] pt-9 sm:gap-7.5',
+            !isRtl && 'lg:pt-4'
+          )}
+        >
           {content.stats.map((stat) => (
             <div key={stat.label} className='text-center sm:text-start'>
               <div className='inline-flex items-baseline gap-0.5 whitespace-nowrap text-[22px] font-extrabold leading-none tracking-[-1px] text-[#1e2364] sm:text-[28px] md:text-[30px]'>

@@ -1,29 +1,44 @@
-import type { Locale } from '@/i18n/config';
 import type { HomeAppContent } from '../home.types';
 import { cn } from '@/shared/lib/cn';
 import { Eyebrow } from './Eyebrow';
 import { CheckIcon, getUtilityIconByKey } from '@/shared/components/icons/home';
 
 interface Props {
-  locale: Locale;
   content: HomeAppContent;
+  isRtl: boolean;
 }
 
-export function AppShowcaseSection({ content }: Props) {
+export function AppShowcaseSection({ content, isRtl }: Props) {
+  const compact = !isRtl;
+
   return (
     <section
       id='app'
-      className='sticky -top-25 flex min-h-screen items-center border-t-2 border-[#e5e7f0] bg-[#eeeeef] pb-30'
+      className='relative flex flex-col border-t-2 border-[#e5e7f0] bg-[#eeeeef] lg:min-h-[calc(100vh-104px)]'
     >
       <div
         className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[26px_26px] opacity-55 mask-[radial-gradient(circle_at_70%_50%,#000_0%,transparent_70%)]'
         aria-hidden='true'
       />
-      <div className='relative z-10 mx-auto w-full max-w-330 px-4 py-16 md:px-7 lg:py-30'>
-        <div className='grid items-center gap-15 lg:grid-cols-[1.1fr_1fr]'>
-          <div className='relative hidden h-150 overflow-hidden rounded-[32px] perspective-[1500px] lg:block'>
+      <div
+        className={cn(
+          'relative z-10 mx-auto flex w-full max-w-330 flex-1 flex-col justify-center px-4 md:px-7',
+          compact ? 'py-7 lg:py-8' : 'py-8 lg:py-10'
+        )}
+      >
+        <div
+          className={cn(
+            'grid items-center lg:grid-cols-[1.1fr_1fr]',
+            compact ? 'gap-5 lg:gap-10' : 'gap-6 lg:gap-12'
+          )}
+        >
+          <div
+            className={cn(
+              'relative hidden overflow-hidden rounded-[32px] perspective-[1500px] lg:block lg:h-140 lg:max-h-[calc(100vh-220px)]'
+            )}
+          >
             <div
-              className='absolute left-1/2 top-1/2 h-140 w-95 transform-3d animate-[stackShowcase_9s_ease-in-out_infinite]'
+              className='absolute left-1/2 top-1/2 h-[min(500px,calc(100vh-240px))] w-95 transform-3d animate-[stackShowcase_9s_ease-in-out_infinite]'
               id='phones'
             >
               <div className='device-card absolute -left-10 -bottom-10 right-20 top-35 overflow-hidden rounded-[28px] border-2 border-[#1e2364] bg-[#1e2364] p-7.5 text-white animate-[cardFloat1_5s_ease-in-out_infinite]'>
@@ -111,9 +126,20 @@ export function AppShowcaseSection({ content }: Props) {
             </div>
           </div>
 
-          <div>
-            <Eyebrow>{content.eyebrow}</Eyebrow>
-            <h2 className='mb-7 text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
+          <div className='min-w-0'>
+            <Eyebrow
+              className={cn(compact ? 'mb-2.5 lg:mb-3' : 'mb-3 lg:mb-4')}
+            >
+              {content.eyebrow}
+            </Eyebrow>
+            <h2
+              className={cn(
+                'font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]',
+                compact
+                  ? 'mb-2.5 text-[clamp(25px,3.4vw,46px)] lg:mb-4'
+                  : 'mb-4 text-[clamp(30px,4.2vw,52px)] lg:mb-6'
+              )}
+            >
               {content.title}
               {content.accent && (
                 <>
@@ -124,39 +150,79 @@ export function AppShowcaseSection({ content }: Props) {
                 </>
               )}
             </h2>
-            <p className='text-[16px] leading-[1.65] text-[#6b7196]'>
+            <p
+              className={cn(
+                'text-[#6b7196]',
+                compact
+                  ? 'text-[14px] leading-[1.5] lg:text-[15px] lg:leading-[1.55]'
+                  : 'text-[16px] leading-[1.65]'
+              )}
+            >
               {content.body}
             </p>
-            <div className='mt-7 flex flex-col gap-3.5'>
+            <div
+              className={cn(
+                'flex flex-col',
+                compact
+                  ? 'mt-3 gap-2 lg:mt-5 lg:gap-2'
+                  : 'mt-5 gap-2.5 lg:mt-6 lg:gap-3'
+              )}
+            >
               {content.points.map((point) => (
                 <div
                   key={point.title}
-                  className='flex items-center gap-3.5 rounded-[18px] border-2 border-[#e5e7f0] bg-white px-5.5 py-4.5 transition-[border-color,transform] duration-300 hover:translate-x-0.75 hover:border-[#1e2364]'
+                  className={cn(
+                    'flex items-center gap-3 rounded-[18px] border-2 border-[#e5e7f0] bg-white transition-[border-color,transform] duration-300 hover:translate-x-0.75 hover:border-[#1e2364]',
+                    compact
+                      ? 'px-3.5 py-2.5 lg:px-4 lg:py-3'
+                      : 'px-5 py-3.5 lg:px-5 lg:py-4'
+                  )}
                 >
-                  <div className='flex size-9.5 shrink-0 items-center justify-center rounded-full border-2 border-[#00dec9] bg-[rgba(0,222,201,0.10)] text-[#007a6e]'>
+                  <div className='flex size-9 shrink-0 items-center justify-center rounded-full border-2 border-[#00dec9] bg-[rgba(0,222,201,0.10)] text-[#007a6e]'>
                     <CheckIcon />
                   </div>
-                  <div>
-                    <strong className='block text-[15.5px] font-bold tracking-[-0.2px] text-[#1e2364]'>
+                  <div className='min-w-0'>
+                    <strong
+                      className={cn(
+                        'block font-bold tracking-[-0.2px] text-[#1e2364]',
+                        compact ? 'text-[14px] lg:text-[14.5px]' : 'text-[15.5px]'
+                      )}
+                    >
                       {point.title}
                     </strong>
-                    <span className='text-[13.5px] text-[#6b7196]'>
+                    <span
+                      className={cn(
+                        'text-[#6b7196]',
+                        compact ? 'text-[12px] lg:text-[12.5px]' : 'text-[13.5px]'
+                      )}
+                    >
                       {point.detail}
                     </span>
                   </div>
                 </div>
               ))}
             </div>
-            <div className='mt-7.5 flex flex-wrap gap-3.5'>
+            <div
+              className={cn(
+                'flex flex-wrap',
+                compact
+                  ? 'mt-3 gap-2 lg:mt-5 lg:gap-2.5'
+                  : 'mt-5 gap-3 lg:mt-6'
+              )}
+            >
               {content.downloadLinks.map((link) => (
                 <span
                   key={`${link.label}-${link.path ?? 'no-path'}`}
                   aria-disabled='true'
-                  className={`pointer-events-none inline-flex items-center gap-2 rounded-full px-7.5 py-4 text-[15px] font-semibold ${
+                  className={cn(
+                    'pointer-events-none inline-flex items-center gap-2 rounded-full font-semibold',
+                    compact
+                      ? 'px-5 py-2.5 text-[13px] lg:px-5 lg:py-2.5 lg:text-[14px]'
+                      : 'px-6 py-3 text-[14px] lg:px-7 lg:py-3.5 lg:text-[15px]',
                     link.iconKey === 'icon-apple'
                       ? 'bg-[#1e2364] text-white'
                       : 'border-2 border-[#1e2364] bg-white text-[#1e2364]'
-                  }`}
+                  )}
                 >
                   {getUtilityIconByKey(link.iconKey)}
                   {link.label}

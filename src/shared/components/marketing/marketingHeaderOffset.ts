@@ -12,7 +12,7 @@ export const marketingHeaderOffsetVariants = {
   /** Taller hero (B2B). */
   heroSpacious: 'pt-36 sm:pt-40 lg:pt-44',
   /** Home landing hero. */
-  home: 'pt-44 max-[560px]:pt-24',
+  home: 'pt-[104px] max-[560px]:pt-20',
   /** Detail pages with breadcrumb (course, service group, profile). */
   detail: 'pt-[120px] sm:pt-[140px] md:pt-[180px]',
   /** Booking / buy flow. */

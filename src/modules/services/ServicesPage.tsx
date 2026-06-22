@@ -59,6 +59,7 @@ export function ServicesPage({
                 t={t.cards}
                 delay={Math.min(i, 4) * 0.08}
                 isAuthenticated={isAuthenticated}
+                hidePrice
               />
             ))}
           </div>

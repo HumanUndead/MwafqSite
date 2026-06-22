@@ -9,8 +9,8 @@ const CARD_W = 96;
 const GAP = 26;
 const TITLE_W = 268;
 const STEP_SCROLL_DISTANCE = 500;
+const MOBILE_STEP_SCROLL_DISTANCE = 300;
 const ITEM_COUNT = 4;
-const SCENE_DISTANCE = STEP_SCROLL_DISTANCE * ITEM_COUNT;
 const ROW_W = 4 * CARD_W + 3 * GAP + TITLE_W;
 const TITLE_EXIT_MS = 360;
 
@@ -20,6 +20,10 @@ const TITLE_H = 56;
 const COL_H = 4 * (CARD_W + GAP) + TITLE_H;
 // Below this width the row would be scaled down too far — switch to vertical.
 const VERTICAL_MAX_WIDTH = 768;
+const MOBILE_MOTION_MS = 500;
+const MOBILE_FIRST_FOCUS_OFFSET = 12;
+const PROGRESS_FILL_CLASS =
+  'absolute inset-0 rounded-full bg-[#1e2364] will-change-transform transition-transform duration-200 ease-out';
 
 type RowPositions = {
   cards: number[];
@@ -68,16 +72,33 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
   const titleResetRef = useRef<number | null>(null);
   const activeStepRef = useRef(0);
   const lastWidthRef = useRef(0);
-  // `isDesktop` now means "JS-driven scroll animation active" — on for all
-  // viewports. The row is scaled down to fit narrow screens (see `scale`).
+  const progressFillRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isDesktop, setIsDesktop] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [leavingStep, setLeavingStep] = useState<number | null>(null);
-  const { progress } = useSectionScrollCapture(stageRef, {
+
+  const vertical =
+    isDesktop && viewportWidth > 0 && viewportWidth < VERTICAL_MAX_WIDTH;
+  const stepScrollDistance = vertical
+    ? MOBILE_STEP_SCROLL_DISTANCE
+    : STEP_SCROLL_DISTANCE;
+  const sceneDistance = stepScrollDistance * ITEM_COUNT;
+
+  const { step: nextStep } = useSectionScrollCapture(stageRef, {
     enabled: isDesktop,
-    distance: SCENE_DISTANCE,
+    distance: sceneDistance,
+    stepSize: stepScrollDistance,
+    itemCount: ITEM_COUNT,
+    onFrame: (step, subProgress) => {
+      progressFillRefs.current.forEach((el, index) => {
+        if (!el) return;
+        const fill =
+          index < step ? 1 : index === step ? subProgress : 0;
+        el.style.transform = `scaleX(${fill})`;
+      });
+    },
   });
 
   useEffect(() => {
@@ -110,24 +131,6 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
     };
   }, []);
 
-  const normalized = isDesktop ? clamp(progress, 0, SCENE_DISTANCE) : 0;
-  const isComplete = normalized >= SCENE_DISTANCE - 1;
-  const progressValue = isDesktop
-    ? isComplete
-      ? ITEM_COUNT
-      : clamp(normalized / STEP_SCROLL_DISTANCE, 0, ITEM_COUNT)
-    : 1;
-  const nextStep = isDesktop
-    ? isComplete
-      ? ITEM_COUNT - 1
-      : Math.min(ITEM_COUNT - 1, Math.floor(progressValue))
-    : 0;
-  const subProgress = isDesktop
-    ? isComplete && nextStep === ITEM_COUNT - 1
-      ? 1
-      : clamp(progressValue - nextStep, 0, 1)
-    : 1;
-
   useEffect(() => {
     if (!isDesktop) {
       activeStepRef.current = 0;
@@ -155,8 +158,6 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
     }, TITLE_EXIT_MS);
   }, [isDesktop, nextStep]);
 
-  const vertical =
-    isDesktop && viewportWidth > 0 && viewportWidth < VERTICAL_MAX_WIDTH;
   const positions = getPositions(activeStep, isRtl, vertical);
   const hiddenTitleX = isRtl ? '120%' : '-120%';
   const items = content.items.slice(0, ITEM_COUNT);
@@ -178,7 +179,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
         ref={stageRef}
         className='relative'
         style={{
-          height: isDesktop ? `calc(100vh + ${SCENE_DISTANCE}px)` : undefined,
+          height: isDesktop ? `calc(100vh + ${sceneDistance}px)` : undefined,
         }}
       >
         <div
@@ -277,8 +278,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                               stage.getBoundingClientRect().top +
                               window.scrollY;
                             const target =
-                              stageTop +
-                              ((index + 0.5) / ITEM_COUNT) * SCENE_DISTANCE;
+                              stageTop + (index + 0.5) * stepScrollDistance;
 
                             window.scrollTo({
                               top: Math.round(target),
@@ -370,32 +370,23 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                   dir={isRtl ? 'rtl' : 'ltr'}
                   aria-hidden='true'
                 >
-                  {items.map((_, index) => {
-                    const fill =
-                      index < activeStep
-                        ? 1
-                        : index === activeStep
-                          ? clamp(subProgress, 0, 1)
-                          : 0;
-
-                    return (
+                  {items.map((_, index) => (
+                    <div
+                      key={index}
+                      className='relative h-0.75 flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]'
+                    >
                       <div
-                        key={index}
-                        className='relative h-0.75 flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]'
-                      >
-                        <div
-                          className={[
-                            'absolute inset-0 rounded-full bg-[#1e2364]',
-                            isRtl ? 'origin-right' : 'origin-left',
-                          ].join(' ')}
-                          style={{
-                            transform: `scaleX(${fill})`,
-                            transition: 'transform 0.15s linear',
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                        ref={(el) => {
+                          progressFillRefs.current[index] = el;
+                        }}
+                        className={[
+                          PROGRESS_FILL_CLASS,
+                          isRtl ? 'origin-right' : 'origin-left',
+                        ].join(' ')}
+                        style={{ transform: 'scaleX(0)' }}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -405,18 +396,27 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
               <div className='flex flex-col items-center gap-7 pb-2.5 pt-4'>
                 <div
                   className='relative w-full'
-                  style={{ height: COL_H * vScale }}
+                  style={{
+                    height:
+                      (COL_H +
+                        (activeStep === 0 ? MOBILE_FIRST_FOCUS_OFFSET : 0)) *
+                      vScale,
+                  }}
                 >
                   <div
-                    className='absolute left-0 top-0 w-full'
+                    className='absolute left-0 top-0 w-full [contain:layout_paint]'
                     style={{
                       height: COL_H,
-                      transform: `scale(${vScale})`,
+                      transform: `scale(${vScale}) translateZ(0)`,
                       transformOrigin: 'top center',
                     }}
                   >
                     {items.map((item, index) => {
                       const isActive = index === activeStep;
+                      const cardYOffset =
+                        index === 0 && isActive
+                          ? MOBILE_FIRST_FOCUS_OFFSET
+                          : 0;
 
                       return (
                         <button
@@ -433,8 +433,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                               stage.getBoundingClientRect().top +
                               window.scrollY;
                             const target =
-                              stageTop +
-                              ((index + 0.5) / ITEM_COUNT) * SCENE_DISTANCE;
+                              stageTop + (index + 0.5) * stepScrollDistance;
 
                             window.scrollTo({
                               top: Math.round(target),
@@ -443,15 +442,14 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                           }}
                           className={[
                             'absolute left-1/2 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
-                            'transition-[transform,border-color] duration-700 ease-in-out',
+                            'transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]',
                             isActive
                               ? 'border-[#1e2364]'
-                              : 'border-[#e5e7f0] hover:border-[#6f8fcf]',
+                              : 'border-[#e5e7f0]',
                           ].join(' ')}
                           style={{
-                            transform: `translateX(-50%) translateY(${positions.cards[index]}px)${isActive ? ' scale(1.06)' : ''}`,
+                            transform: `translate3d(-50%, ${positions.cards[index] + cardYOffset}px, 0)${isActive ? ' scale(1.06)' : ''}`,
                             zIndex: 2,
-                            willChange: 'transform',
                           }}
                         >
                           <span
@@ -459,13 +457,9 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                             className={[
                               'svg-ic',
                               getWhySpriteClassName(item.iconKey, index),
-                              'h-11 w-11 transition-transform duration-450 ease-in-out',
+                              'h-11 w-11 transition-transform duration-400 ease-out',
+                              isActive ? 'scale-[1.26]' : 'scale-[1.16]',
                             ].join(' ')}
-                            style={{
-                              transform: isActive
-                                ? 'scale(1.26)'
-                                : 'scale(1.16)',
-                            }}
                           />
                         </button>
                       );
@@ -473,33 +467,34 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
 
                     <div
                       aria-live='polite'
-                      className='absolute left-1/2 top-0 z-1 flex h-14 w-[88vw] max-w-105 items-center justify-center px-2'
+                      className='absolute left-1/2 top-0 z-1 flex h-14 w-[88vw] max-w-105 items-center justify-center px-2 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]'
                       style={{
-                        transform: `translateX(-50%) translateY(${positions.title}px)`,
-                        willChange: 'transform',
+                        transform: `translate3d(-50%, ${positions.title}px, 0)`,
                       }}
                     >
-                      {items.map((item, index) => {
-                        const isActive = index === activeStep;
+                      <div className='relative h-full w-full'>
+                        {items.map((item, index) => {
+                          const isActive = index === activeStep;
+                          const isLeaving = index === leavingStep;
 
-                        return (
-                          <span
-                            key={`v-${item.title}-${index}`}
-                            className='absolute inset-0 flex items-center justify-center text-center text-[18px] font-extrabold leading-tight text-[#1e2364]'
-                            style={{
-                              opacity: isActive ? 1 : 0,
-                              transform: isActive
-                                ? 'translateY(0)'
-                                : 'translateY(8px)',
-                              transition:
-                                'opacity 0.4s ease, transform 0.4s ease',
-                              willChange: 'opacity, transform',
-                            }}
-                          >
-                            {item.title}
-                          </span>
-                        );
-                      })}
+                          return (
+                            <span
+                              key={`v-title-${item.title}-${index}`}
+                              className='absolute inset-0 flex items-center justify-center text-center text-[18px] font-extrabold leading-tight text-[#1e2364]'
+                              style={{
+                                opacity: isActive ? 1 : 0,
+                                transition: isActive
+                                  ? `opacity ${MOBILE_MOTION_MS * 0.7}ms ease-out ${MOBILE_MOTION_MS * 0.35}ms`
+                                  : isLeaving
+                                    ? `opacity ${MOBILE_MOTION_MS * 0.55}ms ease-in`
+                                    : 'none',
+                              }}
+                            >
+                              {item.title}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -509,32 +504,23 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                   dir={isRtl ? 'rtl' : 'ltr'}
                   aria-hidden='true'
                 >
-                  {items.map((_, index) => {
-                    const fill =
-                      index < activeStep
-                        ? 1
-                        : index === activeStep
-                          ? clamp(subProgress, 0, 1)
-                          : 0;
-
-                    return (
+                  {items.map((_, index) => (
+                    <div
+                      key={index}
+                      className='relative h-0.75 flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]'
+                    >
                       <div
-                        key={index}
-                        className='relative h-0.75 flex-1 overflow-hidden rounded-full bg-[rgba(30,35,100,0.12)]'
-                      >
-                        <div
-                          className={[
-                            'absolute inset-0 rounded-full bg-[#1e2364]',
-                            isRtl ? 'origin-right' : 'origin-left',
-                          ].join(' ')}
-                          style={{
-                            transform: `scaleX(${fill})`,
-                            transition: 'transform 0.15s linear',
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                        ref={(el) => {
+                          progressFillRefs.current[index] = el;
+                        }}
+                        className={[
+                          PROGRESS_FILL_CLASS,
+                          isRtl ? 'origin-right' : 'origin-left',
+                        ].join(' ')}
+                        style={{ transform: 'scaleX(0)' }}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

@@ -48,9 +48,7 @@ function renderSection(
     case 'steps':
       return <StepsSection key={key} locale={locale} content={content.steps} />;
     case 'app':
-      return (
-        <AppShowcaseSection key={key} locale={locale} content={content.app} />
-      );
+      return <AppShowcaseSection key={key} content={content.app} isRtl={rtl} />;
     case 'academy':
       return <AcademySection key={key} content={content.academy} />;
     case 'stats':
