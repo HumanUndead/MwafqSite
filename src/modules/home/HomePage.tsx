@@ -1,17 +1,33 @@
+import dynamic from 'next/dynamic';
 import { isRtl, type Locale } from '@/i18n/config';
 import type { HomePageContent, HomeSectionKey } from './home.types';
 import { AcademySection } from './components/AcademySection';
-import { MwafqAcademySection } from './components/MwafqAcademySection';
 import { AppShowcaseSection } from './components/AppShowcaseSection';
-import { BookingSection } from './components/BookingSection';
 import { HeroSection } from './components/HeroSection';
 import { ServicesSection } from './components/ServicesSection';
 import { StatsSection } from './components/StatsSection';
-import { StepsSection } from './components/StepsSection';
-import { TestimonialSection } from './components/TestimonialSection';
 import { TickerSection } from './components/TickerSection';
-import { WhySection } from './components/WhySection';
 import { getHomePageContent } from './server/homeContentService';
+
+const WhySection = dynamic(() =>
+  import('./components/WhySection').then((m) => ({ default: m.WhySection }))
+);
+
+const BookingSection = dynamic(() =>
+  import('./components/BookingSection').then((m) => ({
+    default: m.BookingSection,
+  }))
+);
+
+const StepsSection = dynamic(() =>
+  import('./components/StepsSection').then((m) => ({ default: m.StepsSection }))
+);
+
+const TestimonialSection = dynamic(() =>
+  import('./components/TestimonialSection').then((m) => ({
+    default: m.TestimonialSection,
+  }))
+);
 
 interface Props {
   locale: Locale;

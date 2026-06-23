@@ -260,59 +260,65 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                       transformOrigin: 'top left',
                     }}
                   >
-                    {items.map((item, index) => {
-                      const isActive = index === activeStep;
+                    <div
+                      role='tablist'
+                      aria-label={content.eyebrow}
+                      className='absolute inset-0'
+                    >
+                      {items.map((item, index) => {
+                        const isActive = index === activeStep;
 
-                      return (
-                        <button
-                          key={`${item.title}-${index}`}
-                          type='button'
-                          role='tab'
-                          aria-selected={isActive}
-                          aria-label={item.title}
-                          onClick={() => {
-                            const stage = stageRef.current;
-                            if (!stage) return;
+                        return (
+                          <button
+                            key={`${item.title}-${index}`}
+                            type='button'
+                            role='tab'
+                            aria-selected={isActive}
+                            aria-label={item.title}
+                            onClick={() => {
+                              const stage = stageRef.current;
+                              if (!stage) return;
 
-                            const stageTop =
-                              stage.getBoundingClientRect().top +
-                              window.scrollY;
-                            const target =
-                              stageTop + (index + 0.5) * stepScrollDistance;
+                              const stageTop =
+                                stage.getBoundingClientRect().top +
+                                window.scrollY;
+                              const target =
+                                stageTop + (index + 0.5) * stepScrollDistance;
 
-                            window.scrollTo({
-                              top: Math.round(target),
-                              behavior: 'smooth',
-                            });
-                          }}
-                          className={[
-                            'absolute left-0 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
-                            'transition-[transform,border-color] duration-700 ease-in-out',
-                            isActive
-                              ? 'border-[#1e2364]'
-                              : 'border-[#e5e7f0] hover:border-[#6f8fcf]',
-                          ].join(' ')}
-                          style={{
-                            transform: `translateX(${positions.cards[index]}px)${isActive ? ' translateY(-6px) scale(1.06)' : ''}`,
-                            zIndex: 2,
-                          }}
-                        >
-                          <span
-                            aria-hidden='true'
+                              window.scrollTo({
+                                top: Math.round(target),
+                                behavior: 'smooth',
+                              });
+                            }}
                             className={[
-                              'svg-ic',
-                              getWhySpriteClassName(item.iconKey, index),
-                              'h-11 w-11 transition-transform duration-450 ease-in-out',
+                              'absolute left-0 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
+                              'transition-[transform,border-color] duration-700 ease-in-out',
+                              isActive
+                                ? 'border-[#1e2364]'
+                                : 'border-[#e5e7f0] hover:border-[#6f8fcf]',
                             ].join(' ')}
                             style={{
-                              transform: isActive
-                                ? 'scale(1.26)'
-                                : 'scale(1.16)',
+                              transform: `translateX(${positions.cards[index]}px)${isActive ? ' translateY(-6px) scale(1.06)' : ''}`,
+                              zIndex: 2,
                             }}
-                          />
-                        </button>
-                      );
-                    })}
+                          >
+                            <span
+                              aria-hidden='true'
+                              className={[
+                                'svg-ic',
+                                getWhySpriteClassName(item.iconKey, index),
+                                'h-11 w-11 transition-transform duration-450 ease-in-out',
+                              ].join(' ')}
+                              style={{
+                                transform: isActive
+                                  ? 'scale(1.26)'
+                                  : 'scale(1.16)',
+                              }}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
 
                     <div
                       aria-live='polite'
@@ -411,59 +417,65 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                       transformOrigin: 'top center',
                     }}
                   >
-                    {items.map((item, index) => {
-                      const isActive = index === activeStep;
-                      const cardYOffset =
-                        index === 0 && isActive
-                          ? MOBILE_FIRST_FOCUS_OFFSET
-                          : 0;
+                    <div
+                      role='tablist'
+                      aria-label={content.eyebrow}
+                      className='absolute inset-0'
+                    >
+                      {items.map((item, index) => {
+                        const isActive = index === activeStep;
+                        const cardYOffset =
+                          index === 0 && isActive
+                            ? MOBILE_FIRST_FOCUS_OFFSET
+                            : 0;
 
-                      return (
-                        <button
-                          key={`v-${item.title}-${index}`}
-                          type='button'
-                          role='tab'
-                          aria-selected={isActive}
-                          aria-label={item.title}
-                          onClick={() => {
-                            const stage = stageRef.current;
-                            if (!stage) return;
+                        return (
+                          <button
+                            key={`v-${item.title}-${index}`}
+                            type='button'
+                            role='tab'
+                            aria-selected={isActive}
+                            aria-label={item.title}
+                            onClick={() => {
+                              const stage = stageRef.current;
+                              if (!stage) return;
 
-                            const stageTop =
-                              stage.getBoundingClientRect().top +
-                              window.scrollY;
-                            const target =
-                              stageTop + (index + 0.5) * stepScrollDistance;
+                              const stageTop =
+                                stage.getBoundingClientRect().top +
+                                window.scrollY;
+                              const target =
+                                stageTop + (index + 0.5) * stepScrollDistance;
 
-                            window.scrollTo({
-                              top: Math.round(target),
-                              behavior: 'smooth',
-                            });
-                          }}
-                          className={[
-                            'absolute left-1/2 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
-                            'transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]',
-                            isActive
-                              ? 'border-[#1e2364]'
-                              : 'border-[#e5e7f0]',
-                          ].join(' ')}
-                          style={{
-                            transform: `translate3d(-50%, ${positions.cards[index] + cardYOffset}px, 0)${isActive ? ' scale(1.06)' : ''}`,
-                            zIndex: 2,
-                          }}
-                        >
-                          <span
-                            aria-hidden='true'
+                              window.scrollTo({
+                                top: Math.round(target),
+                                behavior: 'smooth',
+                              });
+                            }}
                             className={[
-                              'svg-ic',
-                              getWhySpriteClassName(item.iconKey, index),
-                              'h-11 w-11 transition-transform duration-400 ease-out',
-                              isActive ? 'scale-[1.26]' : 'scale-[1.16]',
+                              'absolute left-1/2 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
+                              'transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]',
+                              isActive
+                                ? 'border-[#1e2364]'
+                                : 'border-[#e5e7f0]',
                             ].join(' ')}
-                          />
-                        </button>
-                      );
-                    })}
+                            style={{
+                              transform: `translate3d(-50%, ${positions.cards[index] + cardYOffset}px, 0)${isActive ? ' scale(1.06)' : ''}`,
+                              zIndex: 2,
+                            }}
+                          >
+                            <span
+                              aria-hidden='true'
+                              className={[
+                                'svg-ic',
+                                getWhySpriteClassName(item.iconKey, index),
+                                'h-11 w-11 transition-transform duration-400 ease-out',
+                                isActive ? 'scale-[1.26]' : 'scale-[1.16]',
+                              ].join(' ')}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
 
                     <div
                       aria-live='polite'

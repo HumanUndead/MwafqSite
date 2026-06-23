@@ -8,7 +8,7 @@ interface Props {
 
 export function AcademySection({ content }: Props) {
   return (
-    <section className='relative mt-10 overflow-hidden rounded-t-[40px] bg-white pb-10 pt-10 md:mt-20 md:rounded-t-[60px] md:pt-16'>
+    <section className='relative z-20 -mt-10 overflow-hidden rounded-t-[40px] bg-white pb-10 pt-10 lg:mt-20 lg:rounded-t-[60px] lg:pt-16'>
       <div
         className='pointer-events-none absolute inset-0 opacity-[0.18] bg-[linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] bg-size-[32px_32px]'
         aria-hidden='true'

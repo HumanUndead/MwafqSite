@@ -27,13 +27,13 @@ export function B2BFinalCtaSection({ locale, content }: Props) {
         <div className='flex flex-wrap justify-center gap-3.5'>
           <a
             href={getLocalizedRoute(locale, ROUTES.REGISTER)}
-            className='inline-flex items-center justify-center gap-2 rounded-full bg-[#00a8f1] px-[30px] py-4 text-[15px] font-semibold text-white transition hover:bg-[#0090d1]'
+            className='inline-flex items-center justify-center gap-2 rounded-full bg-[#00a8f1] px-7 py-3 text-[14px] font-semibold text-white transition hover:bg-[#0090d1]'
           >
             {content.primary}
           </a>
           <a
             href={getLocalizedRoute(locale, ROUTES.CONTACT)}
-            className='inline-flex items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-[30px] py-4 text-[15px] font-semibold text-white transition hover:bg-white hover:text-[#1e2364]'
+            className='inline-flex items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-7 py-3 text-[14px] font-semibold text-white transition hover:bg-white hover:text-[#1e2364]'
           >
             {content.secondary}
           </a>

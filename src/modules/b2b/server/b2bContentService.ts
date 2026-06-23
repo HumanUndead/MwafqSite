@@ -383,7 +383,8 @@ function mapWhyContent(
 
 function mapServicesContent(
   rootCategory: CategoryDto | null,
-  langId: number
+  langId: number,
+  fallback: ServicesContent
 ): ServicesContent {
   const servicesCategory = getChildCategoryByRank(
     rootCategory,
@@ -402,7 +403,7 @@ function mapServicesContent(
     ? getArticleTranslation(headerArticle, langId)
     : null;
 
-  const items = getVisibleArticles(servicesCategory)
+  const cmsItems = getVisibleArticles(servicesCategory)
     .filter(
       (a) =>
         a.rank !== B2B_SERVICES_ARTICLE_RANKS.header &&
@@ -416,13 +417,27 @@ function mapServicesContent(
       };
     });
 
+  const items = fallback.items.map((item, index) => {
+    const cms = cmsItems[index];
+    if (!cms) return item;
+
+    return {
+      ...item,
+      title: cms.title || item.title,
+      body: cms.body || item.body,
+    };
+  });
+
   return {
-    titleLead: trimToNull(headerT?.name) ?? '',
-    titleAccent: trimToNull(headerT?.extraInfo) ?? '',
+    titleLead: trimToNull(headerT?.name) ?? fallback.titleLead,
+    titleAccent: trimToNull(headerT?.extraInfo) ?? fallback.titleAccent,
     body:
       trimToNull(
         bodyArticle ? getArticleTranslation(bodyArticle, langId).name : null
-      ) ?? '',
+      ) ?? fallback.body,
+    trustChips: fallback.trustChips,
+    previewLabel: fallback.previewLabel,
+    dashboard: fallback.dashboard,
     items,
   };
 }
@@ -626,7 +641,7 @@ function buildB2BContent(
     meta: dict.b2b.meta,
     hero: mapHeroContent(rootCategory, langId),
     why: mapWhyContent(rootCategory, langId),
-    services: mapServicesContent(rootCategory, langId),
+    services: mapServicesContent(rootCategory, langId, dict.b2b.services),
     steps: mapStepsContent(rootCategory, langId),
     finalCta: mapFinalCtaContent(rootCategory, langId),
     companies: mapB2BCompaniesContent(companiesCategory),

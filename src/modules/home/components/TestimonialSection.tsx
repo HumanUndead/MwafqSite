@@ -24,7 +24,7 @@ interface Props {
 function CarouselDots({ count, current }: { count: number; current: number }) {
   const { api } = useCarousel();
   return (
-    <div className='mt-8 flex justify-center gap-2'>
+    <div className='mt-8 flex justify-center gap-3'>
       {Array.from({ length: count }, (_, i) => (
         <button
           key={i}
@@ -32,11 +32,16 @@ function CarouselDots({ count, current }: { count: number; current: number }) {
           onClick={() => api?.scrollTo(i)}
           aria-label={`Go to slide ${i + 1}`}
           aria-current={i === current ? 'true' : undefined}
-          className={cn(
-            'h-2 rounded-full transition-all duration-300',
-            i === current ? 'w-6 bg-[#00a8f1]' : 'w-2 bg-[#d0d3e8]'
-          )}
-        />
+          className='inline-flex min-h-6 min-w-6 items-center justify-center p-1.5'
+        >
+          <span
+            aria-hidden='true'
+            className={cn(
+              'block h-2 rounded-full transition-all duration-300',
+              i === current ? 'w-6 bg-[#00a8f1]' : 'w-2 bg-[#d0d3e8]'
+            )}
+          />
+        </button>
       ))}
     </div>
   );

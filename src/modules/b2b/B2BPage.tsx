@@ -22,7 +22,7 @@ export function B2BPage({ locale, content }: Props) {
       <B2BHeroSection locale={locale} content={content.hero} isRtl={rtl} />
       <TickerSection content={content.companies} />
       <B2BWhySection content={content.why} />
-      <B2BServicesSection content={content.services} />
+      <B2BServicesSection content={content.services} isRtl={rtl} />
       <B2BSection locale={locale} content={content.business} />
       <B2BStepsSection content={content.steps} />
       <B2BFinalCtaSection locale={locale} content={content.finalCta} />

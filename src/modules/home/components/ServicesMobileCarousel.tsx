@@ -18,7 +18,7 @@ interface Props {
 
 export function ServicesMobileCarousel({ services, rtl }: Props) {
   return (
-    <div className='grid grid-cols-2 gap-3'>
+    <div className='grid grid-cols-1 gap-4 min-[420px]:grid-cols-2'>
       {services.map((service) => (
         <ServiceCard
           key={service.id}

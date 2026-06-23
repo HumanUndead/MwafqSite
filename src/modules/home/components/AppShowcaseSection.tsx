@@ -14,7 +14,7 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
   return (
     <section
       id='app'
-      className='relative flex flex-col border-t-2 border-[#e5e7f0] bg-[#eeeeef] lg:min-h-[calc(100vh-104px)]'
+      className='relative flex flex-col border-t-2 border-[#e5e7f0] bg-[#eeeeef] lg:sticky lg:-top-25 lg:min-h-[calc(100vh-104px)] lg:pb-30'
     >
       <div
         className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[26px_26px] opacity-55 mask-[radial-gradient(circle_at_70%_50%,#000_0%,transparent_70%)]'
@@ -218,10 +218,10 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
           {/* Store buttons — extra space below on mobile */}
           <div
             className={cn(
-              'flex flex-wrap lg:col-start-2 lg:row-start-3',
+              'flex flex-wrap justify-center lg:col-start-2 lg:row-start-3 lg:justify-start',
               compact
-                ? 'mt-8 gap-2 pb-4 lg:mt-5 lg:gap-2.5 lg:pb-0'
-                : 'mt-10 gap-3 pb-5 lg:mt-6 lg:pb-0'
+                ? 'mt-8 gap-2 pb-4 mb-4 lg:mt-5 lg:mb-0 lg:gap-2.5 lg:pb-0'
+                : 'mt-10 gap-3 pb-5 mb-4 lg:mt-6 lg:mb-0 lg:pb-0'
             )}
           >
             {content.downloadLinks.map((link) => (

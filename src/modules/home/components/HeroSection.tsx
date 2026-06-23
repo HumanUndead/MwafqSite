@@ -93,14 +93,20 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                     {content.titleLead}
                   </span>
                 ) : null}
-                <span className='whitespace-nowrap'>
-                  {titleMiddlePart ? <>{titleMiddlePart} </> : null}
-                  {titleTail}
-                  {' '}
-                  <RotatingWord
-                    words={content.rotatingWords}
-                    isRtl={isRtl}
-                  />
+                <span className='max-[499px]:block min-[500px]:inline min-[500px]:whitespace-nowrap'>
+                  <span className='max-[499px]:block min-[500px]:inline'>
+                    {titleMiddlePart ? <>{titleMiddlePart} </> : null}
+                    {titleTail}
+                    <span className='max-[499px]:hidden min-[500px]:inline'>
+                      {' '}
+                    </span>
+                  </span>
+                  <span className='max-[499px]:block min-[500px]:inline'>
+                    <RotatingWord
+                      words={content.rotatingWords}
+                      isRtl={isRtl}
+                    />
+                  </span>
                 </span>
               </>
             ) : (
@@ -181,7 +187,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                   </div>
                 </div>
 
-                <div className='flex items-center gap-2.5 rounded-[12px] border-2 border-[#eef0f7] bg-[#f2f2f2] px-3.5 py-2.75 text-[12px] font-medium text-[#6b7196]'>
+                <div className='flex items-center gap-2.5 rounded-[12px] border-2 border-[#eef0f7] bg-[#f2f2f2] px-3.5 py-2.75 text-[12px] font-medium text-[#545a78]'>
                   <SearchIcon />
                   <span>{content.phoneSearchPlaceholder}</span>
                 </div>

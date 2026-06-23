@@ -2,6 +2,7 @@ import type { Locale } from '@/i18n/config';
 import { getLocalizedRoute } from '@/i18n/routing';
 import type { Dictionary } from '@/locales/types';
 import { ROUTES } from '@/shared/constants/routes';
+import { cn } from '@/shared/lib/cn';
 import { buttonVariants } from '@/shared/lib/variants';
 
 interface Props {
@@ -11,9 +12,9 @@ interface Props {
 }
 
 const floatingMeta = [
-  'right-0 top-[6%] origin-right animate-[floatSoft_5s_ease-in-out_infinite] max-[640px]:scale-[0.78] rtl:right-auto rtl:left-0 rtl:origin-left',
-  'left-0 top-[44%] origin-left animate-[floatTilt_6s_ease-in-out_0.3s_infinite] max-[640px]:scale-[0.78] rtl:left-auto rtl:right-0 rtl:origin-right',
-  'right-2 bottom-[6%] origin-right animate-[floatSoft_5.5s_ease-in-out_0.6s_infinite] max-[640px]:scale-[0.78] rtl:right-auto rtl:left-2 rtl:origin-left',
+  'end-0 top-[4%] origin-right animate-[floatSoft_5s_ease-in-out_infinite] max-lg:max-w-[88%] max-lg:scale-[0.72] max-lg:origin-top-right lg:top-[6%] rtl:end-auto rtl:start-0 rtl:origin-left lg:rtl:origin-left',
+  'start-0 top-[40%] origin-left animate-[floatTilt_6s_ease-in-out_0.3s_infinite] max-lg:max-w-[88%] max-lg:scale-[0.72] max-lg:origin-top-left lg:top-[44%] rtl:start-auto rtl:end-0 rtl:origin-right lg:rtl:origin-right',
+  'end-0 bottom-[4%] origin-bottom-right animate-[floatSoft_5.5s_ease-in-out_0.6s_infinite] max-lg:max-w-[88%] max-lg:scale-[0.72] max-lg:origin-bottom-right lg:end-2 lg:bottom-[6%] rtl:end-auto rtl:start-0 rtl:origin-bottom-left lg:rtl:start-auto lg:rtl:end-2 lg:rtl:origin-left',
 ];
 
 const statusPillStyles: Record<string, string> = {
@@ -41,7 +42,7 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
       />
 
       <div className='relative z-2 mx-auto max-w-330'>
-        <div className='grid grid-cols-1 items-center gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-15'>
+        <div className='grid min-w-0 grid-cols-1 items-center gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-15'>
           <div className='lg:-translate-y-10'>
             <span className='mb-2 inline-block text-[clamp(40px,5.6vw,72px)] font-extrabold leading-none tracking-[-2.2px] text-[#1e2364]'>
               {content.eyebrow}
@@ -51,91 +52,53 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
               <span className='block'>{content.headingAccent}</span>
             </h1>
 
-            <p className='mb-9 max-w-135 text-[clamp(15.5px,1.3vw,17.5px)] leading-[1.65] text-[#6b7196]'>
+            <p className='mb-0 max-w-135 text-[clamp(15.5px,1.3vw,17.5px)] leading-[1.65] text-[#6b7196] lg:mb-9'>
               {content.lead}
             </p>
 
-            <div className='flex flex-wrap gap-3.5'>
-              <a
-                href={getLocalizedRoute(locale, ROUTES.REGISTER)}
-                className={buttonVariants({
-                  variant: 'brand',
-                  size: 'hero',
-                  shape: 'pill',
-                })}
-              >
-                {content.primaryCta}
-                <svg
-                  width='16'
-                  height='16'
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='2.4'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  aria-hidden='true'
-                  className='rtl:-scale-x-100'
-                >
-                  <line x1='5' y1='12' x2='19' y2='12' />
-                  <polyline points='12 5 19 12 12 19' />
-                </svg>
-              </a>
-              <a
-                href={getLocalizedRoute(locale, ROUTES.CONTACT)}
-                className={buttonVariants({
-                  variant: 'brandOutline',
-                  size: 'hero',
-                  shape: 'pill',
-                })}
-              >
-                <svg
-                  width='16'
-                  height='16'
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  aria-hidden='true'
-                >
-                  <path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z' />
-                </svg>
-                {content.secondaryCta}
-              </a>
-            </div>
+            <HeroCtas
+              locale={locale}
+              content={content}
+              className='mt-9 hidden flex-wrap gap-3.5 lg:flex'
+            />
           </div>
 
           {/* Right column — dashboard mockup + floating cards */}
-          <div className='relative mx-auto w-full max-w-140 lg:h-140'>
-            {content.floatingCards.slice(0, 3).map((card, index) => (
-              <div
-                key={card.title || index}
-                className={`absolute z-5 flex items-center gap-3 rounded-[18px] border-2 border-[#1e2364] bg-white px-3 py-3 pr-5 ${floatingMeta[index]}`}
-              >
-                <span
-                  aria-hidden='true'
-                  className='flex size-11.5  shrink-0 items-center justify-center rounded-[12px] bg-[#fbfcff] text-[#1e2364]'
-                >
-                  <FloatingIcon index={index} />
-                </span>
+          <div className='flex w-full min-w-0 flex-col'>
+            <div className='relative mx-auto w-full min-w-0 max-w-[17.5rem] overflow-hidden pb-2 sm:max-w-xs lg:h-140 lg:max-w-140 lg:overflow-visible lg:pb-0'>
+              {content.floatingCards.slice(0, 3).map((card, index) => (
                 <div
-                  className={isRtl ? '-mr-2.5 text-right' : '-ml-2.5 text-left'}
+                  key={card.title || index}
+                  className={cn(
+                    'absolute z-5 flex items-center gap-2 rounded-[14px] border-2 border-[#1e2364] bg-white px-2.5 py-2 pe-4 lg:gap-3 lg:rounded-[18px] lg:px-3 lg:py-3 lg:pe-5',
+                    floatingMeta[index]
+                  )}
                 >
-                  <strong className='block text-[15px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
-                    {card.title}
-                  </strong>
-                  <span className='mt-0.5 block text-[11px] text-[#6b7196]'>
-                    {card.detail}
+                  <span
+                    aria-hidden='true'
+                    className='flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-[#fbfcff] text-[#1e2364] [&_svg]:size-4.5 lg:size-11.5 lg:rounded-[12px] lg:[&_svg]:size-5.5'
+                  >
+                    <FloatingIcon index={index} />
                   </span>
+                  <div
+                    className={cn(
+                      'min-w-0',
+                      isRtl ? '-me-2 text-end' : '-ms-2 text-start'
+                    )}
+                  >
+                    <strong className='block truncate text-[12px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364] lg:text-[15px]'>
+                      {card.title}
+                    </strong>
+                    <span className='mt-0.5 block truncate text-[10px] text-[#6b7196] lg:text-[11px]'>
+                      {card.detail}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-            {/* Dashboard mockup — wrapper centers, inner card animates */}
-            <div className='relative z-2 mx-auto w-full lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[90%] lg:-translate-x-1/2 lg:-translate-y-1/2'>
-              <div className='animate-[floatRotate_6s_ease-in-out_infinite] overflow-hidden rounded-[18px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
+              {/* Dashboard mockup — wrapper centers, inner card animates */}
+              <div className='relative z-2 mx-auto w-[88%] max-w-full lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[90%] lg:-translate-x-1/2 lg:-translate-y-1/2'>
+                <div className='origin-center max-lg:scale-[0.94] lg:animate-[floatRotate_6s_ease-in-out_infinite] overflow-hidden rounded-[18px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
                 {/* Browser chrome */}
                 <div className='flex items-center gap-2 border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-3 py-2'>
                   <div className='flex gap-1.5'>
@@ -214,10 +177,94 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
                 </div>
               </div>
             </div>
+            </div>
+
+            <HeroCtas
+              locale={locale}
+              content={content}
+              compact
+              className='relative z-10 mt-4 flex w-full min-w-0 flex-nowrap items-center justify-center gap-1.5 sm:mt-5 sm:gap-2 lg:hidden'
+            />
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function HeroCtas({
+  locale,
+  content,
+  compact = false,
+  className,
+}: {
+  locale: Locale;
+  content: Dictionary['b2b']['hero'];
+  compact?: boolean;
+  className?: string;
+}) {
+  const iconSize = compact ? 12 : 16;
+
+  return (
+    <div className={className}>
+      <a
+        href={getLocalizedRoute(locale, ROUTES.REGISTER)}
+        className={cn(
+          buttonVariants({
+            variant: 'brand',
+            size: compact ? 'sm' : 'hero',
+            shape: 'pill',
+          }),
+          compact &&
+            'h-8 min-w-0 flex-1 gap-1 px-2.5 text-[10px] font-semibold sm:h-9 sm:px-3 sm:text-[11px]'
+        )}
+      >
+        <span className='truncate'>{content.primaryCta}</span>
+        <svg
+          width={iconSize}
+          height={iconSize}
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2.4'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          aria-hidden='true'
+          className='shrink-0 rtl:-scale-x-100'
+        >
+          <line x1='5' y1='12' x2='19' y2='12' />
+          <polyline points='12 5 19 12 12 19' />
+        </svg>
+      </a>
+      <a
+        href={getLocalizedRoute(locale, ROUTES.CONTACT)}
+        className={cn(
+          buttonVariants({
+            variant: 'brandOutline',
+            size: compact ? 'sm' : 'hero',
+            shape: 'pill',
+          }),
+          compact &&
+            'h-8 min-w-0 flex-1 gap-1 border px-2.5 text-[10px] font-semibold sm:h-9 sm:px-3 sm:text-[11px]'
+        )}
+      >
+        <svg
+          width={iconSize}
+          height={iconSize}
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          aria-hidden='true'
+          className='shrink-0'
+        >
+          <path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z' />
+        </svg>
+        <span className='truncate'>{content.secondaryCta}</span>
+      </a>
+    </div>
   );
 }
 

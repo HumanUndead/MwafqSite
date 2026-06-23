@@ -16,153 +16,96 @@ interface Props {
   compact?: boolean;
 }
 
-export function ServiceCard({ href, title, description, rtl, index = 0, compact = false }: Props) {
-  /* ── Mobile compact — L-shaped card (clip-path matches the brand logo) ── */
-  if (compact) {
-    /*
-     * The Mwafq brand mark is an L-shape: full square with a rectangular
-     * notch cut from the bottom-right (LTR) / bottom-left (RTL).
-     * Proportions: the L "bar" is ~42% of the card dimension.
-     *
-     * clip-path polygon, LTR (notch bottom-right):
-     *   top-left → top-right → right side down → notch inner corner →
-     *   notch bottom → bottom-left → close
-     */
-    const clipPath = rtl
-      ? 'polygon(0% 0%, 100% 0%, 100% 100%, 42% 100%, 42% 58%, 0% 58%)'
-      : 'polygon(0% 0%, 100% 0%, 100% 58%, 58% 58%, 58% 100%, 0% 100%)';
-
-    /*
-     * Inner corner position: where the L bends.
-     * LTR → x=58%, y=58% | RTL → x=42%, y=58%
-     */
-    const innerCornerStyle = rtl
-      ? { top: '58%', left: '42%', transform: 'translate(-50%,-50%)' }
-      : { top: '58%', left: '58%', transform: 'translate(-50%,-50%)' };
-
-    /* Arrow sits on the horizontal foot of the L, inside the white shape */
-    const arrowStyle = rtl
-      ? { bottom: 12, left: 'calc(42% + 12px)' }
-      : { bottom: 12, right: 'calc(42% + 12px)' };
-
-    return (
-      <Link
-        href={href}
-        className='relative block h-[190px] touch-manipulation transition-transform duration-200 active:scale-[0.97] focus-visible:outline-none'
-        style={{
-          filter: 'drop-shadow(0 1px 0 #e5e7f0) drop-shadow(0 8px 22px rgba(30,35,100,0.13))',
-        }}
-      >
-        {/* L-shaped background — clip only the shape, not the arrow */}
-        <div
-          aria-hidden='true'
-          className='absolute inset-0 bg-white'
-          style={{ clipPath }}
-        />
-
-        {/* Cyan top stripe */}
-        <div
-          aria-hidden='true'
-          className='absolute inset-x-0 top-0 z-[1] h-[3px] bg-[#00a8f1]'
-          style={{ clipPath }}
-        />
-
-        {/* L-corner mark */}
-        <div
-          aria-hidden='true'
-          className={cn(
-            'pointer-events-none absolute top-0 z-[2] h-7 w-7',
-            rtl ? 'right-0 scale-x-[-1]' : 'left-0'
-          )}
-          style={{ backgroundImage: CORNER_SVG, backgroundSize: '100%', backgroundRepeat: 'no-repeat' }}
-        />
-
-        {/* Ghost index */}
-        <span
-          aria-hidden='true'
-          className={cn(
-            'pointer-events-none absolute top-2 z-[2] select-none text-[64px] font-black leading-none text-[#1e2364] opacity-[0.04]',
-            rtl ? 'left-3' : 'right-3'
-          )}
-        >
-          {String(index + 1).padStart(2, '0')}
-        </span>
-
-        {/* Inner-corner accent dot */}
-        <div
-          aria-hidden='true'
-          className='pointer-events-none absolute z-[2] size-3.5 rounded-full bg-[#00a8f1]/15 ring-2 ring-[#00a8f1]/30'
-          style={innerCornerStyle}
-        />
-
-        {/* Title */}
-        <div className='relative z-10 px-4 pt-8'>
-          <h3 className='line-clamp-3 text-[12.5px] font-bold leading-[1.35] tracking-[-0.15px] text-[#1e2364]'>
-            {title}
-          </h3>
-        </div>
-
-        {/* Arrow — inside the L foot: EN right, AR left */}
-        <span
-          aria-hidden='true'
-          className='absolute z-10 inline-flex size-8 items-center justify-center rounded-full bg-[#00a8f1] text-white shadow-[0_4px_12px_rgba(0,168,241,0.35)]'
-          style={arrowStyle}
-        >
-          <ArrowIcon className={cn('size-3.5', rtl && 'rotate-180')} />
-        </span>
-      </Link>
-    );
-  }
-
-  /* ── Desktop card ────────────────────────────────────── */
+export function ServiceCard({
+  href,
+  title,
+  description,
+  rtl,
+  compact = false,
+}: Props) {
   return (
     <Link
       href={href}
       className={cn(
-        'group relative flex flex-col overflow-hidden border-2 border-[#e5e7f0] bg-white',
-        'rounded-[4px_28px_4px_28px]',
-        rtl && 'rounded-[28px_4px_28px_4px]',
-        'before:absolute before:top-0 before:left-0 before:right-0 before:h-2.5 before:bg-[#00a8f1] before:origin-left before:scale-x-0 before:content-[\'\'] before:transition-transform before:duration-500',
-        'after:absolute after:bottom-0 after:left-0 after:top-7.5 after:w-2.5 after:bg-[#00a8f1] after:origin-top after:scale-y-0 after:content-[\'\'] after:transition-transform after:duration-500',
-        rtl && [
-          'before:origin-right before:left-auto before:right-7.5',
-          'after:left-auto after:right-0',
-        ],
-        'px-6 pb-7 pt-12',
-        'transition-all duration-400 hover:-translate-y-1 hover:bg-[#fbfcff] hover:before:scale-x-100 hover:after:scale-y-100',
+        'group relative flex h-full min-h-0 flex-col overflow-hidden border-2 border-[#e5e7f0] bg-white',
+        compact
+          ? 'min-h-[220px] rounded-[4px_22px_4px_22px] px-4 pb-5 pt-10 active:scale-[0.98] touch-manipulation'
+          : 'rounded-[4px_28px_4px_28px] px-6 pb-7 pt-12 transition-all duration-400 hover:-translate-y-1 hover:bg-[#fbfcff]',
+        rtl && (compact ? 'rounded-[22px_4px_22px_4px]' : 'rounded-[28px_4px_28px_4px]'),
+        compact
+          ? ''
+          : [
+              'before:absolute before:top-0 before:left-0 before:right-0 before:h-2.5 before:origin-left before:scale-x-0 before:bg-[#00a8f1] before:content-[\'\'] before:transition-transform before:duration-500',
+              'after:absolute after:bottom-0 after:left-0 after:top-7.5 after:w-2.5 after:origin-top after:scale-y-0 after:bg-[#00a8f1] after:content-[\'\'] after:transition-transform after:duration-500',
+              'hover:before:scale-x-100 hover:after:scale-y-100',
+              rtl && [
+                'before:origin-right before:left-auto before:right-7.5',
+                'after:left-auto after:right-0',
+              ],
+            ],
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1e2364] focus-visible:ring-offset-2'
       )}
     >
       <div
         aria-hidden='true'
-        className={cn('pointer-events-none absolute top-0 z-2 h-7.5 w-7.5', rtl ? 'right-0 scale-x-[-1]' : 'left-0')}
-        style={{ backgroundImage: CORNER_SVG, backgroundSize: '100%', backgroundRepeat: 'no-repeat' }}
+        className={cn(
+          'pointer-events-none absolute top-0 z-2',
+          compact ? 'h-6 w-6' : 'h-7.5 w-7.5',
+          rtl ? 'right-0 scale-x-[-1]' : 'left-0'
+        )}
+        style={{
+          backgroundImage: CORNER_SVG,
+          backgroundSize: '100%',
+          backgroundRepeat: 'no-repeat',
+        }}
       />
 
-      <div className='mb-2.5 min-h-11 text-[17px] font-bold leading-[1.3] tracking-[-0.3px] text-[#1e2364]'>
+      <div
+        className={cn(
+          'font-bold leading-[1.3] tracking-[-0.3px] text-[#1e2364]',
+          compact
+            ? 'mb-2 min-h-10 text-[14px] leading-[1.35]'
+            : 'mb-2.5 min-h-11 text-[17px]'
+        )}
+      >
         {title}
       </div>
 
-      {description && (
-        <div className='mb-5 line-clamp-2 text-[13px] leading-[1.6] text-[#6b7196]'>
+      {description ? (
+        <div
+          className={cn(
+            'line-clamp-2 text-[#6b7196]',
+            compact ? 'mb-4 text-[12px] leading-[1.55]' : 'mb-5 text-[13px] leading-[1.6]'
+          )}
+        >
           {description}
         </div>
+      ) : (
+        <div className={compact ? 'mb-4' : 'mb-5'} />
       )}
 
       <div
         className={cn(
-          'mt-auto flex items-center border-t-2 border-[#e5e7f0] pt-4',
+          'mt-auto flex items-center border-t-2 border-[#e5e7f0]',
+          compact ? 'pt-3.5' : 'pt-4',
           rtl ? 'justify-start' : 'justify-end'
         )}
       >
         <span
           aria-hidden='true'
-          className='inline-flex size-9 items-center justify-center rounded-full border-2 border-[#e5e7f0] bg-[#f7f8fb] text-[#1e2364] transition-all duration-400 group-hover:border-[#00a8f1] group-hover:bg-[#00a8f1] group-hover:text-white group-hover:shadow-md'
+          className={cn(
+            'inline-flex items-center justify-center rounded-full border-2 border-[#e5e7f0] bg-[#f7f8fb] text-[#1e2364]',
+            compact
+              ? 'size-8'
+              : 'size-9 transition-all duration-400 group-hover:border-[#00a8f1] group-hover:bg-[#00a8f1] group-hover:text-white group-hover:shadow-md'
+          )}
         >
           <ArrowIcon
             className={cn(
-              'size-4 transition-transform duration-400',
-              rtl ? 'rotate-180 group-hover:-translate-x-0.5' : 'group-hover:translate-x-0.5'
+              compact ? 'size-3.5' : 'size-4 transition-transform duration-400',
+              rtl && 'rotate-180',
+              !compact && rtl && 'group-hover:-translate-x-0.5',
+              !compact && !rtl && 'group-hover:translate-x-0.5'
             )}
           />
         </span>

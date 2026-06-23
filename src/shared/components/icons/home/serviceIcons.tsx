@@ -6,6 +6,8 @@ import { CertificateIcon } from './CertificateIcon';
 
 export function getServiceIconByKey(iconKey?: string | null): ReactNode {
   switch (iconKey) {
+    case 'icon-pre-employment':
+      return <BriefcaseIcon />;
     case 'icon-residency-exam':
       return <BuildingIcon />;
     case 'icon-municipality':

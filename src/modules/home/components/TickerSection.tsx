@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-
+import Image from 'next/image';
 import { HomeCompaniesContent } from '../home.types';
 
 interface Props {
@@ -20,10 +19,13 @@ export function TickerSection({ content }: Props) {
                 key={`${item.id}-${i}`}
                 className='flex h-16 w-36 shrink-0 items-center justify-center px-2 sm:h-20 sm:w-48 sm:px-4'
               >
-                <img
-                  src={item.imageSrc + '_200x200.webp'}
+                <Image
+                  src={`${item.imageSrc}_200x200.webp`}
                   alt={i < items.length ? 'Partner logo' : ''}
                   aria-hidden={i >= items.length || undefined}
+                  width={80}
+                  height={80}
+                  sizes='80px'
                   className='max-h-full max-w-full object-contain opacity-80 filter-[grayscale(1)_brightness(0)_invert(0.55)] transition-[opacity,transform,filter] duration-300 hover:scale-[1.06] hover:opacity-100 hover:filter-[grayscale(1)_brightness(0)_invert(0.35)]'
                 />
               </div>

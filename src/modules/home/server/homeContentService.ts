@@ -260,8 +260,10 @@ function resolveCmsAssetUrl(value: string | null | undefined): string | null {
     return normalized;
   }
 
-  if (normalized.startsWith('/demo-assets/')) {
-    return normalized;
+  const demoAssetMatch = normalized.match(/(?:^|\/)demo-assets\/[^\s?#]+/i);
+  if (demoAssetMatch) {
+    const localPath = demoAssetMatch[0].replace(/^\/+/, '');
+    return `/${localPath}`;
   }
 
   const baseUrl = HOME_CONTENT_API_BASE_URL.replace(/\/+$/, '');
