@@ -9,7 +9,6 @@ const CORNER_SVG = `url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://ww
 interface Props {
   href: string;
   title: string;
-  description: string;
   iconKey?: string | null;
   rtl: boolean;
   index?: number;
@@ -19,7 +18,6 @@ interface Props {
 export function ServiceCard({
   href,
   title,
-  description,
   rtl,
   compact = false,
 }: Props) {
@@ -27,10 +25,10 @@ export function ServiceCard({
     <Link
       href={href}
       className={cn(
-        'group relative flex h-full min-h-0 flex-col overflow-hidden border-2 border-[#e5e7f0] bg-white',
+        'group relative flex flex-col overflow-hidden border-2 border-[#e5e7f0] bg-white',
         compact
-          ? 'min-h-[220px] rounded-[4px_22px_4px_22px] px-4 pb-5 pt-10 active:scale-[0.98] touch-manipulation'
-          : 'rounded-[4px_28px_4px_28px] px-6 pb-7 pt-12 transition-all duration-400 hover:-translate-y-1 hover:bg-[#fbfcff]',
+          ? 'rounded-[4px_22px_4px_22px] px-4 pb-3.5 pt-9 active:scale-[0.98] touch-manipulation'
+          : 'rounded-[4px_28px_4px_28px] px-5 pb-4 pt-10 transition-all duration-400 hover:-translate-y-1 hover:bg-[#fbfcff]',
         rtl && (compact ? 'rounded-[22px_4px_22px_4px]' : 'rounded-[28px_4px_28px_4px]'),
         compact
           ? ''
@@ -63,32 +61,16 @@ export function ServiceCard({
       <div
         className={cn(
           'font-bold leading-[1.3] tracking-[-0.3px] text-[#1e2364]',
-          compact
-            ? 'mb-2 min-h-10 text-[14px] leading-[1.35]'
-            : 'mb-2.5 min-h-11 text-[17px]'
+          compact ? 'text-[14px] leading-[1.35]' : 'text-[17px]'
         )}
       >
         {title}
       </div>
 
-      {description ? (
-        <div
-          className={cn(
-            'line-clamp-2 text-[#6b7196]',
-            compact ? 'mb-4 text-[12px] leading-[1.55]' : 'mb-5 text-[13px] leading-[1.6]'
-          )}
-        >
-          {description}
-        </div>
-      ) : (
-        <div className={compact ? 'mb-4' : 'mb-5'} />
-      )}
-
       <div
         className={cn(
-          'mt-auto flex items-center border-t-2 border-[#e5e7f0]',
-          compact ? 'pt-3.5' : 'pt-4',
-          rtl ? 'justify-start' : 'justify-end'
+          'flex items-center justify-end',
+          compact ? 'mt-3' : 'mt-3.5'
         )}
       >
         <span

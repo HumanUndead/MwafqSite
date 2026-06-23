@@ -514,88 +514,68 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
       {/* ── Company Info ── */}
       <div className='rounded-[14px] border border-[#e5e7f0] bg-[#fafbfd] p-4'>
         <SectionHeading>{company.sections.info}</SectionHeading>
-        <div className='flex flex-col gap-4'>
-          <div className='grid gap-4 sm:grid-cols-2'>
-            <DdlSelect
-              label={company.fields.companyType}
-              required
-              items={ddl.types}
-              value={form.companyTypeId}
-              onValueChange={(v) => updateField('companyTypeId', v)}
-              placeholder={company.placeholders.selectType}
-              locale={locale}
-              loading={loading.typesLoading}
-              error={errors.companyTypeId}
-            />
-            <DdlSelect
-              label={company.fields.parentCompany}
-              items={ddl.parents}
-              value={form.parentCompanyId}
-              onValueChange={(v) => updateField('parentCompanyId', v)}
-              placeholder={company.placeholders.selectParent}
-              locale={locale}
-              loading={loading.parentsLoading}
-            />
-          </div>
-
-          <div className='grid gap-4 sm:grid-cols-2'>
-            <TextField
-              label={company.fields.rank}
-              required
-              value={form.rank}
-              onChange={(v) => updateField('rank', v)}
-              placeholder={company.placeholders.rank}
-              type='number'
-              error={errors.rank}
-            />
-            <TextField
-              label={company.fields.companyPhone}
-              value={form.companyPhone}
-              onChange={(v) => updateField('companyPhone', v)}
-              placeholder={company.placeholders.companyPhone}
-              type='tel'
-            />
-          </div>
-
-          <div className='grid gap-4 sm:grid-cols-3'>
-            <TextField
-              label={company.fields.crNumber}
-              value={form.crNumber}
-              onChange={(v) => updateField('crNumber', v)}
-              placeholder={company.placeholders.crNumber}
-            />
-            <TextField
-              label={company.fields.vatNumber}
-              value={form.vatNumber}
-              onChange={(v) => updateField('vatNumber', v)}
-              placeholder={company.placeholders.vatNumber}
-            />
-            <TextField
-              label={company.fields.ipan}
-              value={form.ipan}
-              onChange={(v) => updateField('ipan', v)}
-              placeholder={company.placeholders.ipan}
-            />
-          </div>
-
-          <div className='grid gap-4 sm:grid-cols-2'>
-            <TextField
-              label={company.fields.companySize}
-              value={form.companySize}
-              onChange={(v) => updateField('companySize', v)}
-              placeholder={company.placeholders.companySize}
-              type='number'
-            />
-            <LogoUpload
-              label={company.fields.logo}
-              file={form.logo}
-              onChange={(f) => updateField('logo', f)}
-              hintText={company.placeholders.logoHint}
-              subHintText={company.placeholders.logoSubHint}
-              uploadText={company.placeholders.uploadLogo}
-              changeText={company.placeholders.changeLogo}
-            />
-          </div>
+        <div className='grid gap-4 sm:grid-cols-2'>
+          <DdlSelect
+            label={company.fields.companyType}
+            required
+            items={ddl.types}
+            value={form.companyTypeId}
+            onValueChange={(v) => updateField('companyTypeId', v)}
+            placeholder={company.placeholders.selectType}
+            locale={locale}
+            loading={loading.typesLoading}
+            error={errors.companyTypeId}
+          />
+          <TextField
+            label={company.fields.rank}
+            required
+            value={form.rank}
+            onChange={(v) => updateField('rank', v)}
+            placeholder={company.placeholders.rank}
+            type='number'
+            error={errors.rank}
+          />
+          <TextField
+            label={company.fields.companyPhone}
+            value={form.companyPhone}
+            onChange={(v) => updateField('companyPhone', v)}
+            placeholder={company.placeholders.companyPhone}
+            type='tel'
+          />
+          <TextField
+            label={company.fields.companySize}
+            value={form.companySize}
+            onChange={(v) => updateField('companySize', v)}
+            placeholder={company.placeholders.companySize}
+            type='number'
+          />
+          <TextField
+            label={company.fields.crNumber}
+            value={form.crNumber}
+            onChange={(v) => updateField('crNumber', v)}
+            placeholder={company.placeholders.crNumber}
+          />
+          <TextField
+            label={company.fields.vatNumber}
+            value={form.vatNumber}
+            onChange={(v) => updateField('vatNumber', v)}
+            placeholder={company.placeholders.vatNumber}
+          />
+          <TextField
+            label={company.fields.ipan}
+            value={form.ipan}
+            onChange={(v) => updateField('ipan', v)}
+            placeholder={company.placeholders.ipan}
+          />
+          <LogoUpload
+            label={company.fields.logo}
+            file={form.logo}
+            onChange={(f) => updateField('logo', f)}
+            hintText={company.placeholders.logoHint}
+            subHintText={company.placeholders.logoSubHint}
+            uploadText={company.placeholders.uploadLogo}
+            changeText={company.placeholders.changeLogo}
+          />
         </div>
       </div>
 
@@ -689,27 +669,6 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
             loading={loading.tagsLoading}
             placeholder={company.placeholders.selectTags}
           />
-          <div className='flex items-center gap-3 px-1'>
-            <button
-              type='button'
-              role='checkbox'
-              aria-checked={form.status}
-              onClick={() => updateField('status', !form.status)}
-              className={cn(
-                'relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent',
-                'transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00a8f1] focus:ring-offset-2',
-                form.status ? 'bg-[#00a8f1]' : 'bg-[#d9ddea]'
-              )}
-            >
-              <span
-                className={cn(
-                  'pointer-events-none inline-block size-4 rounded-full bg-white shadow transition-transform duration-200',
-                  form.status ? 'translate-x-4' : 'translate-x-0'
-                )}
-              />
-            </button>
-            <span className='text-sm font-semibold text-[#1e2364]'>{company.fields.status}</span>
-          </div>
         </div>
       </div>
 

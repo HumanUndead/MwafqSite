@@ -1,5 +1,6 @@
 import type { HomeAppContent } from '../home.types';
 import { cn } from '@/shared/lib/cn';
+import { sectionScrollMarginClass } from '@/shared/lib/scrollToSection';
 import { Eyebrow } from './Eyebrow';
 import { CheckIcon, getUtilityIconByKey } from '@/shared/components/icons/home';
 
@@ -12,10 +13,7 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
   const compact = !isRtl;
 
   return (
-    <section
-      id='app'
-      className='relative flex flex-col border-t-2 border-[#e5e7f0] bg-[#eeeeef] lg:sticky lg:-top-25 lg:min-h-[calc(100vh-104px)] lg:pb-30'
-    >
+    <section className='relative flex flex-col border-t-2 border-[#e5e7f0] bg-[#eeeeef] lg:sticky lg:-top-25 lg:min-h-[calc(100vh-104px)] lg:pb-30'>
       <div
         className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[26px_26px] opacity-55 mask-[radial-gradient(circle_at_70%_50%,#000_0%,transparent_70%)]'
         aria-hidden='true'
@@ -33,7 +31,13 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
           )}
         >
           {/* Intro — first on mobile */}
-          <div className='min-w-0 lg:col-start-2 lg:row-start-1'>
+          <div
+            id='app'
+            className={cn(
+              'min-w-0 lg:col-start-2 lg:row-start-1',
+              sectionScrollMarginClass
+            )}
+          >
             <Eyebrow
               className={cn(compact ? 'mb-2.5 lg:mb-3' : 'mb-3 lg:mb-4')}
             >
@@ -125,7 +129,8 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
                               className={cn(
                                 'size-2.5 shrink-0 rounded-full',
                                 index === 0 && 'bg-[#1e2364]',
-                                index === 1 && 'border border-white/40 bg-[#742f88]',
+                                index === 1 &&
+                                  'border border-white/40 bg-[#742f88]',
                                 index >= 2 && 'bg-[#f5b400]'
                               )}
                               aria-hidden='true'
@@ -151,7 +156,9 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
                             className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] text-white ${index === 0 ? 'bg-[#1e2364]' : 'bg-[#742f88]'}`}
                             aria-hidden='true'
                           >
-                            {getUtilityIconByKey(report.iconKey) ?? <CheckIcon />}
+                            {getUtilityIconByKey(report.iconKey) ?? (
+                              <CheckIcon />
+                            )}
                           </div>
                           <div className='min-w-0 flex-1'>
                             <strong className='block text-[13px] font-extrabold text-[#1e2364]'>
@@ -175,9 +182,7 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
           <div
             className={cn(
               'flex flex-col lg:col-start-2 lg:row-start-2',
-              compact
-                ? 'gap-2 lg:gap-2'
-                : 'gap-2.5 lg:gap-3'
+              compact ? 'gap-2 lg:gap-2' : 'gap-2.5 lg:gap-3'
             )}
           >
             {content.points.map((point) => (

@@ -18,7 +18,8 @@ export function B2BServiceCapabilityCard({ item, isRtl, isActive }: Props) {
     <article
       className={cn(
         'group relative flex w-full flex-col overflow-hidden border-2 bg-white text-start transition-all duration-300',
-        'rounded-[4px_22px_4px_22px] px-4 pb-5 pt-10',
+        'rounded-[4px_22px_4px_22px] px-3.5 pb-4 pt-9',
+        'sm:px-4 sm:pb-5 sm:pt-10',
         'lg:rounded-[4px_24px_4px_24px] lg:px-5 lg:pb-6 lg:pt-11',
         isRtl && 'rounded-[22px_4px_22px_4px] lg:rounded-[24px_4px_24px_4px]',
         isActive
@@ -53,15 +54,15 @@ export function B2BServiceCapabilityCard({ item, isRtl, isActive }: Props) {
         </h3>
       </div>
 
-      <p className='mb-3 text-[13px] font-semibold leading-[1.45] text-[#1e2364] lg:text-[14px]'>
+      <p className='mb-3 text-[12.5px] font-semibold leading-[1.45] text-[#1e2364] sm:text-[13px] lg:text-[14px]'>
         {item.outcome}
       </p>
 
-      <p className='mb-4 text-[12px] leading-[1.6] text-[#6b7196] lg:text-[13px] lg:leading-[1.65]'>
+      <p className='mb-3.5 text-[11.5px] leading-[1.6] text-[#6b7196] sm:mb-4 sm:text-[12px] lg:text-[13px] lg:leading-[1.65]'>
         {item.body}
       </p>
 
-      <ul className='mb-4 flex flex-col gap-2'>
+      <ul className='mb-3.5 flex flex-col gap-1.5 sm:mb-4 sm:gap-2'>
         {item.bullets.map((bullet) => (
           <li
             key={bullet}

@@ -90,15 +90,11 @@ export async function ServiceGroupDetailsView({
                   <h1 className='text-[clamp(24px,2.6vw,32px)] font-extrabold leading-[1.05] tracking-[-1.2px] text-[#1e2364]'>
                     {title}
                   </h1>
-                  {descriptionHtml ? (
+                  {descriptionPlain ? (
                     <div
                       className='mt-1 text-[12.5px] leading-normal text-[#6b7196] [&_p]:m-0'
                       dangerouslySetInnerHTML={{ __html: descriptionHtml }}
                     />
-                  ) : descriptionPlain ? (
-                    <p className='mt-1 text-[12.5px] leading-normal text-[#6b7196]'>
-                      {descriptionPlain}
-                    </p>
                   ) : null}
                 </div>
               </div>

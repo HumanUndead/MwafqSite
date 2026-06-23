@@ -2,19 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const LG_MEDIA = '(min-width: 1024px)';
-
-function pickActiveIndex(items: HTMLElement[], horizontal: boolean): number {
-  const center = horizontal ? window.innerWidth / 2 : window.innerHeight / 2;
+function pickActiveIndex(items: HTMLElement[]): number {
+  const center = window.innerHeight / 2;
 
   let bestIndex = 0;
   let bestDistance = Infinity;
 
   items.forEach((element, index) => {
     const rect = element.getBoundingClientRect();
-    const elementCenter = horizontal
-      ? rect.left + rect.width / 2
-      : rect.top + rect.height / 2;
+    const elementCenter = rect.top + rect.height / 2;
     const distance = Math.abs(elementCenter - center);
 
     if (distance < bestDistance) {
@@ -26,7 +22,11 @@ function pickActiveIndex(items: HTMLElement[], horizontal: boolean): number {
   return bestIndex;
 }
 
-export function useB2BServiceScrollSpy(itemCount: number) {
+export function useB2BServiceScrollSpy(
+  itemCount: number,
+  options?: { enabled?: boolean }
+) {
+  const enabled = options?.enabled ?? true;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
@@ -44,11 +44,10 @@ export function useB2BServiceScrollSpy(itemCount: number) {
       (node): node is HTMLElement => node != null
     );
 
-    if (items.length === 0) return;
+    if (!enabled || items.length === 0) return;
 
     const compute = () => {
-      const horizontal = !window.matchMedia(LG_MEDIA).matches;
-      setActiveIndex(pickActiveIndex(items, horizontal));
+      setActiveIndex(pickActiveIndex(items));
     };
 
     const raf = requestAnimationFrame(compute);
@@ -63,7 +62,7 @@ export function useB2BServiceScrollSpy(itemCount: number) {
       window.removeEventListener('resize', compute);
       container?.removeEventListener('scroll', compute);
     };
-  }, [itemCount]);
+  }, [itemCount, enabled]);
 
   return { activeIndex, containerRef, setItemRef };
 }

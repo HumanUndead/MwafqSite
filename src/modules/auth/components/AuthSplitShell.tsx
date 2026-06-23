@@ -74,18 +74,20 @@ export function AuthSplitShell({
                 ))}
               </ol>
 
-              <div className='mt-9 grid max-w-[560px] grid-cols-3 gap-6 border-t-2 border-[#e5e7f0] pt-9 max-[640px]:grid-cols-2'>
-                {aside.stats.map((stat) => (
-                  <div key={`${stat.value}-${stat.label}`}>
-                    <strong className='text-[30px] font-extrabold leading-none tracking-[-0.05em] text-[#1e2364]'>
-                      {stat.value}
-                    </strong>
-                    <span className='mt-2 block text-[12.5px] text-[#6b7196]'>
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              {aside.stats.length > 0 ? (
+                <div className='mt-9 grid max-w-[560px] grid-cols-3 gap-6 border-t-2 border-[#e5e7f0] pt-9 max-[640px]:grid-cols-2'>
+                  {aside.stats.map((stat) => (
+                    <div key={`${stat.value}-${stat.label}`}>
+                      <strong className='text-[30px] font-extrabold leading-none tracking-[-0.05em] text-[#1e2364]'>
+                        {stat.value}
+                      </strong>
+                      <span className='mt-2 block text-[12.5px] text-[#6b7196]'>
+                        {stat.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         ) : null}

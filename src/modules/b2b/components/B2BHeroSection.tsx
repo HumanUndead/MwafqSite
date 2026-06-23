@@ -99,91 +99,91 @@ export function B2BHeroSection({ locale, content, isRtl }: Props) {
               {/* Dashboard mockup — wrapper centers, inner card animates */}
               <div className='relative z-2 mx-auto w-[88%] max-w-full lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[90%] lg:-translate-x-1/2 lg:-translate-y-1/2'>
                 <div className='origin-center max-lg:scale-[0.94] lg:animate-[floatRotate_6s_ease-in-out_infinite] overflow-hidden rounded-[18px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
-                {/* Browser chrome */}
-                <div className='flex items-center gap-2 border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-3 py-2'>
-                  <div className='flex gap-1.5'>
-                    <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
-                    <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
-                    <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
-                  </div>
-                </div>
-
-                {/* Dashboard body */}
-                <div className='flex flex-col gap-3 p-3'>
-                  {/* Tab bar */}
-                  <div className='flex gap-0.5 rounded-full bg-[#f4f4f6] p-1'>
-                    <span className='flex-1 rounded-full bg-white py-1 text-center text-[10px] font-extrabold text-[#1e2364] shadow-sm'>
-                      {content.phone.tabOverview}
-                    </span>
-                    <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
-                      {content.phone.tabEmployees}
-                    </span>
-                    <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
-                      {content.phone.tabReports}
-                    </span>
+                  {/* Browser chrome */}
+                  <div className='flex items-center gap-2 border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-3 py-2'>
+                    <div className='flex gap-1.5'>
+                      <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                      <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                      <span className='h-2 w-2 rounded-full bg-[#c0c3d4]' />
+                    </div>
                   </div>
 
-                  {/* Stat cards */}
-                  <div className='grid grid-cols-3 gap-2'>
-                    <StatCard
-                      value='248'
-                      label={content.phone.statEmployeesLabel}
-                      numColor='#1565c0'
-                      barColor='#1e88e5'
-                      bars={[8, 12, 6, 14, 10, 16, 18]}
-                    />
-                    <StatCard
-                      value='96%'
-                      label={content.phone.statClearedLabel}
-                      numColor='#00897b'
-                      barColor='#00dec9'
-                      bars={[6, 10, 8, 16, 12, 14, 18]}
-                    />
-                    <StatCard
-                      value='12'
-                      label={content.phone.statPendingLabel}
-                      numColor='#e65100'
-                      barColor='#ff9800'
-                      bars={[10, 14, 8, 12, 6, 16, 10]}
-                    />
-                  </div>
+                  {/* Dashboard body */}
+                  <div className='flex flex-col gap-3 p-3'>
+                    {/* Tab bar */}
+                    <div className='flex gap-0.5 rounded-full bg-[#f4f4f6] p-1'>
+                      <span className='flex-1 rounded-full bg-white py-1 text-center text-[10px] font-extrabold text-[#1e2364] shadow-sm'>
+                        {content.phone.tabOverview}
+                      </span>
+                      <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
+                        {content.phone.tabEmployees}
+                      </span>
+                      <span className='flex-1 py-1 text-center text-[10px] font-medium text-[#6b7196]'>
+                        {content.phone.tabReports}
+                      </span>
+                    </div>
 
-                  {/* Employee rows */}
-                  <ul className='flex flex-col gap-2'>
-                    {employees.map((emp, idx) => (
-                      <li
-                        key={`${emp.initials}-${idx}`}
-                        className='flex items-center gap-2.5 rounded-[14px] border border-[#e5e7f0] px-3 py-2.5'
-                      >
-                        <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f4f4f6] text-[9.5px] font-extrabold text-[#1e2364]'>
-                          {emp.initials}
-                        </span>
-                        <div className='min-w-0 flex-1'>
-                          <strong className='block truncate text-[11px] font-extrabold leading-tight text-[#1e2364]'>
-                            {emp.name}
-                          </strong>
-                          <span className='block truncate text-[9.5px] text-[#6b7196]'>
-                            {emp.type} · {emp.city}
-                          </span>
-                        </div>
-                        <span
-                          className={`shrink-0 rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
+                    {/* Stat cards */}
+                    <div className='grid grid-cols-3 gap-2'>
+                      <StatCard
+                        value='248'
+                        label={content.phone.statEmployeesLabel}
+                        numColor='#1565c0'
+                        barColor='#1e88e5'
+                        bars={[8, 12, 6, 14, 10, 16, 18]}
+                      />
+                      <StatCard
+                        value='96%'
+                        label={content.phone.statClearedLabel}
+                        numColor='#00897b'
+                        barColor='#00dec9'
+                        bars={[6, 10, 8, 16, 12, 14, 18]}
+                      />
+                      <StatCard
+                        value='12'
+                        label={content.phone.statPendingLabel}
+                        numColor='#e65100'
+                        barColor='#ff9800'
+                        bars={[10, 14, 8, 12, 6, 16, 10]}
+                      />
+                    </div>
+
+                    {/* Employee rows */}
+                    <ul className='flex flex-col gap-2'>
+                      {employees.map((emp, idx) => (
+                        <li
+                          key={`${emp.initials}-${idx}`}
+                          className='flex items-center gap-2.5 rounded-[14px] border border-[#e5e7f0] px-3 py-2.5'
                         >
-                          {statusLabels[emp.status] ?? emp.status}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                          <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f4f4f6] text-[9.5px] font-extrabold text-[#1e2364]'>
+                            {emp.initials}
+                          </span>
+                          <div className='min-w-0 flex-1'>
+                            <strong className='block truncate text-[11px] font-extrabold leading-tight text-[#1e2364]'>
+                              {emp.name}
+                            </strong>
+                            <span className='block truncate text-[9.5px] text-[#6b7196]'>
+                              {emp.type} · {emp.city}
+                            </span>
+                          </div>
+                          <span
+                            className={`shrink-0 rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3px] ${statusPillStyles[emp.status] ?? statusPillStyles.wait}`}
+                          >
+                            {statusLabels[emp.status] ?? emp.status}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
 
             <HeroCtas
               locale={locale}
               content={content}
               compact
-              className='relative z-10 mt-4 flex w-full min-w-0 flex-nowrap items-center justify-center gap-1.5 sm:mt-5 sm:gap-2 lg:hidden'
+              className='relative z-10 mt-4 flex flex-wrap items-center justify-center gap-2 sm:mt-5 lg:hidden'
             />
           </div>
         </div>
@@ -216,10 +216,10 @@ function HeroCtas({
             shape: 'pill',
           }),
           compact &&
-            'h-8 min-w-0 flex-1 gap-1 px-2.5 text-[10px] font-semibold sm:h-9 sm:px-3 sm:text-[11px]'
+            'h-8 shrink-0 gap-1 px-3 text-[10px] font-semibold whitespace-nowrap sm:h-9 sm:px-3.5 sm:text-[11px]'
         )}
       >
-        <span className='truncate'>{content.primaryCta}</span>
+        <span>{content.primaryCta}</span>
         <svg
           width={iconSize}
           height={iconSize}
@@ -245,7 +245,7 @@ function HeroCtas({
             shape: 'pill',
           }),
           compact &&
-            'h-8 min-w-0 flex-1 gap-1 border px-2.5 text-[10px] font-semibold sm:h-9 sm:px-3 sm:text-[11px]'
+            'h-8 shrink-0 gap-1 border px-3 text-[10px] font-semibold whitespace-nowrap sm:h-9 sm:px-3.5 sm:text-[11px]'
         )}
       >
         <svg
@@ -262,7 +262,7 @@ function HeroCtas({
         >
           <path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z' />
         </svg>
-        <span className='truncate'>{content.secondaryCta}</span>
+        <span>{content.secondaryCta}</span>
       </a>
     </div>
   );

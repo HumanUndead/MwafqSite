@@ -3,7 +3,11 @@ import 'server-only';
 import { cache } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/locales/types';
-import type { HomeActionContent, HomeBusinessContent, HomeCompaniesContent } from '@/modules/home/home.types';
+import type {
+  HomeActionContent,
+  HomeBusinessContent,
+  HomeCompaniesContent,
+} from '@/modules/home/home.types';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import {
   B2B_BUSINESS_ARTICLE_IDS,
@@ -535,7 +539,8 @@ function toBusinessAction(
   langId: number,
   fallback: HomeActionContent
 ): HomeActionContent {
-  if (!article) return { label: fallback.label, path: trimToNull(fallback.path) };
+  if (!article)
+    return { label: fallback.label, path: trimToNull(fallback.path) };
   const t = getArticleTranslation(article, langId);
   return {
     label: trimToNull(t.name) ?? '',
@@ -549,18 +554,41 @@ function mapBusinessContent(
 ): HomeBusinessContent {
   if (!businessCategory) return EMPTY_BUSINESS;
 
-  const headerArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.header);
-  const primaryActionArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.primaryAction);
-  const secondaryActionArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.secondaryAction);
-  const headerT = headerArticle ? getArticleTranslation(headerArticle, langId) : null;
+  const headerArticle = getArticleById(
+    businessCategory,
+    B2B_BUSINESS_ARTICLE_IDS.header
+  );
+  const primaryActionArticle = getArticleById(
+    businessCategory,
+    B2B_BUSINESS_ARTICLE_IDS.primaryAction
+  );
+  const secondaryActionArticle = getArticleById(
+    businessCategory,
+    B2B_BUSINESS_ARTICLE_IDS.secondaryAction
+  );
+  const headerT = headerArticle
+    ? getArticleTranslation(headerArticle, langId)
+    : null;
 
-  const pointArticles = getArticlesByIds(businessCategory, B2B_BUSINESS_ARTICLE_IDS.points);
+  const pointArticles = getArticlesByIds(
+    businessCategory,
+    B2B_BUSINESS_ARTICLE_IDS.points
+  );
 
-  const tabsArticle = getArticleById(businessCategory, B2B_BUSINESS_ARTICLE_IDS.tabs);
+  const tabsArticle = getArticleById(
+    businessCategory,
+    B2B_BUSINESS_ARTICLE_IDS.tabs
+  );
   const tabsT = tabsArticle ? getArticleTranslation(tabsArticle, langId) : null;
 
-  const metricArticles = getArticlesByIds(businessCategory, B2B_BUSINESS_ARTICLE_IDS.metrics);
-  const employeeArticles = getArticlesByIds(businessCategory, B2B_BUSINESS_ARTICLE_IDS.employees);
+  const metricArticles = getArticlesByIds(
+    businessCategory,
+    B2B_BUSINESS_ARTICLE_IDS.metrics
+  );
+  const employeeArticles = getArticlesByIds(
+    businessCategory,
+    B2B_BUSINESS_ARTICLE_IDS.employees
+  );
 
   return {
     eyebrow: trimToNull(headerT?.shortDescription) ?? EMPTY_BUSINESS.eyebrow,
@@ -569,18 +597,25 @@ function mapBusinessContent(
     body: stripHtmlTags(headerT?.description) ?? EMPTY_BUSINESS.body,
     points:
       pointArticles.length > 0
-        ? pointArticles.map((a) => trimToNull(getArticleTranslation(a, langId).name) ?? '')
+        ? pointArticles.map(
+            (a) => trimToNull(getArticleTranslation(a, langId).name) ?? ''
+          )
         : EMPTY_BUSINESS.points,
     tabs: tabsT
-      ? [trimToNull(tabsT.name), trimToNull(tabsT.shortDescription), trimToNull(tabsT.extraInfo)].filter(
-          (t): t is string => Boolean(t)
-        )
+      ? [
+          trimToNull(tabsT.name),
+          trimToNull(tabsT.shortDescription),
+          trimToNull(tabsT.extraInfo),
+        ].filter((t): t is string => Boolean(t))
       : EMPTY_BUSINESS.tabs,
     metrics:
       metricArticles.length > 0
         ? metricArticles.map((a) => {
             const t = getArticleTranslation(a, langId);
-            return { value: trimToNull(t.name) ?? '', label: stripHtmlTags(t.description) ?? '' };
+            return {
+              value: trimToNull(t.name) ?? '',
+              label: stripHtmlTags(t.description) ?? '',
+            };
           })
         : EMPTY_BUSINESS.metrics,
     employees:
@@ -594,8 +629,16 @@ function mapBusinessContent(
             };
           })
         : EMPTY_BUSINESS.employees,
-    primaryAction: toBusinessAction(primaryActionArticle, langId, EMPTY_BUSINESS.primaryAction),
-    secondaryAction: toBusinessAction(secondaryActionArticle, langId, EMPTY_BUSINESS.secondaryAction),
+    primaryAction: toBusinessAction(
+      primaryActionArticle,
+      langId,
+      EMPTY_BUSINESS.primaryAction
+    ),
+    secondaryAction: toBusinessAction(
+      secondaryActionArticle,
+      langId,
+      EMPTY_BUSINESS.secondaryAction
+    ),
   };
 }
 
@@ -695,6 +738,15 @@ export async function getB2BPageContent(
     fetchB2BContentTree(),
     fetchB2BCompaniesCategoryTree(),
   ]);
-  const businessCategory = getChildCategoryById(rootCategory, B2B_BUSINESS_CATEGORY_ID);
-  return buildB2BContent(dict, rootCategory, companiesCategory, mapBusinessContent(businessCategory, langId), langId);
+  const businessCategory = getChildCategoryById(
+    rootCategory,
+    B2B_BUSINESS_CATEGORY_ID
+  );
+  return buildB2BContent(
+    dict,
+    rootCategory,
+    companiesCategory,
+    mapBusinessContent(businessCategory, langId),
+    langId
+  );
 }

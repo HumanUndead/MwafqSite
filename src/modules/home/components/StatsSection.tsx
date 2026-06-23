@@ -20,16 +20,13 @@ export function StatsSection({ content }: Props) {
         aria-hidden='true'
       />
       <div className='relative mx-auto max-w-330'>
-        <h2 className='relative z-10 mx-auto mb-9 text-center text-[clamp(28px,3.6vw,44px)] font-extrabold uppercase leading-[1.05] tracking-[-0.5px] text-[#1e2364]'>
+        <h2 className='relative z-10 mx-auto mb-6 text-center text-[clamp(28px,3.6vw,44px)] font-extrabold uppercase leading-[1.05] tracking-[-0.5px] text-[#1e2364] sm:mb-8'>
           {content.title}
         </h2>
 
-        <div className='relative z-10 w-full grid grid-cols-3 gap-0 px-2 pt-8 sm:gap-8 sm:px-7 sm:pt-15'>
+        <div className='relative z-10 -mt-2 w-full grid grid-cols-3 gap-0 px-2 pt-4 sm:mt-0 sm:gap-8 sm:px-7 sm:pt-8'>
           {content.items.map((stat) => (
-            <div
-              key={stat.label}
-              className='text-center not-last:border-r not-last:border-[#e5e7f0] sm:not-last:border-0'
-            >
+            <div key={stat.label} className='text-center'>
               <div className='text-[clamp(20px,5.5vw,60px)] font-extrabold leading-none tracking-[-1.5px] text-[#00a8f1] sm:tracking-[-2px]'>
                 <CountUp
                   value={stat.value}
@@ -37,7 +34,7 @@ export function StatsSection({ content }: Props) {
                   decimals={stat.decimals}
                 />
               </div>
-              <div className='mt-2 text-[11px] font-bold leading-tight tracking-[0.3px] text-[#1e2364] sm:mt-3.5 sm:text-[14.5px] sm:tracking-[0.5px]'>
+              <div className='mt-1 text-[11px] font-bold leading-tight tracking-[0.3px] text-[#1e2364] sm:mt-1.5 sm:text-[14.5px] sm:tracking-[0.5px]'>
                 {stat.label}
               </div>
             </div>

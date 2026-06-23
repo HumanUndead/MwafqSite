@@ -6,7 +6,6 @@ interface ServiceItem {
   id: number;
   href: string;
   title: string;
-  description: string;
   iconKey?: string | null;
   index?: number;
 }
@@ -24,7 +23,6 @@ export function ServicesMobileCarousel({ services, rtl }: Props) {
           key={service.id}
           href={service.href}
           title={service.title}
-          description={service.description}
           iconKey={service.iconKey}
           rtl={rtl}
           index={service.index ?? 0}

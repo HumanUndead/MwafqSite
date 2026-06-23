@@ -19,7 +19,6 @@ export interface CompanyFormState {
   contactLastName: string;
   contactEmail: string;
   contactPhone: string;
-  parentCompanyId: string;
   rank: string;
   companyPhone: string;
   companySize: string;
@@ -31,7 +30,6 @@ export interface CompanyFormState {
   cityId: string;
   companyTypeId: string;
   tagIds: string[];
-  status: boolean;
 }
 
 export interface CompanyFormErrors {
@@ -52,7 +50,6 @@ const INITIAL_FORM: CompanyFormState = {
   contactLastName: '',
   contactEmail: '',
   contactPhone: '',
-  parentCompanyId: '',
   rank: '',
   companyPhone: '',
   companySize: '',
@@ -64,7 +61,6 @@ const INITIAL_FORM: CompanyFormState = {
   cityId: '',
   companyTypeId: '',
   tagIds: [],
-  status: true,
 };
 
 export function useCompanyCreate(onSuccess?: () => void) {
@@ -77,14 +73,12 @@ export function useCompanyCreate(onSuccess?: () => void) {
   const [submitting, setSubmitting] = useState(false);
 
   const [types, setTypes] = useState<DdlItem[]>([]);
-  const [parents, setParents] = useState<DdlItem[]>([]);
   const [countries, setCountries] = useState<DdlItem[]>([]);
   const [cities, setCities] = useState<DdlItem[]>([]);
   const [tags, setTags] = useState<DdlItem[]>([]);
   const [userResults, setUserResults] = useState<UserSearchItem[]>([]);
 
   const [typesLoading, setTypesLoading] = useState(true);
-  const [parentsLoading, setParentsLoading] = useState(true);
   const [countriesLoading, setCountriesLoading] = useState(true);
   const [citiesLoading, setCitiesLoading] = useState(false);
   const [tagsLoading, setTagsLoading] = useState(true);
@@ -96,7 +90,6 @@ export function useCompanyCreate(onSuccess?: () => void) {
 
   useEffect(() => {
     companyApi.getTypes().then(setTypes).catch(console.error).finally(() => setTypesLoading(false));
-    companyApi.getParents().then(setParents).catch(console.error).finally(() => setParentsLoading(false));
     companyApi.getTags(tagsType).then(setTags).catch(console.error).finally(() => setTagsLoading(false));
   }, [tagsType]);
 
@@ -235,7 +228,6 @@ export function useCompanyCreate(onSuccess?: () => void) {
           email: form.contactEmail || undefined,
           phone: form.contactPhone || undefined,
         },
-        parentCompanyId: form.parentCompanyId || undefined,
         rank: Number(form.rank),
         companyPhone: form.companyPhone || undefined,
         companySize: form.companySize ? Number(form.companySize) : undefined,
@@ -247,7 +239,7 @@ export function useCompanyCreate(onSuccess?: () => void) {
         cityId: form.cityId,
         companyTypeId: form.companyTypeId,
         tagIds: form.tagIds,
-        status: form.status,
+        status: false,
       };
       await companyApi.create(dto);
       toast.success(company.create.success);
@@ -280,7 +272,7 @@ export function useCompanyCreate(onSuccess?: () => void) {
     userResults,
     usersLoading,
     getDdlName,
-    ddl: { types, parents, countries, cities, tags },
-    loading: { typesLoading, parentsLoading, countriesLoading, citiesLoading, tagsLoading },
+    ddl: { types, countries, cities, tags },
+    loading: { typesLoading, countriesLoading, citiesLoading, tagsLoading },
   };
 }

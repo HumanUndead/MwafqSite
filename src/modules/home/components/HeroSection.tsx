@@ -78,7 +78,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       />
       <div
         className={cn(
-          'relative mx-auto grid w-full max-w-330 gap-6 lg:grid-cols-[1.05fr_1fr] lg:pt-8 lg:pb-8',
+          'relative mx-auto grid w-full max-w-330 gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:pt-8 lg:pb-8',
           isRtl
             ? 'lg:flex-1 lg:grid-rows-[1fr_auto] lg:gap-15'
             : 'lg:grid-rows-[auto_auto] lg:gap-6 lg:items-start'
@@ -144,12 +144,11 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
-              className={`absolute z-5 flex items-center gap-3.5 rounded-[18px] border-2 border-[#1e2364] bg-white max-[560px]:scale-[0.72] ${index === 1 ? 'max-[560px]:origin-left' : 'max-[560px]:origin-right'} ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
-              style={{ padding: '12px 18px 12px 12px' }}
+              className={`absolute z-5 flex w-fit max-w-[12rem] items-center gap-3 rounded-[17px] border-2 border-[#1e2364] bg-white px-3 py-2.5 pe-3.5 max-[560px]:scale-[0.72] ${index === 1 ? 'max-[560px]:origin-left' : 'max-[560px]:origin-right'} ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
             >
               <span
                 aria-hidden='true'
-                className='block size-11.5 shrink-0 rounded-[12px] bg-[#fbfcff]'
+                className='block size-10 shrink-0 rounded-[11px] bg-[#fbfcff]'
                 style={{
                   backgroundImage: `url("${floatingCardSprite}")`,
                   backgroundRepeat: 'no-repeat',
@@ -157,11 +156,11 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                   backgroundPosition: floatingCardMeta[index]?.iconPosition,
                 }}
               />
-              <div className={isRtl ? 'text-right' : ''}>
-                <strong className='mt-1 block text-[17px] font-extrabold leading-[1.15] tracking-[-0.3px] text-[#1e2364]'>
+              <div className={cn('min-w-0', isRtl ? 'text-right' : '')}>
+                <strong className='block text-[14.5px] font-extrabold leading-[1.2] tracking-[-0.25px] text-[#1e2364]'>
                   {card.title}
                 </strong>
-                <span className='block text-[11px] text-[#6b7196]'>
+                <span className='block text-[10.5px] leading-[1.2] text-[#6b7196]'>
                   {card.detail}
                 </span>
               </div>
@@ -248,8 +247,8 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
         <div
           className={cn(
-            'order-3 grid grid-cols-3 gap-4 border-t-2 border-[#e5e7f0] pt-9 sm:gap-7.5',
-            !isRtl && 'lg:pt-4'
+            'order-3 -mt-5 grid grid-cols-3 gap-4 sm:-mt-6 sm:gap-7.5 lg:mt-0',
+            !isRtl && 'lg:pt-2'
           )}
         >
           {content.stats.map((stat) => (
@@ -259,9 +258,10 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                   value={stat.value}
                   suffix={stat.suffix}
                   decimals={stat.decimals}
+                  trigger='mount'
                 />
               </div>
-              <p className='mt-1.5 text-[11px] font-medium tracking-[0.4px] text-[#6b7196] sm:text-[12.5px]'>
+              <p className='mt-1 text-[11px] font-medium tracking-[0.4px] text-[#6b7196] sm:text-[12.5px]'>
                 {stat.label}
               </p>
             </div>

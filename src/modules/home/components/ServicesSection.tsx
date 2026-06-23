@@ -3,7 +3,6 @@ import { isRtl } from '@/i18n/config';
 import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
 import {
   getServiceGroupBuyPath,
-  plainTextFromHtml,
 } from '@/modules/services/booking.shared';
 import { getTranslation } from '@/shared/lib/getTranslationName';
 import type { HomeServicesContent } from '../home.types';
@@ -19,7 +18,6 @@ interface Props {
 interface ServiceCardData {
   id: number;
   title: string;
-  description: string;
   iconKey: string | null;
 }
 
@@ -36,9 +34,6 @@ async function getServiceCards(locale: Locale): Promise<ServiceCardData[]> {
         return {
           id: group.id,
           title: translation?.name?.trim() ?? '',
-          description: translation?.description
-            ? plainTextFromHtml(translation.description)
-            : '',
           iconKey: group.icon ?? null,
         };
       })
@@ -80,13 +75,12 @@ export async function ServicesSection({ locale, content }: Props) {
         </div>
 
         {/* Desktop grid */}
-        <div className='hidden md:grid grid-cols-2 gap-4.5 xl:grid-cols-4'>
+        <div className='hidden items-start md:grid grid-cols-2 gap-4.5 xl:grid-cols-4'>
           {services.map((service, index) => (
             <ServiceCard
               key={service.id}
               href={getServiceGroupBuyPath(locale, service.id)}
               title={service.title}
-              description={service.description}
               iconKey={service.iconKey}
               rtl={rtl}
               index={index}
@@ -101,7 +95,6 @@ export async function ServicesSection({ locale, content }: Props) {
               id: s.id,
               href: getServiceGroupBuyPath(locale, s.id),
               title: s.title,
-              description: s.description,
               iconKey: s.iconKey,
               index: i,
             }))}
