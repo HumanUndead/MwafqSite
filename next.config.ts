@@ -6,6 +6,7 @@ const mwafqApiHostname = new URL(MWAFQ_API_BASE_URL).hostname;
 
 const nextConfig: NextConfig = {
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

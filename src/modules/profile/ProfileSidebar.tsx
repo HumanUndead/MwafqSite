@@ -31,7 +31,6 @@ export async function ProfileSidebar({ locale }: { locale: Locale }) {
             width={140}
             height={140}
             className='block h-full w-full object-cover'
-            unoptimized={avatarSrc.startsWith('http')}
           />
         </div>
         <div className='wrap-break-word text-xl font-extrabold leading-tight tracking-[-0.4px] text-[#00a8f1] max-[1100px]:text-base'>

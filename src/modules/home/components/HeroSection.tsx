@@ -252,7 +252,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           )}
         >
           {content.stats.map((stat) => (
-            <div key={stat.label} className='text-center sm:text-start'>
+            <div key={stat.label} className='text-center'>
               <div className='inline-flex items-baseline gap-0.5 whitespace-nowrap text-[22px] font-extrabold leading-none tracking-[-1px] text-[#1e2364] sm:text-[28px] md:text-[30px]'>
                 <CountUp
                   value={stat.value}

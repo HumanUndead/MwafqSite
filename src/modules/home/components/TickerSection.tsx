@@ -28,6 +28,7 @@ export function TickerSection({ content }: Props) {
                   sizes='80px'
                   className='max-h-full max-w-full object-contain opacity-80 filter-[grayscale(1)_brightness(0)_invert(0.55)] transition-[opacity,transform,filter] duration-300 hover:scale-[1.06] hover:opacity-100 hover:filter-[grayscale(1)_brightness(0)_invert(0.35)]'
                 />
+          
               </div>
             )
         )}

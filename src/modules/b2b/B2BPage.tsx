@@ -5,6 +5,7 @@ import { B2BSection } from '@/modules/home/components/B2BSection';
 import { TickerSection } from '@/modules/home/components/TickerSection';
 import { B2BFinalCtaSection } from './components/B2BFinalCtaSection';
 import { B2BHeroSection } from './components/B2BHeroSection';
+import { B2BProcessSection } from './components/B2BProcessSection';
 import { B2BServicesSection } from './components/B2BServicesSection';
 import { B2BStepsSection } from './components/B2BStepsSection';
 import { B2BWhySection } from './components/B2BWhySection';
@@ -24,6 +25,7 @@ export function B2BPage({ locale, content }: Props) {
       <B2BWhySection content={content.why} />
       <B2BServicesSection content={content.services} isRtl={rtl} />
       <B2BSection locale={locale} content={content.business} />
+      <B2BProcessSection locale={locale} />
       <B2BStepsSection content={content.steps} />
       <B2BFinalCtaSection locale={locale} content={content.finalCta} />
     </>

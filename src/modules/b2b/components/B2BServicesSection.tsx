@@ -8,7 +8,7 @@ interface Props {
 
 export function B2BServicesSection({ content, isRtl }: Props) {
   return (
-    <section id='services' className='relative bg-[#050B1A]'>
+    <section id='services' className='relative bg-[#eeeeef]'>
       <B2BServicesCards content={content} isRtl={isRtl} />
     </section>
   );
