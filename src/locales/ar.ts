@@ -183,10 +183,34 @@ const ar = {
         statusInProgress: 'جارٍ',
         statusScheduled: 'مجدول',
         employees: [
-          { initials: 'أ.ص', name: 'أحمد ص.', type: 'فحص ما قبل التوظيف', city: 'الرياض', status: 'done' },
-          { initials: 'ف.ر', name: 'فاطمة ر.', type: 'فحص الإقامة', city: 'جدة', status: 'active' },
-          { initials: 'خ.م', name: 'خالد م.', type: 'فحص مهني', city: 'الدمام', status: 'wait' },
-          { initials: 'ن.ع', name: 'نورة ع.', type: 'فحص البلدية', city: 'الرياض', status: 'wait' },
+          {
+            initials: 'أ.ص',
+            name: 'أحمد ص.',
+            type: 'فحص ما قبل التوظيف',
+            city: 'الرياض',
+            status: 'done',
+          },
+          {
+            initials: 'ف.ر',
+            name: 'فاطمة ر.',
+            type: 'فحص الإقامة',
+            city: 'جدة',
+            status: 'active',
+          },
+          {
+            initials: 'خ.م',
+            name: 'خالد م.',
+            type: 'فحص مهني',
+            city: 'الدمام',
+            status: 'wait',
+          },
+          {
+            initials: 'ن.ع',
+            name: 'نورة ع.',
+            type: 'فحص البلدية',
+            city: 'الرياض',
+            status: 'wait',
+          },
         ],
       },
       floatingCards: [

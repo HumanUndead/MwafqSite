@@ -64,6 +64,8 @@ type PackageCardProps = {
   withScrollReveal?: boolean;
   isAuthenticated?: boolean;
   hidePrice?: boolean;
+  /** No hover lift / image zoom — for flat grids on detail pages. */
+  flat?: boolean;
 };
 
 export function PackageCard({
@@ -75,6 +77,7 @@ export function PackageCard({
   withScrollReveal,
   isAuthenticated = false,
   hidePrice = false,
+  flat = false,
 }: PackageCardProps) {
   const isRelated = variant === 'related';
   const shouldReveal = withScrollReveal ?? !isRelated;
@@ -97,17 +100,17 @@ export function PackageCard({
     serviceGroupImageSrc(pkg.icon, pkg.id)
   );
 
-  const cardMotion = prefersReducedMotion
-    ? {}
-    : {
-        variants: packageCardVariants,
-        initial: 'rest' as const,
-        whileHover: 'hover' as const,
-      };
+  const cardMotion =
+    flat || prefersReducedMotion
+      ? {}
+      : {
+          variants: packageCardVariants,
+          initial: 'rest' as const,
+          whileHover: 'hover' as const,
+        };
 
-  const mediaMotion = prefersReducedMotion
-    ? {}
-    : { variants: packageMediaVariants };
+  const mediaMotion =
+    flat || prefersReducedMotion ? {} : { variants: packageMediaVariants };
 
   const image = (
     <Image

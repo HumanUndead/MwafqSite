@@ -182,10 +182,34 @@ const en = {
         statusInProgress: 'In Progress',
         statusScheduled: 'Scheduled',
         employees: [
-          { initials: 'AS', name: 'Ahmad S.', type: 'Pre-Employment Basic', city: 'Riyadh', status: 'done' },
-          { initials: 'FR', name: 'Fatima R.', type: 'Residency Exam', city: 'Jeddah', status: 'active' },
-          { initials: 'KM', name: 'Khalid M.', type: 'Occupational Exam', city: 'Dammam', status: 'wait' },
-          { initials: 'NA', name: 'Noura A.', type: 'Municipality Exam', city: 'Riyadh', status: 'wait' },
+          {
+            initials: 'AS',
+            name: 'Ahmad S.',
+            type: 'Pre-Employment Basic',
+            city: 'Riyadh',
+            status: 'done',
+          },
+          {
+            initials: 'FR',
+            name: 'Fatima R.',
+            type: 'Residency Exam',
+            city: 'Jeddah',
+            status: 'active',
+          },
+          {
+            initials: 'KM',
+            name: 'Khalid M.',
+            type: 'Occupational Exam',
+            city: 'Dammam',
+            status: 'wait',
+          },
+          {
+            initials: 'NA',
+            name: 'Noura A.',
+            type: 'Municipality Exam',
+            city: 'Riyadh',
+            status: 'wait',
+          },
         ],
       },
       floatingCards: [
@@ -544,8 +568,7 @@ const en = {
   academyPayment: {
     verifying: 'Verifying your payment…',
     successTitle: 'Payment successful',
-    successMessage:
-      'Your enrollment is complete. Redirecting to your courses…',
+    successMessage: 'Your enrollment is complete. Redirecting to your courses…',
     failedTitle: 'Payment not completed',
     failedMessage: 'Your payment could not be verified.',
     errorTitle: 'Something went wrong',
@@ -610,8 +633,7 @@ const en = {
     backToCourse: 'Back to course',
     minutes: 'minutes',
     quizWarningTitle: 'Next up: a quiz',
-    quizWarningMessage:
-      'The next item is a quiz. Do you want to start it now?',
+    quizWarningMessage: 'The next item is a quiz. Do you want to start it now?',
     goToQuiz: 'Start quiz',
     stayHere: 'Not now',
     attachments: 'Attachments',

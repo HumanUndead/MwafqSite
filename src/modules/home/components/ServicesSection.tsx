@@ -7,8 +7,7 @@ import {
 import { getTranslation } from '@/shared/lib/getTranslationName';
 import type { HomeServicesContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
-import { ServiceCard } from './ServiceCard';
-import { ServicesMobileCarousel } from './ServicesMobileCarousel';
+import { ServicesScrollList } from './ServicesScrollList';
 
 interface Props {
   locale: Locale;
@@ -18,14 +17,13 @@ interface Props {
 interface ServiceCardData {
   id: number;
   title: string;
-  iconKey: string | null;
 }
 
 async function getServiceCards(locale: Locale): Promise<ServiceCardData[]> {
   try {
     const page = await fetchServiceGroupsList({
       pageNumber: 1,
-      pageSize: 8,
+      pageSize: 6,
     });
 
     return (page.data ?? [])
@@ -34,10 +32,10 @@ async function getServiceCards(locale: Locale): Promise<ServiceCardData[]> {
         return {
           id: group.id,
           title: translation?.name?.trim() ?? '',
-          iconKey: group.icon ?? null,
         };
       })
-      .filter((card) => card.title.length > 0);
+      .filter((card) => card.title.length > 0)
+      .slice(0, 6);
   } catch {
     return [];
   }
@@ -48,7 +46,7 @@ export async function ServicesSection({ locale, content }: Props) {
   const rtl = isRtl(locale);
 
   return (
-    <section id='services' className='relative px-4 py-12 md:py-20 md:px-7'>
+    <section id='services' className='relative px-4 py-10 md:py-16 md:px-7'>
       <div
         className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(30,35,100,0.05)_1px,transparent_1.2px)] bg-size-[24px_24px]'
         aria-hidden='true'
@@ -74,33 +72,14 @@ export async function ServicesSection({ locale, content }: Props) {
           </div>
         </div>
 
-        {/* Desktop grid */}
-        <div className='hidden items-start md:grid grid-cols-2 gap-4.5 xl:grid-cols-4'>
-          {services.map((service, index) => (
-            <ServiceCard
-              key={service.id}
-              href={getServiceGroupBuyPath(locale, service.id)}
-              title={service.title}
-              iconKey={service.iconKey}
-              rtl={rtl}
-              index={index}
-            />
-          ))}
-        </div>
-
-        {/* Mobile grid */}
-        <div className='md:hidden'>
-          <ServicesMobileCarousel
-            services={services.map((s, i) => ({
-              id: s.id,
-              href: getServiceGroupBuyPath(locale, s.id),
-              title: s.title,
-              iconKey: s.iconKey,
-              index: i,
-            }))}
-            rtl={rtl}
-          />
-        </div>
+        <ServicesScrollList
+          services={services.map((service) => ({
+            id: service.id,
+            href: getServiceGroupBuyPath(locale, service.id),
+            title: service.title,
+          }))}
+          rtl={rtl}
+        />
       </div>
     </section>
   );

@@ -301,7 +301,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
   return (
     <section
       id='booking'
-      className='relative z-50 px-4 pb-8 pt-2 md:px-7 md:pb-10 md:pt-2 min-[1024px]:pb-0 min-[1024px]:-mb-6'
+      className='relative z-50 mt-10 px-4 pb-5 pt-2 md:mt-14 md:px-7 md:pb-6 md:pt-2 min-[1024px]:pb-0 min-[1024px]:-mb-3'
     >
       <BookingMascot locale={locale} cardRef={cardRef} label={content.title} />
 
