@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import {
   motion,
   useReducedMotion,
@@ -12,39 +13,46 @@ import {
 } from './B2BServiceCapabilityCard';
 
 /**
- * One card in the 3D scroll deck. The geometric transforms (y / translateZ /
- * scale / opacity / blur) live on a single layer that is a direct child of the
- * perspective stage, so translateZ renders with real depth. The card face is
- * reused from {@link B2BServiceCapabilityCard}. An inner layer adds a subtle
- * float to the active card only. Transform + opacity only — GPU friendly.
+ * Circular drum/wheel card.
+ *
+ * Uses circular (shortest-path) distance so the last card wraps above the
+ * first and the first wraps below the last, creating a true cycle illusion.
+ *
+ * d = 0  → active card, facing viewer flat
+ * d = -1 → card above active (prev, or last wrapping around)
+ * d = +1 → card below active (next, or first wrapping around)
  */
+const SLOT_Y    = 168;   // px between card centres
+const TILT_DEG  = 38;    // rotateX degrees per step
+const Z_STEP    = 90;    // depth recession per step
+const SCALE_STEP = 0.14; // scale shrink per step
+const OP_STEP   = 0.32;  // opacity fade per step
+const MAX_DEPTH = 1.6;   // clamp so far cards don't overshoot
 
-// Deck tunables (px per step of distance from the active card).
-// Both upcoming and passed cards stay BELOW the active card so the space above
-// it is always clean — no peeking edges reading as a "shadow" above the card.
-const PEEK_Y = 28; // upcoming cards peek just below the active card (behind it)
-const EXIT_Y = 128; // passed cards sink further down + back as they leave
-const Z_STEP = 150; // depth recede per step
-const SCALE_UP = 0.07; // upcoming shrink per step
-const SCALE_DOWN = 0.06; // passed shrink per step
-const OP_UP = 0.34; // upcoming fade per step
-const OP_DOWN = 0.6; // passed fade per step (leave faster)
-const MAX_DEPTH = 3; // clamp far cards so transforms stay bounded
+const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 
-const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+/**
+ * Shortest signed distance on a ring of `count` items.
+ * Always in the range (-count/2, +count/2].
+ */
+function circularDist(index: number, pos: number, count: number): number {
+  const raw = index - pos;
+  return raw - Math.round(raw / count) * count;
+}
 
 interface Props {
   item: B2BServiceItem;
   index: number;
-  /** Continuous active position in [0, count - 1]. */
+  count: number;
   position: MotionValue<number>;
   isActive: boolean;
   isRtl: boolean;
 }
 
-export function B2BServiceStackCard({
+export const B2BServiceStackCard = memo(function B2BServiceStackCard({
   item,
   index,
+  count,
   position,
   isActive,
   isRtl,
@@ -52,37 +60,34 @@ export function B2BServiceStackCard({
   const prefersReducedMotion = useReducedMotion();
 
   const y = useTransform(position, (p) => {
-    const d = index - p;
-    return d >= 0
-      ? PEEK_Y * Math.min(d, MAX_DEPTH)
-      : EXIT_Y * Math.min(-d, MAX_DEPTH);
+    const d = clamp(circularDist(index, p, count), -MAX_DEPTH, MAX_DEPTH);
+    return d * SLOT_Y;
   });
 
-  const z = useTransform(
-    position,
-    (p) => -Z_STEP * Math.min(Math.abs(index - p), MAX_DEPTH)
-  );
+  const rotateX = useTransform(position, (p) => {
+    const d = clamp(circularDist(index, p, count), -MAX_DEPTH, MAX_DEPTH);
+    return -d * TILT_DEG;
+  });
+
+  const z = useTransform(position, (p) => {
+    const d = Math.abs(clamp(circularDist(index, p, count), -MAX_DEPTH, MAX_DEPTH));
+    return -d * Z_STEP;
+  });
 
   const scale = useTransform(position, (p) => {
-    const d = index - p;
-    return d >= 0
-      ? 1 - SCALE_UP * Math.min(d, MAX_DEPTH)
-      : 1 + SCALE_DOWN * Math.max(d, -MAX_DEPTH);
+    const d = Math.abs(clamp(circularDist(index, p, count), -MAX_DEPTH, MAX_DEPTH));
+    return clamp(1 - d * SCALE_STEP, 0.1, 1);
   });
 
   const opacity = useTransform(position, (p) => {
-    const d = index - p;
-    return clamp01(d >= 0 ? 1 - OP_UP * d : 1 - OP_DOWN * -d);
+    const d = Math.abs(clamp(circularDist(index, p, count), -MAX_DEPTH, MAX_DEPTH));
+    return clamp(1 - d * OP_STEP, 0, 1);
   });
 
-  const filter = useTransform(position, (p) => {
-    const blur = Math.min(Math.abs(index - p) * 1.6, 4);
-    return `blur(${blur}px)`;
+  const zIndex = useTransform(position, (p) => {
+    const d = Math.abs(circularDist(index, p, count));
+    return Math.round(40 - d * 10);
   });
-
-  const zIndex = useTransform(position, (p) =>
-    Math.round(40 - Math.abs(index - p) * 8)
-  );
 
   return (
     <motion.div
@@ -90,23 +95,15 @@ export function B2BServiceStackCard({
       style={
         prefersReducedMotion
           ? { zIndex }
-          : { y, z, scale, opacity, filter, zIndex }
+          : { y, z, scale, opacity, rotateX, zIndex }
       }
       aria-hidden={!isActive}
     >
-      <motion.div
+      <div
         className={
           isActive
-            ? 'w-full max-w-[440px] px-2'
-            : 'pointer-events-none w-full max-w-[440px] px-2'
-        }
-        animate={
-          isActive && !prefersReducedMotion ? { y: [0, -9, 0] } : { y: 0 }
-        }
-        transition={
-          isActive && !prefersReducedMotion
-            ? { duration: 6.5, ease: 'easeInOut', repeat: Infinity }
-            : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+            ? 'w-full max-w-[420px] px-2'
+            : 'pointer-events-none w-full max-w-[420px] px-2'
         }
       >
         <B2BServiceCapabilityCard
@@ -114,7 +111,7 @@ export function B2BServiceStackCard({
           isRtl={isRtl}
           isActive={isActive}
         />
-      </motion.div>
+      </div>
     </motion.div>
   );
-}
+});

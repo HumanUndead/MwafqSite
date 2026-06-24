@@ -280,6 +280,36 @@ const en = {
             status: 'done',
             statusLabel: 'Cleared',
           },
+          dashboardMock: {
+            stats: {
+              employees: { value: '142', bars: [8, 12, 6, 14, 10, 16, 18] },
+              cleared: { value: '91%', bars: [6, 10, 8, 16, 12, 14, 18] },
+              pending: { value: '8', bars: [10, 14, 8, 12, 6, 16, 10] },
+            },
+            employees: [
+              {
+                initials: 'AS',
+                name: 'Ahmad S.',
+                detail: 'Pre-Employment Basic · Riyadh',
+                status: 'done',
+                statusLabel: 'Cleared',
+              },
+              {
+                initials: 'SK',
+                name: 'Sara K.',
+                detail: 'Pre-Employment Basic · Jeddah',
+                status: 'active',
+                statusLabel: 'In progress',
+              },
+              {
+                initials: 'OT',
+                name: 'Omar T.',
+                detail: 'Pre-Employment Basic · Dammam',
+                status: 'wait',
+                statusLabel: 'Scheduled',
+              },
+            ],
+          },
         },
         {
           title: 'Residency Exams',
@@ -300,6 +330,36 @@ const en = {
             status: 'active',
             statusLabel: 'In progress',
           },
+          dashboardMock: {
+            stats: {
+              employees: { value: '248', bars: [8, 12, 6, 14, 10, 16, 18] },
+              cleared: { value: '96%', bars: [6, 10, 8, 16, 12, 14, 18] },
+              pending: { value: '12', bars: [10, 14, 8, 12, 6, 16, 10] },
+            },
+            employees: [
+              {
+                initials: 'FR',
+                name: 'Fatima R.',
+                detail: 'Residency Exam · Jeddah',
+                status: 'active',
+                statusLabel: 'In progress',
+              },
+              {
+                initials: 'NA',
+                name: 'Noura A.',
+                detail: 'Residency Exam · Riyadh',
+                status: 'wait',
+                statusLabel: 'Scheduled',
+              },
+              {
+                initials: 'YH',
+                name: 'Youssef H.',
+                detail: 'Residency Exam · Dammam',
+                status: 'done',
+                statusLabel: 'Cleared',
+              },
+            ],
+          },
         },
         {
           title: 'Municipality Certificates',
@@ -319,6 +379,36 @@ const en = {
             detail: 'Municipality Exam · Dammam',
             status: 'wait',
             statusLabel: 'Scheduled',
+          },
+          dashboardMock: {
+            stats: {
+              employees: { value: '86', bars: [12, 8, 14, 6, 10, 16, 12] },
+              cleared: { value: '88%', bars: [8, 14, 10, 12, 6, 16, 14] },
+              pending: { value: '18', bars: [14, 10, 12, 8, 16, 6, 10] },
+            },
+            employees: [
+              {
+                initials: 'KM',
+                name: 'Khalid M.',
+                detail: 'Municipality Exam · Dammam',
+                status: 'wait',
+                statusLabel: 'Scheduled',
+              },
+              {
+                initials: 'LB',
+                name: 'Layla B.',
+                detail: 'Food Handler Cert · Riyadh',
+                status: 'active',
+                statusLabel: 'In progress',
+              },
+              {
+                initials: 'HG',
+                name: 'Hassan G.',
+                detail: 'Public Service Cert · Jeddah',
+                status: 'done',
+                statusLabel: 'Cleared',
+              },
+            ],
           },
         },
       ],

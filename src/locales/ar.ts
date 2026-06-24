@@ -281,6 +281,36 @@ const ar = {
             status: 'done',
             statusLabel: 'معتمد',
           },
+          dashboardMock: {
+            stats: {
+              employees: { value: '142', bars: [8, 12, 6, 14, 10, 16, 18] },
+              cleared: { value: '91%', bars: [6, 10, 8, 16, 12, 14, 18] },
+              pending: { value: '8', bars: [10, 14, 8, 12, 6, 16, 10] },
+            },
+            employees: [
+              {
+                initials: 'أ س',
+                name: 'أحمد س.',
+                detail: 'فحص ما قبل التوظيف · الرياض',
+                status: 'done',
+                statusLabel: 'معتمد',
+              },
+              {
+                initials: 'س ك',
+                name: 'سارة ك.',
+                detail: 'فحص ما قبل التوظيف · جدة',
+                status: 'active',
+                statusLabel: 'قيد التنفيذ',
+              },
+              {
+                initials: 'ع ت',
+                name: 'عمر ت.',
+                detail: 'فحص ما قبل التوظيف · الدمام',
+                status: 'wait',
+                statusLabel: 'مجدول',
+              },
+            ],
+          },
         },
         {
           title: 'فحوصات الإقامة',
@@ -301,6 +331,36 @@ const ar = {
             status: 'active',
             statusLabel: 'قيد التنفيذ',
           },
+          dashboardMock: {
+            stats: {
+              employees: { value: '248', bars: [8, 12, 6, 14, 10, 16, 18] },
+              cleared: { value: '96%', bars: [6, 10, 8, 16, 12, 14, 18] },
+              pending: { value: '12', bars: [10, 14, 8, 12, 6, 16, 10] },
+            },
+            employees: [
+              {
+                initials: 'ف ر',
+                name: 'فاطمة ر.',
+                detail: 'فحص الإقامة · جدة',
+                status: 'active',
+                statusLabel: 'قيد التنفيذ',
+              },
+              {
+                initials: 'ن أ',
+                name: 'نورة أ.',
+                detail: 'فحص الإقامة · الرياض',
+                status: 'wait',
+                statusLabel: 'مجدول',
+              },
+              {
+                initials: 'ي ح',
+                name: 'يوسف ح.',
+                detail: 'فحص الإقامة · الدمام',
+                status: 'done',
+                statusLabel: 'معتمد',
+              },
+            ],
+          },
         },
         {
           title: 'شهادات البلدية',
@@ -320,6 +380,36 @@ const ar = {
             detail: 'فحص البلدية · الدمام',
             status: 'wait',
             statusLabel: 'مجدول',
+          },
+          dashboardMock: {
+            stats: {
+              employees: { value: '86', bars: [12, 8, 14, 6, 10, 16, 12] },
+              cleared: { value: '88%', bars: [8, 14, 10, 12, 6, 16, 14] },
+              pending: { value: '18', bars: [14, 10, 12, 8, 16, 6, 10] },
+            },
+            employees: [
+              {
+                initials: 'خ م',
+                name: 'خالد م.',
+                detail: 'فحص البلدية · الدمام',
+                status: 'wait',
+                statusLabel: 'مجدول',
+              },
+              {
+                initials: 'ل ب',
+                name: 'ليلى ب.',
+                detail: 'شهادة عمال المنشآت الغذائية · الرياض',
+                status: 'active',
+                statusLabel: 'قيد التنفيذ',
+              },
+              {
+                initials: 'ح غ',
+                name: 'حسن غ.',
+                detail: 'شهادة الخدمة العامة · جدة',
+                status: 'done',
+                statusLabel: 'معتمد',
+              },
+            ],
           },
         },
       ],

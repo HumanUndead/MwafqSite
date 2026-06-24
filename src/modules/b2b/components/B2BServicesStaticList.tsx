@@ -60,8 +60,7 @@ export function B2BServicesStaticList({
         aria-atomic='true'
       >
         <B2BSharedServiceDashboard
-          items={cards}
-          activeIndex={activeIndex}
+          item={cards[activeIndex] ?? cards[0]}
           dashboard={dashboard}
         />
       </aside>

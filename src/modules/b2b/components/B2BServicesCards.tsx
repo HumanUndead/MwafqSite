@@ -21,6 +21,7 @@ export function B2BServicesCards({ content, isRtl }: Props) {
       <B2BServicesMobileView
         cards={cards}
         dashboard={content.dashboard}
+        content={content}
         isRtl={isRtl}
         sectionLabel={sectionLabel}
       />
