@@ -1,10 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/shared/components/ui/Button';
 import type { Locale } from '@/i18n/config';
-import { isRtl } from '@/i18n/config';
 import {
   getSocialIcon,
   getSocialIconStyle,
@@ -73,10 +70,8 @@ function ContactLink({
 }
 
 export function FooterSection({ locale, content }: Props) {
-  const rtl = isRtl(locale);
-
   return (
-    <footer id='contact' className='bg-[#eeeeef] px-4 pb-0 pt-0 md:px-6'>
+    <footer id='contact' className='bg-[#eeeeef] px-4 pb-3 pt-0 md:px-6 md:pb-4'>
       <div className='mx-auto max-w-330'>
         <div className='xl:grid xl:grid-cols-[2.6fr_1fr_1.4fr] xl:py-5'>
 
@@ -99,9 +94,8 @@ export function FooterSection({ locale, content }: Props) {
               {content.brandBody}
             </p>
 
-            {/* Social icons — mobile only */}
             {content.socialLinks.length > 0 && (
-              <div className='mt-2.5 flex justify-center gap-2 xl:hidden'>
+              <div className='mt-2.5 flex gap-2'>
                 {content.socialLinks.map(({ name, path }) => {
                   const Icon = getSocialIcon(name);
                   const href = toExternalHref(path);
@@ -113,7 +107,7 @@ export function FooterSection({ locale, content }: Props) {
                       rel={href ? 'noopener noreferrer' : undefined}
                       aria-label={name}
                       className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-200 hover:scale-110',
+                        'flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-200 hover:scale-110 xl:hover:-translate-y-0.5',
                         getSocialIconStyle(name)
                       )}
                     >
@@ -123,6 +117,10 @@ export function FooterSection({ locale, content }: Props) {
                 })}
               </div>
             )}
+
+            <p className='mt-3 text-[12px] text-[rgba(30,35,100,0.45)]'>
+              {content.copyrightLabel} {content.copyrightBody}
+            </p>
           </div>
 
           {/* ── Mobile only: 2-col grid (Pages | Contact), no accordion ── */}
@@ -180,80 +178,18 @@ export function FooterSection({ locale, content }: Props) {
             </ul>
           </div>
 
-          {/* ── Desktop col 3: Contact + Newsletter | Mobile: Newsletter only ── */}
-          <div className='xl:py-0'>
-
-            {/* Contact — desktop only (mobile shows in 2-col grid above) */}
-            <div className='hidden xl:block'>
-              <div className='flex flex-col gap-2 text-[13px] text-[rgba(30,35,100,0.72)]'>
-                {content.contact.links.map((link) => (
-                  <ContactLink
-                    key={`${link.label}-${link.path ?? 'no-path'}`}
-                    link={link}
-                    locale={locale}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div className='border-t border-[#1e2364]/10 py-2.5 xl:mt-3 xl:border-0 xl:pt-3'>
-              <p className='text-[10px] font-bold uppercase tracking-[0.16em] text-[rgba(30,35,100,0.5)]'>
-                {content.newsletterEyebrow}
-              </p>
-              <div className='mt-1.5 flex h-9 items-center overflow-hidden rounded-full border-2 border-[#1e2364]/12 bg-white pr-1 xl:h-auto xl:overflow-visible xl:rounded-none xl:border-0 xl:border-b xl:border-[#1e2364]/20 xl:bg-transparent xl:pr-0'>
-                <Input
-                  type='email'
-                  placeholder={content.newsletterPlaceholder}
-                  className='h-full flex-1 border-0 bg-transparent px-3 text-[13px] text-[#1e2364] shadow-none placeholder:font-medium placeholder:text-[rgba(30,35,100,0.35)] focus-visible:ring-0 xl:px-0'
+          {/* ── Desktop col 3: Contact ── */}
+          <div className='hidden xl:block xl:py-0'>
+            <div className='flex flex-col gap-2 text-[13px] text-[rgba(30,35,100,0.72)]'>
+              {content.contact.links.map((link) => (
+                <ContactLink
+                  key={`${link.label}-${link.path ?? 'no-path'}`}
+                  link={link}
+                  locale={locale}
                 />
-                <Button
-                  type='button'
-                  aria-label={content.newsletterAction}
-                  className={cn(
-                    'h-8 shrink-0 rounded-full bg-[#1e2364] px-4 text-[12px] font-bold text-white hover:bg-[#233567] xl:h-8 xl:w-8 xl:rounded-none xl:bg-transparent xl:p-0 xl:text-[20px] xl:text-[#00a8f1] xl:hover:bg-transparent',
-                    rtl ? 'xl:hover:-translate-x-1' : 'xl:hover:translate-x-1'
-                  )}
-                >
-                  <span className={cn('inline-block', rtl && 'rotate-180')}>
-                    →
-                  </span>
-                </Button>
-              </div>
+              ))}
             </div>
           </div>
-        </div>
-
-        {/* ── Bottom bar ── */}
-        <div className='flex flex-col items-center gap-1.5 border-t border-[#1e2364]/10 py-2 text-[12px] text-[rgba(30,35,100,0.45)] xl:flex-row xl:justify-between'>
-          <p>
-            {content.copyrightLabel} {content.copyrightBody}
-          </p>
-
-          {/* Social icons — desktop only */}
-          {content.socialLinks.length > 0 && (
-            <div className='hidden items-center gap-2 xl:flex'>
-              {content.socialLinks.map(({ name, path }) => {
-                const Icon = getSocialIcon(name);
-                const href = toExternalHref(path);
-                return (
-                  <a
-                    key={name}
-                    href={href ?? '#contact'}
-                    target={href ? '_blank' : undefined}
-                    rel={href ? 'noopener noreferrer' : undefined}
-                    aria-label={name}
-                    className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-200 hover:-translate-y-0.5',
-                      getSocialIconStyle(name)
-                    )}
-                  >
-                    <Icon className='h-4 w-4' />
-                  </a>
-                );
-              })}
-            </div>
-          )}
         </div>
       </div>
     </footer>

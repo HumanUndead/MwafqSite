@@ -1,12 +1,22 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations, useLocale } from '@/i18n/DictionaryProvider';
 import { useAuthStore } from '@/modules/auth/store/authStore';
 import { MwafqPagination } from '@/shared/components/ui/MwafqPagination';
+import { cn } from '@/shared/lib/cn';
+import {
+  scrollToSectionIdWithRetries,
+  sectionScrollMarginClass,
+} from '@/shared/lib/scrollToSection';
 import { FilterSection } from './components/FilterSection';
 import { PackageCard } from './components/PackageCard';
 import type { ServiceGroupListItem } from '../auth/serviceGroup.types';
+
+function scrollToPackagesGrid() {
+  scrollToSectionIdWithRetries('packagesGrid');
+}
 
 type ServicesPageProps = {
   services: ServiceGroupListItem[];
@@ -25,6 +35,20 @@ export function ServicesPage({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const prevPage = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (prevPage.current === null) {
+      prevPage.current = page;
+      if (page > 1) scrollToPackagesGrid();
+      return;
+    }
+
+    if (prevPage.current === page) return;
+
+    prevPage.current = page;
+    scrollToPackagesGrid();
+  }, [page]);
 
   function handlePageChange(nextPage: number) {
     const params = new URLSearchParams(searchParams.toString());
@@ -37,20 +61,22 @@ export function ServicesPage({
 
     const query = params.toString();
     router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
-
-    const grid = document.getElementById('packagesGrid');
-    if (grid) {
-      grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    scrollToPackagesGrid();
   }
 
   return (
     <>
       <FilterSection t={t.filter} />
 
-      <section id='packagesGrid' className='relative px-0 pb-30 pt-7.5'>
+      <section className='relative px-0 pb-30 pt-7.5'>
         <div className='mx-auto max-w-330 px-4 md:px-7'>
-          <div className='grid grid-cols-2 gap-5.5 sm:grid-cols-3 lg:grid-cols-4'>
+          <div
+            id='packagesGrid'
+            className={cn(
+              'grid grid-cols-2 gap-5.5 sm:grid-cols-3 lg:grid-cols-4',
+              sectionScrollMarginClass
+            )}
+          >
             {services.map((pkg, i) => (
               <PackageCard
                 key={pkg.id}
