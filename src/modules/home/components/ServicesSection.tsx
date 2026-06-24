@@ -2,7 +2,7 @@ import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
 import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
 import {
-  getServiceGroupBuyPath,
+  getServiceGroupDetailPath,
 } from '@/modules/services/booking.shared';
 import { getTranslation } from '@/shared/lib/getTranslationName';
 import type { HomeServicesContent } from '../home.types';
@@ -75,7 +75,7 @@ export async function ServicesSection({ locale, content }: Props) {
         <ServicesScrollList
           services={services.map((service) => ({
             id: service.id,
-            href: getServiceGroupBuyPath(locale, service.id),
+            href: getServiceGroupDetailPath(locale, service.id),
             title: service.title,
           }))}
           rtl={rtl}

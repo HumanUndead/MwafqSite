@@ -1,4 +1,4 @@
-const DEFAULT_MWAFQ_API_BASE_URL = 'https://productionapi.mwafq.com';
+const DEFAULT_MWAFQ_API_BASE_URL = 'https://stagingapi.mwafq.com/';
 
 export const MWAFQ_API_BASE_URL =
   process.env.MWAFQ_API_BASE_URL ?? DEFAULT_MWAFQ_API_BASE_URL;

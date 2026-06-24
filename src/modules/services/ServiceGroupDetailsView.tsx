@@ -11,9 +11,9 @@ import type {
   ServiceGroupDetail,
   ServiceGroupListItem,
 } from '@/modules/auth/serviceGroup.types';
-import { getServiceGroupBuyPath } from '@/modules/services/booking.shared';
+// import { getServiceGroupBuyPath } from '@/modules/services/booking.shared';
 import { PackageCard } from './components/PackageCard';
-import { BuyNowButton } from './components/BuyNowButton';
+// import { BuyNowButton } from './components/BuyNowButton';
 import { ServiceGroupDetailImage } from './components/ServiceGroupDetailImage';
 
 function plainTextFromHtml(value: string): string {
@@ -55,10 +55,10 @@ export async function ServiceGroupDetailsView({
   const descriptionHtml = translation?.description?.trim() ?? '';
   const descriptionPlain = plainTextFromHtml(descriptionHtml);
 
-  const buyPath = getServiceGroupBuyPath(locale, serviceGroup.id);
-  const buyHref = isAuthenticated
-    ? buyPath
-    : `${getLocalizedRoute(locale, ROUTES.LOGIN)}?redirect=${encodeURIComponent(buyPath)}`;
+  // const buyPath = getServiceGroupBuyPath(locale, serviceGroup.id);
+  // const buyHref = isAuthenticated
+  //   ? buyPath
+  //   : `${getLocalizedRoute(locale, ROUTES.LOGIN)}?redirect=${encodeURIComponent(buyPath)}`;
 
   const requirements =
     serviceGroup.requirements?.filter((r) => r.langId === langId) ?? [];
@@ -174,13 +174,13 @@ export async function ServiceGroupDetailsView({
                     />
                   </div>
 
-                  <BuyNowButton
+                  {/* <BuyNowButton
                     href={buyHref}
                     label={t.buyNow}
                     locale={locale}
                     size='detail'
                     className='h-11 w-full rounded-[14px] text-[14px]'
-                  />
+                  /> */}
                 </div>
               </ScrollReveal>
             </div>

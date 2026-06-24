@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/cn';
@@ -78,20 +78,4 @@ export function B2BServicesMobileView({
       </div>
     </div>
   );
-}
-
-export function useIsLgUp() {
-  const [isLgUp, setIsLgUp] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia('(min-width: 1024px)');
-
-    const update = () => setIsLgUp(media.matches);
-    update();
-    media.addEventListener('change', update);
-
-    return () => media.removeEventListener('change', update);
-  }, []);
-
-  return isLgUp;
 }

@@ -11,7 +11,7 @@ export default async function ServicesRoute({
 
   const data = await fetchServiceGroupsList({
     pageNumber: page ? +page : 1,
-    pageSize: 10,
+    pageSize: 8,
     search,
   });
 

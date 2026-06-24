@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/shared/lib/cn';
 import type { Dictionary } from '@/locales/types';
 import type { B2BServiceItem } from './B2BServiceCapabilityCard';
@@ -36,20 +36,31 @@ export function B2BSharedServiceDashboard({
       </div>
 
       <div className='flex flex-col gap-3 p-3 sm:p-4'>
-        <motion.div
-          key={activeItem?.title}
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className='rounded-[12px] border border-[#00a8f1]/25 bg-[#00a8f1]/6 px-3 py-2'
-        >
-          <span className='block text-[9px] font-bold uppercase tracking-[0.5px] text-[#6b7196]'>
-            {dashboard.viewingLabel}
-          </span>
-          <strong className='block text-[13px] font-extrabold text-[#1e2364] sm:text-[14px]'>
-            {activeItem?.title}
-          </strong>
-        </motion.div>
+        <div className='relative min-h-[64px] overflow-hidden rounded-[12px] border border-[#00a8f1]/25 bg-[#00a8f1]/6 px-3 py-2'>
+          <AnimatePresence mode='wait' initial={false}>
+            <motion.div
+              key={activeItem?.title}
+              initial={
+                prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }
+              }
+              animate={{ opacity: 1, y: 0 }}
+              exit={
+                prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -10 }
+              }
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <span className='block text-[9px] font-bold uppercase tracking-[0.5px] text-[#6b7196]'>
+                {dashboard.viewingLabel}
+              </span>
+              <strong className='block text-[13px] font-extrabold text-[#1e2364] sm:text-[14px]'>
+                {activeItem?.title}
+              </strong>
+              <span className='mt-0.5 block text-[10px] leading-[1.4] text-[#6b7196]'>
+                {activeItem?.outcome}
+              </span>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
         <div className='flex gap-0.5 rounded-full bg-[#f4f4f6] p-1'>
           <span className='flex-1 rounded-full bg-white py-1 text-center text-[10px] font-extrabold text-[#1e2364] shadow-sm'>
