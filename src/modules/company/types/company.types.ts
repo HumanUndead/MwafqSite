@@ -21,8 +21,8 @@ export interface CompanyCreateDto {
   rank: number;
   companyPhone?: string;
   companySize?: number;
-  crNumber?: string;
-  vatNumber?: string;
+  crNumber: string;
+  vatNumber: string;
   ipan?: string;
   logo?: File | null;
   countryId: string;

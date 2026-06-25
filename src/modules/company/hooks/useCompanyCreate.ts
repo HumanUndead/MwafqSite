@@ -5,8 +5,10 @@ import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { localeToLangId } from '@/i18n/config';
 import { useAuthStore } from '@/modules/auth/store/authStore';
 import { toast } from '@/shared/components/feedback/Toast';
+import { ApiError } from '@/shared/lib/http';
 import { getTranslationName } from '@/shared/lib/getTranslationName';
 import { companyApi } from '../api/companyApi';
+import { getLangTabWithErrors, isRichTextEmpty } from '../companyForm.shared';
 import type { DdlItem, UserSearchItem, CompanyCreateDto } from '../types/company.types';
 
 export interface CompanyFormState {
@@ -34,11 +36,27 @@ export interface CompanyFormState {
 
 export interface CompanyFormErrors {
   nameEn?: string;
+  nameAr?: string;
+  addressEn?: string;
+  addressAr?: string;
   rank?: string;
   countryId?: string;
   cityId?: string;
   companyTypeId?: string;
+  crNumber?: string;
+  vatNumber?: string;
+  contactFirstName?: string;
+  contactLastName?: string;
+  contactEmail?: string;
+  contactPhone?: string;
 }
+
+const CONTACT_MANUAL_FIELDS = new Set<keyof CompanyFormState>([
+  'contactFirstName',
+  'contactLastName',
+  'contactEmail',
+  'contactPhone',
+]);
 
 const INITIAL_FORM: CompanyFormState = {
   nameEn: '',
@@ -75,13 +93,13 @@ export function useCompanyCreate(onSuccess?: () => void) {
   const [types, setTypes] = useState<DdlItem[]>([]);
   const [countries, setCountries] = useState<DdlItem[]>([]);
   const [cities, setCities] = useState<DdlItem[]>([]);
-  const [tags, setTags] = useState<DdlItem[]>([]);
+  const [tags] = useState<DdlItem[]>([]);
   const [userResults, setUserResults] = useState<UserSearchItem[]>([]);
 
   const [typesLoading, setTypesLoading] = useState(true);
   const [countriesLoading, setCountriesLoading] = useState(true);
   const [citiesLoading, setCitiesLoading] = useState(false);
-  const [tagsLoading, setTagsLoading] = useState(true);
+  const [tagsLoading] = useState(false);
   const [usersLoading, setUsersLoading] = useState(false);
 
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -90,7 +108,8 @@ export function useCompanyCreate(onSuccess?: () => void) {
 
   useEffect(() => {
     companyApi.getTypes().then(setTypes).catch(console.error).finally(() => setTypesLoading(false));
-    companyApi.getTags(tagsType).then(setTags).catch(console.error).finally(() => setTagsLoading(false));
+    // Tags section hidden — skip fetch until classification is re-enabled
+    // companyApi.getTags(tagsType).then(setTags).catch(console.error).finally(() => setTagsLoading(false));
   }, [tagsType]);
 
   useEffect(() => {
@@ -116,16 +135,29 @@ export function useCompanyCreate(onSuccess?: () => void) {
   }, [locale]);
 
   useEffect(() => {
-    if (!form.countryId) {
-      setCities([]);
-      return;
-    }
-    setCitiesLoading(true);
-    companyApi
-      .getCities(form.countryId)
-      .then(setCities)
+    const countryId = form.countryId;
+    if (!countryId) return;
+
+    let cancelled = false;
+
+    void Promise.resolve()
+      .then(() => {
+        if (cancelled) return;
+        setCitiesLoading(true);
+        return companyApi.getCities(countryId);
+      })
+      .then((data) => {
+        if (!data || cancelled) return;
+        setCities(data);
+      })
       .catch(console.error)
-      .finally(() => setCitiesLoading(false));
+      .finally(() => {
+        if (!cancelled) setCitiesLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [form.countryId]);
 
   const searchUsers = useCallback((term: string) => {
@@ -163,18 +195,19 @@ export function useCompanyCreate(onSuccess?: () => void) {
     setForm((f) => ({
       ...f,
       selectedContactUserId: '',
-      contactFirstName: '',
-      contactLastName: '',
-      contactEmail: '',
-      contactPhone: '',
     }));
   }, []);
 
   const updateField = useCallback(
     <K extends keyof CompanyFormState>(key: K, value: CompanyFormState[K]) => {
+      if (key === 'countryId') {
+        setCities([]);
+        setCitiesLoading(false);
+      }
       setForm((f) => {
         const next = { ...f, [key]: value };
         if (key === 'countryId') next.cityId = '';
+        if (CONTACT_MANUAL_FIELDS.has(key)) next.selectedContactUserId = '';
         return next;
       });
       setErrors((e) => {
@@ -196,9 +229,16 @@ export function useCompanyCreate(onSuccess?: () => void) {
     }));
   }, []);
 
-  const validate = (): boolean => {
+  const validateForm = (): { valid: boolean; focusLangTab?: 'en' | 'ar' } => {
     const next: CompanyFormErrors = {};
     if (!form.nameEn.trim()) next.nameEn = company.validation.nameEnRequired;
+    if (!form.nameAr.trim()) next.nameAr = company.validation.nameArRequired;
+    if (isRichTextEmpty(form.addressEn)) {
+      next.addressEn = company.validation.addressEnRequired;
+    }
+    if (isRichTextEmpty(form.addressAr)) {
+      next.addressAr = company.validation.addressArRequired;
+    }
     if (!form.rank.trim()) {
       next.rank = company.validation.rankRequired;
     } else if (isNaN(Number(form.rank)) || Number(form.rank) <= 0) {
@@ -207,13 +247,30 @@ export function useCompanyCreate(onSuccess?: () => void) {
     if (!form.countryId) next.countryId = company.validation.countryRequired;
     if (!form.cityId) next.cityId = company.validation.cityRequired;
     if (!form.companyTypeId) next.companyTypeId = company.validation.typeRequired;
+    if (!form.crNumber.trim()) next.crNumber = company.validation.crNumberRequired;
+    if (!form.vatNumber.trim()) next.vatNumber = company.validation.vatNumberRequired;
+    if (!form.contactFirstName.trim()) {
+      next.contactFirstName = company.validation.contactFirstNameRequired;
+    }
+    if (!form.contactLastName.trim()) {
+      next.contactLastName = company.validation.contactLastNameRequired;
+    }
+    if (!form.contactEmail.trim()) {
+      next.contactEmail = company.validation.contactEmailRequired;
+    }
+    if (!form.contactPhone.trim()) {
+      next.contactPhone = company.validation.contactPhoneRequired;
+    }
+
     setErrors(next);
-    return Object.keys(next).length === 0;
+    const focusLangTab = getLangTabWithErrors(next);
+    return {
+      valid: Object.keys(next).length === 0,
+      focusLangTab,
+    };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
+  const submitCompany = async () => {
     setSubmitting(true);
     try {
       const dto: CompanyCreateDto = {
@@ -223,16 +280,16 @@ export function useCompanyCreate(onSuccess?: () => void) {
         ],
         contact: {
           userId: form.selectedContactUserId || undefined,
-          firstName: form.contactFirstName || undefined,
-          lastName: form.contactLastName || undefined,
-          email: form.contactEmail || undefined,
-          phone: form.contactPhone || undefined,
+          firstName: form.contactFirstName.trim(),
+          lastName: form.contactLastName.trim(),
+          email: form.contactEmail.trim(),
+          phone: form.contactPhone.trim(),
         },
         rank: Number(form.rank),
         companyPhone: form.companyPhone || undefined,
         companySize: form.companySize ? Number(form.companySize) : undefined,
-        crNumber: form.crNumber || undefined,
-        vatNumber: form.vatNumber || undefined,
+        crNumber: form.crNumber.trim(),
+        vatNumber: form.vatNumber.trim(),
         ipan: form.ipan || undefined,
         logo: form.logo,
         countryId: form.countryId,
@@ -244,11 +301,21 @@ export function useCompanyCreate(onSuccess?: () => void) {
       await companyApi.create(dto);
       toast.success(company.create.success);
       onSuccess?.();
-    } catch {
-      toast.error(company.create.error);
+    } catch (err) {
+      toast.error(
+        err instanceof ApiError ? err.message : company.create.error
+      );
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { valid, focusLangTab } = validateForm();
+    if (!valid) return { valid: false as const, focusLangTab };
+    await submitCompany();
+    return { valid: true as const };
   };
 
   const getDdlName = useCallback(
@@ -272,7 +339,12 @@ export function useCompanyCreate(onSuccess?: () => void) {
     userResults,
     usersLoading,
     getDdlName,
-    ddl: { types, countries, cities, tags },
-    loading: { typesLoading, countriesLoading, citiesLoading, tagsLoading },
+    ddl: { types, countries, cities: form.countryId ? cities : [], tags },
+    loading: {
+      typesLoading,
+      countriesLoading,
+      citiesLoading: form.countryId ? citiesLoading : false,
+      tagsLoading,
+    },
   };
 }

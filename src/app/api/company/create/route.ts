@@ -8,9 +8,21 @@ import {
   hasUpstreamFailure,
   normalizeUpstreamStatus,
 } from '@/modules/auth/server/upstreamAuthResult';
+import { forwardCompanyCreateFormData } from '@/modules/company/companyCreatePayload.shared';
 
 function toString(v: FormDataEntryValue | null): string {
   return typeof v === 'string' ? v.trim() : '';
+}
+
+function hasCompleteContact(incoming: FormData): boolean {
+  const keys = [
+    'Contact.FirstName',
+    'Contact.LastName',
+    'Contact.Email',
+    'Contact.Phone',
+  ] as const;
+
+  return keys.every((key) => toString(incoming.get(key)).length > 0);
 }
 
 export async function POST(request: NextRequest) {
@@ -27,8 +39,10 @@ export async function POST(request: NextRequest) {
 
     const incomingForm = await request.formData();
 
-    const nameEn = toString(incomingForm.get('NameEn'));
+    const nameEn = toString(incomingForm.get('Translations[0].Name'));
     const rank = toString(incomingForm.get('Rank'));
+    const crNumber = toString(incomingForm.get('CRNumber'));
+    const vatNumber = toString(incomingForm.get('VATNumber'));
 
     if (!nameEn || !rank) {
       return NextResponse.json(
@@ -37,35 +51,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const upstreamForm = new FormData();
-
-    const textFields = [
-      'NameEn', 'NameAr', 'AddressEn', 'AddressAr',
-      'Rank', 'CountryId', 'CityId', 'CompanyTypeId',
-      'ParentCompanyId', 'CompanyPhone', 'CompanySize',
-      'CrNumber', 'VatNumber', 'Ipan',
-      'ContactUserId', 'ContactFirstName', 'ContactLastName',
-      'ContactEmail', 'ContactPhone', 'Status',
-    ] as const;
-
-    for (const field of textFields) {
-      const val = incomingForm.get(field);
-      if (typeof val === 'string' && val.trim()) {
-        upstreamForm.set(field, val.trim());
-      }
+    if (!crNumber || !vatNumber) {
+      return NextResponse.json(
+        { success: false, message: 'CR Number and VAT Number are required.', data: null },
+        { status: 400 }
+      );
     }
 
-    const tagEntries = incomingForm.getAll('Tags');
-    for (const tag of tagEntries) {
-      if (typeof tag === 'string' && tag) {
-        upstreamForm.append('Tags', tag);
-      }
+    if (!hasCompleteContact(incomingForm)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'All contact fields (first name, last name, email, phone) are required.',
+          data: null,
+        },
+        { status: 400 }
+      );
     }
 
-    const logo = incomingForm.get('Logo');
-    if (logo instanceof File && logo.size > 0) {
-      upstreamForm.set('Logo', logo);
-    }
+    const upstreamForm = forwardCompanyCreateFormData(incomingForm);
 
     const endpoint = new URL('/api/Company/Company/Create', MWAFQ_API_BASE_URL);
 

@@ -1,4 +1,5 @@
 import { http } from '@/shared/lib/http';
+import { buildCompanyCreateUpstreamForm } from '../companyCreatePayload.shared';
 import type { DdlItem, UserSearchItem, CompanyCreateDto, CompanyCreateResponse } from '../types/company.types';
 
 interface DdlResponse {
@@ -53,40 +54,7 @@ export const companyApi = {
   },
 
   create: (dto: CompanyCreateDto) => {
-    const form = new FormData();
-
-    const en = dto.translations.find((t) => t.langId === 1);
-    const ar = dto.translations.find((t) => t.langId === 2);
-
-    if (en?.name) form.set('NameEn', en.name);
-    if (ar?.name) form.set('NameAr', ar.name);
-    if (en?.address) form.set('AddressEn', en.address);
-    if (ar?.address) form.set('AddressAr', ar.address);
-
-    form.set('Rank', String(dto.rank));
-    form.set('CountryId', dto.countryId);
-    form.set('CityId', dto.cityId);
-    form.set('CompanyTypeId', dto.companyTypeId);
-    form.set('Status', dto.status ? 'true' : 'false');
-
-    if (dto.parentCompanyId) form.set('ParentCompanyId', dto.parentCompanyId);
-    if (dto.companyPhone) form.set('CompanyPhone', dto.companyPhone);
-    if (dto.companySize != null) form.set('CompanySize', String(dto.companySize));
-    if (dto.crNumber) form.set('CrNumber', dto.crNumber);
-    if (dto.vatNumber) form.set('VatNumber', dto.vatNumber);
-    if (dto.ipan) form.set('Ipan', dto.ipan);
-    if (dto.logo) form.set('Logo', dto.logo);
-
-    if (dto.contact.userId) form.set('ContactUserId', dto.contact.userId);
-    if (dto.contact.firstName) form.set('ContactFirstName', dto.contact.firstName);
-    if (dto.contact.lastName) form.set('ContactLastName', dto.contact.lastName);
-    if (dto.contact.email) form.set('ContactEmail', dto.contact.email);
-    if (dto.contact.phone) form.set('ContactPhone', dto.contact.phone);
-
-    for (const tagId of dto.tagIds) {
-      form.append('Tags', tagId);
-    }
-
+    const form = buildCompanyCreateUpstreamForm(dto);
     return http.post<CompanyCreateResponse>('/api/company/create', form);
   },
 };

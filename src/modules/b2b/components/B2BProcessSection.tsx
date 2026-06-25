@@ -56,13 +56,13 @@ const CONTENT: Record<string, JourneyContent> = {
         number: '05',
         title: 'Scale with Confidence',
         description:
-          'As your team grows, Mwafq scales with you — automated renewals, deep analytics, and direct compliance reporting.',
+          'As your workforce expands, Mwafq grows with you — automated policy renewals, workforce analytics, and export-ready compliance reports for auditors and regulators.',
       },
     ],
   },
   ar: {
     eyebrow: 'كيف يعمل',
-    title: 'رحلة مَوافق',
+    title: 'رحلة موفق',
     stages: [
       {
         number: '٠١',
@@ -92,7 +92,7 @@ const CONTENT: Record<string, JourneyContent> = {
         number: '٠٥',
         title: 'التوسع بثقة',
         description:
-          'مع نمو فريقك تنمو مَوافق معك — تجديدات تلقائية وتحليلات عميقة وتقارير امتثال مباشرة.',
+          'مع توسع قواك العاملة تنمو موفق معك — تجديدات تلقائية للوثائق، وتحليلات للقوى العاملة، وتقارير امتثال جاهزة للتصدير للمراجعين والجهات الرقابية.',
       },
     ],
   },
@@ -116,16 +116,196 @@ const PATH_D = [
   'C 100,920  1100,960 1100,970',
 ].join(' ');
 
-const CAM_PROGRESS = [0, 0.2, 0.4, 0.6, 0.8, 0.9, 1.0];
-const CAM_X = [500, 1000, 0, 1000, 0, 500, 0];
-const CAM_Y = [0, 0, 160, 370, 400, 500, 0];
-const CAM_W = [1200, 1200, 1200, 1200, 1200, 1200, 2200];
+const FINALE_THRESHOLD = 0.92;
+const STAGE_INTRO = 0.02;
+const STAGE_STEP = (FINALE_THRESHOLD - STAGE_INTRO) / 5;
+const STAGE_THRESHOLDS = [
+  STAGE_INTRO,
+  STAGE_INTRO + STAGE_STEP,
+  STAGE_INTRO + STAGE_STEP * 2,
+  STAGE_INTRO + STAGE_STEP * 3,
+  STAGE_INTRO + STAGE_STEP * 4,
+] as const;
+
+/** Hand-tuned viewBox origin per node — matches STAGE_META order */
+const NODE_CAMERAS = [
+  { x: 1000, y: 0 },
+  { x: 0, y: 160 },
+  { x: 1000, y: 370 },
+  { x: 0, y: 400 },
+  { x: 500, y: 620 },
+] as const;
+const CAM_INTRO = { x: 500, y: 0 };
+
+// Camera hits each node when the path dot arrives (stage boundaries, not midpoints)
+const CAM_PROGRESS = [
+  0,
+  STAGE_THRESHOLDS[1],
+  STAGE_THRESHOLDS[2],
+  STAGE_THRESHOLDS[3],
+  STAGE_THRESHOLDS[4],
+  FINALE_THRESHOLD,
+  1,
+];
+const CAM_X = [CAM_INTRO.x, ...NODE_CAMERAS.map((c) => c.x), -640];
+const CAM_Y = [CAM_INTRO.y, ...NODE_CAMERAS.map((c) => c.y), 0];
+const CAM_W = [1200, 1200, 1200, 1200, 1200, 1200, 3480];
 const CAM_H = [1000, 600, 600, 600, 600, 600, 1000];
 
 const SECTION_HEIGHT = '2600vh';
-const STAGE_THRESHOLDS = [0.1, 0.3, 0.5, 0.7, 0.85];
-const FINALE_THRESHOLD = 0.9;
 const RING_R = 22;
+const LABEL_W = 460;
+const LABEL_H = 176;
+const LABEL_GAP = 130;
+const FINALE_LABEL_W = 640;
+const FINALE_LABEL_H = 252;
+/** Steps 1–4 — tight to the path */
+const FINALE_LABEL_GAP = 52;
+/** Step 5 */
+const FINALE_LABEL_GAP_LAST = 100;
+
+type LabelLayout = {
+  foX: number;
+  foY: number;
+  foW: number;
+  foH: number;
+  lx1: number;
+  ly1: number;
+  lx2: number;
+  ly2: number;
+  /** Extra padding on the side facing the node (finale only) */
+  padTowardNode?: 'start' | 'end';
+};
+
+/** Scroll focus — label toward path center, away from screen edge */
+function getStageLabelLayout(index: number): LabelLayout {
+  const meta = STAGE_META[index]!;
+  const foY = meta.nodeY - LABEL_H / 2;
+
+  if (index === 4) {
+    const foX = meta.nodeX + RING_R + LABEL_GAP;
+    return {
+      foX,
+      foY,
+      foW: LABEL_W,
+      foH: LABEL_H,
+      lx1: meta.nodeX + RING_R,
+      ly1: meta.nodeY,
+      lx2: foX,
+      ly2: meta.nodeY,
+    };
+  }
+
+  if (meta.side === 'right') {
+    const foX = meta.nodeX - LABEL_GAP - LABEL_W;
+    return {
+      foX,
+      foY,
+      foW: LABEL_W,
+      foH: LABEL_H,
+      lx1: meta.nodeX - RING_R,
+      ly1: meta.nodeY,
+      lx2: foX + LABEL_W,
+      ly2: meta.nodeY,
+    };
+  }
+
+  const foX = meta.nodeX + RING_R + LABEL_GAP;
+  return {
+    foX,
+    foY,
+    foW: LABEL_W,
+    foH: LABEL_H,
+    lx1: meta.nodeX + RING_R,
+    ly1: meta.nodeY,
+    lx2: foX,
+    ly2: meta.nodeY,
+  };
+}
+
+/** Finale zoom-out — swapped sides (outer edge), larger boxes, clears the path */
+function getFinaleLabelLayout(index: number): LabelLayout {
+  const meta = STAGE_META[index]!;
+  const w = FINALE_LABEL_W;
+  const h = FINALE_LABEL_H;
+  const gap = index === 4 ? FINALE_LABEL_GAP_LAST : FINALE_LABEL_GAP;
+  const foY = meta.nodeY - h / 2;
+
+  if (index === 4) {
+    const foX = meta.nodeX + RING_R + gap;
+    return {
+      foX,
+      foY: meta.nodeY - h / 2 - 12,
+      foW: w,
+      foH: h,
+      lx1: meta.nodeX + RING_R,
+      ly1: meta.nodeY,
+      lx2: foX,
+      ly2: meta.nodeY,
+      padTowardNode: 'start',
+    };
+  }
+
+  if (meta.side === 'right') {
+    const foX = meta.nodeX + RING_R + gap;
+    return {
+      foX,
+      foY,
+      foW: w,
+      foH: h,
+      lx1: meta.nodeX + RING_R,
+      ly1: meta.nodeY,
+      lx2: foX,
+      ly2: meta.nodeY,
+      padTowardNode: 'start',
+    };
+  }
+
+  const foX = meta.nodeX - gap - w;
+  return {
+    foX,
+    foY,
+    foW: w,
+    foH: h,
+    lx1: meta.nodeX - RING_R,
+    ly1: meta.nodeY,
+    lx2: foX + w,
+    ly2: meta.nodeY,
+    padTowardNode: 'end',
+  };
+}
+
+/** Equal scroll time per leg — each stage owns one fifth of the pre-finale scroll */
+function mapScrollToPathProgress(scroll: number): number {
+  if (scroll <= STAGE_INTRO) return 0;
+  if (scroll >= FINALE_THRESHOLD) return 1;
+
+  for (let i = 0; i < 5; i++) {
+    const legStart = STAGE_THRESHOLDS[i]!;
+    const legEnd = i < 4 ? STAGE_THRESHOLDS[i + 1]! : FINALE_THRESHOLD;
+    if (scroll <= legEnd) {
+      const t = (scroll - legStart) / (legEnd - legStart);
+      return i * 0.2 + t * 0.2;
+    }
+  }
+
+  return 1;
+}
+
+/** Keep label i until path passes node i+1 — avoids hiding step 04 before dot reaches node 4 */
+function getActiveLabelIndex(
+  scrollProgress: number,
+  pathProgress: number
+): number {
+  if (scrollProgress >= FINALE_THRESHOLD) return -1;
+  if (pathProgress <= 0) return -1;
+
+  if (pathProgress <= 0.2) return 0;
+  if (pathProgress <= 0.4) return 1;
+  if (pathProgress <= 0.6) return 2;
+  if (pathProgress <= 0.8) return 3;
+  return 4;
+}
 
 const ELLIPSE_BG = `url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 700' fill='none' stroke='%23d3d6e1' stroke-width='1'%3E%3Cellipse cx='800' cy='720' rx='220' ry='90'/%3E%3Cellipse cx='800' cy='720' rx='320' ry='130'/%3E%3Cellipse cx='800' cy='720' rx='430' ry='170'/%3E%3Cellipse cx='800' cy='720' rx='550' ry='215'/%3E%3Cellipse cx='800' cy='720' rx='680' ry='265'/%3E%3Cellipse cx='800' cy='720' rx='820' ry='320'/%3E%3Cellipse cx='800' cy='720' rx='970' ry='380'/%3E%3C/svg%3E")`;
 
@@ -140,65 +320,93 @@ function getStageState(
   return 'active';
 }
 
-// ─── Story panel (desktop only) ───────────────────────────────────────────────
-function StoryPanel({
-  activeIndex,
-  stages,
+// ─── SVG stage label (desktop) ────────────────────────────────────────────────
+function StageLabelContent({
+  stage,
+  total,
   rtl,
+  size = 'active',
+  padTowardNode,
 }: {
-  activeIndex: number;
-  stages: Stage[];
+  stage: Stage;
+  total: number;
   rtl: boolean;
+  size?: 'active' | 'finale';
+  padTowardNode?: 'start' | 'end';
 }) {
-  const stage = stages[activeIndex];
-  const meta = STAGE_META[activeIndex];
-  if (!stage || !meta) return null;
+  const isFinale = size === 'finale';
+  const padInner = isFinale ? 20 : 20;
+  const padOuter = isFinale ? 16 : 20;
+  const padBlock = isFinale ? 12 : 0;
 
-  const fromRight = meta.side === 'right';
-  // XOR: flex-start/end is flipped by dir="rtl", so we invert when RTL so the
-  // panel always lands on the SAME side as the node (right node → right panel).
-  const panelOnRight = fromRight !== rtl;
+  const paddingStyle =
+    isFinale && padTowardNode
+      ? padTowardNode === 'start'
+        ? {
+            paddingTop: padBlock,
+            paddingBottom: padBlock,
+            paddingInlineStart: padInner,
+            paddingInlineEnd: padOuter,
+          }
+        : {
+            paddingTop: padBlock,
+            paddingBottom: padBlock,
+            paddingInlineStart: padOuter,
+            paddingInlineEnd: padInner,
+          }
+      : { padding: `0 ${padOuter}px` };
 
   return (
-    <AnimatePresence mode='wait'>
-      <motion.div
-        key={activeIndex}
-        initial={{ opacity: 0, x: panelOnRight ? 48 : -48, y: 0 }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        exit={{ opacity: 0, x: panelOnRight ? 24 : -24 }}
-        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className='pointer-events-none absolute bottom-8 left-0 right-0 z-20 flex px-8'
-        style={{ justifyContent: panelOnRight ? 'flex-end' : 'flex-start' }}
-        dir={rtl ? 'rtl' : 'ltr'}
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        textAlign: rtl ? 'right' : 'left',
+        direction: rtl ? 'rtl' : 'ltr',
+        boxSizing: 'border-box',
+        ...paddingStyle,
+      }}
+    >
+      <span
+        style={{
+          display: 'block',
+          fontSize: isFinale ? '16px' : '10px',
+          letterSpacing: isFinale ? '0.28em' : '0.32em',
+          textTransform: 'uppercase',
+          color: '#00a8f1',
+          fontFamily: 'ui-monospace, monospace',
+          marginBottom: isFinale ? '10px' : '8px',
+        }}
       >
-        <div className='w-[min(500px,calc(100vw-64px))]'>
-          <span
-            className='block mb-3'
-            style={{
-              fontSize: '10px',
-              letterSpacing: '0.32em',
-              textTransform: 'uppercase',
-              color: '#00a8f1',
-              fontFamily: 'ui-monospace, monospace',
-            }}
-          >
-            {stage.number} / 0{stages.length}
-          </span>
-          <h3
-            className='font-extrabold leading-[1.1] tracking-[-0.03em] text-[#1e2364] mb-3'
-            style={{ fontSize: 'clamp(22px, 2.6vw, 38px)' }}
-          >
-            {stage.title}
-          </h3>
-          <p
-            className='text-[#6b7196] leading-relaxed'
-            style={{ fontSize: 'clamp(13px, 1.1vw, 16px)' }}
-          >
-            {stage.description}
-          </p>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+        {stage.number} / 0{total}
+      </span>
+      <span
+        style={{
+          display: 'block',
+          fontSize: isFinale ? '42px' : '26px',
+          fontWeight: 800,
+          letterSpacing: '-0.03em',
+          lineHeight: 1.15,
+          color: '#1e2364',
+          marginBottom: isFinale ? '12px' : '8px',
+        }}
+      >
+        {stage.title}
+      </span>
+      <span
+        style={{
+          display: 'block',
+          fontSize: isFinale ? '21px' : '14px',
+          lineHeight: isFinale ? 1.5 : 1.55,
+          color: '#6b7196',
+        }}
+      >
+        {stage.description}
+      </span>
+    </div>
   );
 }
 
@@ -380,7 +588,6 @@ export function B2BProcessSection({ locale }: Props) {
   const [pathLength, setPathLength] = useState(9999);
   const [leadingPoint, setLeadingPoint] = useState({ x: 1100, y: 40 });
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(-1);
 
   const scrollMV = useMotionValue(0);
   const camX = useTransform(scrollMV, CAM_PROGRESS, CAM_X);
@@ -405,20 +612,13 @@ export function B2BProcessSection({ locale }: Props) {
       setScrollProgress(progress);
       scrollMV.set(progress);
 
+      const pathProgress = mapScrollToPathProgress(progress);
+
       if (pathLength < 9999) {
         const len = pathRef.current.getTotalLength();
-        const pt = pathRef.current.getPointAtLength(len * progress);
+        const pt = pathRef.current.getPointAtLength(len * pathProgress);
         setLeadingPoint({ x: pt.x, y: pt.y });
       }
-
-      let idx = -1;
-      for (let i = STAGE_THRESHOLDS.length - 1; i >= 0; i--) {
-        if (progress >= STAGE_THRESHOLDS[i]) {
-          idx = i;
-          break;
-        }
-      }
-      setActiveIndex(idx);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -426,62 +626,9 @@ export function B2BProcessSection({ locale }: Props) {
     return () => window.removeEventListener('scroll', onScroll);
   }, [pathLength, scrollMV]);
 
-  const dashOffset = pathLength * (1 - scrollProgress);
-
-  // Finale label cards (SVG foreignObject positions)
-  const CARDS = [
-    {
-      foX: 1370,
-      foY: 2,
-      foW: 800,
-      foH: 170,
-      lx1: 2100,
-      ly1: 174,
-      lx2: 2100,
-      ly2: 208,
-    },
-    {
-      foX: 42,
-      foY: 262,
-      foW: 800,
-      foH: 155,
-      lx1: 100,
-      ly1: 419,
-      lx2: 100,
-      ly2: 438,
-    },
-    {
-      foX: 1370,
-      foY: 472,
-      foW: 800,
-      foH: 160,
-      lx1: 2100,
-      ly1: 634,
-      lx2: 2100,
-      ly2: 648,
-    },
-    {
-      foX: 42,
-      foY: 655,
-      foW: 800,
-      foH: 158,
-      lx1: 100,
-      ly1: 815,
-      lx2: 100,
-      ly2: 833,
-    },
-    {
-      // Stage 5 — center node (1100,970): card right side; diagonal leader from node up-right to card
-      foX: 1370,
-      foY: 720,
-      foW: 800,
-      foH: 140,
-      lx1: 1100,
-      ly1: 948,
-      lx2: 1370,
-      ly2: 862,
-    },
-  ];
+  const dashOffset = pathLength * (1 - mapScrollToPathProgress(scrollProgress));
+  const pathProgress = mapScrollToPathProgress(scrollProgress);
+  const activeLabelIndex = getActiveLabelIndex(scrollProgress, pathProgress);
 
   return (
     <>
@@ -553,20 +700,6 @@ export function B2BProcessSection({ locale }: Props) {
                   <stop offset='0%' stopColor='#1e2364' />
                   <stop offset='100%' stopColor='#00a8f1' />
                 </linearGradient>
-                <linearGradient id='mjGlow' x1='0%' y1='0%' x2='0%' y2='100%'>
-                  <stop offset='0%' stopColor='#1e2364' stopOpacity='0.4' />
-                  <stop offset='100%' stopColor='#00a8f1' stopOpacity='0.4' />
-                </linearGradient>
-                <filter
-                  id='mjPathBlur'
-                  x='-25%'
-                  y='-5%'
-                  width='150%'
-                  height='110%'
-                >
-                  <feGaussianBlur stdDeviation='6' result='blur' />
-                  <feComposite in='SourceGraphic' in2='blur' operator='over' />
-                </filter>
                 <filter
                   id='mjNodeGlw'
                   x='-150%'
@@ -600,22 +733,6 @@ export function B2BProcessSection({ locale }: Props) {
                   </feMerge>
                 </filter>
               </defs>
-
-
-              {/* Glow layer */}
-              <path
-                d={PATH_D}
-                fill='none'
-                stroke='url(#mjGlow)'
-                strokeWidth='14'
-                strokeLinecap='round'
-                filter='url(#mjPathBlur)'
-                style={{
-                  strokeDasharray: pathLength,
-                  strokeDashoffset: dashOffset,
-                  opacity: 0.22,
-                }}
-              />
 
               {/* Animated draw path */}
               <path
@@ -740,10 +857,55 @@ export function B2BProcessSection({ locale }: Props) {
                 );
               })}
 
-              {/* Finale labels */}
+              {/* Active stage label — anchored beside the focused node */}
+              {scrollProgress < FINALE_THRESHOLD && activeLabelIndex >= 0 && (
+                <AnimatePresence mode='wait'>
+                  <motion.g
+                    key={activeLabelIndex}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 0.45,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    }}
+                  >
+                    {(() => {
+                      const layout = getStageLabelLayout(activeLabelIndex);
+                      const stage = stages[activeLabelIndex]!;
+                      return (
+                        <>
+                          <line
+                            x1={layout.lx1}
+                            y1={layout.ly1}
+                            x2={layout.lx2}
+                            y2={layout.ly2}
+                            stroke='rgba(0,168,241,0.45)'
+                            strokeWidth='1'
+                          />
+                          <foreignObject
+                            x={layout.foX}
+                            y={layout.foY}
+                            width={layout.foW}
+                            height={layout.foH}
+                          >
+                            <StageLabelContent
+                              stage={stage}
+                              total={stages.length}
+                              rtl={rtl}
+                            />
+                          </foreignObject>
+                        </>
+                      );
+                    })()}
+                  </motion.g>
+                </AnimatePresence>
+              )}
+
+              {/* Finale labels — same layout, all visible */}
               {stages.map((stage, i) => {
                 const isFinale = scrollProgress >= FINALE_THRESHOLD;
-                const c = CARDS[i]!;
+                const layout = getFinaleLabelLayout(i);
                 return (
                   <motion.g
                     key={`finale-label-${i}`}
@@ -752,82 +914,36 @@ export function B2BProcessSection({ locale }: Props) {
                     transition={{
                       duration: 0.6,
                       ease: [0.25, 0.46, 0.45, 0.94],
-                      delay: isFinale ? 0.2 + i * 0.14 : 0,
+                      delay: isFinale ? 0.08 + i * 0.07 : 0,
                     }}
                   >
                     <line
-                      x1={c.lx1}
-                      y1={c.ly1}
-                      x2={c.lx2}
-                      y2={c.ly2}
+                      x1={layout.lx1}
+                      y1={layout.ly1}
+                      x2={layout.lx2}
+                      y2={layout.ly2}
                       stroke='rgba(0,168,241,0.35)'
                       strokeWidth='1'
                       strokeDasharray='3 4'
                     />
                     <foreignObject
-                      x={c.foX}
-                      y={c.foY}
-                      width={c.foW}
-                      height={c.foH}
+                      x={layout.foX}
+                      y={layout.foY}
+                      width={layout.foW}
+                      height={layout.foH}
                     >
-                      <div
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          textAlign: rtl ? 'right' : 'left',
-                          direction: rtl ? 'rtl' : 'ltr',
-                          padding: '0 20px',
-                        }}
-                      >
-                        <span
-                          style={{
-                            display: 'block',
-                            fontSize: '10px',
-                            letterSpacing: '0.32em',
-                            textTransform: 'uppercase',
-                            color: '#00a8f1',
-                            fontFamily: 'ui-monospace, monospace',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          {stage.number}
-                        </span>
-                        <span
-                          style={{
-                            display: 'block',
-                            fontSize: '19px',
-                            fontWeight: 700,
-                            letterSpacing: '-0.02em',
-                            lineHeight: 1.2,
-                            color: '#1e2364',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          {stage.title}
-                        </span>
-                        <span
-                          style={{
-                            display: 'block',
-                            fontSize: '12px',
-                            lineHeight: 1.6,
-                            color: '#6b7196',
-                          }}
-                        >
-                          {stage.description}
-                        </span>
-                      </div>
+                      <StageLabelContent
+                        stage={stage}
+                        total={stages.length}
+                        rtl={rtl}
+                        size='finale'
+                        padTowardNode={layout.padTowardNode}
+                      />
                     </foreignObject>
                   </motion.g>
                 );
               })}
             </motion.svg>
-
-            {scrollProgress < FINALE_THRESHOLD && (
-              <StoryPanel activeIndex={activeIndex} stages={stages} rtl={rtl} />
-            )}
           </div>
         </div>
       </div>

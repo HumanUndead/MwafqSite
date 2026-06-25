@@ -170,6 +170,9 @@ function UserSearchBox({
   onSelect,
   selectedId,
   onClear,
+  noResultsMessage,
+  noResultsHint,
+  searchingMessage,
 }: {
   label: string;
   placeholder: string;
@@ -179,6 +182,9 @@ function UserSearchBox({
   onSelect: (user: UserSearchItem) => void;
   selectedId: string;
   onClear: () => void;
+  noResultsMessage: string;
+  noResultsHint: string;
+  searchingMessage: string;
 }) {
   const [term, setTerm] = useState('');
   const [open, setOpen] = useState(false);
@@ -187,7 +193,8 @@ function UserSearchBox({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
     setTerm(v);
-    setOpen(true);
+    if (selectedId) onClear();
+    setOpen(v.length > 0);
     onSearch(v);
   };
 
@@ -202,6 +209,11 @@ function UserSearchBox({
     setOpen(false);
     onClear();
   };
+
+  const showResultsDropdown =
+    open && term.length > 0 && !selectedId && (loading || results.length > 0);
+  const showNoResultsHint =
+    open && term.length > 0 && !loading && !selectedId && results.length === 0;
 
   return (
     <div ref={ref} className='relative'>
@@ -235,12 +247,10 @@ function UserSearchBox({
         ) : null}
       </div>
 
-      {open && (term.length > 0) ? (
+      {showResultsDropdown ? (
         <div className='absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-[#e5e7f0] bg-white shadow-lg'>
           {loading ? (
-            <p className='px-3.5 py-3 text-sm text-[#a3a8c4]'>Searching…</p>
-          ) : results.length === 0 ? (
-            <p className='px-3.5 py-3 text-sm text-[#a3a8c4]'>No users found</p>
+            <p className='px-3.5 py-3 text-sm text-[#a3a8c4]'>{searchingMessage}</p>
           ) : (
             <ul>
               {results.map((u) => (
@@ -261,10 +271,20 @@ function UserSearchBox({
           )}
         </div>
       ) : null}
+
+      {showNoResultsHint ? (
+        <p className='mt-1.5 px-1 text-xs leading-relaxed text-[#6b7196]' role='status'>
+          <span className='font-semibold text-[#1e2364]'>{noResultsMessage}</span>
+          {' — '}
+          {noResultsHint}
+        </p>
+      ) : null}
     </div>
   );
 }
 
+// Kept for classification section (currently commented out in the form)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function TagsMultiSelect({
   label,
   items,
@@ -434,7 +454,6 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
     errors,
     submitting,
     updateField,
-    toggleTag,
     handleSubmit,
     searchUsers,
     selectContactUser,
@@ -447,8 +466,24 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
 
   const [langTab, setLangTab] = useState<'en' | 'ar'>('en');
 
+  const enLangErrors = !!(errors.nameEn || errors.addressEn);
+  const arLangErrors = !!(errors.nameAr || errors.addressAr);
+  const hiddenLangAlert =
+    langTab === 'en' && arLangErrors
+      ? company.validation.switchToArabicTab
+      : langTab === 'ar' && enLangErrors
+        ? company.validation.switchToEnglishTab
+        : null;
+
+  const onFormSubmit = async (e: React.FormEvent) => {
+    const result = await handleSubmit(e);
+    if (result && !result.valid && result.focusLangTab) {
+      setLangTab(result.focusLangTab);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-6' noValidate>
+    <form onSubmit={onFormSubmit} className='flex flex-col gap-6' noValidate>
       <div className='flex flex-col gap-1'>
         <h2 className='text-xl font-bold text-[#1e2364]'>{company.create.title}</h2>
         <p className='text-sm text-[#6b7196]'>{company.create.subtitle}</p>
@@ -457,57 +492,81 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
       {/* ── Language tabs ── */}
       <div>
         <div className='mb-4 flex gap-2 border-b border-[#e5e7f0]'>
-          {(['en', 'ar'] as const).map((tab) => (
-            <button
-              key={tab}
-              type='button'
-              onClick={() => setLangTab(tab)}
-              className={cn(
-                '-mb-px border-b-2 px-4 pb-2.5 text-[13px] font-semibold transition-colors',
-                langTab === tab
-                  ? 'border-[#00a8f1] text-[#1e2364]'
-                  : 'border-transparent text-[#a3a8c4] hover:text-[#1e2364]'
-              )}
-            >
-              {tab === 'en' ? company.tabs.en : company.tabs.ar}
-            </button>
-          ))}
+          {(['en', 'ar'] as const).map((tab) => {
+            const tabHasError = tab === 'en' ? enLangErrors : arLangErrors;
+            return (
+              <button
+                key={tab}
+                type='button'
+                onClick={() => setLangTab(tab)}
+                className={cn(
+                  '-mb-px flex items-center gap-1.5 border-b-2 px-4 pb-2.5 text-[13px] font-semibold transition-colors',
+                  langTab === tab
+                    ? 'border-[#00a8f1] text-[#1e2364]'
+                    : tabHasError
+                      ? 'border-transparent text-red-600 hover:text-red-700'
+                      : 'border-transparent text-[#a3a8c4] hover:text-[#1e2364]'
+                )}
+              >
+                {tab === 'en' ? company.tabs.en : company.tabs.ar}
+                {tabHasError ? (
+                  <span
+                    className='size-1.5 shrink-0 rounded-full bg-red-500'
+                    aria-hidden
+                  />
+                ) : null}
+              </button>
+            );
+          })}
         </div>
 
-        <div className='flex flex-col gap-4'>
-          {langTab === 'en' ? (
-            <>
-              <TextField
-                label={company.fields.nameEn}
-                required
-                value={form.nameEn}
-                onChange={(v) => updateField('nameEn', v)}
-                placeholder={company.placeholders.nameEn}
-                error={errors.nameEn}
-              />
-              <RichTextEditor
-                label={company.fields.addressEn}
-                value={form.addressEn}
-                onChange={(v) => updateField('addressEn', v)}
-                placeholder={company.placeholders.address}
-              />
-            </>
-          ) : (
-            <>
-              <TextField
-                label={company.fields.nameAr}
-                value={form.nameAr}
-                onChange={(v) => updateField('nameAr', v)}
-                placeholder={company.placeholders.nameAr}
-              />
-              <RichTextEditor
-                label={company.fields.addressAr}
-                value={form.addressAr}
-                onChange={(v) => updateField('addressAr', v)}
-                placeholder={company.placeholders.address}
-              />
-            </>
-          )}
+        {hiddenLangAlert ? (
+          <p
+            role='alert'
+            className='mb-4 rounded-[10px] border border-red-200 bg-red-50 px-3 py-2.5 text-[13px] leading-snug text-red-700'
+          >
+            {hiddenLangAlert}
+          </p>
+        ) : null}
+
+        <div className={cn('flex flex-col gap-4', langTab !== 'en' && 'hidden')}>
+          <TextField
+            label={company.fields.nameEn}
+            required
+            value={form.nameEn}
+            onChange={(v) => updateField('nameEn', v)}
+            placeholder={company.placeholders.nameEn}
+            error={errors.nameEn}
+          />
+          <RichTextEditor
+            key='company-address-en'
+            label={company.fields.addressEn}
+            required
+            value={form.addressEn}
+            onChange={(v) => updateField('addressEn', v)}
+            placeholder={company.placeholders.address}
+            error={errors.addressEn}
+          />
+        </div>
+
+        <div className={cn('flex flex-col gap-4', langTab !== 'ar' && 'hidden')}>
+          <TextField
+            label={company.fields.nameAr}
+            required
+            value={form.nameAr}
+            onChange={(v) => updateField('nameAr', v)}
+            placeholder={company.placeholders.nameAr}
+            error={errors.nameAr}
+          />
+          <RichTextEditor
+            key='company-address-ar'
+            label={company.fields.addressAr}
+            required
+            value={form.addressAr}
+            onChange={(v) => updateField('addressAr', v)}
+            placeholder={company.placeholders.address}
+            error={errors.addressAr}
+          />
         </div>
       </div>
 
@@ -551,15 +610,19 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
           />
           <TextField
             label={company.fields.crNumber}
+            required
             value={form.crNumber}
             onChange={(v) => updateField('crNumber', v)}
             placeholder={company.placeholders.crNumber}
+            error={errors.crNumber}
           />
           <TextField
             label={company.fields.vatNumber}
+            required
             value={form.vatNumber}
             onChange={(v) => updateField('vatNumber', v)}
             placeholder={company.placeholders.vatNumber}
+            error={errors.vatNumber}
           />
           <TextField
             label={company.fields.ipan}
@@ -622,41 +685,48 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
             onSelect={selectContactUser}
             selectedId={form.selectedContactUserId}
             onClear={clearContactUser}
+            noResultsMessage={company.contact.noResults}
+            noResultsHint={company.contact.noResultsHint}
+            searchingMessage={company.contact.searching}
           />
           <div className='grid gap-4 sm:grid-cols-2'>
             <TextField
               label={company.fields.contactFirstName}
+              required
               value={form.contactFirstName}
               onChange={(v) => updateField('contactFirstName', v)}
-              disabled={!!form.selectedContactUserId}
+              error={errors.contactFirstName}
             />
             <TextField
               label={company.fields.contactLastName}
+              required
               value={form.contactLastName}
               onChange={(v) => updateField('contactLastName', v)}
-              disabled={!!form.selectedContactUserId}
+              error={errors.contactLastName}
             />
           </div>
           <div className='grid gap-4 sm:grid-cols-2'>
             <TextField
               label={company.fields.contactEmail}
+              required
               value={form.contactEmail}
               onChange={(v) => updateField('contactEmail', v)}
               type='email'
-              disabled={!!form.selectedContactUserId}
+              error={errors.contactEmail}
             />
             <TextField
               label={company.fields.contactPhone}
+              required
               value={form.contactPhone}
               onChange={(v) => updateField('contactPhone', v)}
               type='tel'
-              disabled={!!form.selectedContactUserId}
+              error={errors.contactPhone}
             />
           </div>
         </div>
       </div>
 
-      {/* ── Classification ── */}
+      {/* ── Classification (tags) — hidden for now
       <div className='rounded-[14px] border border-[#e5e7f0] bg-[#fafbfd] p-4'>
         <SectionHeading>{company.sections.classification}</SectionHeading>
         <div className='flex flex-col gap-4'>
@@ -671,6 +741,7 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
           />
         </div>
       </div>
+      */}
 
       <Button
         type='submit'

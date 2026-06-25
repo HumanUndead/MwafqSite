@@ -996,14 +996,28 @@ const en = {
     },
     validation: {
       nameEnRequired: 'Company name in English is required',
+      nameArRequired: 'Company name in Arabic is required',
+      addressEnRequired: 'Address in English is required',
+      addressArRequired: 'Address in Arabic is required',
+      switchToArabicTab:
+        'Switch to the Arabic tab — required fields there are missing.',
+      switchToEnglishTab:
+        'Switch to the English tab — required fields there are missing.',
       rankRequired: 'Rank is required',
       rankPositive: 'Rank must be a positive number',
       countryRequired: 'Country is required',
       cityRequired: 'City is required',
       typeRequired: 'Company type is required',
+      crNumberRequired: 'CR Number is required',
+      vatNumberRequired: 'VAT Number is required',
+      contactFirstNameRequired: 'First name is required',
+      contactLastNameRequired: 'Last name is required',
+      contactEmailRequired: 'Email is required',
+      contactPhoneRequired: 'Phone is required',
     },
     contact: {
       noResults: 'No users found',
+      noResultsHint: 'enter the contact details in the fields below',
       searching: 'Searching…',
     },
     ddl: {

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { cn } from '@/shared/lib/cn';
@@ -11,6 +12,7 @@ interface Props {
   label?: string;
   error?: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 function BoldIcon() {
@@ -45,7 +47,15 @@ function ListIcon() {
   );
 }
 
-export function RichTextEditor({ value, onChange, placeholder, label, error, disabled }: Props) {
+export function RichTextEditor({
+  value,
+  onChange,
+  placeholder,
+  label,
+  error,
+  disabled,
+  required,
+}: Props) {
   const editor = useEditor({
     extensions: [StarterKit],
     content: value || '',
@@ -65,6 +75,16 @@ export function RichTextEditor({ value, onChange, placeholder, label, error, dis
     },
   });
 
+  useEffect(() => {
+    if (!editor) return;
+    const next = value || '';
+    const current = editor.getHTML();
+    const normalizedCurrent = current === '<p></p>' ? '' : current;
+    if (next !== normalizedCurrent) {
+      editor.commands.setContent(next, { emitUpdate: false });
+    }
+  }, [editor, value]);
+
   const toolbarBtn = (active: boolean) =>
     cn(
       'flex size-7 items-center justify-center rounded-md transition-colors',
@@ -78,6 +98,7 @@ export function RichTextEditor({ value, onChange, placeholder, label, error, dis
       {label ? (
         <label className='px-1 text-[13px] font-bold tracking-[-0.01em] text-[#1e2364]'>
           {label}
+          {required ? <span className='ml-0.5 text-red-500'>*</span> : null}
         </label>
       ) : null}
 
