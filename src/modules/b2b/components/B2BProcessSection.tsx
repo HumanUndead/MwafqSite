@@ -11,7 +11,6 @@ import {
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
 
-// ─── Bilingual content ────────────────────────────────────────────────────────
 interface Stage {
   number: string;
   title: string;
@@ -98,7 +97,6 @@ const CONTENT: Record<string, JourneyContent> = {
   },
 };
 
-// ─── SVG geometry (unchanged) ─────────────────────────────────────────────────
 const STAGE_META = [
   { nodeX: 2100, nodeY: 230, side: 'right' as const },
   { nodeX: 100, nodeY: 460, side: 'left' as const },
@@ -127,7 +125,6 @@ const STAGE_THRESHOLDS = [
   STAGE_INTRO + STAGE_STEP * 4,
 ] as const;
 
-/** Hand-tuned viewBox origin per node — matches STAGE_META order */
 const NODE_CAMERAS = [
   { x: 1000, y: 0 },
   { x: 0, y: 160 },
@@ -137,7 +134,6 @@ const NODE_CAMERAS = [
 ] as const;
 const CAM_INTRO = { x: 500, y: 0 };
 
-// Camera hits each node when the path dot arrives (stage boundaries, not midpoints)
 const CAM_PROGRESS = [
   0,
   STAGE_THRESHOLDS[1],
@@ -159,9 +155,7 @@ const LABEL_H = 176;
 const LABEL_GAP = 130;
 const FINALE_LABEL_W = 640;
 const FINALE_LABEL_H = 252;
-/** Steps 1–4 — tight to the path */
 const FINALE_LABEL_GAP = 52;
-/** Step 5 */
 const FINALE_LABEL_GAP_LAST = 100;
 
 type LabelLayout = {
@@ -173,11 +167,9 @@ type LabelLayout = {
   ly1: number;
   lx2: number;
   ly2: number;
-  /** Extra padding on the side facing the node (finale only) */
   padTowardNode?: 'start' | 'end';
 };
 
-/** Scroll focus — label toward path center, away from screen edge */
 function getStageLabelLayout(index: number): LabelLayout {
   const meta = STAGE_META[index]!;
   const foY = meta.nodeY - LABEL_H / 2;
@@ -223,7 +215,6 @@ function getStageLabelLayout(index: number): LabelLayout {
   };
 }
 
-/** Finale zoom-out — swapped sides (outer edge), larger boxes, clears the path */
 function getFinaleLabelLayout(index: number): LabelLayout {
   const meta = STAGE_META[index]!;
   const w = FINALE_LABEL_W;
@@ -275,7 +266,6 @@ function getFinaleLabelLayout(index: number): LabelLayout {
   };
 }
 
-/** Equal scroll time per leg — each stage owns one fifth of the pre-finale scroll */
 function mapScrollToPathProgress(scroll: number): number {
   if (scroll <= STAGE_INTRO) return 0;
   if (scroll >= FINALE_THRESHOLD) return 1;
@@ -292,7 +282,6 @@ function mapScrollToPathProgress(scroll: number): number {
   return 1;
 }
 
-/** Keep label i until path passes node i+1 — avoids hiding step 04 before dot reaches node 4 */
 function getActiveLabelIndex(
   scrollProgress: number,
   pathProgress: number
@@ -320,7 +309,6 @@ function getStageState(
   return 'active';
 }
 
-// ─── SVG stage label (desktop) ────────────────────────────────────────────────
 function StageLabelContent({
   stage,
   total,
@@ -410,7 +398,6 @@ function StageLabelContent({
   );
 }
 
-// ─── Mobile view — vertical timeline ─────────────────────────────────────────
 function MobileJourney({
   eyebrow,
   title,
@@ -428,7 +415,6 @@ function MobileJourney({
       aria-label={title}
       dir={rtl ? 'rtl' : 'ltr'}
     >
-      {/* Background ellipses */}
       <div
         aria-hidden
         className='pointer-events-none absolute inset-0 opacity-30'
@@ -440,7 +426,6 @@ function MobileJourney({
         }}
       />
 
-      {/* Header */}
       <div className='relative mb-10 flex flex-col items-center gap-2 text-center'>
         <div className='flex items-center gap-2'>
           <div className='h-px w-6 bg-[#00a8f1]' />
@@ -465,9 +450,7 @@ function MobileJourney({
         </h2>
       </div>
 
-      {/* Steps */}
       <div className='relative mx-auto max-w-lg'>
-        {/* Vertical connector line */}
         <div
           aria-hidden
           className='absolute top-0 bottom-0 w-px bg-gradient-to-b from-[#00a8f1]/60 via-[#1e2364]/20 to-transparent'
@@ -533,7 +516,6 @@ function MobileStep({
       className='relative flex items-start gap-4'
       style={{ flexDirection: rtl ? 'row-reverse' : 'row' }}
     >
-      {/* Node */}
       <div className='relative shrink-0'>
         <div
           className='flex size-10 items-center justify-center rounded-full border-2 bg-white text-[11px] font-extrabold'
@@ -547,7 +529,6 @@ function MobileStep({
         </div>
       </div>
 
-      {/* Content */}
       <div className={`pb-1 pt-0.5 flex-1 ${rtl ? 'text-right' : ''}`}>
         <span
           className='mb-0.5 block'
@@ -572,7 +553,6 @@ function MobileStep({
   );
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
 interface Props {
   locale: Locale;
 }
@@ -632,7 +612,6 @@ export function B2BProcessSection({ locale }: Props) {
 
   return (
     <>
-      {/* ── Mobile view (< lg) ── */}
       <div className='lg:hidden relative overflow-hidden'>
         <MobileJourney
           eyebrow={eyebrow}
@@ -642,7 +621,6 @@ export function B2BProcessSection({ locale }: Props) {
         />
       </div>
 
-      {/* ── Desktop view (≥ lg) ── */}
       <div
         ref={sectionRef}
         className='relative hidden lg:block'
@@ -650,7 +628,6 @@ export function B2BProcessSection({ locale }: Props) {
         aria-label={title}
       >
         <div className='sticky top-0 z-[201] h-dvh flex flex-col overflow-hidden bg-[#f4f4f6]'>
-          {/* Concentric-ellipse background */}
           <div
             aria-hidden
             className='pointer-events-none absolute inset-0 opacity-[0.42]'
@@ -662,7 +639,6 @@ export function B2BProcessSection({ locale }: Props) {
             }}
           />
 
-          {/* Section header */}
           <div className='relative z-10 flex flex-col items-center pt-10 pb-3 shrink-0'>
             <div className='flex items-center gap-2 mb-3'>
               <div className='h-px w-8 bg-[#00a8f1]' />
@@ -687,7 +663,6 @@ export function B2BProcessSection({ locale }: Props) {
             </h2>
           </div>
 
-          {/* SVG canvas */}
           <div className='relative flex-1 min-h-0'>
             <motion.svg
               viewBox={viewBox as unknown as string}
@@ -734,7 +709,6 @@ export function B2BProcessSection({ locale }: Props) {
                 </filter>
               </defs>
 
-              {/* Animated draw path */}
               <path
                 ref={pathRef}
                 d={PATH_D}
@@ -748,7 +722,6 @@ export function B2BProcessSection({ locale }: Props) {
                 }}
               />
 
-              {/* Travelling dot */}
               {scrollProgress > 0.005 && scrollProgress < 0.998 && (
                 <circle
                   cx={leadingPoint.x}
@@ -759,7 +732,6 @@ export function B2BProcessSection({ locale }: Props) {
                 />
               )}
 
-              {/* Stage nodes */}
               {stages.map((stage, i) => {
                 const meta = STAGE_META[i]!;
                 const state = getStageState(scrollProgress, i);
@@ -857,7 +829,6 @@ export function B2BProcessSection({ locale }: Props) {
                 );
               })}
 
-              {/* Active stage label — anchored beside the focused node */}
               {scrollProgress < FINALE_THRESHOLD && activeLabelIndex >= 0 && (
                 <AnimatePresence mode='wait'>
                   <motion.g
@@ -902,7 +873,6 @@ export function B2BProcessSection({ locale }: Props) {
                 </AnimatePresence>
               )}
 
-              {/* Finale labels — same layout, all visible */}
               {stages.map((stage, i) => {
                 const isFinale = scrollProgress >= FINALE_THRESHOLD;
                 const layout = getFinaleLabelLayout(i);
