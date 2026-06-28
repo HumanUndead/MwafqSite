@@ -1,11 +1,12 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useAuthStore } from '@/modules/auth/store/authStore';
 import type { User } from '@/shared/types/user.types';
 import { getUserMemberSinceDate } from '@/shared/lib/user';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
+import { Button } from '@/shared/components/ui/Button';
 import {
   AwardMedalIcon,
   CalendarIcon,
@@ -61,6 +62,83 @@ function formatMemberSince(iso: string, locale: string): string {
   });
 }
 
+const contactFieldLabelClass =
+  'mb-1 text-[13px] font-semibold text-[#6b7196] md:mb-[3px] md:text-sm md:font-bold md:uppercase md:tracking-[0.12em]';
+
+const contactFieldValueClass =
+  'text-[15px] font-semibold leading-[1.45] text-[#1e2364] md:text-[15.5px]';
+
+function ContactField({
+  label,
+  children,
+  className,
+}: {
+  label: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        'min-w-0 border-b border-[#e5e7f0] py-3.5 last:border-b-0 last:pb-0 first:pt-0',
+        'max-[640px]:py-4',
+        'md:border-b-0 md:py-0',
+        className
+      )}
+    >
+      <div className={contactFieldLabelClass}>{label}</div>
+      <div className={contactFieldValueClass}>{children}</div>
+    </div>
+  );
+}
+
+type StatItemProps = {
+  count: string;
+  title: string;
+  subtitle: string;
+  icon: typeof CalendarIcon;
+  iconWrap: string;
+  transitionDelay: number;
+};
+
+function StatCard({
+  count,
+  title,
+  subtitle,
+  icon: Icon,
+  iconWrap,
+  transitionDelay,
+}: StatItemProps) {
+  return (
+    <ScrollReveal
+      transitionDelay={transitionDelay}
+      className='flex items-center gap-4 rounded-[18px] border-2 border-[#e5e7f0] bg-white p-4 shadow-sm md:p-5'
+    >
+      <div
+        className={cn(
+          'flex size-11 shrink-0 items-center justify-center rounded-full md:size-12',
+          iconWrap
+        )}
+      >
+        <Icon className='size-5' />
+      </div>
+      <div className='min-w-0 flex-1'>
+        <div className='text-[26px] font-extrabold leading-none tracking-[-0.5px] text-[#1e2364] md:text-[28px]'>
+          {count}
+        </div>
+        <div className='mt-1.5'>
+          <div className='text-[14px] font-semibold text-[#1e2364] md:text-[15px]'>
+            {title}
+          </div>
+          <div className='mt-0.5 text-[12px] font-medium text-[#6b7196] md:text-[12.5px]'>
+            {subtitle}
+          </div>
+        </div>
+      </div>
+    </ScrollReveal>
+  );
+}
+
 export type PersonalInfoContact = {
   email: string;
   phone: string;
@@ -114,51 +192,58 @@ export function PersonalInfoView({
     memberSince && memberSince !== ''
       ? `${t.contact.memberSince} ${formatMemberSince(memberSince, locale)}`
       : null;
+
   return (
-    <>
+    <section className='relative min-w-0 pb-4 max-[640px]:pb-20'>
       <ScrollReveal
         id='contact-info'
         className={cn(
-          'rounded-[28px] border-2 border-[#e5e7f0] bg-white px-[34px] py-8',
-          'transition-[border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
-          'hover:border-[#e5e7f0]'
+          'rounded-[22px] border-2 border-[#e5e7f0] bg-white px-6 py-6 shadow-sm',
+          'transition-[border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
+          'hover:border-[#e5e7f0] hover:shadow-md',
+          'md:rounded-[28px] md:px-[34px] md:py-8'
         )}
       >
         <div
           className={cn(
-            'mb-[26px] flex flex-col gap-4 border-b border-[#e5e7f0] pb-[18px]',
-            'sm:flex-row sm:items-end sm:justify-between sm:gap-[18px]'
+            'mb-5 flex flex-col gap-4 border-b border-[#e5e7f0] pb-5',
+            'max-[480px]:gap-3',
+            'md:mb-[26px] md:flex-row md:items-end md:justify-between md:gap-[18px] md:pb-[18px]'
           )}
         >
-          <div className='min-w-0'>
-            <h2 className='text-[22px] font-extrabold leading-[1.2] tracking-[-0.5px] text-[#1e2364] [&_em]:italic [&_em]:font-normal [&_em]:text-[#1e2364] [&_em]:opacity-55'>
+          <div className='min-w-0 flex-1'>
+            <h2 className='text-[20px] font-extrabold leading-[1.2] tracking-[-0.4px] text-[#1e2364] md:text-[22px] md:tracking-[-0.5px] [&_em]:font-normal [&_em]:italic [&_em]:text-[#1e2364] [&_em]:opacity-55'>
               {t.contact.title}
             </h2>
             {resolvedUser?.name ? (
-              <p className='mt-1.5 text-[15px] font-semibold leading-snug text-[#1e2364]'>
+              <p className='mt-1.5 hidden text-[15px] font-semibold leading-snug text-[#1e2364] min-[1101px]:block'>
                 {resolvedUser.name}
               </p>
             ) : null}
             {memberSinceLabel ? (
-              <p className='mt-0.5 text-sm font-medium text-[#6b7196]'>
-                {memberSinceLabel}
+              <p className='mt-2'>
+                <span className='inline-flex items-center rounded-full bg-[#f3f4f8] px-3 py-1 text-[12px] font-semibold text-[#6b7196]'>
+                  {memberSinceLabel}
+                </span>
               </p>
             ) : null}
           </div>
-          <button
+          <Button
             type='button'
             onClick={() => setEditOpen(true)}
+            shape='pill'
             className={cn(
-              'inline-flex shrink-0 items-center gap-[7px] rounded-[30px]',
-              'bg-[rgba(0,168,241,0.1)] px-[14px] py-2 text-sm font-bold text-[#00a8f1]',
+              'h-auto w-full gap-2 rounded-[30px] border-0 px-4 py-2.5 text-sm font-bold shadow-none',
+              'bg-[rgba(0,168,241,0.1)] text-[#00a8f1]',
               'transition-colors duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]',
-              'hover:bg-[#00a8f1] hover:text-white'
+              'hover:bg-[#00a8f1] hover:text-white',
+              'md:w-auto md:shrink-0 md:px-[14px] md:py-2'
             )}
             data-cursor
           >
             <PencilEditIcon className='size-[14px] shrink-0' />
             {t.contact.edit}
-          </button>
+          </Button>
 
           <EditPersonalInfoDialog
             open={editOpen}
@@ -168,132 +253,76 @@ export function PersonalInfoView({
           />
         </div>
 
-        <div className='grid grid-cols-1 gap-x-8 gap-y-[22px] md:grid-cols-2'>
-          <div className='min-w-0'>
-            <div className='mb-[3px] text-sm font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
-              {t.contact.labels.email}
-            </div>
-            <div className='text-[15.5px] font-semibold leading-[1.45] text-[#1e2364]'>
-              {contact.email}
-            </div>
-          </div>
-          <div className='min-w-0'>
-            <div className='mb-[3px] text-sm font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
-              {t.contact.labels.phone}
-            </div>
-            <div className='text-[15.5px] font-semibold leading-[1.45] text-[#1e2364]'>
-              <bdi>{contact.phone}</bdi>
-            </div>
-          </div>
-          <div className='min-w-0'>
-            <div className='mb-[3px] text-sm font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
-              {t.contact.labels.city}
-            </div>
-            <div className='text-[15.5px] font-semibold leading-[1.45] text-[#1e2364]'>
+        <div
+          className={cn(
+            'flex flex-col',
+            'md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-[22px]'
+          )}
+        >
+          <ContactField label={t.contact.labels.email}>
+            {contact.email}
+          </ContactField>
+          <ContactField label={t.contact.labels.phone}>
+            <bdi>{contact.phone}</bdi>
+          </ContactField>
+          <div className='grid grid-cols-2 gap-x-5 border-b border-[#e5e7f0] py-4 md:contents'>
+            <ContactField
+              label={t.contact.labels.city}
+              className='border-b-0 py-0'
+            >
               {contact.city}
-            </div>
-          </div>
-          <div className='min-w-0'>
-            <div className='mb-[3px] text-sm font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
-              {t.contact.labels.country}
-            </div>
-            <div className='text-[15.5px] font-semibold leading-[1.45] text-[#1e2364]'>
+            </ContactField>
+            <ContactField
+              label={t.contact.labels.country}
+              className='border-b-0 py-0'
+            >
               {contact.country}
-            </div>
+            </ContactField>
           </div>
-          <div className='min-w-0 md:col-span-2'>
-            <div className='mb-[3px] text-sm font-bold uppercase tracking-[0.12em] text-[#6b7196]'>
-              {t.contact.labels.mailingAddress}
-            </div>
-            <div className='wrap-break-word text-[15.5px] font-semibold leading-[1.45] text-[#1e2364]'>
-              {contact.mailingAddress}
-            </div>
-          </div>
+          <ContactField
+            label={t.contact.labels.mailingAddress}
+            className='md:col-span-2'
+          >
+            <span className='wrap-break-word'>{contact.mailingAddress}</span>
+          </ContactField>
         </div>
       </ScrollReveal>
 
-      <div className='mt-8 grid grid-cols-1 gap-4 md:grid-cols-3'>
-        <ScrollReveal
+      <ScrollReveal
+        transitionDelay={0.06}
+        className='mb-3.5 mt-6 md:mb-4 md:mt-8'
+      >
+        <h3 className='text-[17px] font-extrabold tracking-[-0.3px] text-[#1e2364] md:text-lg'>
+          {t.stats.heading}
+        </h3>
+      </ScrollReveal>
+
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4'>
+        <StatCard
+          count={stats.reservationsCount}
+          title={t.stats.reservations.title}
+          subtitle={t.stats.reservations.subtitle}
+          icon={CalendarIcon}
+          iconWrap={statIconWrap.sky}
           transitionDelay={0.08}
-          className='flex items-center gap-4 rounded-[18px] border-2 border-[#e5e7f0] bg-white p-4 md:p-5'
-        >
-          <div
-            className={cn(
-              'flex size-12 shrink-0 items-center justify-center rounded-full',
-              statIconWrap.sky
-            )}
-          >
-            <CalendarIcon className='size-5' />
-          </div>
-          <div className='min-w-0 flex-1'>
-            <div className='text-[28px] font-extrabold leading-none tracking-[-0.5px] text-[#1e2364]'>
-              {stats.reservationsCount}
-            </div>
-            <div className='mt-1.5'>
-              <div className='text-[15px] font-semibold text-[#1e2364]'>
-                {t.stats.reservations.title}
-              </div>
-              <div className='text-[12.5px] font-medium text-[#6b7196]'>
-                {t.stats.reservations.subtitle}
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal
+        />
+        <StatCard
+          count={stats.coursesOngoingCount}
+          title={t.stats.coursesOngoing.title}
+          subtitle={t.stats.coursesOngoing.subtitle}
+          icon={GraduationCapIcon}
+          iconWrap={statIconWrap.mint}
           transitionDelay={0.16}
-          className='flex items-center gap-4 rounded-[18px] border-2 border-[#e5e7f0] bg-white p-4 md:p-5'
-        >
-          <div
-            className={cn(
-              'flex size-12 shrink-0 items-center justify-center rounded-full',
-              statIconWrap.mint
-            )}
-          >
-            <GraduationCapIcon className='size-5' />
-          </div>
-          <div className='min-w-0 flex-1'>
-            <div className='text-[28px] font-extrabold leading-none tracking-[-0.5px] text-[#1e2364]'>
-              {stats.coursesOngoingCount}
-            </div>
-            <div className='mt-1.5'>
-              <div className='text-[15px] font-semibold text-[#1e2364]'>
-                {t.stats.coursesOngoing.title}
-              </div>
-              <div className='text-[12.5px] font-medium text-[#6b7196]'>
-                {t.stats.coursesOngoing.subtitle}
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal
+        />
+        <StatCard
+          count={stats.coursesFinishedCount}
+          title={t.stats.coursesFinished.title}
+          subtitle={t.stats.coursesFinished.subtitle}
+          icon={AwardMedalIcon}
+          iconWrap={statIconWrap.purple}
           transitionDelay={0.24}
-          className='flex items-center gap-4 rounded-[18px] border-2 border-[#e5e7f0] bg-white p-4 md:p-5'
-        >
-          <div
-            className={cn(
-              'flex size-12 shrink-0 items-center justify-center rounded-full',
-              statIconWrap.purple
-            )}
-          >
-            <AwardMedalIcon className='size-5' />
-          </div>
-          <div className='min-w-0 flex-1'>
-            <div className='text-[28px] font-extrabold leading-none tracking-[-0.5px] text-[#1e2364]'>
-              {stats.coursesFinishedCount}
-            </div>
-            <div className='mt-1.5'>
-              <div className='text-[15px] font-semibold text-[#1e2364]'>
-                {t.stats.coursesFinished.title}
-              </div>
-              <div className='text-[12.5px] font-medium text-[#6b7196]'>
-                {t.stats.coursesFinished.subtitle}
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
+        />
       </div>
-    </>
+    </section>
   );
 }

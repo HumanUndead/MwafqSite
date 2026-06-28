@@ -816,6 +816,7 @@ const en = {
   profileLayout: {
     signOut: 'Sign out',
     avatarAlt: 'Profile photo of {{name}}',
+    navAriaLabel: 'Profile navigation',
     nav: {
       personalInfo: 'Personal Info',
       academyCourses: 'Mwafaq Academy Courses',
@@ -866,6 +867,7 @@ const en = {
       cityLoadError: 'Failed to load cities',
     },
     stats: {
+      heading: 'Your overview',
       reservations: {
         title: 'Reservations',
         subtitle: 'Across all services',

@@ -807,6 +807,7 @@ const ar = {
   profileLayout: {
     signOut: 'تسجيل الخروج',
     avatarAlt: 'صورة الملف الشخصي لـ {{name}}',
+    navAriaLabel: 'تنقل الملف الشخصي',
     nav: {
       personalInfo: 'المعلومات الشخصية',
       academyCourses: 'دورات أكاديمية موفق',
@@ -857,6 +858,7 @@ const ar = {
       cityLoadError: 'فشل تحميل المدن',
     },
     stats: {
+      heading: 'نظرة عامة',
       reservations: {
         title: 'الحجوزات',
         subtitle: 'عبر جميع الخدمات',

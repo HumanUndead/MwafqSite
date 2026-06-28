@@ -15,8 +15,6 @@ import { cn } from '@/shared/lib/cn';
 import { courseCardVariants, courseMediaVariants, EASE } from './constants';
 import type { AcademyCourseRow } from './types/academy.types';
 
-const sectionArrowTransition = { duration: 0.25, ease: EASE };
-
 function CourseProgressBar({ value }: { value: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
@@ -153,36 +151,10 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
 
   return (
     <section className='relative pt-2'>
-      <ScrollReveal className='mb-5.5 flex flex-wrap items-center justify-between gap-4'>
+      <ScrollReveal className='mb-5.5'>
         <h2 className='text-[clamp(22px,2vw,28px)] font-extrabold leading-[1.15] tracking-[-0.6px] text-[#1e2364]'>
           {t.title}
         </h2>
-        <div
-          className='inline-flex items-center gap-2'
-          role='group'
-          aria-label={t.carouselControls}
-        >
-          <motion.button
-            type='button'
-            className='inline-flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1]'
-            aria-label={t.previousCourses}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
-            transition={sectionArrowTransition}
-          >
-            <ChevronRightSmIcon className='size-3.5 rotate-180 rtl:rotate-0' />
-          </motion.button>
-          <motion.button
-            type='button'
-            className='inline-flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-[#e5e7f0] bg-white text-[#1e2364] hover:border-[#00a8f1] hover:text-[#00a8f1]'
-            aria-label={t.nextCourses}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
-            transition={sectionArrowTransition}
-          >
-            <ChevronRightSmIcon className='size-3.5 rtl:rotate-180' />
-          </motion.button>
-        </div>
       </ScrollReveal>
 
       <div className='grid grid-cols-3 gap-5.5 pb-1 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1'>

@@ -154,7 +154,7 @@ export function EditPersonalInfoDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='sm:max-w-[500px]'>
+      <DialogContent className='max-h-[min(92dvh,720px)] overflow-y-auto sm:max-w-[500px] max-[640px]:max-w-[calc(100%-20px)] max-[640px]:rounded-[22px]'>
         <DialogHeader>
           <DialogTitle className='text-[18px] font-extrabold tracking-[-0.4px] text-[#1e2364]'>
             {labels.title}
@@ -341,7 +341,7 @@ function Field({
 }) {
   return (
     <div className='flex flex-col gap-1.5'>
-      <label className='text-[13px] font-bold uppercase tracking-widest text-[#6b7196]'>
+      <label className='text-[13px] font-bold text-[#6b7196] max-[640px]:font-semibold max-[640px]:normal-case max-[640px]:tracking-normal md:uppercase md:tracking-widest'>
         {label}
       </label>
       {children}
