@@ -30,13 +30,6 @@ export async function POST(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get(authTokenCookieName)?.value;
 
-    if (!token) {
-      return NextResponse.json(
-        { success: false, message: 'Unauthorized', data: null },
-        { status: 401 }
-      );
-    }
-
     const incomingForm = await request.formData();
 
     const nameEn = toString(incomingForm.get('Translations[0].Name'));
@@ -73,10 +66,15 @@ export async function POST(request: NextRequest) {
 
     const endpoint = new URL('/api/Company/Company/Create', MWAFQ_API_BASE_URL);
 
+    const upstreamHeaders: Record<string, string> = {};
+    if (token) {
+      upstreamHeaders.Authorization = `Bearer ${token}`;
+    }
+
     const upstreamResponse = await fetch(endpoint.toString(), {
       method: 'POST',
       body: upstreamForm,
-      headers: { Authorization: `Bearer ${token}` },
+      headers: upstreamHeaders,
       cache: 'no-store',
     });
 
