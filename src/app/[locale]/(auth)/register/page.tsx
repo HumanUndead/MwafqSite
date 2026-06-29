@@ -3,7 +3,6 @@ import { hasLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 import { RegisterFlow } from '@/modules/auth';
 import { AuthSplitShell } from '@/modules/auth/components/AuthSplitShell';
-import { getCurrentUser } from '@/modules/auth/server/authSession';
 import { getRegisterPageContent } from '@/modules/auth/server/registerPageContentService';
 
 interface RegisterPageProps {
@@ -18,30 +17,17 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
   }
 
   const dictionary = await getDictionary(locale);
-  const [content, currentUser] = await Promise.all([
-    getRegisterPageContent(locale, dictionary),
-    getCurrentUser(),
-  ]);
-
-  const isCompanyOnly = Boolean(currentUser);
+  const content = await getRegisterPageContent(locale, dictionary);
 
   return (
     <AuthSplitShell
       locale={locale}
       aside={{ ...content, stats: [] }}
-      title={
-        isCompanyOnly
-          ? dictionary.company.create.title
-          : dictionary.auth.register.title
-      }
-      subtitle={
-        isCompanyOnly
-          ? dictionary.company.create.subtitle
-          : dictionary.auth.register.description
-      }
+      title={dictionary.company.create.title}
+      subtitle={dictionary.company.create.subtitle}
       wideForm
     >
-      <RegisterFlow initialStep={isCompanyOnly ? 'company' : 'register'} />
+      <RegisterFlow />
     </AuthSplitShell>
   );
 }
