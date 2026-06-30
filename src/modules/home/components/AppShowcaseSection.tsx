@@ -3,6 +3,7 @@ import { cn } from '@/shared/lib/cn';
 import { sectionScrollMarginClass } from '@/shared/lib/scrollToSection';
 import { Eyebrow } from './Eyebrow';
 import { CheckIcon, getUtilityIconByKey } from '@/shared/components/icons/home';
+import { marketingSectionShellClass } from '@/shared/components/marketing/marketingLayout';
 
 interface Props {
   content: HomeAppContent;
@@ -20,7 +21,8 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
       />
       <div
         className={cn(
-          'relative z-10 mx-auto flex w-full max-w-330 flex-1 flex-col justify-center px-4 md:px-7',
+          marketingSectionShellClass,
+          'relative z-10 flex flex-1 flex-col justify-center px-4 md:px-7',
           compact ? 'py-7 lg:py-8' : 'py-8 lg:py-10'
         )}
       >
@@ -47,8 +49,8 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
               className={cn(
                 'font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]',
                 compact
-                  ? 'mb-2.5 text-[clamp(25px,3.4vw,46px)] lg:mb-4'
-                  : 'mb-4 text-[clamp(30px,4.2vw,52px)] lg:mb-6'
+                  ? 'mb-2.5 text-[clamp(25px,3.4vw,46px)] lg:mb-4 min-[1920px]:text-[clamp(46px,2.8vw,64px)]'
+                  : 'mb-4 text-[clamp(30px,4.2vw,52px)] lg:mb-6 min-[1920px]:text-[clamp(52px,3vw,72px)]'
               )}
             >
               {content.title}
@@ -65,8 +67,8 @@ export function AppShowcaseSection({ content, isRtl }: Props) {
               className={cn(
                 'text-[#6b7196]',
                 compact
-                  ? 'text-[14px] leading-[1.5] lg:text-[15px] lg:leading-[1.55]'
-                  : 'text-[16px] leading-[1.65]'
+                  ? 'text-[14px] leading-[1.5] lg:text-[15px] lg:leading-[1.55] min-[1920px]:text-[clamp(15px,0.95vw,20px)]'
+                  : 'text-[16px] leading-[1.65] min-[1920px]:text-[clamp(16px,1vw,21px)]'
               )}
             >
               {content.body}

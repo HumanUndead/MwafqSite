@@ -305,7 +305,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
     >
       <BookingMascot locale={locale} cardRef={cardRef} label={content.title} />
 
-      <div className='relative mx-auto max-w-275'>
+      <div className='relative mx-auto w-full min-w-0 max-w-275 min-[1920px]:max-w-[min(72vw,1280px)]'>
         <div
           ref={cardRef}
           className='relative overflow-visible rounded-[32px] border-2 border-[#1e2364] bg-white px-5 pb-20 pt-8 text-center sm:px-10 sm:pb-16 sm:pt-9 md:px-14 md:pb-18 md:pt-10'

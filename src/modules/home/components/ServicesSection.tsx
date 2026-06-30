@@ -8,6 +8,12 @@ import { getTranslation } from '@/shared/lib/getTranslationName';
 import type { HomeServicesContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
 import { ServicesScrollList } from './ServicesScrollList';
+import { cn } from '@/shared/lib/cn';
+import {
+  marketingLeadTextClass,
+  marketingSectionHeadingClass,
+  marketingSectionShellClass,
+} from '@/shared/components/marketing/marketingLayout';
 
 interface Props {
   locale: Locale;
@@ -51,11 +57,11 @@ export async function ServicesSection({ locale, content }: Props) {
         className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(30,35,100,0.05)_1px,transparent_1.2px)] bg-size-[24px_24px]'
         aria-hidden='true'
       />
-      <div className='relative mx-auto max-w-330'>
+      <div className={cn('relative', marketingSectionShellClass)}>
         <div className='mb-10 md:mb-15 flex flex-wrap items-end justify-start gap-12.5'>
           <div className=''>
             <Eyebrow>{content.eyebrow}</Eyebrow>
-            <h2 className='text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
+            <h2 className={cn('font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]', marketingSectionHeadingClass)}>
               {content.title}
               {content.accent && (
                 <>
@@ -66,7 +72,7 @@ export async function ServicesSection({ locale, content }: Props) {
                 </>
               )}
             </h2>
-            <p className='mt-4 max-w-135 text-[15px] leading-[1.6] text-[#6b7196]'>
+            <p className={cn('mt-4 max-w-135 leading-[1.6] text-[#6b7196] min-[1920px]:max-w-none', marketingLeadTextClass)}>
               {content.body}
             </p>
           </div>

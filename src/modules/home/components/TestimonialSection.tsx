@@ -13,6 +13,7 @@ import {
 import { cn } from '@/shared/lib/cn';
 import { useLocale } from '@/i18n/DictionaryProvider';
 import { isRtl } from '@/i18n/config';
+import { marketingSectionShellClass } from '@/shared/components/marketing/marketingLayout';
 import { ArrowIcon } from '@/shared/components/icons/home';
 
 const AUTOPLAY_MS = 3000;
@@ -132,7 +133,7 @@ export function TestimonialSection({ items }: Props) {
         className='pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(#eef0f7_1px,transparent_1px),linear-gradient(90deg,#eef0f7_1px,transparent_1px)] [background-size:60px_60px] [mask-image:radial-gradient(circle_at_50%_50%,#000_0%,transparent_70%)]'
         aria-hidden='true'
       />
-      <div className='relative mx-auto max-w-[1320px] px-4 md:px-7'>
+      <div className={cn('relative', marketingSectionShellClass, 'px-4 md:px-7')}>
         <Carousel
           opts={{ loop: hasMultiple, direction: rtl ? 'rtl' : 'ltr' }}
           plugins={hasMultiple ? [autoplayPlugin] : undefined}
@@ -145,7 +146,7 @@ export function TestimonialSection({ items }: Props) {
               {validItems.map((item, i) => (
                 <CarouselItem key={i}>
                   <div className='relative z-10 mx-auto max-w-[980px] text-center'>
-                    <div className='mb-9 text-[clamp(26px,3.5vw,44px)] font-light italic leading-[1.3] tracking-[-1px] text-[#1e2364]'>
+                    <div className='mb-9 text-[clamp(26px,3.5vw,44px)] font-light italic leading-[1.3] tracking-[-1px] text-[#1e2364] min-[1920px]:text-[clamp(44px,2.8vw,60px)]'>
                       {item.quote}
                       {item.highlight && (
                         <>

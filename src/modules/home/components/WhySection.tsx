@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { HomeWhyContent } from '../home.types';
 import { getWhySpriteClassName } from '@/shared/components/icons/home';
 import { useSectionScrollCapture } from './useSectionScrollCapture';
+import { cn } from '@/shared/lib/cn';
+import { marketingSectionShellClass } from '@/shared/components/marketing/marketingLayout';
 
 const CARD_W = 96;
 const GAP = 26;
@@ -202,12 +204,12 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
             }}
           />
 
-          <div className='relative z-10 mx-auto w-full max-w-330 px-5 sm:px-7'>
-            <h2 className='mb-6 text-center text-[clamp(24px,3.6vw,44px)] font-extrabold uppercase tracking-[-0.5px] text-[#1e2364] sm:mb-9'>
+          <div className={cn(marketingSectionShellClass, 'relative z-10 px-5 sm:px-7')}>
+            <h2 className='mb-6 text-center text-[clamp(24px,3.6vw,44px)] font-extrabold uppercase tracking-[-0.5px] text-[#1e2364] sm:mb-9 min-[1920px]:text-[clamp(44px,2.8vw,60px)]'>
               {content.eyebrow}
             </h2>
             {content.title ? (
-              <p className='mx-auto mb-8 max-w-175 text-center text-[15px] leading-[1.65] text-[#6b7196] sm:mb-10 sm:text-[16px]'>
+              <p className='mx-auto mb-8 max-w-175 text-center text-[15px] leading-[1.65] text-[#6b7196] sm:mb-10 sm:text-[16px] min-[1920px]:max-w-none min-[1920px]:text-[clamp(16px,1vw,21px)]'>
                 {content.title}
               </p>
             ) : null}

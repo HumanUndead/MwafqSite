@@ -6,6 +6,8 @@ import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { getUtilityIconByKey, StarIcon } from '@/shared/components/icons/home';
 import type { HomeAcademyContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
+import { marketingSectionHeadingClass } from '@/shared/components/marketing/marketingLayout';
+import { cn } from '@/shared/lib/cn';
 
 const MOBILE_MAX_WIDTH_PX = 767;
 const CARD_STAGGER_S = 0.08;
@@ -37,7 +39,7 @@ export function AcademyCourseGrid({ content }: Props) {
         <div className='flex flex-wrap items-end justify-start gap-12.5'>
           <div>
             <Eyebrow>{content.eyebrow}</Eyebrow>
-            <h2 className='text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
+            <h2 className={cn('font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]', marketingSectionHeadingClass)}>
               {content.title}
               {content.accent && (
                 <>

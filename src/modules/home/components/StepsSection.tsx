@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { HomeStepsContent } from '../home.types';
 import { CmsLink } from './CmsLink';
+import { cn } from '@/shared/lib/cn';
+import {
+  marketingSectionHeadingClass,
+  marketingSectionShellClass,
+} from '@/shared/components/marketing/marketingLayout';
 
 const DESKTOP_MIN = 1024;
 const INITIAL_OFFSET = 24;
@@ -187,13 +192,13 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
           }
         >
           <div className='w-full'>
-            <div className='mx-auto max-w-[1320px] px-4 md:px-7'>
+            <div className={cn(marketingSectionShellClass, 'px-4 md:px-7')}>
               <div className='grid grid-cols-1 items-start gap-10 min-[1024px]:grid-cols-2 min-[1024px]:items-center min-[1024px]:gap-20'>
                 <div>
                   <span className='relative mb-7 inline-block px-[30px] py-3 text-[17px] font-bold uppercase leading-none tracking-[2.2px] text-[#00a8f1] before:absolute before:left-0 before:top-0 before:h-[18px] before:w-[18px] before:border-l-4 before:border-t-4 before:border-current after:absolute after:bottom-0 after:right-0 after:h-[18px] after:w-[18px] after:border-b-4 after:border-r-4 after:border-current'>
                     {content.eyebrow}
                   </span>
-                  <h2 className='text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]'>
+                  <h2 className={cn('font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]', marketingSectionHeadingClass)}>
                     {content.title}{' '}
                     <span className='text-[#00a8f1]'>{content.highlight}</span>
                   </h2>

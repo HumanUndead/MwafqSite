@@ -3,6 +3,8 @@ import type { Locale } from '@/i18n/config';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
 import { Eyebrow } from './Eyebrow';
+import { cn } from '@/shared/lib/cn';
+import { marketingSectionShellClass } from '@/shared/components/marketing/marketingLayout';
 
 /**
  * Mwafq Academy showcase. Design inspired by the legacy {@link B2BSection}
@@ -98,10 +100,10 @@ const ACADEMY_CONTENT: Record<Locale, AcademyContent> = {
     },
   },
   ar: {
-    eyebrow: 'أكاديمية موافق',
+    eyebrow: 'أكاديمية موفق',
     title: 'تعلّم المهارات التي',
     accent: 'تُبقي الرعاية متوافقة',
-    body: 'تحوّل أكاديمية موافق الخبرة الطبية وخبرة الصحة المهنية إلى دورات منظّمة ومعتمدة. طوّر مهارات فريقك، واسبق المتطلبات التنظيمية، وتعلّم وفق إيقاعك الخاص — كل درس يُعدّه ويراجعه مختصون مرخّصون.',
+    body: 'تحوّل أكاديمية موفق الخبرة الطبية وخبرة الصحة المهنية إلى دورات منظّمة ومعتمدة. طوّر مهارات فريقك، واسبق المتطلبات التنظيمية، وتعلّم وفق إيقاعك الخاص — كل درس يُعدّه ويراجعه مختصون مرخّصون.',
     points: [
       'دورات معتمدة من إعداد خبراء طبيين مرخّصين',
       'دروس فيديو ذاتية مبنية على سيناريوهات فحص واقعية',
@@ -109,7 +111,7 @@ const ACADEMY_CONTENT: Record<Locale, AcademyContent> = {
       'لوحة واحدة لمتابعة تقدّم كل متعلّم',
     ],
     primaryLabel: 'تصفّح الدورات',
-    secondaryLabel: 'درّس عبر موافق',
+    secondaryLabel: 'درّس عبر موفق',
     card: {
       tabs: ['تعلّمي', 'الكتالوج', 'المعتمدة'],
       continueLabel: 'متابعة',
@@ -180,7 +182,7 @@ export function MwafqAcademySection({ locale }: Props) {
         className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.06)_1.2px,transparent_1.2px)] bg-size-[24px_24px]'
         aria-hidden='true'
       />
-      <div className='relative z-10 mx-auto max-w-330'>
+      <div className={cn('relative z-10', marketingSectionShellClass)}>
         <div className='grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20'>
           {/* Copy */}
           <div>

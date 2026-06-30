@@ -1,5 +1,7 @@
 import type { HomeAcademyContent } from '../home.types';
 import { AcademyCourseGrid } from './AcademyCourseGrid';
+import { cn } from '@/shared/lib/cn';
+import { marketingSectionShellClass } from '@/shared/components/marketing/marketingLayout';
 
 interface Props {
   content: HomeAcademyContent;
@@ -12,7 +14,7 @@ export function AcademySection({ content }: Props) {
         className='pointer-events-none absolute inset-0 opacity-[0.18] bg-[linear-gradient(rgba(30,35,100,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(30,35,100,0.035)_1px,transparent_1px)] bg-size-[32px_32px]'
         aria-hidden='true'
       />
-      <div className='relative mx-auto max-w-330 px-4 md:px-7'>
+      <div className={cn(marketingSectionShellClass, 'relative px-4 md:px-7')}>
         <AcademyCourseGrid content={content} />
       </div>
     </section>
