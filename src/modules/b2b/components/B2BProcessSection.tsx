@@ -178,10 +178,13 @@ type LayoutConfig = {
   camFinaleX: number;
 };
 
-const DESKTOP_FINALE_CAM_W = 4200;
-const DESKTOP_FINALE_CAM_X = -1000;
-const DESKTOP_FINALE_CAM_Y = -52;
-const DESKTOP_FINALE_CAM_H = 1020;
+// Frame = tight bounds of the finale content (all nodes + labels), so the
+// graphic is as large as possible and `meet` fills the height instead of
+// shrinking to fit a too-wide frame. Centered on the content box (1110, 600).
+const DESKTOP_FINALE_CAM_W = 3520;
+const DESKTOP_FINALE_CAM_X = -650;
+const DESKTOP_FINALE_CAM_Y = 50;
+const DESKTOP_FINALE_CAM_H = 1100;
 
 const DESKTOP_LAYOUT: LayoutConfig = {
   labelW: 460,
@@ -732,19 +735,16 @@ export function B2BProcessSection({ locale }: Props) {
           )}
 
           <div
-            className='absolute inset-x-0 top-0'
+            className={cn(
+              'absolute inset-x-0 top-0',
+              !compact && 'px-[clamp(16px,4vw,96px)]'
+            )}
             style={compact ? { bottom: MOBILE_CARD_RESERVE } : { bottom: 0 }}
           >
             <svg
               viewBox={viewBox}
               className='h-full w-full'
-              preserveAspectRatio={
-                compact
-                  ? mobileAspect
-                  : isFinale
-                    ? 'xMidYMin meet'
-                    : 'xMidYMid meet'
-              }
+              preserveAspectRatio={compact ? mobileAspect : 'xMidYMid meet'}
               aria-hidden='true'
               style={{ overflow: 'visible' }}
             >
