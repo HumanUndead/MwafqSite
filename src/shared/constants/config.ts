@@ -1,5 +1,8 @@
 const DEFAULT_MWAFQ_API_BASE_URL = 'https://stagingapi.mwafq.com/';
 
+/** B2B dashboard — navbar "Business sign in" destination. */
+export const MWAFQ_BUSINESS_PORTAL_URL = 'https://www.mwafq.com/';
+
 export const MWAFQ_API_BASE_URL =
   process.env.MWAFQ_API_BASE_URL ?? DEFAULT_MWAFQ_API_BASE_URL;
 
