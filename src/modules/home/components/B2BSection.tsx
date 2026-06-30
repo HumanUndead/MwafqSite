@@ -2,6 +2,11 @@ import type { Locale } from '@/i18n/config';
 import type { HomeBusinessContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
 import { HomeActionLinks } from './HomeActionLinks';
+import { cn } from '@/shared/lib/cn';
+import {
+  marketingSectionHeadingClass,
+  marketingSectionShellClass,
+} from '@/shared/components/marketing/marketingLayout';
 
 interface Props {
   locale: Locale;
@@ -36,11 +41,11 @@ export function B2BSection({ locale, content }: Props) {
         className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.06)_1.2px,transparent_1.2px)] bg-size-[24px_24px]'
         aria-hidden='true'
       />
-      <div className='relative z-10 mx-auto max-w-330'>
+      <div className={cn('relative z-10', marketingSectionShellClass)}>
         <div className='grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20'>
           <div className='min-w-0'>
             <Eyebrow dark>{content.eyebrow}</Eyebrow>
-            <h2 className='mb-7 text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.08] tracking-[-1.6px] text-white'>
+            <h2 className={cn('mb-7 font-extrabold leading-[1.08] tracking-[-1.6px] text-white', marketingSectionHeadingClass)}>
               {content.title}
               {content.accent ? (
                 <>

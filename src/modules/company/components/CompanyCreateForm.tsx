@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { getLocalizedRoute } from '@/i18n/routing';
@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { DdlItem, UserSearchItem } from '../types/company.types';
+import type { DdlItem } from '../types/company.types';
 import { useCompanyCreate } from '../hooks/useCompanyCreate';
 import { RichTextEditor } from './RichTextEditor';
 
@@ -157,128 +157,6 @@ function DdlSelect({
         </SelectContent>
       </Select>
       <FieldError msg={error} />
-    </div>
-  );
-}
-
-function UserSearchBox({
-  label,
-  placeholder,
-  results,
-  loading,
-  onSearch,
-  onSelect,
-  selectedId,
-  onClear,
-  noResultsMessage,
-  noResultsHint,
-  searchingMessage,
-}: {
-  label: string;
-  placeholder: string;
-  results: UserSearchItem[];
-  loading: boolean;
-  onSearch: (term: string) => void;
-  onSelect: (user: UserSearchItem) => void;
-  selectedId: string;
-  onClear: () => void;
-  noResultsMessage: string;
-  noResultsHint: string;
-  searchingMessage: string;
-}) {
-  const [term, setTerm] = useState('');
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value;
-    setTerm(v);
-    if (selectedId) onClear();
-    setOpen(v.length > 0);
-    onSearch(v);
-  };
-
-  const handleSelect = (user: UserSearchItem) => {
-    setTerm(`${user.firstName} ${user.lastName}`.trim());
-    setOpen(false);
-    onSelect(user);
-  };
-
-  const handleClear = () => {
-    setTerm('');
-    setOpen(false);
-    onClear();
-  };
-
-  const showResultsDropdown =
-    open && term.length > 0 && !selectedId && (loading || results.length > 0);
-  const showNoResultsHint =
-    open && term.length > 0 && !loading && !selectedId && results.length === 0;
-
-  return (
-    <div ref={ref} className='relative'>
-      <FieldLabel>{label}</FieldLabel>
-      <div className='relative'>
-        <input
-          value={term}
-          onChange={handleChange}
-          onFocus={() => term && setOpen(true)}
-          onBlur={() => setTimeout(() => setOpen(false), 150)}
-          placeholder={placeholder}
-          className={cn(
-            'flex min-h-[52px] w-full rounded-[14px] border border-[#d9ddea] bg-white px-3.5 pr-10',
-            'text-sm text-[#1e2364] placeholder:text-[rgba(30,35,100,0.4)] outline-none',
-            'transition-[border-color,box-shadow] duration-200',
-            'focus:border-[#00a8f1] focus:ring-[3px] focus:ring-[rgba(0,168,241,0.20)]'
-          )}
-        />
-        {selectedId ? (
-          <button
-            type='button'
-            onClick={handleClear}
-            className='absolute right-3 top-1/2 -translate-y-1/2 text-[#a3a8c4] hover:text-[#1e2364]'
-            aria-label='Clear'
-          >
-            <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' aria-hidden='true'>
-              <line x1='18' y1='6' x2='6' y2='18' />
-              <line x1='6' y1='6' x2='18' y2='18' />
-            </svg>
-          </button>
-        ) : null}
-      </div>
-
-      {showResultsDropdown ? (
-        <div className='absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-[#e5e7f0] bg-white shadow-lg'>
-          {loading ? (
-            <p className='px-3.5 py-3 text-sm text-[#a3a8c4]'>{searchingMessage}</p>
-          ) : (
-            <ul>
-              {results.map((u) => (
-                <li key={u.id}>
-                  <button
-                    type='button'
-                    onMouseDown={() => handleSelect(u)}
-                    className='flex w-full flex-col px-3.5 py-2.5 text-left hover:bg-[rgba(0,168,241,0.06)]'
-                  >
-                    <span className='text-[14px] font-semibold text-[#1e2364]'>
-                      {u.firstName} {u.lastName}
-                    </span>
-                    <span className='text-xs text-[#6b7196]'>{u.email} · {u.phone}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ) : null}
-
-      {showNoResultsHint ? (
-        <p className='mt-1.5 px-1 text-xs leading-relaxed text-[#6b7196]' role='status'>
-          <span className='font-semibold text-[#1e2364]'>{noResultsMessage}</span>
-          {' — '}
-          {noResultsHint}
-        </p>
-      ) : null}
     </div>
   );
 }
@@ -455,11 +333,6 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
     submitting,
     updateField,
     handleSubmit,
-    searchUsers,
-    selectContactUser,
-    clearContactUser,
-    userResults,
-    usersLoading,
     ddl,
     loading,
   } = useCompanyCreate(handleSuccess);
@@ -586,15 +459,6 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
             error={errors.companyTypeId}
           />
           <TextField
-            label={company.fields.rank}
-            required
-            value={form.rank}
-            onChange={(v) => updateField('rank', v)}
-            placeholder={company.placeholders.rank}
-            type='number'
-            error={errors.rank}
-          />
-          <TextField
             label={company.fields.companyPhone}
             value={form.companyPhone}
             onChange={(v) => updateField('companyPhone', v)}
@@ -676,19 +540,6 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
       <div className='rounded-[14px] border border-[#e5e7f0] bg-[#fafbfd] p-4'>
         <SectionHeading>{company.sections.contact}</SectionHeading>
         <div className='flex flex-col gap-4'>
-          <UserSearchBox
-            label={company.fields.contactUser}
-            placeholder={company.placeholders.contactSearch}
-            results={userResults}
-            loading={usersLoading}
-            onSearch={searchUsers}
-            onSelect={selectContactUser}
-            selectedId={form.selectedContactUserId}
-            onClear={clearContactUser}
-            noResultsMessage={company.contact.noResults}
-            noResultsHint={company.contact.noResultsHint}
-            searchingMessage={company.contact.searching}
-          />
           <div className='grid gap-4 sm:grid-cols-2'>
             <TextField
               label={company.fields.contactFirstName}

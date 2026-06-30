@@ -33,13 +33,12 @@ export async function POST(request: NextRequest) {
     const incomingForm = await request.formData();
 
     const nameEn = toString(incomingForm.get('Translations[0].Name'));
-    const rank = toString(incomingForm.get('Rank'));
     const crNumber = toString(incomingForm.get('CRNumber'));
     const vatNumber = toString(incomingForm.get('VATNumber'));
 
-    if (!nameEn || !rank) {
+    if (!nameEn) {
       return NextResponse.json(
-        { success: false, message: 'Name (English) and Rank are required.', data: null },
+        { success: false, message: 'Name (English) is required.', data: null },
         { status: 400 }
       );
     }

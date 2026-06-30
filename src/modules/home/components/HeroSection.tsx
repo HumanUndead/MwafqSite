@@ -13,6 +13,15 @@ import {
 } from '@/shared/components/icons/home';
 import { RotatingWord } from './RotatingWord';
 import { cn } from '@/shared/lib/cn';
+import {
+  marketingHeroCtaClass,
+  marketingHeroLeadClass,
+  marketingHeroTitleClass,
+  marketingInlineStatLabelClass,
+  marketingInlineStatValueClass,
+  marketingSectionShellClass,
+} from '@/shared/components/marketing/marketingLayout';
+import { buttonVariants } from '@/shared/lib/variants';
 
 const phoneTileStyles = [
   { card: 'bg-[#dff5ff]', icon: 'bg-white text-[#27a7e7]' },
@@ -71,21 +80,27 @@ export function HeroSection({ locale, content, isRtl }: Props) {
   ];
 
   return (
-    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-12 pt-0 md:pb-20 md:px-7 lg:flex lg:min-h-[calc(100vh-104px)] lg:flex-col lg:pb-0'>
+    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-12 pt-0 md:pb-20 md:px-7 lg:pb-0 min-[1920px]:px-10'>
       <div
         className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
         aria-hidden='true'
       />
       <div
         className={cn(
-          'relative mx-auto grid w-full max-w-330 gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:pt-8 lg:pb-8',
-          isRtl
-            ? 'lg:flex-1 lg:grid-rows-[1fr_auto] lg:gap-15'
-            : 'lg:grid-rows-[auto_auto] lg:gap-6 lg:items-start'
+          marketingSectionShellClass,
+          'relative grid gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:pt-8 lg:pb-10',
+          'min-[1920px]:gap-12 min-[1920px]:py-12 min-[2560px]:gap-16 min-[2560px]:py-14',
+          'lg:grid-rows-[auto_auto]'
         )}
       >
         <div className='order-1'>
-          <h1 className='mb-5 md:mb-7 lg:mb-5 text-[clamp(30px,4.5vw,52px)] font-extrabold tracking-[-2.6px] text-[#1e2364]'>
+          <h1
+            className={cn(
+              'mb-5 md:mb-7 lg:mb-6 font-extrabold tracking-[-2.6px] text-[#1e2364]',
+              'min-[1920px]:mb-8 min-[1920px]:tracking-[-3.5px] min-[2560px]:mb-10',
+              marketingHeroTitleClass
+            )}
+          >
             {hasRotatingWords ? (
               <>
                 {content.titleLead ? (
@@ -102,10 +117,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                     </span>
                   </span>
                   <span className='max-[499px]:block min-[500px]:inline'>
-                    <RotatingWord
-                      words={content.rotatingWords}
-                      isRtl={isRtl}
-                    />
+                    <RotatingWord words={content.rotatingWords} isRtl={isRtl} />
                   </span>
                 </span>
               </>
@@ -123,7 +135,13 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             )}
           </h1>
 
-          <p className='mb-6 md:mb-9 lg:mb-7 max-w-135 text-[17.5px] leading-[1.45] text-[#6b7196]'>
+          <p
+            className={cn(
+              'mb-6 md:mb-9 lg:mb-8 max-w-135 leading-[1.5] text-[#6b7196]',
+              'lg:max-w-150 min-[1920px]:mb-10 min-[1920px]:max-w-none min-[2560px]:mb-12',
+              marketingHeroLeadClass
+            )}
+          >
             {content.subtitle}
           </p>
 
@@ -133,18 +151,34 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             secondary={content.secondaryAction}
             primaryVariant='brand'
             secondaryVariant='brandOutline'
-            className='mb-8 md:mb-11 lg:mb-8 flex flex-wrap gap-3.5'
+            className='mb-8 md:mb-11 lg:mb-0 flex flex-wrap gap-3.5 min-[1920px]:gap-5'
+            primaryClassName={cn(
+              buttonVariants({
+                variant: 'brand',
+                size: 'hero',
+                shape: 'pill',
+              }),
+              marketingHeroCtaClass
+            )}
+            secondaryClassName={cn(
+              buttonVariants({
+                variant: 'brandOutline',
+                size: 'hero',
+                shape: 'pill',
+              }),
+              marketingHeroCtaClass
+            )}
             primaryTrailing={
               <ArrowIcon className={isRtl ? 'rotate-180' : undefined} />
             }
           />
         </div>
 
-        <div className='relative mx-auto order-2 h-115 w-full max-w-140 overflow-hidden sm:h-120 sm:overflow-visible lg:h-140 lg:row-span-2 lg:self-center'>
+        <div className='relative z-0 mx-auto order-2 h-115 w-full max-w-140 overflow-hidden min-[600px]:max-lg:mb-6 sm:h-120 sm:overflow-visible lg:z-auto lg:mb-0 lg:h-140 lg:row-span-2 lg:self-center min-[1920px]:h-180 min-[1920px]:max-w-180 min-[2560px]:h-200 min-[2560px]:max-w-200'>
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
-              className={`absolute z-5 flex w-fit max-w-[12rem] items-center gap-3 rounded-[17px] border-2 border-[#1e2364] bg-white px-3 py-2.5 pe-3.5 max-[560px]:scale-[0.72] ${index === 1 ? 'max-[560px]:origin-left' : 'max-[560px]:origin-right'} ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
+              className={`absolute z-5 flex w-fit max-w-[12rem] items-center gap-3 rounded-[17px] border-2 border-[#1e2364] bg-white px-3 py-2.5 pe-3.5 max-[560px]:scale-[0.72] min-[1920px]:max-w-[16rem] min-[1920px]:gap-4 min-[1920px]:rounded-[20px] min-[1920px]:px-4 min-[1920px]:py-3 min-[2560px]:max-w-[18rem] min-[2560px]:scale-110 ${index === 1 ? 'max-[560px]:origin-left' : 'max-[560px]:origin-right'} ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
             >
               <span
                 aria-hidden='true'
@@ -157,17 +191,17 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                 }}
               />
               <div className={cn('min-w-0', isRtl ? 'text-right' : '')}>
-                <strong className='block text-[14.5px] font-extrabold leading-[1.2] tracking-[-0.25px] text-[#1e2364]'>
+                <strong className='block text-[14.5px] font-extrabold leading-[1.2] tracking-[-0.25px] text-[#1e2364] min-[1920px]:text-[17px] min-[2560px]:text-[19px]'>
                   {card.title}
                 </strong>
-                <span className='block text-[10.5px] leading-[1.2] text-[#6b7196]'>
+                <span className='block text-[10.5px] leading-[1.2] text-[#6b7196] min-[1920px]:text-[13px] min-[2560px]:text-[14px]'>
                   {card.detail}
                 </span>
               </div>
             </div>
           ))}
 
-          <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.78] sm:scale-100'>
+          <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.78] sm:scale-100 min-[1920px]:scale-110 min-[2560px]:scale-125'>
             <div className='relative h-135 w-65 animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
               <div className='absolute left-1/2 top-4.5 z-10 h-5.5 w-21 -translate-x-1/2 rounded-[14px] bg-[#1e2364]' />
               <div className='absolute inset-3.5 flex flex-col gap-2.5 overflow-hidden rounded-[36px] border-2 border-[#e5e7f0] bg-white px-3.25 pb-3.5 pt-6'>
@@ -247,13 +281,20 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
         <div
           className={cn(
-            'order-3 -mt-5 grid grid-cols-3 gap-4 sm:-mt-6 sm:gap-7.5 lg:mt-0',
-            !isRtl && 'lg:pt-2'
+            'relative z-10 order-3 grid grid-cols-3 gap-4 max-[599px]:-mt-5 sm:gap-7.5',
+            'min-[600px]:max-lg:mt-8 lg:mt-8',
+            'min-[2000px]:mt-10 min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-16',
+            'min-[2560px]:gap-20'
           )}
         >
           {content.stats.map((stat) => (
             <div key={stat.label} className='text-center'>
-              <div className='inline-flex items-baseline gap-0.5 whitespace-nowrap text-[22px] font-extrabold leading-none tracking-[-1px] text-[#1e2364] sm:text-[28px] md:text-[30px]'>
+              <div
+                className={cn(
+                  'inline-flex items-baseline gap-0.5 whitespace-nowrap font-extrabold leading-none tracking-[-1px] text-[#1e2364]',
+                  marketingInlineStatValueClass
+                )}
+              >
                 <CountUp
                   value={stat.value}
                   suffix={stat.suffix}
@@ -261,7 +302,12 @@ export function HeroSection({ locale, content, isRtl }: Props) {
                   trigger='mount'
                 />
               </div>
-              <p className='mt-1 text-[11px] font-medium tracking-[0.4px] text-[#6b7196] sm:text-[12.5px]'>
+              <p
+                className={cn(
+                  'mt-1 font-medium tracking-[0.4px] text-[#6b7196]',
+                  marketingInlineStatLabelClass
+                )}
+              >
                 {stat.label}
               </p>
             </div>

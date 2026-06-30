@@ -8,6 +8,7 @@ import {
 } from '@/shared/components/icons/home/SocialIcons';
 import { cn } from '@/shared/lib/cn';
 import type { HomeFooterContent } from '../home.types';
+import { marketingSectionShellClass } from '@/shared/components/marketing/marketingLayout';
 import { CmsLink } from './CmsLink';
 import {
   EmailIcon,
@@ -72,7 +73,7 @@ function ContactLink({
 export function FooterSection({ locale, content }: Props) {
   return (
     <footer id='contact' className='bg-[#eeeeef] px-4 pb-3 pt-0 md:px-6 md:pb-4'>
-      <div className='mx-auto max-w-330'>
+      <div className={marketingSectionShellClass}>
         <div className='xl:grid xl:grid-cols-[2.6fr_1fr_1.4fr] xl:py-5'>
 
           {/* ── Brand ── */}
