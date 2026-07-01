@@ -2,6 +2,10 @@
 export const sectionScrollMarginClass =
   'scroll-mt-[104px] max-[560px]:scroll-mt-20';
 
+/** Top padding for sticky mobile panels that sit below the fixed marketing header. */
+export const fixedHeaderPaddingClass =
+  'pt-[104px] max-[560px]:pt-20';
+
 export function getFixedHeaderScrollOffset(extraGap = 12): number {
   const header = document.querySelector('header');
   if (!header) {

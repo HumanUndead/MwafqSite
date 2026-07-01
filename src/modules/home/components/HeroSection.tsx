@@ -88,8 +88,8 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       <div
         className={cn(
           marketingSectionShellClass,
-          'relative grid gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:pt-8 lg:pb-10',
-          'min-[1920px]:gap-12 min-[1920px]:py-12 min-[2560px]:gap-16 min-[2560px]:py-14',
+          'relative grid gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-4 lg:pt-6 lg:pb-6',
+          'min-[1920px]:gap-5 min-[1920px]:py-8 min-[2560px]:gap-16 min-[2560px]:py-14',
           'lg:grid-rows-[auto_auto]'
         )}
       >
@@ -282,8 +282,8 @@ export function HeroSection({ locale, content, isRtl }: Props) {
         <div
           className={cn(
             'relative z-10 order-3 grid grid-cols-3 gap-4 max-[599px]:-mt-5 sm:gap-7.5',
-            'min-[600px]:max-lg:mt-8 lg:mt-8',
-            'min-[2000px]:mt-10 min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-16',
+            'min-[600px]:max-lg:mt-4 lg:mt-3 lg:self-start',
+            'min-[1920px]:mt-4 min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-12',
             'min-[2560px]:gap-20'
           )}
         >
