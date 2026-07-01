@@ -73,14 +73,10 @@ export function HeroSection({ locale, content, isRtl }: Props) {
     ? titleWords.slice(leadWordCount, -1).join(' ')
     : '';
 
-  const badgeImages = [
-    { src: '/demo-assets/img1.jpg', alt: content.badge },
-    { src: '/demo-assets/img2.jpg', alt: content.badge },
-    { src: '/demo-assets/img3.jpg', alt: content.badge },
-  ];
+
 
   return (
-    <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-12 pt-0 md:pb-20 md:px-7 lg:pb-0 min-[1920px]:px-10'>
+    <section className='relative flex min-h-dvh flex-col justify-center lg:justify-start overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-16 pt-20 md:px-7 md:pb-14 lg:pb-8 lg:pt-20 min-[1920px]:px-10 min-[1920px]:pt-32 min-[2560px]:pt-40 [@media(max-height:740px)]:lg:pt-24! [@media(max-height:740px)]:lg:pb-6!'>
       <div
         className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
         aria-hidden='true'
@@ -88,16 +84,18 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       <div
         className={cn(
           marketingSectionShellClass,
-          'relative grid gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-4 lg:pt-6 lg:pb-6',
+          'relative grid gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-4',
           'min-[1920px]:gap-5 min-[1920px]:py-8 min-[2560px]:gap-16 min-[2560px]:py-14',
+          '[@media(max-height:740px)]:lg:py-0! [@media(max-height:740px)]:lg:gap-4!',
           'lg:grid-rows-[auto_auto]'
         )}
       >
-        <div className='order-1'>
+        <div className='order-1 -mt-2 sm:-mt-3 lg:-mt-1'>
           <h1
             className={cn(
               'mb-5 md:mb-7 lg:mb-6 font-extrabold tracking-[-2.6px] text-[#1e2364]',
               'min-[1920px]:mb-8 min-[1920px]:tracking-[-3.5px] min-[2560px]:mb-10',
+              '[@media(max-height:740px)]:lg:mb-3! [@media(max-height:740px)]:lg:text-[clamp(30px,2.8vw,44px)]! [@media(max-height:740px)]:lg:tracking-[-1.8px]!',
               marketingHeroTitleClass
             )}
           >
@@ -137,8 +135,9 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
           <p
             className={cn(
-              'mb-6 md:mb-9 lg:mb-8 max-w-135 leading-[1.5] text-[#6b7196]',
+              'mb-6 md:mb-9 lg:mb-8 max-w-135 text-[#545a78]',
               'lg:max-w-150 min-[1920px]:mb-10 min-[1920px]:max-w-none min-[2560px]:mb-12',
+              '[@media(max-height:740px)]:lg:mb-4! [@media(max-height:740px)]:lg:text-[17px]! [@media(max-height:740px)]:lg:leading-[1.55]!',
               marketingHeroLeadClass
             )}
           >
@@ -174,7 +173,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           />
         </div>
 
-        <div className='relative z-0 mx-auto order-2 h-115 w-full max-w-140 overflow-hidden min-[600px]:max-lg:mb-6 sm:h-120 sm:overflow-visible lg:z-auto lg:mb-0 lg:h-140 lg:row-span-2 lg:self-center min-[1920px]:h-180 min-[1920px]:max-w-180 min-[2560px]:h-200 min-[2560px]:max-w-200'>
+        <div className='relative z-0 mx-auto order-2 h-115 w-full max-w-140 overflow-hidden min-[600px]:max-lg:mb-6 sm:h-120 sm:overflow-visible lg:z-auto lg:mb-0 lg:h-140 lg:row-span-2 lg:self-center min-[1920px]:h-180 min-[1920px]:max-w-180 min-[2560px]:h-200 min-[2560px]:max-w-200 [@media(max-height:740px)]:lg:h-[440px]!'>
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
@@ -201,7 +200,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             </div>
           ))}
 
-          <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.78] sm:scale-100 min-[1920px]:scale-110 min-[2560px]:scale-125'>
+          <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.78] sm:scale-100 min-[1920px]:scale-110 min-[2560px]:scale-125 [@media(max-height:740px)]:lg:scale-[0.8]!'>
             <div className='relative h-135 w-65 animate-[phoneFloat_6s_ease-in-out_infinite] overflow-visible rounded-[42px] border-2 border-[#1e2364] bg-white shadow-[0_20px_60px_rgba(30,35,100,0.12)]'>
               <div className='absolute left-1/2 top-4.5 z-10 h-5.5 w-21 -translate-x-1/2 rounded-[14px] bg-[#1e2364]' />
               <div className='absolute inset-3.5 flex flex-col gap-2.5 overflow-hidden rounded-[36px] border-2 border-[#e5e7f0] bg-white px-3.25 pb-3.5 pt-6'>
@@ -282,7 +281,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
         <div
           className={cn(
             'relative z-10 order-3 grid grid-cols-3 gap-4 max-[599px]:-mt-5 sm:gap-7.5',
-            'min-[600px]:max-lg:mt-4 lg:mt-3 lg:self-start',
+            'min-[600px]:max-lg:mt-4 lg:mt-3 lg:self-start [@media(max-height:740px)]:lg:mt-1!',
             'min-[1920px]:mt-4 min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-12',
             'min-[2560px]:gap-20'
           )}
