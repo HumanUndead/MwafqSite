@@ -76,7 +76,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
 
   return (
-    <section className='relative flex min-h-dvh flex-col justify-center lg:justify-start overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-16 pt-20 md:px-7 md:pb-14 lg:pb-8 lg:pt-20 min-[1920px]:px-10 min-[1920px]:pt-32 min-[2560px]:pt-40 [@media(max-height:740px)]:lg:pt-24! [@media(max-height:740px)]:lg:pb-6!'>
+    <section className='relative flex min-h-dvh flex-col justify-center lg:justify-start overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-20 pt-16 md:px-7 md:pb-16 lg:pb-8 lg:pt-16 min-[1920px]:px-10 min-[1920px]:pt-28 min-[2560px]:pt-36 [@media(max-height:740px)]:lg:pt-20! [@media(max-height:740px)]:lg:pb-6!'>
       <div
         className='pointer-events-none absolute inset-0 opacity-55 bg-[radial-gradient(circle,#e5e7f0_1.2px,transparent_1.2px)] bg-size-[24px_24px] mask-[radial-gradient(circle_at_50%_50%,#000_0%,transparent_75%)]'
         aria-hidden='true'
@@ -84,13 +84,13 @@ export function HeroSection({ locale, content, isRtl }: Props) {
       <div
         className={cn(
           marketingSectionShellClass,
-          'relative grid gap-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-4',
-          'min-[1920px]:gap-5 min-[1920px]:py-8 min-[2560px]:gap-16 min-[2560px]:py-14',
+          'relative -mt-3 grid gap-4 sm:-mt-4 sm:gap-6 lg:grid-cols-[1.05fr_1fr] lg:-mt-5 lg:items-center lg:gap-4',
+          'min-[1920px]:gap-5 min-[1920px]:py-4 min-[2560px]:gap-16 min-[2560px]:py-8',
           '[@media(max-height:740px)]:lg:py-0! [@media(max-height:740px)]:lg:gap-4!',
           'lg:grid-rows-[auto_auto]'
         )}
       >
-        <div className='order-1 -mt-2 sm:-mt-3 lg:-mt-1'>
+        <div className='order-1'>
           <h1
             className={cn(
               'mb-5 md:mb-7 lg:mb-6 font-extrabold tracking-[-2.6px] text-[#1e2364]',
@@ -137,7 +137,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             className={cn(
               'mb-6 md:mb-9 lg:mb-8 max-w-135 text-[#545a78]',
               'lg:max-w-150 min-[1920px]:mb-10 min-[1920px]:max-w-none min-[2560px]:mb-12',
-              '[@media(max-height:740px)]:lg:mb-4! [@media(max-height:740px)]:lg:text-[17px]! [@media(max-height:740px)]:lg:leading-[1.55]!',
+              '[@media(max-height:740px)]:lg:mb-4! [@media(max-height:740px)]:lg:text-[17px]! [@media(max-height:740px)]:lg:leading-[1.8]!',
               marketingHeroLeadClass
             )}
           >
@@ -150,7 +150,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
             secondary={content.secondaryAction}
             primaryVariant='brand'
             secondaryVariant='brandOutline'
-            className='mb-8 md:mb-11 lg:mb-0 flex flex-wrap gap-3.5 min-[1920px]:gap-5'
+            className='mb-8 md:mb-11 lg:mb-10 flex flex-wrap gap-3.5 min-[1920px]:mb-12 min-[1920px]:gap-5'
             primaryClassName={cn(
               buttonVariants({
                 variant: 'brand',
@@ -280,9 +280,9 @@ export function HeroSection({ locale, content, isRtl }: Props) {
 
         <div
           className={cn(
-            'relative z-10 order-3 grid grid-cols-3 gap-4 max-[599px]:-mt-5 sm:gap-7.5',
-            'min-[600px]:max-lg:mt-4 lg:mt-3 lg:self-start [@media(max-height:740px)]:lg:mt-1!',
-            'min-[1920px]:mt-4 min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-12',
+            'relative z-10 order-3 grid grid-cols-3 gap-4 max-[599px]:mt-8 sm:gap-7.5',
+            'min-[600px]:max-lg:mt-10 lg:mt-12 lg:self-start [@media(max-height:740px)]:lg:mt-8!',
+            'min-[1920px]:mt-14 min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-12',
             'min-[2560px]:gap-20'
           )}
         >
