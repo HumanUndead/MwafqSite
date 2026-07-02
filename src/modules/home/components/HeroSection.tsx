@@ -177,7 +177,7 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           {content.floatingCards.slice(0, 3).map((card, index) => (
             <div
               key={card.title || index}
-              className={`absolute z-5 flex w-fit max-w-[12rem] items-center gap-3 rounded-[17px] border-2 border-[#1e2364] bg-white px-3 py-2.5 pe-3.5 max-[560px]:scale-[0.72] min-[1920px]:max-w-[16rem] min-[1920px]:gap-4 min-[1920px]:rounded-[20px] min-[1920px]:px-4 min-[1920px]:py-3 min-[2560px]:max-w-[18rem] min-[2560px]:scale-110 ${index === 1 ? 'max-[560px]:origin-left' : 'max-[560px]:origin-right'} ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
+              className={`absolute z-5 flex w-fit max-w-[12rem] items-center gap-3.5 rounded-[17px] border-2 border-[#1e2364] bg-white px-4 py-3.5 max-[560px]:scale-[0.72] min-[1920px]:max-w-[16rem] min-[1920px]:gap-4 min-[1920px]:rounded-[20px] min-[1920px]:px-5 min-[1920px]:py-4 min-[2560px]:max-w-[18rem] min-[2560px]:scale-110 ${index === 1 ? 'max-[560px]:origin-left' : 'max-[560px]:origin-right'} ${floatingCardMeta[index]?.wrapperClassName ?? ''}`}
             >
               <span
                 aria-hidden='true'
