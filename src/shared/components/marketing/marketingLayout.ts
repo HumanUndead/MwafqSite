@@ -32,7 +32,7 @@ export const marketingAlignedContainerClass = cn(
 
 /** Hero / page title — fluid on large viewports. */
 export const marketingHeroTitleClass =
-  'text-[clamp(30px,4.5vw,52px)] min-[1920px]:text-[clamp(56px,4.2vw,96px)] min-[2560px]:text-[clamp(68px,4.8vw,112px)]';
+  'text-[clamp(36px,5.2vw,60px)] leading-[1.28] min-[1920px]:text-[clamp(62px,4.5vw,104px)] min-[1920px]:leading-[1.22] min-[2560px]:text-[clamp(76px,5vw,120px)]';
 
 /** Section h2 — fluid on large viewports. */
 export const marketingSectionHeadingClass =
@@ -44,7 +44,7 @@ export const marketingLeadTextClass =
 
 /** Hero subtitle — scales up on large / ultra-wide viewports. */
 export const marketingHeroLeadClass =
-  'text-[17.5px] lg:text-[19px] min-[1920px]:text-[clamp(22px,1.35vw,38px)] min-[1920px]:leading-[1.6] min-[2560px]:text-[clamp(28px,1.5vw,44px)]';
+  'text-[clamp(18px,2.3vw,23px)] leading-[1.9] lg:text-[clamp(23px,2.1vw,30px)] lg:leading-[1.95] min-[1920px]:text-[clamp(26px,1.4vw,42px)] min-[1920px]:leading-[1.85] min-[2560px]:text-[clamp(32px,1.55vw,48px)] min-[2560px]:leading-[1.8]';
 
 /** Hero CTA buttons — scale with viewport past 1920px. */
 export const marketingHeroCtaClass =

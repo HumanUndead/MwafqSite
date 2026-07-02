@@ -2,10 +2,39 @@
 
 import type { AboutHeroContent } from '@/modules/about/types/aboutContent';
 
+const HERO_VIDEO_SRC =
+  'https://res.cloudinary.com/imtjaipy/video/upload/v1782893582/16x9_asp_2_1_mot947.mp4';
+
 interface Props {
   content: AboutHeroContent;
 }
 
+// Hero video, full width (w-full h-auto keeps aspect, never cropped).
+// Mobile: no forced height — the section fits the video and sits it directly
+// below the navbar (pt clearance), so there's no empty space above/below.
+// lg+: section is 100dvh and the video is centered, with the navbar overlaying
+// its top (no clearance).
+// The previous "About Mwafq" heading + mascot hero is kept below as a
+// commented block for easy restore.
+export function AboutHero(_props: Props) {
+  return (
+    <section
+      id='about'
+      className='relative flex w-full flex-col items-center justify-center overflow-hidden bg-[#f4f4f6] pt-20 sm:pt-24 lg:h-[100dvh] lg:pt-0'
+    >
+      <video
+        className='h-auto w-full'
+        src={HERO_VIDEO_SRC}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload='metadata'
+      />
+    </section>
+  );
+}
+/* --- Previous hero (commented out on request) ---
 export function AboutHero({ content }: Props) {
   return (
     <section
@@ -69,3 +98,4 @@ export function AboutHero({ content }: Props) {
     </section>
   );
 }
+--- end previous hero --- */

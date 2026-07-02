@@ -127,6 +127,37 @@ const STAGE_THRESHOLDS = [
   STAGE_INTRO + STAGE_STEP * 4,
 ] as const;
 
+/** Fallback path fractions until the SVG path is measured. */
+const NODE_PATH_PROGRESS = [0.2, 0.4, 0.6, 0.8, 1.0] as const;
+/** Hide label/ring until this far through the leg toward a node (0–1). */
+const NODE_ARRIVE_RATIO = 0.82;
+/** Keep visible this far into the leg toward the next node (0–1). */
+const NODE_DWELL_RATIO = 0.38;
+
+function measureNodePathProgress(path: SVGPathElement): number[] {
+  const len = path.getTotalLength();
+  if (len <= 0) return [...NODE_PATH_PROGRESS];
+
+  return STAGE_META.map((meta) => {
+    let bestT = 0;
+    let bestD = Infinity;
+    const steps = 240;
+
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const point = path.getPointAtLength(len * t);
+      const d =
+        (point.x - meta.nodeX) ** 2 + (point.y - meta.nodeY) ** 2;
+      if (d < bestD) {
+        bestD = d;
+        bestT = t;
+      }
+    }
+
+    return bestT;
+  });
+}
+
 const NODE_CAMERAS = [
   { x: 1000, y: 0 },
   { x: 0, y: 160 },
@@ -154,7 +185,6 @@ const MOBILE_CAM_H = 640;
 const MOBILE_PATH_END = 1;
 const MOBILE_CAM_Y_FOCUS_START = 0.14;
 const MOBILE_CAM_Y_FOCUS_END = 0.82;
-const MOBILE_CARD_RESERVE = 'clamp(148px, 27vh, 196px)';
 const MOBILE_STAGE_STEP = (MOBILE_PATH_END - STAGE_INTRO) / 5;
 const MOBILE_STAGE_THRESHOLDS = [
   STAGE_INTRO,
@@ -194,7 +224,7 @@ const DESKTOP_LAYOUT: LayoutConfig = {
   finaleLabelH: 312,
   finaleLabelGap: 88,
   finaleLabelGapLast: 140,
-  sectionHeight: '2600vh',
+  sectionHeight: '1200vh',
   camW: [1200, 1200, 1200, 1200, 1200, 1200, DESKTOP_FINALE_CAM_W],
   camH: [1000, 600, 600, 600, 600, 600, DESKTOP_FINALE_CAM_H],
   camFinaleX: DESKTOP_FINALE_CAM_X,
@@ -202,13 +232,13 @@ const DESKTOP_LAYOUT: LayoutConfig = {
 
 const MOBILE_LAYOUT: LayoutConfig = {
   labelW: 300,
-  labelH: 140,
-  labelGap: 48,
+  labelH: 184,
+  labelGap: 40,
   finaleLabelW: 280,
   finaleLabelH: 120,
   finaleLabelGap: 28,
   finaleLabelGapLast: 40,
-  sectionHeight: '1600vh',
+  sectionHeight: '750vh',
   camW: Array(7).fill(MOBILE_CAM_W) as number[],
   camH: Array(7).fill(MOBILE_CAM_H) as number[],
   camFinaleX: 380,
@@ -252,49 +282,72 @@ function getLayout(compact: boolean): LayoutConfig {
   return compact ? MOBILE_LAYOUT : DESKTOP_LAYOUT;
 }
 
-function mapScrollToPathProgress(scroll: number, compact: boolean): number {
+function mapScrollToPathProgress(
+  scroll: number,
+  compact: boolean,
+  nodes: readonly number[]
+): number {
   const end = compact ? MOBILE_PATH_END : FINALE_THRESHOLD;
   const thresholds = compact ? MOBILE_STAGE_THRESHOLDS : STAGE_THRESHOLDS;
+  const lastNode = nodes[nodes.length - 1] ?? 1;
 
   if (scroll <= STAGE_INTRO) return 0;
-  if (scroll >= end) return 1;
+  if (scroll >= end) return lastNode;
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < nodes.length; i++) {
     const legStart = thresholds[i]!;
-    const legEnd = i < 4 ? thresholds[i + 1]! : end;
+    const legEnd = i < nodes.length - 1 ? thresholds[i + 1]! : end;
     if (scroll <= legEnd) {
       const t = (scroll - legStart) / (legEnd - legStart);
-      return i * 0.2 + t * 0.2;
+      const pathStart = i === 0 ? 0 : nodes[i - 1]!;
+      const pathEnd = nodes[i]!;
+      return pathStart + t * (pathEnd - pathStart);
     }
   }
 
-  return 1;
+  return lastNode;
+}
+
+function nodeVisibilityWindow(index: number, nodes: readonly number[]) {
+  const nodeAt = nodes[index]!;
+  const pathStart = index === 0 ? 0 : nodes[index - 1]!;
+  const pathEnd = index < nodes.length - 1 ? nodes[index + 1]! : 1;
+
+  const showFrom = pathStart + (nodeAt - pathStart) * NODE_ARRIVE_RATIO;
+
+  if (index === nodes.length - 1) {
+    return { showFrom, showUntil: 1 };
+  }
+
+  const showUntil = nodeAt + (pathEnd - nodeAt) * NODE_DWELL_RATIO;
+  return { showFrom, showUntil };
 }
 
 function getActiveLabelIndex(
   scrollProgress: number,
   pathProgress: number,
-  compact: boolean
+  compact: boolean,
+  nodes: readonly number[]
 ): number {
   if (!compact && scrollProgress >= FINALE_THRESHOLD) return -1;
   if (pathProgress <= 0) return -1;
-  if (pathProgress <= 0.2) return 0;
-  if (pathProgress <= 0.4) return 1;
-  if (pathProgress <= 0.6) return 2;
-  if (pathProgress <= 0.8) return 3;
-  return 4;
+
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const { showFrom, showUntil } = nodeVisibilityWindow(i, nodes);
+    if (pathProgress >= showFrom && pathProgress <= showUntil) return i;
+  }
+
+  return -1;
 }
 
 function getStageState(
-  progress: number,
+  pathProgress: number,
   index: number,
-  compact: boolean
+  nodes: readonly number[]
 ): 'upcoming' | 'active' | 'completed' {
-  const thresholds = compact ? MOBILE_STAGE_THRESHOLDS : STAGE_THRESHOLDS;
-  const threshold = thresholds[index];
-  const next = thresholds[index + 1];
-  if (progress < threshold) return 'upcoming';
-  if (next !== undefined && progress >= next) return 'completed';
+  const { showFrom, showUntil } = nodeVisibilityWindow(index, nodes);
+  if (pathProgress < showFrom) return 'upcoming';
+  if (pathProgress > showUntil) return 'completed';
   return 'active';
 }
 
@@ -396,6 +449,9 @@ function getFinaleLabelLayout(
   };
 }
 
+// Camera vertical focus is a single continuous lerp over the whole journey.
+// No per-card snapping and no preserveAspectRatio switching — any discontinuity
+// here reads as the screen lurching on mobile (worst around point 4).
 function getMobileViewBox(
   leadingPoint: { x: number; y: number },
   pathProgress: number
@@ -408,12 +464,6 @@ function getMobileViewBox(
   const x = leadingPoint.x - MOBILE_CAM_W / 2;
   const y = leadingPoint.y - MOBILE_CAM_H * yFocus;
   return `${x} ${y} ${MOBILE_CAM_W} ${MOBILE_CAM_H}`;
-}
-
-function getMobilePreserveAspectRatio(pathProgress: number): string {
-  if (pathProgress <= 0.12) return 'xMidYMin meet';
-  if (pathProgress >= 0.88) return 'xMidYMax meet';
-  return 'xMidYMid meet';
 }
 
 function getDesktopViewBox(progress: number, layout: LayoutConfig): string {
@@ -436,22 +486,6 @@ function getDesktopViewBox(progress: number, layout: LayoutConfig): string {
   return `${x} ${y} ${w} ${h}`;
 }
 
-function MobileStageCard({ stage, rtl }: { stage: Stage; rtl: boolean }) {
-  return (
-    <div
-      className='rounded-[18px] border-2 border-[#e5e7f0] bg-white/95 p-4 shadow-[0_12px_40px_-24px_rgba(30,35,100,0.35)] backdrop-blur-sm'
-      dir={rtl ? 'rtl' : 'ltr'}
-    >
-      <h3 className='text-lg font-extrabold tracking-[-0.4px] text-[#1e2364]'>
-        {stage.title}
-      </h3>
-      <p className='mt-1 text-sm leading-relaxed text-[#6b7196]'>
-        {stage.description}
-      </p>
-    </div>
-  );
-}
-
 function StageLabelContent({
   stage,
   total,
@@ -468,57 +502,61 @@ function StageLabelContent({
   padTowardNode?: 'start' | 'end';
 }) {
   const isFinale = size === 'finale';
+  const showMobileCard = compact && !isFinale;
   const padInner = compact ? 14 : 20;
   const padOuter = compact ? 12 : 20;
   const padBlock = isFinale ? (compact ? 8 : 12) : 0;
 
   const paddingStyle =
-    isFinale && padTowardNode
-      ? padTowardNode === 'start'
-        ? {
-            paddingTop: padBlock,
-            paddingBottom: padBlock,
-            paddingInlineStart: padInner,
-            paddingInlineEnd: padOuter,
-          }
-        : {
-            paddingTop: padBlock,
-            paddingBottom: padBlock,
-            paddingInlineStart: padOuter,
-            paddingInlineEnd: padInner,
-          }
-      : { padding: `0 ${padOuter}px` };
+    showMobileCard
+      ? { padding: '12px 14px' }
+      : isFinale && padTowardNode
+        ? padTowardNode === 'start'
+          ? {
+              paddingTop: padBlock,
+              paddingBottom: padBlock,
+              paddingInlineStart: padInner,
+              paddingInlineEnd: padOuter,
+            }
+          : {
+              paddingTop: padBlock,
+              paddingBottom: padBlock,
+              paddingInlineStart: padOuter,
+              paddingInlineEnd: padInner,
+            }
+        : { padding: `0 ${padOuter}px` };
 
   const numberSize = isFinale
     ? compact
       ? '11px'
       : '22px'
     : compact
-      ? '9px'
+      ? '10px'
       : '10px';
   const titleSize = isFinale
     ? compact
       ? '22px'
       : '56px'
     : compact
-      ? '18px'
+      ? '20px'
       : '26px';
   const descSize = isFinale
     ? compact
       ? '13px'
       : '27px'
     : compact
-      ? '12px'
+      ? '13px'
       : '14px';
 
-  return (
+  const content = (
     <div
       style={{
         width: '100%',
         height: '100%',
+        minHeight: showMobileCard ? '100%' : undefined,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: showMobileCard ? 'flex-start' : 'center',
         textAlign: rtl ? 'right' : 'left',
         direction: rtl ? 'rtl' : 'ltr',
         boxSizing: 'border-box',
@@ -557,10 +595,30 @@ function StageLabelContent({
           fontSize: descSize,
           lineHeight: 1.55,
           color: '#6b7196',
+          ...(showMobileCard ? { wordBreak: 'break-word' } : {}),
         }}
       >
         {stage.description}
       </span>
+    </div>
+  );
+
+  if (!showMobileCard) return content;
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        borderRadius: 16,
+        border: '2px solid #e5e7f0',
+        background: 'rgba(255,255,255,0.97)',
+        boxShadow: '0 12px 40px -24px rgba(30,35,100,0.35)',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}
+    >
+      {content}
     </div>
   );
 }
@@ -579,15 +637,19 @@ export function B2BProcessSection({ locale }: Props) {
 
   const [compact, setCompact] = useState(false);
   const [pathLength, setPathLength] = useState(0);
+  const [nodePathProgress, setNodePathProgress] = useState<number[]>([
+    ...NODE_PATH_PROGRESS,
+  ]);
   const [leadingPoint, setLeadingPoint] = useState({ x: 1100, y: 40 });
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const layout = getLayout(compact);
 
   const measurePath = useCallback(() => {
-    if (pathRef.current) {
-      setPathLength(pathRef.current.getTotalLength());
-    }
+    const path = pathRef.current;
+    if (!path) return;
+    setPathLength(path.getTotalLength());
+    setNodePathProgress(measureNodePathProgress(path));
   }, []);
 
   useLayoutEffect(() => {
@@ -618,7 +680,11 @@ export function B2BProcessSection({ locale }: Props) {
       setScrollProgress(progress);
 
       if (pathLength > 0) {
-        const pathProgress = mapScrollToPathProgress(progress, compact);
+        const pathProgress = mapScrollToPathProgress(
+          progress,
+          compact,
+          nodePathProgress
+        );
         const point = pathRef.current.getPointAtLength(
           pathLength * pathProgress
         );
@@ -640,21 +706,47 @@ export function B2BProcessSection({ locale }: Props) {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, [pathLength, compact]);
+  }, [pathLength, compact, nodePathProgress]);
 
-  const pathProgress = mapScrollToPathProgress(scrollProgress, compact);
+  const pathProgress = mapScrollToPathProgress(
+    scrollProgress,
+    compact,
+    nodePathProgress
+  );
   const dashOffset = pathLength > 0 ? pathLength * (1 - pathProgress) : 0;
   const activeLabelIndex = getActiveLabelIndex(
     scrollProgress,
     pathProgress,
-    compact
+    compact,
+    nodePathProgress
   );
+  const lastNodeShowFrom = nodeVisibilityWindow(
+    stages.length - 1,
+    nodePathProgress
+  ).showFrom;
+  const mobilePinLast = compact && pathProgress >= lastNodeShowFrom;
+  const displayLabelIndex = mobilePinLast
+    ? stages.length - 1
+    : activeLabelIndex;
   const viewBox = compact
     ? getMobileViewBox(leadingPoint, pathProgress)
     : getDesktopViewBox(scrollProgress, layout);
-  const mobileAspect = getMobilePreserveAspectRatio(pathProgress);
   const isFinale = !compact && scrollProgress >= FINALE_THRESHOLD;
   const ringR = compact ? 18 : RING_R;
+  const showStageLabel = compact
+    ? displayLabelIndex >= 0
+    : scrollProgress < FINALE_THRESHOLD && activeLabelIndex >= 0;
+  const showLeadingDot =
+    pathLength > 0 &&
+    scrollProgress > 0.005 &&
+    (compact ? scrollProgress <= 1 : scrollProgress < 0.998);
+
+  const getNodeState = (index: number) => {
+    if (mobilePinLast) {
+      return index === stages.length - 1 ? 'active' : 'completed';
+    }
+    return getStageState(pathProgress, index, nodePathProgress);
+  };
 
   return (
     <section
@@ -712,39 +804,16 @@ export function B2BProcessSection({ locale }: Props) {
         </div>
 
         <div className='relative z-0 min-h-0 flex-1 overflow-hidden'>
-          {compact && activeLabelIndex >= 0 && (
-            <div className='absolute inset-x-0 bottom-0 z-30 px-4 pb-4 pt-1'>
-              <AnimatePresence mode='wait'>
-                <motion.div
-                  key={activeLabelIndex}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{
-                    duration: 0.35,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                  }}
-                >
-                  <MobileStageCard
-                    stage={stages[activeLabelIndex]!}
-                    rtl={rtl}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          )}
-
           <div
             className={cn(
-              'absolute inset-x-0 top-0',
+              'absolute inset-0',
               !compact && 'px-[clamp(16px,4vw,96px)]'
             )}
-            style={compact ? { bottom: MOBILE_CARD_RESERVE } : { bottom: 0 }}
           >
             <svg
               viewBox={viewBox}
               className='h-full w-full'
-              preserveAspectRatio={compact ? mobileAspect : 'xMidYMid meet'}
+              preserveAspectRatio='xMidYMid meet'
               aria-hidden='true'
               style={{ overflow: 'visible' }}
             >
@@ -798,9 +867,7 @@ export function B2BProcessSection({ locale }: Props) {
                 strokeDashoffset={dashOffset}
               />
 
-              {pathLength > 0 &&
-                scrollProgress > 0.005 &&
-                scrollProgress < 0.998 && (
+              {showLeadingDot && (
                   <circle
                     cx={leadingPoint.x}
                     cy={leadingPoint.y}
@@ -812,7 +879,7 @@ export function B2BProcessSection({ locale }: Props) {
 
               {stages.map((stage, i) => {
                 const meta = STAGE_META[i]!;
-                const state = getStageState(scrollProgress, i, compact);
+                const state = getNodeState(i);
                 const isActive = state === 'active';
                 const isCompleted = state === 'completed';
                 const nodeAlpha = isFinale
@@ -916,55 +983,53 @@ export function B2BProcessSection({ locale }: Props) {
                 );
               })}
 
-              {!compact &&
-                scrollProgress < FINALE_THRESHOLD &&
-                activeLabelIndex >= 0 && (
-                  <AnimatePresence mode='wait'>
-                    <motion.g
-                      key={activeLabelIndex}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{
-                        duration: 0.45,
-                        ease: [0.25, 0.46, 0.45, 0.94],
-                      }}
-                    >
-                      {(() => {
-                        const labelLayout = getStageLabelLayout(
-                          activeLabelIndex,
-                          layout
-                        );
-                        const stage = stages[activeLabelIndex]!;
-                        return (
-                          <>
-                            <line
-                              x1={labelLayout.lx1}
-                              y1={labelLayout.ly1}
-                              x2={labelLayout.lx2}
-                              y2={labelLayout.ly2}
-                              stroke='rgba(0,168,241,0.45)'
-                              strokeWidth='1'
+              {showStageLabel && (
+                <AnimatePresence mode='wait'>
+                  <motion.g
+                    key={displayLabelIndex}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 0.45,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    }}
+                  >
+                    {(() => {
+                      const labelLayout = getStageLabelLayout(
+                        displayLabelIndex,
+                        layout
+                      );
+                      const stage = stages[displayLabelIndex]!;
+                      return (
+                        <>
+                          <line
+                            x1={labelLayout.lx1}
+                            y1={labelLayout.ly1}
+                            x2={labelLayout.lx2}
+                            y2={labelLayout.ly2}
+                            stroke='rgba(0,168,241,0.45)'
+                            strokeWidth={compact ? 1.2 : 1}
+                          />
+                          <foreignObject
+                            x={labelLayout.foX}
+                            y={labelLayout.foY}
+                            width={labelLayout.foW}
+                            height={labelLayout.foH}
+                          >
+                            <StageLabelContent
+                              stage={stage}
+                              total={stages.length}
+                              rtl={rtl}
+                              compact={compact}
                             />
-                            <foreignObject
-                              x={labelLayout.foX}
-                              y={labelLayout.foY}
-                              width={labelLayout.foW}
-                              height={labelLayout.foH}
-                            >
-                              <StageLabelContent
-                                stage={stage}
-                                total={stages.length}
-                                rtl={rtl}
-                                compact={compact}
-                              />
-                            </foreignObject>
-                          </>
-                        );
-                      })()}
-                    </motion.g>
-                  </AnimatePresence>
-                )}
+                          </foreignObject>
+                        </>
+                      );
+                    })()}
+                  </motion.g>
+                </AnimatePresence>
+              )}
 
               {!compact &&
                 stages.map((stage, i) => {
