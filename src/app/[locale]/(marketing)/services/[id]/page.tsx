@@ -11,9 +11,11 @@ import {
   fetchServiceGroupById,
   fetchServiceGroupsList,
 } from '@/modules/auth/server/ServiceGroupService';
+import { FetchResponseError } from '@/shared/lib/fetchWithErrorHandling.shared';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 import { SITE_URL } from '@/shared/constants/config';
 import { JsonLd } from '@/shared/components/seo/JsonLd';
+import { stripHtmlToNull } from '@/shared/lib/text';
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -30,17 +32,20 @@ export async function generateMetadata({
   const langId = localeToLangId[locale];
   const serviceGroup = await fetchServiceGroupById(numericId, {
     isMandatoryTest: true,
+  }).catch((error) => {
+    if (error instanceof FetchResponseError) notFound();
+    throw error;
   });
   const translation =
     serviceGroup.translations.find((t) => t.langId === langId) ??
     serviceGroup.translations[0];
-  if (!translation) return {};
+  if (!translation) notFound();
 
   return buildPageMetadata({
     locale,
     route: `${ROUTES.SERVICES}/${numericId}`,
     title: translation.name,
-    description: translation.description ?? translation.name,
+    description: stripHtmlToNull(translation.description) ?? translation.name,
   });
 }
 
@@ -53,7 +58,12 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
 
   const [locale, serviceGroup, relatedList, currentUser] = await Promise.all([
     GetLocale(),
-    fetchServiceGroupById(numericId, { isMandatoryTest: true }),
+    fetchServiceGroupById(numericId, { isMandatoryTest: true }).catch(
+      (error) => {
+        if (error instanceof FetchResponseError) notFound();
+        throw error;
+      }
+    ),
     fetchServiceGroupsList({ pageNumber: 1, pageSize: 6 }),
     getCurrentUser(),
   ]);
@@ -66,19 +76,21 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
     serviceGroup.translations.find((t) => t.langId === langId) ??
     serviceGroup.translations[0];
 
+  if (!translation) {
+    notFound();
+  }
+
   return (
     <MarketingStickyHeaderOffset variant='detail'>
-      {translation ? (
-        <JsonLd
-          data={{
-            '@context': 'https://schema.org',
-            '@type': 'MedicalTest',
-            name: translation.name,
-            description: translation.description ?? translation.name,
-            url: `${SITE_URL}/${locale}${ROUTES.SERVICES}/${numericId}`,
-          }}
-        />
-      ) : null}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'MedicalTest',
+          name: translation.name,
+          description: stripHtmlToNull(translation.description) ?? translation.name,
+          url: `${SITE_URL}/${locale}${ROUTES.SERVICES}/${numericId}`,
+        }}
+      />
       <ServiceGroupDetailsView
         locale={locale}
         langId={langId}

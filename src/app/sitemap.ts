@@ -14,25 +14,28 @@ const STATIC_ROUTES = [
   ROUTES.CONTACT,
 ] as const;
 
+function localizedUrl(locale: string, path: string): string {
+  return `${SITE_URL}${path === '/' ? `/${locale}` : `/${locale}${path}`}`;
+}
+
 function localizedAlternates(path: string) {
   return Object.fromEntries(
-    locales.map((locale) => [
-      locale,
-      `${SITE_URL}${path === '/' ? `/${locale}` : `/${locale}${path}`}`,
-    ])
+    locales.map((locale) => [locale, localizedUrl(locale, path)])
   );
 }
 
-function entry(path: string): MetadataRoute.Sitemap[number] {
-  return {
-    url: `${SITE_URL}${path === '/' ? `/${locales[0]}` : `/${locales[0]}${path}`}`,
-    alternates: { languages: localizedAlternates(path) },
-  };
+/** One sitemap entry per locale, each pointing to itself plus hreflang alternates for every locale. */
+function entriesForPath(path: string): MetadataRoute.Sitemap {
+  const alternates = { languages: localizedAlternates(path) };
+  return locales.map((locale) => ({
+    url: localizedUrl(locale, path),
+    alternates,
+  }));
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const entries: MetadataRoute.Sitemap = STATIC_ROUTES.map((route) =>
-    entry(route)
+  const entries: MetadataRoute.Sitemap = STATIC_ROUTES.flatMap((route) =>
+    entriesForPath(route)
   );
 
   try {
@@ -41,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       pageSize: 200,
     });
     for (const service of services.data) {
-      entries.push(entry(`${ROUTES.SERVICES}/${service.id}`));
+      entries.push(...entriesForPath(`${ROUTES.SERVICES}/${service.id}`));
     }
   } catch {
     // Upstream unavailable — keep static routes in the sitemap.
@@ -50,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const courses = await fetchCourseList({ pageNumber: 1, pageSize: 200 });
     for (const course of courses.data) {
-      entries.push(entry(`${ROUTES.COURSES}/${course.id}`));
+      entries.push(...entriesForPath(`${ROUTES.COURSES}/${course.id}`));
     }
   } catch {
     // Upstream unavailable — keep static routes in the sitemap.
