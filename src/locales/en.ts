@@ -1,7 +1,8 @@
 const en = {
   site: {
     title: 'Mwafq',
-    description: 'Your trusted platform',
+    description:
+      'Book medical tests, health services, and professional courses online with Mwafq. Trusted providers, certified results, and corporate health solutions across Saudi Arabia.',
   },
   seo: {
     home: {

@@ -16,6 +16,7 @@ export const GOOGLE_SITE_VERIFICATION =
 
 export const config = {
   appName: 'Mwafq',
-  appDescription: 'Your trusted platform',
+  appDescription:
+    'Book medical tests, health services, and professional courses online with Mwafq. Trusted providers, certified results, and corporate health solutions across Saudi Arabia.',
   apiBaseUrl: MWAFQ_API_BASE_URL,
 } as const;
