@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { hasLocale } from '@/i18n/config';
@@ -6,6 +7,13 @@ import { getCurrentUser } from '@/modules/auth/server/authSession';
 import { FooterSection } from '@/modules/home/components/FooterSection';
 import { Header } from '@/shared/components/layout/Header';
 import { getMenuContent } from '@/modules/home/server/menuContentService';
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 interface AuthLayoutProps {
   children: ReactNode;

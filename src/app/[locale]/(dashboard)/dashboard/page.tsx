@@ -1,5 +1,13 @@
+import type { Metadata } from 'next';
 import { getTranslations } from '@/i18n/server';
 import { getCurrentUser } from '@/modules/auth/server/authSession';
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function DashboardPage() {
   const t = await getTranslations('dashboard');

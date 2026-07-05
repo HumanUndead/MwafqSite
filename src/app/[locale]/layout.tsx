@@ -5,7 +5,11 @@ import { DictionaryProvider } from '@/i18n/DictionaryProvider';
 import { QueryProvider } from '@/shared/providers/QueryProvider';
 import { getDictionary } from '@/i18n/dictionaries';
 import { hasLocale, locales, type Locale } from '@/i18n/config';
+import { getLocalizedRoute } from '@/i18n/routing';
+import { ROUTES } from '@/shared/constants/routes';
+import { SITE_URL } from '@/shared/constants/config';
 import { TokenValidator } from '@/modules/auth/components/TokenValidator';
+import { JsonLd } from '@/shared/components/seo/JsonLd';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -24,10 +28,33 @@ export async function generateMetadata({
   const { locale } = await params;
   const resolvedLocale = hasLocale(locale) ? locale : locales[0];
   const dict = await getDictionary(resolvedLocale);
+  const canonicalPath = getLocalizedRoute(resolvedLocale, ROUTES.HOME);
 
   return {
-    title: dict.site.title,
+    title: {
+      default: dict.site.title,
+      template: `%s | ${dict.site.title}`,
+    },
     description: dict.site.description,
+    alternates: {
+      canonical: canonicalPath,
+      languages: Object.fromEntries(
+        locales.map((loc) => [loc, getLocalizedRoute(loc, ROUTES.HOME)])
+      ),
+    },
+    openGraph: {
+      title: dict.site.title,
+      description: dict.site.description,
+      url: canonicalPath,
+      siteName: dict.site.title,
+      locale: resolvedLocale,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.site.title,
+      description: dict.site.description,
+    },
   };
 }
 
@@ -42,9 +69,28 @@ export default async function LocaleLayout({
   }
 
   const dict = await getDictionary(locale as Locale);
+  const homeUrl = `${SITE_URL}${getLocalizedRoute(locale as Locale, ROUTES.HOME)}`;
 
   return (
     <QueryProvider>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: dict.site.title,
+          url: homeUrl,
+          logo: `${SITE_URL}/favicon.ico`,
+        }}
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: dict.site.title,
+          url: homeUrl,
+          inLanguage: locale,
+        }}
+      />
       <DictionaryProvider dict={dict} locale={locale}>
         <TokenValidator />
         {children}

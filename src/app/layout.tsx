@@ -8,7 +8,11 @@ import {
   isRtl,
   localeCookieName,
 } from '@/i18n/config';
-import { config } from '@/shared/constants/config';
+import {
+  config,
+  GOOGLE_SITE_VERIFICATION,
+  SITE_URL,
+} from '@/shared/constants/config';
 import './globals.css';
 import { Geist } from 'next/font/google';
 import { cn } from '@/lib/utils';
@@ -38,8 +42,12 @@ const lamaSans = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: config.appName,
   description: config.appDescription,
+  verification: {
+    google: GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default async function RootLayout({

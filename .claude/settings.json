@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(node_modules/.bin/tsc --noEmit -p tsconfig.json)",
+      "Bash(npm run *)",
+      "Bash(node_modules/.bin/eslint src/app/sitemap.ts src/app/robots.ts src/app/layout.tsx \"src/app/[locale]/layout.tsx\" src/i18n/seo.ts src/shared/components/seo/JsonLd.tsx \"src/app/[locale]/\\(marketing\\)/page.tsx\" \"src/app/[locale]/\\(marketing\\)/services/page.tsx\" \"src/app/[locale]/\\(marketing\\)/services/[id]/page.tsx\" \"src/app/[locale]/\\(marketing\\)/\\(academy\\)/courses/page.tsx\" \"src/app/[locale]/\\(marketing\\)/\\(academy\\)/courses/[id]/page.tsx\" \"src/app/[locale]/\\(marketing\\)/about/page.tsx\" \"src/app/[locale]/\\(marketing\\)/contact/page.tsx\" \"src/app/[locale]/\\(marketing\\)/b2b/page.tsx\" \"src/app/[locale]/\\(auth\\)/layout.tsx\" \"src/app/[locale]/\\(marketing\\)/\\(profile\\)/layout.tsx\" \"src/app/[locale]/\\(dashboard\\)/dashboard/page.tsx\" src/shared/constants/config.ts src/locales/en.ts src/locales/ar.ts)",
+      "Bash(node_modules/.bin/next build *)",
+      "Bash(node_modules/.bin/next dev *)",
+      "Bash(echo \"started with pid $!\")",
+      "Read(//tmp/**)",
+      "Bash(curl -s http://localhost:3100/sitemap.xml)"
+    ]
+  }
+}

@@ -1,6 +1,29 @@
+import type { Metadata } from 'next';
+import { hasLocale, type Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/dictionaries';
+import { buildPageMetadata } from '@/i18n/seo';
+import { ROUTES } from '@/shared/constants/routes';
 import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
 import { ServicesPage } from '@/modules/services';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
+
+interface RouteProps {
+  params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: RouteProps): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(locale)) return {};
+  const dict = await getDictionary(locale as Locale);
+  return buildPageMetadata({
+    locale: locale as Locale,
+    route: ROUTES.SERVICES,
+    title: dict.seo.services.title,
+    description: dict.seo.services.description,
+  });
+}
 
 export default async function ServicesRoute({
   searchParams,

@@ -33,7 +33,9 @@
       "Bash(node node_modules/eslint/bin/eslint.js src/modules/b2b/components/B2BServicesStack.tsx src/modules/b2b/components/B2BServiceStackCard.tsx src/modules/b2b/components/B2BServicesStaticList.tsx src/modules/b2b/components/B2BServicesCards.tsx src/modules/b2b/components/B2BServicesMobileView.tsx src/modules/b2b/components/B2BSharedServiceDashboard.tsx)",
       "Bash(node node_modules/prettier/bin/prettier.cjs --write src/modules/b2b/components/B2BServicesStack.tsx src/modules/b2b/components/B2BServiceStackCard.tsx src/modules/b2b/components/B2BServicesStaticList.tsx src/modules/b2b/components/B2BServicesCards.tsx src/modules/b2b/components/B2BSharedServiceDashboard.tsx)",
       "Bash(node node_modules/eslint/bin/eslint.js src/modules/b2b/components/*.tsx)",
-      "Bash(node node_modules/eslint/bin/eslint.js src/modules/b2b/components/B2BServicesStack.tsx src/modules/b2b/hooks/useDeckStepScroll.ts)"
+      "Bash(node node_modules/eslint/bin/eslint.js src/modules/b2b/components/B2BServicesStack.tsx src/modules/b2b/hooks/useDeckStepScroll.ts)",
+      "Bash(xargs grep -n \"alt=\\\\|priority\")",
+      "Bash(node -e ' *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"
