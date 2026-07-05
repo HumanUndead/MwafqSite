@@ -3,13 +3,14 @@ import { locales } from '@/i18n/config';
 import { ROUTES } from '@/shared/constants/routes';
 import { SITE_URL } from '@/shared/constants/config';
 import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
-import { fetchCourseList } from '@/modules/auth/server/courseListService';
+// import { fetchCourseList } from '@/modules/auth/server/courseListService';
 
+// Courses section is hidden from the frontend for now — re-add ROUTES.COURSES
+// here and the course loop below once it's re-enabled.
 const STATIC_ROUTES = [
   ROUTES.HOME,
   ROUTES.ABOUT,
   ROUTES.SERVICES,
-  ROUTES.COURSES,
   ROUTES.B2B,
   ROUTES.CONTACT,
 ] as const;
@@ -50,14 +51,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Upstream unavailable — keep static routes in the sitemap.
   }
 
-  try {
-    const courses = await fetchCourseList({ pageNumber: 1, pageSize: 200 });
-    for (const course of courses.data) {
-      entries.push(...entriesForPath(`${ROUTES.COURSES}/${course.id}`));
-    }
-  } catch {
-    // Upstream unavailable — keep static routes in the sitemap.
-  }
+  // Courses section is hidden from the frontend for now — re-enable when it's live again.
+  // try {
+  //   const courses = await fetchCourseList({ pageNumber: 1, pageSize: 200 });
+  //   for (const course of courses.data) {
+  //     entries.push(...entriesForPath(`${ROUTES.COURSES}/${course.id}`));
+  //   }
+  // } catch {
+  //   // Upstream unavailable — keep static routes in the sitemap.
+  // }
 
   return entries;
 }
