@@ -11,9 +11,6 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://site.mwafq.com'
 ).replace(/\/$/, '');
 
-export const GOOGLE_SITE_VERIFICATION =
-  'tAeGn-m3s7LkysW2OAr8gYCgP05UN4-1r9GrkTeNGDY';
-
 export const config = {
   appName: 'Mwafq',
   appDescription:
