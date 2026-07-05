@@ -1,7 +1,25 @@
 const en = {
   site: {
     title: 'Mwafq',
-    description: 'Your trusted platform',
+    description:
+      'Book medical tests, health services, and professional courses online with Mwafq. Trusted providers, certified results, and corporate health solutions across Saudi Arabia.',
+  },
+  seo: {
+    home: {
+      title: 'Mwafq — Book Medical Tests & Health Services Online',
+      description:
+        'Book lab tests, medical exams, and health services online with Mwafq. Fast scheduling, certified results, and trusted providers across Saudi Arabia.',
+    },
+    services: {
+      title: 'Lab Packages & Medical Tests',
+      description:
+        'Browse and book comprehensive lab packages and medical exams. Compare tests, prices, and providers, then book online in minutes.',
+    },
+    courses: {
+      title: 'Mwafq Academy — Professional & Medical Courses',
+      description:
+        'Advance your professional and medical skills with Mwafq Academy courses. Learn from certified instructors and earn recognized certificates.',
+    },
   },
   notFound: {
     code: '404',

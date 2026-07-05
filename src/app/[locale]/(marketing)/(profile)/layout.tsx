@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, type Locale } from '@/i18n/config';
 import { ProfileSidebar } from '@/modules/profile/ProfileSidebar';
@@ -6,6 +7,13 @@ import {
   marketingAlignedShellClass,
 } from '@/shared/components/marketing';
 import { cn } from '@/shared/lib/cn';
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 interface ProfileLayoutProps {
   children: React.ReactNode;

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, type Locale } from '@/i18n/config';
+import { buildPageMetadata } from '@/i18n/seo';
+import { ROUTES } from '@/shared/constants/routes';
 import { ContactPage } from '@/modules/contact';
 import { getContactPageContent } from '@/modules/contact/server/contactContentService';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
@@ -15,15 +17,12 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!hasLocale(locale)) return {};
   const content = await getContactPageContent(locale as Locale);
-  return {
+  return buildPageMetadata({
+    locale: locale as Locale,
+    route: ROUTES.CONTACT,
     title: content.title,
     description: content.description,
-    openGraph: {
-      title: content.title,
-      description: content.description,
-      type: 'website',
-    },
-  };
+  });
 }
 
 export default async function ContactRoute({ params }: RouteProps) {

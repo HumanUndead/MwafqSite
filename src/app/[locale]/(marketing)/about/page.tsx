@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, type Locale } from '@/i18n/config';
+import { buildPageMetadata } from '@/i18n/seo';
+import { ROUTES } from '@/shared/constants/routes';
 import { AboutPage } from '@/modules/about';
 import { getAboutPageContent } from '@/modules/about/server/aboutContentService';
 
@@ -14,15 +16,12 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!hasLocale(locale)) return {};
   const content = await getAboutPageContent(locale as Locale);
-  return {
+  return buildPageMetadata({
+    locale: locale as Locale,
+    route: ROUTES.ABOUT,
     title: content.meta.title,
     description: content.meta.description,
-    openGraph: {
-      title: content.meta.title,
-      description: content.meta.description,
-      type: 'website',
-    },
-  };
+  });
 }
 
 export default async function AboutRoute({ params }: RouteProps) {
