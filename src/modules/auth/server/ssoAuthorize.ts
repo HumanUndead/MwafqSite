@@ -6,6 +6,7 @@ import {
   SSO_AUTHORIZE_PATH,
   SSO_CODE_CHALLENGE_METHOD,
   type SsoAuthorizeRequest,
+  type SsoAuthorizeResult,
 } from '../sso.shared';
 
 function base64Url(input: Buffer): string {
@@ -80,31 +81,52 @@ export async function requestSsoAuthorize(
   return { status: response.status, payload };
 }
 
-/** Best-effort extraction of the redirect URL from the upstream authorize payload. */
-export function extractAuthorizeRedirectUrl(payload: unknown): string | null {
-  if (typeof payload === 'string') {
-    return payload.trim() || null;
+/** Read a key from an object case-insensitively. */
+function readCaseInsensitive(
+  record: Record<string, unknown>,
+  key: string
+): unknown {
+  const target = key.toLowerCase();
+  for (const [k, v] of Object.entries(record)) {
+    if (k.toLowerCase() === target) {
+      return v;
+    }
   }
+  return undefined;
+}
 
+function asString(value: unknown): string | null {
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
+/**
+ * Extract `{ authorizationRequestId, expiresAtUtc }` from the authorize payload.
+ * Tolerant of casing and a `value`/`data` envelope wrapper.
+ */
+export function extractAuthorizeResult(
+  payload: unknown
+): SsoAuthorizeResult | null {
   if (!payload || typeof payload !== 'object') {
     return null;
   }
 
   const record = payload as Record<string, unknown>;
-  const candidates = [
-    record.redirectUrl,
-    record.url,
-    record.location,
-    record.value,
-    (record.data as Record<string, unknown> | undefined)?.redirectUrl,
-    (record.data as Record<string, unknown> | undefined)?.url,
-  ];
+  const envelope = record.value ?? record.data;
+  const source =
+    envelope && typeof envelope === 'object'
+      ? (envelope as Record<string, unknown>)
+      : record;
 
-  for (const candidate of candidates) {
-    if (typeof candidate === 'string' && candidate.trim()) {
-      return candidate.trim();
-    }
+  const authorizationRequestId = asString(
+    readCaseInsensitive(source, 'authorizationRequestId')
+  );
+
+  if (!authorizationRequestId) {
+    return null;
   }
 
-  return null;
+  return {
+    authorizationRequestId,
+    expiresAtUtc: asString(readCaseInsensitive(source, 'expiresAtUtc')),
+  };
 }

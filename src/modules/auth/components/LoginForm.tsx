@@ -19,12 +19,12 @@ export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
     try {
       // Dev: run from the browser so the request shows in the Network tab.
       // Prod: go through the server route so it stays hidden.
-      const redirectUrl = SSO_DEV_NETWORK_ENABLED
+      const loginUrl = SSO_DEV_NETWORK_ENABLED
         ? await runSsoAuthorizeInBrowser()
-        : (await authApi.ssoAuthorize()).data.redirectUrl;
+        : (await authApi.ssoAuthorize()).data.loginUrl;
 
-      if (redirectUrl) {
-        window.location.assign(redirectUrl);
+      if (loginUrl) {
+        window.location.assign(loginUrl);
         return;
       }
 

@@ -53,8 +53,16 @@ export const authApi = {
 
   /** Start the Mwafq external SSO flow via our server (PKCE + Authorize hidden from Network). */
   ssoAuthorize: () =>
-    http.post<{ redirectUrl: string | null; raw: unknown }>(
-      '/api/auth/sso/authorize',
-      {}
+    http.post<{
+      loginUrl: string;
+      authorizationRequestId: string;
+      expiresAtUtc: string | null;
+    }>('/api/auth/sso/authorize', {}),
+
+  /** Exchange the SSO auth code for tokens via our server (secret + tokens stay server-side). */
+  ssoToken: (code: string) =>
+    http.post<{ tokenType: string; accessTokenExpiresAtUtc: string | null }>(
+      '/api/auth/sso/token',
+      { code }
     ),
 };

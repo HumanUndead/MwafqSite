@@ -501,6 +501,15 @@ const en = {
         'Welcome back to Mwafq. Sign in with your verification code to continue.',
       otpSent: 'OTP sent successfully. Enter the 4-digit code to sign in.',
     },
+    ssoLogin: {
+      loadingTitle: 'Signing you in…',
+      loadingSubtitle: 'Please wait while we complete your Mwafq login.',
+      successTitle: 'Login successful',
+      successSubtitle: 'You are now signed in with Mwafq.',
+      errorTitle: 'Login failed',
+      errorSubtitle: 'We could not complete your login. Please try again.',
+      retry: 'Back to login',
+    },
     register: {
       title: 'Create Account',
       description:
