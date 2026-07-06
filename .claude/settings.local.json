@@ -44,7 +44,8 @@
       "Bash(mkdir -p \"src/app/[locale]/\\(sso\\)/ssologin\")",
       "Bash(git mv *)",
       "Bash(mv \"src/app/[locale]/\\(auth\\)/ssologin/page.tsx\" \"src/app/[locale]/\\(sso\\)/ssologin/page.tsx\")",
-      "Bash(rmdir \"src/app/[locale]/\\(auth\\)/ssologin\")"
+      "Bash(rmdir \"src/app/[locale]/\\(auth\\)/ssologin\")",
+      "Bash(node_modules/.bin/eslint \"src/app/[locale]/\\(sso\\)/layout.tsx\" \"src/app/[locale]/\\(sso\\)/ssologin/page.tsx\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"
