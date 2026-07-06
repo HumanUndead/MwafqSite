@@ -39,7 +39,12 @@
       "Bash(node_modules/.bin/tsc --noEmit)",
       "Bash(rm -f \".next/types/validator.ts\")",
       "Bash(node_modules/.bin/eslint src/modules/auth/components/LoginForm.tsx src/modules/auth/server/ssoAuthorize.ts src/modules/auth/ssoClient.dev.ts src/modules/auth/sso.shared.ts \"src/app/api/auth/sso/authorize/route.ts\" src/modules/auth/api/authApi.ts)",
-      "Bash(node_modules/.bin/eslint src/modules/auth/sso.shared.ts src/modules/auth/server/ssoAuthorize.ts src/modules/auth/ssoClient.dev.ts)"
+      "Bash(node_modules/.bin/eslint src/modules/auth/sso.shared.ts src/modules/auth/server/ssoAuthorize.ts src/modules/auth/ssoClient.dev.ts)",
+      "Bash(node_modules/.bin/eslint src/shared/constants/config.ts \"src/app/api/auth/sso/authorize/route.ts\" \"src/app/api/auth/sso/token/route.ts\" \"src/app/api/auth/sso/refresh/route.ts\")",
+      "Bash(mkdir -p \"src/app/[locale]/\\(sso\\)/ssologin\")",
+      "Bash(git mv *)",
+      "Bash(mv \"src/app/[locale]/\\(auth\\)/ssologin/page.tsx\" \"src/app/[locale]/\\(sso\\)/ssologin/page.tsx\")",
+      "Bash(rmdir \"src/app/[locale]/\\(auth\\)/ssologin\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"

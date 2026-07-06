@@ -8,6 +8,11 @@ import {
   requestSsoAuthorize,
 } from '@/modules/auth/server/ssoAuthorize';
 import {
+  extractUpstreamCode,
+  extractUpstreamMessage,
+  hasUpstreamFailure,
+} from '@/modules/auth/server/upstreamAuthResult';
+import {
   buildSsoApiRedirectUri,
   buildSsoLoginUrl,
   resolveSsoRedirectOrigin,
@@ -17,6 +22,7 @@ import {
   SSO_STATE_VALUE,
 } from '@/modules/auth/sso.shared';
 import {
+  INFRASTRUCTURE_URL,
   MWAFQ_SSO_LOGIN_URL,
   SITE_URL,
   SSO_CLIENT_ID,
@@ -32,9 +38,9 @@ const PKCE_COOKIE_OPTIONS = {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!SSO_CLIENT_ID) {
+    if (!SSO_CLIENT_ID || !INFRASTRUCTURE_URL || !MWAFQ_SSO_LOGIN_URL) {
       return NextResponse.json(
-        { success: false, message: 'SSO client id is not configured', data: null },
+        { success: false, message: 'SSO is not configured', data: null },
         { status: 500 }
       );
     }
@@ -54,11 +60,19 @@ export async function POST(request: NextRequest) {
 
     const result = extractAuthorizeResult(upstream.payload);
 
-    if (upstream.status >= 400 || !result) {
+    if (
+      upstream.status >= 400 ||
+      hasUpstreamFailure(upstream.payload) ||
+      !result
+    ) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Failed to start SSO login',
+          message: extractUpstreamMessage(
+            upstream.payload,
+            'Failed to start SSO login'
+          ),
+          code: extractUpstreamCode(upstream.payload),
           data: upstream.payload,
         },
         { status: 502 }

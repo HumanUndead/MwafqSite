@@ -5,8 +5,14 @@ import {
   clearSsoAuthCookies,
   setSsoTokenCookies,
 } from '@/modules/auth/server/ssoCookies';
+import { buildAuthResponseFromToken } from '@/modules/auth/server/authService';
+import { setAuthSessionCookie } from '@/modules/auth/server/authSession';
+import {
+  extractUpstreamMessage,
+  hasUpstreamFailure,
+} from '@/modules/auth/server/upstreamAuthResult';
 import { SSO_REFRESH_TOKEN_COOKIE } from '@/modules/auth/sso.shared';
-import { SSO_CLIENT_SECRET } from '@/shared/constants/config';
+import { INFRASTRUCTURE_URL, SSO_CLIENT_SECRET } from '@/shared/constants/config';
 
 /** Fresh tokens rejected → clear session and tell the client to re-authenticate. */
 function sessionExpired(message: string) {
@@ -20,9 +26,9 @@ function sessionExpired(message: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!SSO_CLIENT_SECRET) {
+    if (!SSO_CLIENT_SECRET || !INFRASTRUCTURE_URL) {
       return NextResponse.json(
-        { success: false, message: 'SSO client secret is not configured', data: null },
+        { success: false, message: 'SSO is not configured', data: null },
         { status: 500 }
       );
     }
@@ -34,23 +40,35 @@ export async function POST(request: NextRequest) {
 
     const refresh = await requestSsoRefresh(refreshToken);
 
-    if (refresh.status >= 400 || !refresh.result) {
+    if (
+      refresh.status >= 400 ||
+      hasUpstreamFailure(refresh.payload) ||
+      !refresh.result
+    ) {
       // Refresh token invalid/expired — force a clean re-login.
-      return sessionExpired('Refresh failed');
+      return sessionExpired(
+        extractUpstreamMessage(refresh.payload, 'Refresh failed')
+      );
     }
 
     const token = refresh.result;
+    // Rebuild the session from the new JWT (fresh claims + expiry).
+    const authResponse = buildAuthResponseFromToken(token.accessToken, '');
+
     const response = NextResponse.json({
       success: true,
       message: 'Token refreshed',
       data: {
         tokenType: token.tokenType,
         accessTokenExpiresAtUtc: token.accessTokenExpiresAtUtc,
+        user: authResponse.user,
       },
     });
 
-    // Rotate: overwrite access + refresh cookies with the new pair.
+    // Rotate: overwrite access + refresh cookies with the new pair, and keep the
+    // session cookie in sync with the rotated access token.
     setSsoTokenCookies(response.cookies, token);
+    setAuthSessionCookie(response.cookies, authResponse);
 
     return response;
   } catch (error) {

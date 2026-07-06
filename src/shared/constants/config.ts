@@ -13,37 +13,31 @@ export const SITE_URL = (
 
 /**
  * Mwafq infrastructure origin (external SSO). No `/api` suffix — paths include it.
- * Falls back to the NEXT_PUBLIC_ mirror so a single `.env` entry serves both the
- * server and dev-browser paths.
+ * SERVER-ONLY, required — must be set in the environment (no default).
  */
-export const INFRASTRUCTURE_URL = (
-  process.env.INFRASTRUCTURE_URL ??
-  process.env.NEXT_PUBLIC_INFRASTRUCTURE_URL ??
-  'https://infrastructure.mwafq.com'
-).replace(/\/$/, '');
+export const INFRASTRUCTURE_URL = (process.env.INFRASTRUCTURE_URL ?? '').replace(
+  /\/$/,
+  ''
+);
 
 /**
- * OAuth client id for the external SSO authorize flow. Falls back to the
- * NEXT_PUBLIC_ mirror (the id is already exposed to the browser in the dev path).
+ * OAuth client id for the external SSO flow. SERVER-ONLY — never expose via
+ * NEXT_PUBLIC_. Read only by the server SSO routes.
  */
-export const SSO_CLIENT_ID =
-  process.env.CLIENT_ID ?? process.env.NEXT_PUBLIC_CLIENT_ID ?? '';
+export const SSO_CLIENT_ID = process.env.CLIENT_ID ?? '';
 
 /**
- * OAuth client secret for the token exchange. Read only by the server
- * token-exchange route.
- *
- * SECURITY: prefer the server-only `CLIENT_SECRET` (e.g. in `.env.local` or the
- * hosting env). The `NEXT_PUBLIC_CLIENT_SECRET` fallback is a convenience for
- * this project's `.env`, but a NEXT_PUBLIC_ value is embedded in the browser
- * bundle and readable by anyone — move it to `CLIENT_SECRET` before production.
+ * OAuth client secret for the token/refresh exchange. SERVER-ONLY — never expose
+ * via NEXT_PUBLIC_. Read only by the server SSO routes.
  */
-export const SSO_CLIENT_SECRET =
-  process.env.CLIENT_SECRET ?? process.env.NEXT_PUBLIC_CLIENT_SECRET ?? '';
+export const SSO_CLIENT_SECRET = process.env.CLIENT_SECRET ?? '';
 
-/** Hosted SSO login page users are sent to after a successful Authorize request. */
+/**
+ * Hosted SSO login page users are sent to after a successful Authorize request.
+ * SERVER-ONLY, required — must be set in the environment (no default).
+ */
 export const MWAFQ_SSO_LOGIN_URL = (
-  process.env.NEXT_PUBLIC_MWAFQ_SSO_LOGIN_URL ?? 'https://www.mwafq.com/auth'
+  process.env.MWAFQ_SSO_LOGIN_URL ?? ''
 ).replace(/\/$/, '');
 
 export const config = {

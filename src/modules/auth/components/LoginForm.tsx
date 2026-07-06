@@ -5,10 +5,6 @@ import { useTranslations } from '@/i18n/DictionaryProvider';
 import { toast } from '@/shared/components/feedback/Toast';
 import { Button } from '@/shared/components/ui/Button';
 import { authApi } from '../api/authApi';
-import {
-  SSO_DEV_NETWORK_ENABLED,
-  runSsoAuthorizeInBrowser,
-} from '../ssoClient.dev';
 
 export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
   const auth = useTranslations('auth');
@@ -17,11 +13,9 @@ export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      // Dev: run from the browser so the request shows in the Network tab.
-      // Prod: go through the server route so it stays hidden.
-      const loginUrl = SSO_DEV_NETWORK_ENABLED
-        ? await runSsoAuthorizeInBrowser()
-        : (await authApi.ssoAuthorize()).data.loginUrl;
+      // Server route runs the PKCE + Authorize request (client id/secret stay
+      // server-side); we only get back the hosted SSO login URL to redirect to.
+      const { loginUrl } = (await authApi.ssoAuthorize()).data;
 
       if (loginUrl) {
         window.location.assign(loginUrl);

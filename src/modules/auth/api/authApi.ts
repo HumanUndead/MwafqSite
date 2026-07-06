@@ -61,8 +61,9 @@ export const authApi = {
 
   /** Exchange the SSO auth code for tokens via our server (secret + tokens stay server-side). */
   ssoToken: (code: string) =>
-    http.post<{ tokenType: string; accessTokenExpiresAtUtc: string | null }>(
-      '/api/auth/sso/token',
-      { code }
-    ),
+    http.post<{
+      tokenType: string;
+      accessTokenExpiresAtUtc: string | null;
+      user: User;
+    }>('/api/auth/sso/token', { code }),
 };

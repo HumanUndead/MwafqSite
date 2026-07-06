@@ -144,12 +144,18 @@ export function buildUserFromToken(
       'lastName',
       'last_name',
     ]) ?? '';
+  // Some issuers (SSO) put the identifier in the xmlsoap `name` claim.
+  const nameClaim = readStringClaim(payload, [
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
+  ]);
   const email =
     readStringClaim(payload, [
       'email',
       'upn',
       'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
-    ]) ?? userName;
+    ]) ??
+    nameClaim ??
+    userName;
   const id =
     readStringClaim(payload, [
       'sub',
@@ -157,25 +163,36 @@ export function buildUserFromToken(
       'uid',
       'userId',
       'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier',
-    ]) ?? userName;
+    ]) ??
+    nameClaim ??
+    userName;
+  const phoneNo =
+    readStringClaim(payload, [
+      'PhoneNumber',
+      'phoneNumber',
+      'phone_number',
+      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/mobilephone',
+    ]) ?? '';
+  const resolvedUserName = userName || nameClaim || id;
 
   const user: User = {
-    ...emptyUserDefaults(userName || id),
+    ...emptyUserDefaults(resolvedUserName),
     id,
-    userName: userName || id,
+    userName: resolvedUserName,
     firstName,
     lastName,
     email,
-    identityNumber: userName || id,
-    username: userName || id,
+    phoneNo,
+    identityNumber: resolvedUserName,
+    username: resolvedUserName,
     name: '',
     role: 'user',
   };
 
   user.name =
     getUserDisplayName(user) ||
-    readStringClaim(payload, ['name', 'unique_name']) ||
-    userName;
+    readStringClaim(payload, ['FullName', 'name', 'unique_name']) ||
+    resolvedUserName;
   user.role = resolveUserAppRole({
     ...user,
     role:

@@ -9,14 +9,7 @@ import { getLocalizedRoute } from '@/i18n/routing';
 import { hasLocale, localeCookieName, type Locale } from '@/i18n/config';
 import { ROUTES } from '@/shared/constants/routes';
 import { authApi } from '../api/authApi';
-import { authTokenCookieName } from '../session.shared';
-import {
-  SSO_ACCESS_EXPIRES_COOKIE,
-  SSO_REFRESH_EXPIRES_COOKIE,
-  SSO_REFRESH_TOKEN_COOKIE,
-  SSO_TOKEN_TYPE_COOKIE,
-} from '../sso.shared';
-import { SSO_DEV_NETWORK_ENABLED, runSsoTokenInBrowser } from '../ssoClient.dev';
+import { useAuthStore } from '../store/authStore';
 
 type Status = 'loading' | 'success' | 'error';
 
@@ -30,30 +23,6 @@ function readPreferredLocale(): Locale | null {
 }
 
 /**
- * Dev-only: exchange the code in the browser (visible in Network) and persist
- * the tokens in client-side cookies. Prod uses the server route which sets
- * httpOnly cookies — this dev path cannot, by design.
- */
-async function exchangeInBrowser(code: string): Promise<void> {
-  const token = await runSsoTokenInBrowser(code);
-  if (!token) {
-    throw new Error('Token exchange failed');
-  }
-
-  const set = (name: string, value: string) => {
-    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; samesite=lax`;
-  };
-
-  set(authTokenCookieName, token.accessToken);
-  set(SSO_TOKEN_TYPE_COOKIE, token.tokenType);
-  if (token.refreshToken) set(SSO_REFRESH_TOKEN_COOKIE, token.refreshToken);
-  if (token.accessTokenExpiresAtUtc)
-    set(SSO_ACCESS_EXPIRES_COOKIE, token.accessTokenExpiresAtUtc);
-  if (token.refreshTokenExpiresAtUtc)
-    set(SSO_REFRESH_EXPIRES_COOKIE, token.refreshTokenExpiresAtUtc);
-}
-
-/**
  * SSO callback page. The browser always lands on `/en/ssologin` (the fixed
  * redirectUri). For UX we bounce to the user's language (`/ar/ssologin`) if it
  * differs, then exchange `?code=<AuthorizationCode>` for tokens via our server
@@ -64,6 +33,7 @@ export function SsoLoginView() {
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const setUser = useAuthStore((s) => s.setUser);
   const code = searchParams.get('code');
   // No code in the URL → nothing to exchange, start in the error state.
   const [status, setStatus] = useState<Status>(code ? 'loading' : 'error');
@@ -86,21 +56,22 @@ export function SsoLoginView() {
 
     exchanged.current = true;
 
-    // Dev: exchange from the browser so the request shows in the Network tab.
-    // Prod: go through the server route so the secret + tokens stay server-side.
-    const exchange = SSO_DEV_NETWORK_ENABLED
-      ? exchangeInBrowser(code)
-      : authApi.ssoToken(code).then(() => undefined);
-
-    exchange
-      .then(() => {
+    // Server route exchanges the code (client secret + tokens stay server-side)
+    // and returns the user built from the JWT.
+    authApi
+      .ssoToken(code)
+      .then((res) => {
+        const user = res.data.user ?? null;
+        if (user) {
+          setUser(user);
+        }
         setStatus('success');
         const profile = getLocalizedRoute(locale, ROUTES.PERSONAL_INFO);
         router.replace(profile);
         router.refresh();
       })
       .catch(() => setStatus('error'));
-  }, [code, locale, router]);
+  }, [code, locale, router, setUser]);
 
   return (
     <div className='flex min-h-[60vh] flex-col items-center justify-center gap-6 px-6 text-center'>

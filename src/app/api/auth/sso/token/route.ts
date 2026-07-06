@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { requestSsoToken } from '@/modules/auth/server/ssoToken';
 import { setSsoTokenCookies } from '@/modules/auth/server/ssoCookies';
+import { buildAuthResponseFromToken } from '@/modules/auth/server/authService';
+import { setAuthSessionCookie } from '@/modules/auth/server/authSession';
+import {
+  extractUpstreamMessage,
+  hasUpstreamFailure,
+} from '@/modules/auth/server/upstreamAuthResult';
 import {
   buildSsoApiRedirectUri,
   resolveSsoRedirectOrigin,
@@ -9,13 +15,17 @@ import {
   SSO_REDIRECT_URI_COOKIE,
   SSO_STATE_COOKIE,
 } from '@/modules/auth/sso.shared';
-import { SITE_URL, SSO_CLIENT_SECRET } from '@/shared/constants/config';
+import {
+  INFRASTRUCTURE_URL,
+  SITE_URL,
+  SSO_CLIENT_SECRET,
+} from '@/shared/constants/config';
 
 export async function POST(request: NextRequest) {
   try {
-    if (!SSO_CLIENT_SECRET) {
+    if (!SSO_CLIENT_SECRET || !INFRASTRUCTURE_URL) {
       return NextResponse.json(
-        { success: false, message: 'SSO client secret is not configured', data: null },
+        { success: false, message: 'SSO is not configured', data: null },
         { status: 500 }
       );
     }
@@ -61,11 +71,18 @@ export async function POST(request: NextRequest) {
       redirectUri: storedRedirectUri,
     });
 
-    if (exchange.status >= 400 || !exchange.result) {
+    if (
+      exchange.status >= 400 ||
+      hasUpstreamFailure(exchange.payload) ||
+      !exchange.result
+    ) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Token exchange failed',
+          message: extractUpstreamMessage(
+            exchange.payload,
+            'Token exchange failed'
+          ),
           data: exchange.payload,
         },
         { status: 502 }
@@ -73,16 +90,22 @@ export async function POST(request: NextRequest) {
     }
 
     const token = exchange.result;
+    // Build the user session from the JWT claims (name, phone, etc.).
+    // Empty fallback — the identifier comes from the token's `name` claim.
+    const authResponse = buildAuthResponseFromToken(token.accessToken, '');
+
     const response = NextResponse.json({
       success: true,
       message: 'Signed in',
       data: {
         tokenType: token.tokenType,
         accessTokenExpiresAtUtc: token.accessTokenExpiresAtUtc,
+        user: authResponse.user,
       },
     });
 
     setSsoTokenCookies(response.cookies, token);
+    setAuthSessionCookie(response.cookies, authResponse);
 
     // One-time PKCE cookies are consumed — clear them.
     response.cookies.delete(SSO_CODE_VERIFIER_COOKIE);
