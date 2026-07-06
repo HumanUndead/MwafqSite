@@ -35,7 +35,11 @@
       "Bash(node node_modules/eslint/bin/eslint.js src/modules/b2b/components/*.tsx)",
       "Bash(node node_modules/eslint/bin/eslint.js src/modules/b2b/components/B2BServicesStack.tsx src/modules/b2b/hooks/useDeckStepScroll.ts)",
       "Bash(xargs grep -n \"alt=\\\\|priority\")",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(rm -f \".next/types/validator.ts\")",
+      "Bash(node_modules/.bin/eslint src/modules/auth/components/LoginForm.tsx src/modules/auth/server/ssoAuthorize.ts src/modules/auth/ssoClient.dev.ts src/modules/auth/sso.shared.ts \"src/app/api/auth/sso/authorize/route.ts\" src/modules/auth/api/authApi.ts)",
+      "Bash(node_modules/.bin/eslint src/modules/auth/sso.shared.ts src/modules/auth/server/ssoAuthorize.ts src/modules/auth/ssoClient.dev.ts)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Emran\\MwafqSite\\src\\app\\[locale]\\(marketing)\\contact"

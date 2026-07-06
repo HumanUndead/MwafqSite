@@ -11,6 +11,14 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://site.mwafq.com'
 ).replace(/\/$/, '');
 
+/** Mwafq infrastructure API (external SSO). Trailing slash trimmed for URL joins. */
+export const INFRASTRUCTURE_URL = (
+  process.env.INFRASTRUCTURE_URL ?? 'https://infrastructure.mwafq.com/api/'
+).replace(/\/$/, '');
+
+/** OAuth client id for the external SSO authorize flow. */
+export const SSO_CLIENT_ID = process.env.CLIENT_ID ?? '';
+
 export const config = {
   appName: 'Mwafq',
   appDescription:

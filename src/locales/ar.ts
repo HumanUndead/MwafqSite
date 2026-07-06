@@ -494,7 +494,7 @@ const ar = {
     login: {
       title: 'تسجيل الدخول',
       welcomeTitle: 'مرحبًا بعودتك',
-      submit: 'تسجيل الدخول',
+      submit: 'تسجيل الدخول عبر موفق',
       forgotPassword: 'هل نسيت كلمة المرور؟',
       noAccount: 'ليس لديك حساب؟',
       signUp: 'إنشاء حساب',

@@ -493,7 +493,7 @@ const en = {
     login: {
       title: 'Sign in',
       welcomeTitle: 'Welcome back',
-      submit: 'Sign in',
+      submit: 'Login with Mwafq',
       forgotPassword: 'Forgot password?',
       noAccount: "Don't have an account?",
       signUp: 'Sign up',

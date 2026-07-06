@@ -1,7 +1,5 @@
 import { http } from '@/shared/lib/http';
 import type {
-  LoginDto,
-  LoginResponse,
   RegisterDto,
   RegisterResponse,
   User,
@@ -26,8 +24,6 @@ function normalizeSaudiPhoneNumber(value: string): string {
 }
 
 export const authApi = {
-  login: (data: LoginDto) => http.post<LoginResponse>('/api/auth/login', data),
-
   register: (data: RegisterDto) => {
     const formData = new FormData();
     const localPhoneNumber = normalizeSaudiPhoneNumber(data.phoneNumber);
@@ -54,4 +50,11 @@ export const authApi = {
 
   logout: () => http.post<null>('/api/auth/logout', {}),
   getUserByToken: () => http.post<User>('/api/auth/get-user-by-token', {}),
+
+  /** Start the Mwafq external SSO flow via our server (PKCE + Authorize hidden from Network). */
+  ssoAuthorize: () =>
+    http.post<{ redirectUrl: string | null; raw: unknown }>(
+      '/api/auth/sso/authorize',
+      {}
+    ),
 };
