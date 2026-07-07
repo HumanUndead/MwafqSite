@@ -101,7 +101,8 @@ export function buildSsoApiRedirectUri(origin: string): string {
 
 /**
  * Build the hosted SSO login URL the browser is sent to:
- * `<authUrl>?requestId=<AuthorizationRequestId>&callbackUrl=<encoded callback>`.
+ * `<authUrl>?requestId=<AuthorizationRequestId>&callbackUrl=<encoded callback>&from=b2c`.
+ * `from=b2c` marks this site (the B2C consumer site) as the request origin.
  */
 export function buildSsoLoginUrl(params: {
   authUrl: string;
@@ -111,5 +112,6 @@ export function buildSsoLoginUrl(params: {
   const url = new URL(params.authUrl);
   url.searchParams.set('requestId', params.authorizationRequestId);
   url.searchParams.set('callbackUrl', params.callbackUrl);
+  url.searchParams.set('from', 'b2c');
   return url.toString();
 }
