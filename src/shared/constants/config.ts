@@ -1,7 +1,9 @@
 const DEFAULT_MWAFQ_API_BASE_URL = 'https://stagingapi.mwafq.com/';
 
-/** B2B dashboard — navbar "Business sign in" destination. */
-export const MWAFQ_BUSINESS_PORTAL_URL = 'https://www.mwafq.com/';
+/** SSO project registration page — "Register with Mwafq" destination. */
+export const MWAFQ_REGISTER_URL =
+  process.env.NEXT_PUBLIC_MWAFQ_REGISTER_URL ??
+  'http://localhost:3001/auth/register';
 
 export const MWAFQ_API_BASE_URL =
   process.env.MWAFQ_API_BASE_URL ?? DEFAULT_MWAFQ_API_BASE_URL;

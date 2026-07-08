@@ -99,7 +99,7 @@ export function B2BServicesMobileView({
     >
       <div
         className={cn(
-          'sticky top-0 z-[5] min-h-dvh overflow-hidden bg-[#f4f4f6] px-4 pb-10 sm:px-6',
+          'sticky top-0 z-[5] min-h-dvh max-h-dvh overflow-y-auto bg-[#f4f4f6] px-4 pb-10 sm:px-6',
           fixedHeaderPaddingClass
         )}
       >

@@ -1019,8 +1019,10 @@ const ar = {
       nameArRequired: 'اسم الشركة بالعربية مطلوب',
       addressEnRequired: 'العنوان بالإنجليزية مطلوب',
       addressArRequired: 'العنوان بالعربية مطلوب',
-      switchToArabicTab: 'انتقل إلى تبويب العربية — هناك حقول مطلوبة غير مكتملة.',
-      switchToEnglishTab: 'انتقل إلى تبويب الإنجليزية — هناك حقول مطلوبة غير مكتملة.',
+      switchToArabicTab:
+        'انتقل إلى تبويب العربية — هناك حقول مطلوبة غير مكتملة.',
+      switchToEnglishTab:
+        'انتقل إلى تبويب الإنجليزية — هناك حقول مطلوبة غير مكتملة.',
       rankRequired: 'الترتيب مطلوب',
       rankPositive: 'يجب أن يكون الترتيب رقماً موجباً',
       countryRequired: 'الدولة مطلوبة',

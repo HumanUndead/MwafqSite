@@ -52,6 +52,9 @@ export default function proxy(request: NextRequest) {
   }
 
   const appPathname = getPathnameWithoutLocale(pathname);
+  const cookieLocale = request.cookies.get(localeCookieName)?.value;
+  const shouldPreserveSsoLocale =
+    appPathname === ROUTES.SSO_LOGIN && cookieLocale && hasLocale(cookieLocale);
   const isProtected =
     PROTECTED_PREFIXES.some((prefix) => appPathname.startsWith(prefix)) ||
     PROTECTED_PATTERNS.some((pattern) => pattern.test(appPathname));
@@ -73,11 +76,14 @@ export default function proxy(request: NextRequest) {
       headers: requestHeaders,
     },
   });
-  response.cookies.set(localeCookieName, localeFromPath, {
-    path: '/',
-    maxAge: 60 * 60 * 24 * 365,
-    sameSite: 'lax',
-  });
+  if (!shouldPreserveSsoLocale) {
+    response.cookies.set(localeCookieName, localeFromPath, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+    });
+  }
+
   return response;
 }
 

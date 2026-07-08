@@ -45,7 +45,7 @@ export function B2BSection({ locale, content }: Props) {
         <div className='grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20'>
           <div className='min-w-0'>
             <Eyebrow dark>{content.eyebrow}</Eyebrow>
-            <h2 className={cn('mb-7 font-extrabold leading-[1.08] tracking-[-1.6px] text-white', marketingSectionHeadingClass)}>
+            <h2 className={cn('mb-7 font-extrabold leading-[1.08] tracking-[-0.1px] sm:tracking-[-1.6px] text-white', marketingSectionHeadingClass)}>
               {content.title}
               {content.accent ? (
                 <>
