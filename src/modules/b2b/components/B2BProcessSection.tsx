@@ -742,9 +742,17 @@ export function B2BProcessSection({ locale }: Props) {
     nodePathProgress
   ).showFrom;
   const mobilePinLast = compact && pathProgress >= lastNodeShowFrom;
+  let lastReachedIndex = -1;
+  for (let i = 0; i < nodePathProgress.length; i++) {
+    if (pathProgress >= nodeVisibilityWindow(i, nodePathProgress).showFrom) {
+      lastReachedIndex = i;
+    }
+  }
   const displayLabelIndex = mobilePinLast
     ? stages.length - 1
-    : activeLabelIndex;
+    : compact
+      ? activeLabelIndex
+      : lastReachedIndex;
   const viewBox = compact
     ? getMobileViewBox(leadingPoint, pathProgress)
     : getDesktopViewBox(scrollProgress, layout);
@@ -752,7 +760,7 @@ export function B2BProcessSection({ locale }: Props) {
   const ringR = compact ? 18 : RING_R;
   const showStageLabel = compact
     ? displayLabelIndex >= 0
-    : scrollProgress < FINALE_THRESHOLD && activeLabelIndex >= 0;
+    : scrollProgress < FINALE_THRESHOLD && displayLabelIndex >= 0;
   const showLeadingDot =
     pathLength > 0 &&
     scrollProgress > 0.005 &&
@@ -1001,7 +1009,7 @@ export function B2BProcessSection({ locale }: Props) {
               })}
 
               {showStageLabel && (
-                <AnimatePresence mode='wait'>
+                <AnimatePresence mode={compact ? 'wait' : 'sync'}>
                   <motion.g
                     key={displayLabelIndex}
                     initial={{ opacity: 0 }}
