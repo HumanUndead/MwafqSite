@@ -16,8 +16,8 @@ export function B2BFinalCtaSection({ locale, content }: Props) {
     >
       <div className='mx-auto max-w-[760px]'>
         <h2 className='mx-auto mb-5 max-w-[720px] text-[clamp(30px,4.6vw,56px)] font-extrabold leading-[1.06] tracking-[-1.6px] text-white'>
-          {content.titleLead}{' '}
-          <em className='font-normal italic text-[#00a8f1]/95'>
+          {content.titleLead}
+          <em className='ms-2 font-normal italic text-[#00a8f1]/95'>
             {content.titleAccent}
           </em>
         </h2>

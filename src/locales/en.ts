@@ -493,13 +493,22 @@ const en = {
     login: {
       title: 'Sign in',
       welcomeTitle: 'Welcome back',
-      submit: 'Sign in',
+      submit: 'Login with Mwafq',
       forgotPassword: 'Forgot password?',
       noAccount: "Don't have an account?",
       signUp: 'Sign up',
       welcomeBack:
         'Welcome back to Mwafq. Sign in with your verification code to continue.',
       otpSent: 'OTP sent successfully. Enter the 4-digit code to sign in.',
+    },
+    ssoLogin: {
+      loadingTitle: 'Signing you in…',
+      loadingSubtitle: 'Please wait while we complete your Mwafq login.',
+      successTitle: 'Login successful',
+      successSubtitle: 'You are now signed in with Mwafq.',
+      errorTitle: 'Login failed',
+      errorSubtitle: 'We could not complete your login. Please try again.',
+      retry: 'Back to login',
     },
     register: {
       title: 'Create Account',
@@ -979,6 +988,7 @@ const en = {
       contactLastName: 'Last Name',
       contactEmail: 'Email',
       contactPhone: 'Phone',
+      contactPhoneVerified: 'Verified',
       parentCompany: 'Parent Company',
       rank: 'Rank',
       companyPhone: 'Company Phone',
@@ -1014,6 +1024,10 @@ const en = {
       uploadLogo: 'Upload',
       changeLogo: 'Change',
     },
+    verify: {
+      button: 'Verify Number',
+      verified: 'Verified',
+    },
     validation: {
       nameEnRequired: 'Company name in English is required',
       nameArRequired: 'Company name in Arabic is required',
@@ -1034,6 +1048,7 @@ const en = {
       contactLastNameRequired: 'Last name is required',
       contactEmailRequired: 'Email is required',
       contactPhoneRequired: 'Phone is required',
+      contactPhoneNotVerified: 'Please verify the contact phone number',
     },
     contact: {
       noResults: 'No users found',

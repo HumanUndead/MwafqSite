@@ -8,6 +8,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/cn';
 import { getTranslationName } from '@/shared/lib/getTranslationName';
+import { OtpModal } from '@/modules/auth/components/OtpModal';
 import {
   Select,
   SelectContent,
@@ -96,6 +97,70 @@ function TextField({
           disabled && 'opacity-60 cursor-not-allowed bg-[#f8f9fc]'
         )}
       />
+      <FieldError msg={error} />
+    </div>
+  );
+}
+
+function PhoneVerifyField({
+  label,
+  required,
+  value,
+  onChange,
+  error,
+  disabled,
+  isVerified,
+  verifiedLabel,
+  verifyLabel,
+  onVerifyClick,
+}: {
+  label: string;
+  required?: boolean;
+  value: string;
+  onChange: (v: string) => void;
+  error?: string;
+  disabled?: boolean;
+  isVerified: boolean;
+  verifiedLabel: string;
+  verifyLabel: string;
+  onVerifyClick: () => void;
+}) {
+  return (
+    <div>
+      <FieldLabel required={required}>{label}</FieldLabel>
+      <div className='flex items-center gap-2'>
+        <input
+          type='tel'
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          className={cn(
+            'flex min-h-[52px] w-full rounded-[14px] border border-[#d9ddea] bg-white px-3.5',
+            'text-sm text-[#1e2364] placeholder:text-[rgba(30,35,100,0.4)]',
+            'transition-[border-color,box-shadow] duration-200 outline-none',
+            'focus:border-[#00a8f1] focus:ring-[3px] focus:ring-[rgba(0,168,241,0.20)]',
+            error && 'border-red-400 focus:border-red-400 focus:ring-red-200/50',
+            disabled && 'opacity-60 cursor-not-allowed bg-[#f8f9fc]'
+          )}
+        />
+        {isVerified ? (
+          <span className='inline-flex shrink-0 items-center gap-1 rounded-full bg-green-50 px-3 py-2 text-xs font-semibold text-green-700'>
+            {verifiedLabel}
+          </span>
+        ) : (
+          <Button
+            type='button'
+            variant='outline'
+            size='sm'
+            shape='pill'
+            className='shrink-0 border-[#1e2364] text-[#1e2364] hover:bg-[#1e2364] hover:text-white'
+            disabled={!value.trim()}
+            onClick={onVerifyClick}
+          >
+            {verifyLabel}
+          </Button>
+        )}
+      </div>
       <FieldError msg={error} />
     </div>
   );
@@ -335,6 +400,7 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
     handleSubmit,
     ddl,
     loading,
+    phoneVerification,
   } = useCompanyCreate(handleSuccess);
 
   const [langTab, setLangTab] = useState<'en' | 'ar'>('en');
@@ -565,17 +631,29 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
               type='email'
               error={errors.contactEmail}
             />
-            <TextField
+            <PhoneVerifyField
               label={company.fields.contactPhone}
               required
               value={form.contactPhone}
               onChange={(v) => updateField('contactPhone', v)}
-              type='tel'
               error={errors.contactPhone}
+              isVerified={phoneVerification.isPhoneVerified}
+              verifiedLabel={company.fields.contactPhoneVerified}
+              verifyLabel={company.verify.button}
+              onVerifyClick={phoneVerification.openOtpModal}
             />
           </div>
         </div>
       </div>
+
+      <OtpModal
+        open={phoneVerification.isOtpModalOpen}
+        destinationLabel={form.contactPhone}
+        loading={phoneVerification.otpLoading}
+        error={phoneVerification.otpError}
+        onVerify={phoneVerification.verifyOtp}
+        onClose={phoneVerification.closeOtpModal}
+      />
 
       {/* ── Classification (tags) — hidden for now
       <div className='rounded-[14px] border border-[#e5e7f0] bg-[#fafbfd] p-4'>

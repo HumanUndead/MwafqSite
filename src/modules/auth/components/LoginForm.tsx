@@ -1,121 +1,77 @@
 'use client';
 
-import Link from 'next/link';
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useState } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
-import { getLocalizedRoute } from '@/i18n/routing';
-import { ROUTES } from '@/shared/constants/routes';
+import { toast } from '@/shared/components/feedback/Toast';
 import { Button } from '@/shared/components/ui/Button';
-import { useLogin } from '../hooks/useLogin';
-import { OtpModal } from './OtpModal';
-import { AuthTextField } from './AuthTextField';
-
-interface LoginValues {
-  userName: string;
-}
-
-function UserNameIcon() {
-  return (
-    <svg
-      width='18'
-      height='18'
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      aria-hidden='true'
-    >
-      <rect x='2' y='5' width='20' height='14' rx='2' ry='2' />
-      <circle cx='9' cy='12' r='2.5' />
-      <line x1='14' y1='10' x2='19' y2='10' />
-      <line x1='14' y1='14' x2='17' y2='14' />
-    </svg>
-  );
-}
+import { MWAFQ_REGISTER_URL } from '@/shared/constants/config';
+import { authApi } from '../api/authApi';
 
 export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
-  const locale = useLocale();
   const auth = useTranslations('auth');
-  const {
-    login,
-    loading,
-    error,
-    verifyOtp,
-    closeOtpModal,
-    resendOtp,
-    isOtpModalOpen,
-    otpDestinationLabel,
-  } = useLogin({ redirectTo });
-  const [form, setForm] = useState<LoginValues>({ userName: '' });
-  const [fieldError, setFieldError] = useState<string>();
+  const locale = useLocale();
+  const [loading, setLoading] = useState(false);
 
-  const updateField =
-    (key: keyof LoginValues) => (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.trimStart();
-      setForm((current) => ({ ...current, [key]: value }));
-      if (key === 'userName' && fieldError) {
-        setFieldError(undefined);
+  const handleRegister = () => {
+    window.location.assign(MWAFQ_REGISTER_URL);
+  };
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      // Server route runs the PKCE + Authorize request (client id/secret stay
+      // server-side); we only get back the hosted SSO login URL to redirect to.
+      const { loginUrl } = (await authApi.ssoAuthorize()).data;
+
+      if (loginUrl) {
+        window.location.assign(loginUrl);
+        return;
       }
-    };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!form.userName.trim()) {
-      setFieldError(auth.validation.identityRequired);
-      return;
+      toast.error(auth.errors.loginFailed);
+    } catch {
+      toast.error(auth.errors.loginFailed);
+    } finally {
+      setLoading(false);
     }
 
-    setFieldError(undefined);
-    await login({ userName: form.userName.trim() });
+    void redirectTo;
   };
 
   return (
-    <>
-      <form noValidate onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <AuthTextField
-          label={auth.fields.identityNumber}
-          value={form.userName}
-          onChange={updateField('userName')}
-          error={fieldError}
-          placeholder={auth.fields.identityNumberPlaceholder}
-          autoComplete='username'
-          icon={<UserNameIcon />}
-        />
-
-        {error ? <p className='text-sm text-red-600'>{error}</p> : null}
-
-        <Button
-          type='submit'
-          loading={loading}
-          variant='brand'
-          size='lg'
-          className='mt-2 w-full rounded-[14px] py-3 text-[15px]'
-        >
-          {auth.login.submit}
-        </Button>
-
-        <p className='text-center text-sm text-gray-600'>
-          {auth.login.noAccount}{' '}
-          <Link
-            href={getLocalizedRoute(locale, ROUTES.REGISTER)}
-            className='font-medium text-[#00a8f1] transition hover:text-[#0090d1]'
-          >
-            {auth.login.signUp}
-          </Link>
-        </p>
-      </form>
-
-      <OtpModal
-        open={isOtpModalOpen}
-        destinationLabel={otpDestinationLabel ?? ''}
+    <div className='flex flex-col gap-4'>
+      <Button
+        type='button'
+        onClick={handleLogin}
         loading={loading}
-        error={error}
-        onVerify={verifyOtp}
-        onResend={resendOtp}
-        onClose={closeOtpModal}
-      />
-    </>
+        variant='brand'
+        size='lg'
+        className='mt-2 w-full rounded-[14px] py-3 text-[15px]'
+      >
+        {auth.login.submit}
+      </Button>
+
+      <Button
+        type='button'
+        onClick={handleRegister}
+        variant='outline'
+        size='lg'
+        className='w-full rounded-[14px] py-3 text-[15px]'
+      >
+        {locale === 'ar' ? 'التسجيل عبر موفق' : 'Register with Mwafq'}
+      </Button>
+
+      {/* Sign-up link hidden — login only for now.
+      <p className='text-center text-sm text-gray-600'>
+        {auth.login.noAccount}{' '}
+        <Link
+          href={getLocalizedRoute(locale, ROUTES.REGISTER)}
+          className='font-medium text-[#00a8f1] transition hover:text-[#0090d1]'
+        >
+          {auth.login.signUp}
+        </Link>
+      </p>
+      */}
+    </div>
   );
 }

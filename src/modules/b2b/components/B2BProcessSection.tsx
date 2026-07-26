@@ -33,31 +33,31 @@ const CONTENT: Record<string, JourneyContent> = {
         number: '01',
         title: 'Register',
         description:
-          'Create your company account in minutes — verify your CR number and you are instantly ready to operate.',
+          'Create your account and verify your CR number in minutes.',
       },
       {
         number: '02',
         title: 'Set Up Your Team',
         description:
-          'Upload employees in bulk, assign departments, and configure approval workflows to match your HR structure.',
+          'Upload employees, assign departments, and set approval workflows.',
       },
       {
         number: '03',
         title: 'Book Services',
         description:
-          'Schedule medical exams, certifications, and visa health checks in a single click — no paperwork, no waiting.',
+          'Book exams, certifications, and visa checks in one click.',
       },
       {
         number: '04',
         title: 'Track in Real Time',
         description:
-          'Follow every request from submission to delivery. Get instant alerts and a unified dashboard for your entire workforce.',
+          'Track every request live with instant alerts and one dashboard.',
       },
       {
         number: '05',
         title: 'Scale with Confidence',
         description:
-          'As your workforce expands, Mwafq grows with you — automated policy renewals, workforce analytics, and export-ready compliance reports for auditors and regulators.',
+          'Mwafq scales with you — auto renewals, analytics, and compliance reports.',
       },
     ],
   },
@@ -68,32 +68,28 @@ const CONTENT: Record<string, JourneyContent> = {
       {
         number: '٠١',
         title: 'التسجيل',
-        description:
-          'أنشئ حساب شركتك في دقائق — تحقق من رقم السجل التجاري وابدأ الفور.',
+        description: 'أنشئ حسابك وتحقق من رقم السجل التجاري في دقائق.',
       },
       {
         number: '٠٢',
         title: 'إعداد فريقك',
-        description:
-          'أضف الموظفين دفعةً واحدة، وحدد الأقسام، وأتمت مسارات الموافقة لتتناسب مع هيكل مواردك البشرية.',
+        description: 'أضف الموظفين وحدد الأقسام وأتمت مسارات الموافقة.',
       },
       {
         number: '٠٣',
         title: 'حجز الخدمات',
-        description:
-          'احجز الفحوصات الطبية والشهادات وفحوصات تأشيرة الصحة في نقرة واحدة — بلا أوراق ولا انتظار.',
+        description: 'احجز الفحوصات والشهادات وفحوصات التأشيرة بنقرة واحدة.',
       },
       {
         number: '٠٤',
         title: 'التتبع اللحظي',
-        description:
-          'تابع كل طلب من الإرسال حتى التسليم، واحصل على تنبيهات فورية ولوحة تحكم موحدة لكامل القوى العاملة.',
+        description: 'تابع كل طلب مباشرةً مع تنبيهات فورية ولوحة تحكم واحدة.',
       },
       {
         number: '٠٥',
         title: 'التوسع بثقة',
         description:
-          'مع توسع قواك العاملة تنمو موفق معك — تجديدات تلقائية للوثائق، وتحليلات للقوى العاملة، وتقارير امتثال جاهزة للتصدير للمراجعين والجهات الرقابية.',
+          'موفق تنمو معك — تجديد تلقائي وتحليلات وتقارير امتثال جاهزة.',
       },
     ],
   },
@@ -146,8 +142,7 @@ function measureNodePathProgress(path: SVGPathElement): number[] {
     for (let i = 0; i <= steps; i++) {
       const t = i / steps;
       const point = path.getPointAtLength(len * t);
-      const d =
-        (point.x - meta.nodeX) ** 2 + (point.y - meta.nodeY) ** 2;
+      const d = (point.x - meta.nodeX) ** 2 + (point.y - meta.nodeY) ** 2;
       if (d < bestD) {
         bestD = d;
         bestT = t;
@@ -224,26 +219,25 @@ const DESKTOP_LAYOUT: LayoutConfig = {
   finaleLabelH: 312,
   finaleLabelGap: 88,
   finaleLabelGapLast: 140,
-  sectionHeight: '1200vh',
+  sectionHeight: '500vh', // was 800vh — noticeably faster
   camW: [1200, 1200, 1200, 1200, 1200, 1200, DESKTOP_FINALE_CAM_W],
   camH: [1000, 600, 600, 600, 600, 600, DESKTOP_FINALE_CAM_H],
   camFinaleX: DESKTOP_FINALE_CAM_X,
 };
 
 const MOBILE_LAYOUT: LayoutConfig = {
-  labelW: 300,
-  labelH: 184,
-  labelGap: 40,
+  labelW: 400,
+  labelH: 150,
+  labelGap: 30,
   finaleLabelW: 280,
   finaleLabelH: 120,
   finaleLabelGap: 28,
   finaleLabelGapLast: 40,
-  sectionHeight: '750vh',
+  sectionHeight: '350vh', // was 500vh — noticeably faster
   camW: Array(7).fill(MOBILE_CAM_W) as number[],
   camH: Array(7).fill(MOBILE_CAM_H) as number[],
   camFinaleX: 380,
 };
-
 type LabelLayout = {
   foX: number;
   foY: number;
@@ -351,9 +345,31 @@ function getStageState(
   return 'active';
 }
 
-function getStageLabelLayout(index: number, layout: LayoutConfig): LabelLayout {
+function getStageLabelLayout(
+  index: number,
+  layout: LayoutConfig,
+  compact = false
+): LabelLayout {
   const meta = STAGE_META[index]!;
   const foY = meta.nodeY - layout.labelH / 2;
+
+  // Last node sits horizontally centered (nodeX 1100). On mobile a side-mounted
+  // card gets crammed against the frame edge, so stack it ABOVE the node,
+  // centered, with a short vertical connector — balanced, clear focal point.
+  if (index === 4 && compact) {
+    const foX = meta.nodeX - layout.labelW / 2;
+    const foYAbove = meta.nodeY - RING_R - layout.labelGap - layout.labelH;
+    return {
+      foX,
+      foY: foYAbove,
+      foW: layout.labelW,
+      foH: layout.labelH,
+      lx1: meta.nodeX,
+      ly1: meta.nodeY - RING_R,
+      lx2: meta.nodeX,
+      ly2: foYAbove + layout.labelH,
+    };
+  }
 
   if (index === 4) {
     const foX = meta.nodeX + RING_R + layout.labelGap;
@@ -507,45 +523,44 @@ function StageLabelContent({
   const padOuter = compact ? 12 : 20;
   const padBlock = isFinale ? (compact ? 8 : 12) : 0;
 
-  const paddingStyle =
-    showMobileCard
-      ? { padding: '12px 14px' }
-      : isFinale && padTowardNode
-        ? padTowardNode === 'start'
-          ? {
-              paddingTop: padBlock,
-              paddingBottom: padBlock,
-              paddingInlineStart: padInner,
-              paddingInlineEnd: padOuter,
-            }
-          : {
-              paddingTop: padBlock,
-              paddingBottom: padBlock,
-              paddingInlineStart: padOuter,
-              paddingInlineEnd: padInner,
-            }
-        : { padding: `0 ${padOuter}px` };
+  const paddingStyle = showMobileCard
+    ? { padding: '10px 18px' }
+    : isFinale && padTowardNode
+      ? padTowardNode === 'start'
+        ? {
+            paddingTop: padBlock,
+            paddingBottom: padBlock,
+            paddingInlineStart: padInner,
+            paddingInlineEnd: padOuter,
+          }
+        : {
+            paddingTop: padBlock,
+            paddingBottom: padBlock,
+            paddingInlineStart: padOuter,
+            paddingInlineEnd: padInner,
+          }
+      : { padding: `0 ${padOuter}px` };
 
   const numberSize = isFinale
     ? compact
       ? '11px'
       : '22px'
     : compact
-      ? '10px'
+      ? '11px'
       : '10px';
   const titleSize = isFinale
     ? compact
       ? '22px'
       : '56px'
     : compact
-      ? '20px'
+      ? '24px'
       : '26px';
   const descSize = isFinale
     ? compact
       ? '13px'
       : '27px'
     : compact
-      ? '13px'
+      ? '15px'
       : '14px';
 
   const content = (
@@ -556,7 +571,7 @@ function StageLabelContent({
         minHeight: showMobileCard ? '100%' : undefined,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: showMobileCard ? 'flex-start' : 'center',
+        justifyContent: 'center',
         textAlign: rtl ? 'right' : 'left',
         direction: rtl ? 'rtl' : 'ltr',
         boxSizing: 'border-box',
@@ -611,8 +626,10 @@ function StageLabelContent({
         width: '100%',
         height: '100%',
         borderRadius: 16,
-        border: '2px solid #e5e7f0',
-        background: 'rgba(255,255,255,0.97)',
+        border: '1px solid rgba(255,255,255,0.4)',
+        background: 'rgba(255,255,255,0.55)', // was 0.35 — enough opacity alone to occlude the line immediately
+        backdropFilter: 'blur(16px) saturate(160%)', // blur is now a bonus effect, not doing the hiding
+        WebkitBackdropFilter: 'blur(16px) saturate(160%)',
         boxShadow: '0 12px 40px -24px rgba(30,35,100,0.35)',
         overflow: 'hidden',
         boxSizing: 'border-box',
@@ -725,9 +742,17 @@ export function B2BProcessSection({ locale }: Props) {
     nodePathProgress
   ).showFrom;
   const mobilePinLast = compact && pathProgress >= lastNodeShowFrom;
+  let lastReachedIndex = -1;
+  for (let i = 0; i < nodePathProgress.length; i++) {
+    if (pathProgress >= nodeVisibilityWindow(i, nodePathProgress).showFrom) {
+      lastReachedIndex = i;
+    }
+  }
   const displayLabelIndex = mobilePinLast
     ? stages.length - 1
-    : activeLabelIndex;
+    : compact
+      ? activeLabelIndex
+      : lastReachedIndex;
   const viewBox = compact
     ? getMobileViewBox(leadingPoint, pathProgress)
     : getDesktopViewBox(scrollProgress, layout);
@@ -735,7 +760,7 @@ export function B2BProcessSection({ locale }: Props) {
   const ringR = compact ? 18 : RING_R;
   const showStageLabel = compact
     ? displayLabelIndex >= 0
-    : scrollProgress < FINALE_THRESHOLD && activeLabelIndex >= 0;
+    : scrollProgress < FINALE_THRESHOLD && displayLabelIndex >= 0;
   const showLeadingDot =
     pathLength > 0 &&
     scrollProgress > 0.005 &&
@@ -774,18 +799,18 @@ export function B2BProcessSection({ locale }: Props) {
           className={cn(
             'relative z-10 shrink-0',
             compact
-              ? 'px-4 pt-4 pb-0 sm:px-6'
+              ? 'px-5 pb-2 pt-[52px] max-[560px]:pt-[36px] sm:px-6'
               : 'flex flex-col items-center px-4 pt-10 pb-3 sm:px-7'
           )}
         >
           {compact ? (
-            <div className='mx-auto w-full max-w-lg'>
-              <div className='mb-1.5'>
-                <span className='font-mono text-[13px] font-medium uppercase tracking-[0.28em] text-[#1e2364]/40 sm:text-[15px] min-[1920px]:text-[17px]'>
+            <div className='mx-auto w-full max-w-lg text-center'>
+              <div className='mb-2'>
+                <span className='font-mono text-[12px] font-medium uppercase tracking-[0.28em] text-[#1e2364]/40 sm:text-[15px]'>
                   {eyebrow}
                 </span>
               </div>
-              <h2 className='text-[clamp(24px,5.5vw,34px)] font-extrabold leading-none tracking-[-1px] text-[#1e2364]'>
+              <h2 className='text-[clamp(26px,6.5vw,34px)] font-extrabold leading-[1.05] tracking-[-0.8px] text-[#1e2364]'>
                 {title}
               </h2>
             </div>
@@ -868,14 +893,14 @@ export function B2BProcessSection({ locale }: Props) {
               />
 
               {showLeadingDot && (
-                  <circle
-                    cx={leadingPoint.x}
-                    cy={leadingPoint.y}
-                    r={compact ? 5 : 6}
-                    fill='#00a8f1'
-                    filter='url(#mjDotGlw)'
-                  />
-                )}
+                <circle
+                  cx={leadingPoint.x}
+                  cy={leadingPoint.y}
+                  r={compact ? 5 : 6}
+                  fill='#00a8f1'
+                  filter='url(#mjDotGlw)'
+                />
+              )}
 
               {stages.map((stage, i) => {
                 const meta = STAGE_META[i]!;
@@ -984,7 +1009,7 @@ export function B2BProcessSection({ locale }: Props) {
               })}
 
               {showStageLabel && (
-                <AnimatePresence mode='wait'>
+                <AnimatePresence mode={compact ? 'wait' : 'sync'}>
                   <motion.g
                     key={displayLabelIndex}
                     initial={{ opacity: 0 }}
@@ -998,7 +1023,8 @@ export function B2BProcessSection({ locale }: Props) {
                     {(() => {
                       const labelLayout = getStageLabelLayout(
                         displayLabelIndex,
-                        layout
+                        layout,
+                        compact
                       );
                       const stage = stages[displayLabelIndex]!;
                       return (

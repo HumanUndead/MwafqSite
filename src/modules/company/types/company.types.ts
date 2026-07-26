@@ -19,6 +19,7 @@ export interface CompanyCreateDto {
   contact: CompanyContactInput;
   parentCompanyId?: string;
   rank: number;
+  identifier: string;
   companyPhone?: string;
   companySize?: number;
   crNumber: string;

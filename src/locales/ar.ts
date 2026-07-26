@@ -494,7 +494,7 @@ const ar = {
     login: {
       title: 'تسجيل الدخول',
       welcomeTitle: 'مرحبًا بعودتك',
-      submit: 'تسجيل الدخول',
+      submit: 'تسجيل الدخول عبر موفق',
       forgotPassword: 'هل نسيت كلمة المرور؟',
       noAccount: 'ليس لديك حساب؟',
       signUp: 'إنشاء حساب',
@@ -502,6 +502,15 @@ const ar = {
         'مرحبًا بعودتك إلى موفق. سجّل الدخول باستخدام رمز التحقق للمتابعة.',
       otpSent:
         'تم إرسال رمز التحقق بنجاح. أدخل الرمز المكوّن من 4 أرقام لتسجيل الدخول.',
+    },
+    ssoLogin: {
+      loadingTitle: 'جارٍ تسجيل دخولك…',
+      loadingSubtitle: 'يرجى الانتظار بينما نكمل تسجيل دخولك عبر موفق.',
+      successTitle: 'تم تسجيل الدخول بنجاح',
+      successSubtitle: 'لقد سجّلت الدخول الآن عبر موفق.',
+      errorTitle: 'فشل تسجيل الدخول',
+      errorSubtitle: 'تعذّر إكمال تسجيل دخولك. يرجى المحاولة مرة أخرى.',
+      retry: 'العودة لتسجيل الدخول',
     },
     register: {
       title: 'أنشئ حسابك',
@@ -970,6 +979,7 @@ const ar = {
       contactLastName: 'اسم العائلة',
       contactEmail: 'البريد الإلكتروني',
       contactPhone: 'الهاتف',
+      contactPhoneVerified: 'موثّق',
       parentCompany: 'الشركة الأم',
       rank: 'الترتيب',
       companyPhone: 'هاتف الشركة',
@@ -1005,13 +1015,19 @@ const ar = {
       uploadLogo: 'رفع',
       changeLogo: 'تغيير',
     },
+    verify: {
+      button: 'تحقق من الرقم',
+      verified: 'تم التحقق',
+    },
     validation: {
       nameEnRequired: 'اسم الشركة بالإنجليزية مطلوب',
       nameArRequired: 'اسم الشركة بالعربية مطلوب',
       addressEnRequired: 'العنوان بالإنجليزية مطلوب',
       addressArRequired: 'العنوان بالعربية مطلوب',
-      switchToArabicTab: 'انتقل إلى تبويب العربية — هناك حقول مطلوبة غير مكتملة.',
-      switchToEnglishTab: 'انتقل إلى تبويب الإنجليزية — هناك حقول مطلوبة غير مكتملة.',
+      switchToArabicTab:
+        'انتقل إلى تبويب العربية — هناك حقول مطلوبة غير مكتملة.',
+      switchToEnglishTab:
+        'انتقل إلى تبويب الإنجليزية — هناك حقول مطلوبة غير مكتملة.',
       rankRequired: 'الترتيب مطلوب',
       rankPositive: 'يجب أن يكون الترتيب رقماً موجباً',
       countryRequired: 'الدولة مطلوبة',
@@ -1023,6 +1039,7 @@ const ar = {
       contactLastNameRequired: 'اسم العائلة مطلوب',
       contactEmailRequired: 'البريد الإلكتروني مطلوب',
       contactPhoneRequired: 'رقم الجوال مطلوب',
+      contactPhoneNotVerified: 'يرجى التحقق من رقم هاتف التواصل',
     },
     contact: {
       noResults: 'لا يوجد مستخدمون',

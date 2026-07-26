@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { localeToLangId } from '@/i18n/config';
 import { useAuthStore } from '@/modules/auth/store/authStore';
 import { toast } from '@/shared/components/feedback/Toast';
 import { ApiError } from '@/shared/lib/http';
 import { getTranslationName } from '@/shared/lib/getTranslationName';
+import { generateGuid } from '@/shared/lib/guid';
 import { companyApi } from '../api/companyApi';
 import { getLangTabWithErrors, isRichTextEmpty } from '../companyForm.shared';
 import type { DdlItem, CompanyCreateDto } from '../types/company.types';
@@ -81,6 +82,14 @@ export function useCompanyCreate(onSuccess?: () => void) {
   const [form, setForm] = useState<CompanyFormState>(INITIAL_FORM);
   const [errors, setErrors] = useState<CompanyFormErrors>({});
   const [submitting, setSubmitting] = useState(false);
+
+  const identifierRef = useRef(generateGuid());
+
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [verifiedPhone, setVerifiedPhone] = useState<string | null>(null);
 
   const [types, setTypes] = useState<DdlItem[]>([]);
   const [countries, setCountries] = useState<DdlItem[]>([]);
@@ -171,8 +180,35 @@ export function useCompanyCreate(onSuccess?: () => void) {
         delete next[key as keyof CompanyFormErrors];
         return next;
       });
+      if (key === 'contactPhone' && value !== verifiedPhone) {
+        setIsPhoneVerified(false);
+      }
     },
-    []
+    [verifiedPhone]
+  );
+
+  const openOtpModal = useCallback(() => {
+    setOtpError(null);
+    setIsOtpModalOpen(true);
+  }, []);
+
+  const closeOtpModal = useCallback(() => {
+    setIsOtpModalOpen(false);
+  }, []);
+
+  // TODO: OTP verification API is not available yet — statically accept any code.
+  const verifyOtp = useCallback(
+    async (_otp: string) => {
+      setOtpLoading(true);
+      setOtpError(null);
+      await Promise.resolve();
+      setIsPhoneVerified(true);
+      setVerifiedPhone(form.contactPhone);
+      setOtpLoading(false);
+      setIsOtpModalOpen(false);
+      toast.success(company.verify.verified);
+    },
+    [form.contactPhone, company.verify.verified]
   );
 
   const toggleTag = useCallback((id: string) => {
@@ -213,6 +249,8 @@ export function useCompanyCreate(onSuccess?: () => void) {
     }
     if (!form.contactPhone.trim()) {
       next.contactPhone = company.validation.contactPhoneRequired;
+    } else if (!isPhoneVerified || verifiedPhone !== form.contactPhone) {
+      next.contactPhone = company.validation.contactPhoneNotVerified;
     }
 
     setErrors(next);
@@ -238,6 +276,7 @@ export function useCompanyCreate(onSuccess?: () => void) {
           phone: form.contactPhone.trim(),
         },
         rank: DEFAULT_COMPANY_RANK,
+        identifier: identifierRef.current,
         companyPhone: form.companyPhone || undefined,
         companySize: form.companySize ? Number(form.companySize) : undefined,
         crNumber: form.crNumber.trim(),
@@ -290,6 +329,15 @@ export function useCompanyCreate(onSuccess?: () => void) {
       countriesLoading,
       citiesLoading: form.countryId ? citiesLoading : false,
       tagsLoading,
+    },
+    phoneVerification: {
+      isOtpModalOpen,
+      otpLoading,
+      otpError,
+      isPhoneVerified: isPhoneVerified && verifiedPhone === form.contactPhone,
+      openOtpModal,
+      closeOtpModal,
+      verifyOtp,
     },
   };
 }

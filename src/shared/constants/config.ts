@@ -1,7 +1,9 @@
 const DEFAULT_MWAFQ_API_BASE_URL = 'https://devapi.mwafq.com/';
 
-/** B2B dashboard — navbar "Business sign in" destination. */
-export const MWAFQ_BUSINESS_PORTAL_URL = 'https://www.mwafq.com/';
+/** SSO project registration page — "Register with Mwafq" destination. */
+export const MWAFQ_REGISTER_URL =
+  process.env.NEXT_PUBLIC_MWAFQ_REGISTER_URL ??
+  'http://localhost:3001/auth/register';
 
 export const MWAFQ_API_BASE_URL =
   process.env.MWAFQ_API_BASE_URL ?? DEFAULT_MWAFQ_API_BASE_URL;
@@ -11,8 +13,34 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://site.mwafq.com'
 ).replace(/\/$/, '');
 
-export const GOOGLE_SITE_VERIFICATION =
-  'tAeGn-m3s7LkysW2OAr8gYCgP05UN4-1r9GrkTeNGDY';
+/**
+ * Mwafq infrastructure origin (external SSO). No `/api` suffix — paths include it.
+ * SERVER-ONLY, required — must be set in the environment (no default).
+ */
+export const INFRASTRUCTURE_URL = (process.env.INFRASTRUCTURE_URL ?? '').replace(
+  /\/$/,
+  ''
+);
+
+/**
+ * OAuth client id for the external SSO flow. SERVER-ONLY — never expose via
+ * NEXT_PUBLIC_. Read only by the server SSO routes.
+ */
+export const SSO_CLIENT_ID = process.env.CLIENT_ID ?? '';
+
+/**
+ * OAuth client secret for the token/refresh exchange. SERVER-ONLY — never expose
+ * via NEXT_PUBLIC_. Read only by the server SSO routes.
+ */
+export const SSO_CLIENT_SECRET = process.env.CLIENT_SECRET ?? '';
+
+/**
+ * Hosted SSO login page users are sent to after a successful Authorize request.
+ * SERVER-ONLY, required — must be set in the environment (no default).
+ */
+export const MWAFQ_SSO_LOGIN_URL = (
+  process.env.MWAFQ_SSO_LOGIN_URL ?? ''
+).replace(/\/$/, '');
 
 export const config = {
   appName: 'Mwafq',

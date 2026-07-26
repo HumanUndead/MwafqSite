@@ -6,6 +6,7 @@ export const ROUTES = {
   B2B: '/b2b',
   CONTACT: '/contact',
   LOGIN: '/login',
+  SSO_LOGIN: '/ssologin',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
   DASHBOARD: '/dashboard',

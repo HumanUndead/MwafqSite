@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState, type RefObject } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cn } from '@/shared/lib/cn';
 import { CheckIcon } from '@/shared/components/icons/home';
 import { getServiceIconByKey } from '@/shared/components/icons/home/serviceIcons';
 import { useB2BServiceScrollSpy } from '@/modules/b2b/hooks/useB2BServiceScrollSpy';
 import { useB2BScrollChapters } from '@/modules/b2b/hooks/useB2BScrollChapters';
+import { useHeaderVisibilityStore } from '@/shared/store/headerVisibilityStore';
 import type { Dictionary } from '@/locales/types';
 import { fixedHeaderPaddingClass } from '@/shared/lib/scrollToSection';
 import type { B2BServiceItem } from './B2BServiceCapabilityCard';
@@ -62,6 +63,43 @@ export function B2BServicesMobileView({
     enabled: Boolean(prefersReducedMotion),
   });
 
+  const { trackRef, activeIndex, jumpTo, dist } = scrollChapters;
+
+  // Hide the fixed navbar while the pinned section fills the viewport, so it
+  // neither overlaps nor clips the pinned content. The freed space also lets
+  // the panel show its full content without a top offset for the navbar.
+  // No-op under reduced motion (the section is not pinned there).
+  const requestHide = useHeaderVisibilityStore((s) => s.requestHide);
+  const releaseHide = useHeaderVisibilityStore((s) => s.releaseHide);
+  const isHidingRef = useRef(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const el = trackRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const shouldHide = entry?.isIntersecting ?? false;
+        if (shouldHide === isHidingRef.current) return;
+        isHidingRef.current = shouldHide;
+        if (shouldHide) requestHide();
+        else releaseHide();
+      },
+      // Fire once the section covers roughly the middle band of the viewport.
+      { threshold: 0.01, rootMargin: '-30% 0px -30% 0px' }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      if (isHidingRef.current) {
+        isHidingRef.current = false;
+        releaseHide();
+      }
+    };
+  }, [prefersReducedMotion, trackRef, requestHide, releaseHide]);
+
   if (prefersReducedMotion) {
     return (
       <div
@@ -87,8 +125,6 @@ export function B2BServicesMobileView({
     );
   }
 
-  const { trackRef, activeIndex, jumpTo, dist } = scrollChapters;
-
   return (
     <div
       ref={trackRef}
@@ -98,10 +134,7 @@ export function B2BServicesMobileView({
       }}
     >
       <div
-        className={cn(
-          'sticky top-0 z-[5] min-h-dvh overflow-hidden bg-[#f4f4f6] px-4 pb-10 sm:px-6',
-          fixedHeaderPaddingClass
-        )}
+        className='sticky top-0 z-[5] flex h-dvh flex-col overflow-y-auto bg-[#f4f4f6] px-4 pb-8 pt-6 sm:px-6'
       >
         <MobileServicesContent
           cards={cards}
