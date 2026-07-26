@@ -57,33 +57,24 @@ const fetchSocialMediaCategoryTree = cache(
 
     endpoint.searchParams.set('Id', String(SOCIAL_MEDIA_CATEGORY_ID));
 
-    try {
-      const response = await fetch(endpoint.toString(), {
-        next: {
-          revalidate: MENU_CONTENT_REVALIDATE_SECONDS,
-          tags: [MENU_CONTENT_CACHE_TAG],
-        },
-      });
+    const response = await fetch(endpoint.toString(), {
+      next: {
+        revalidate: MENU_CONTENT_REVALIDATE_SECONDS,
+        tags: [MENU_CONTENT_CACHE_TAG],
+      },
+    });
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
 
-      const payload =
-        (await response.json()) as RecursiveArticleCategoryResponse;
+    const payload = (await response.json()) as RecursiveArticleCategoryResponse;
 
-      if (!payload.isSuccess || !payload.value) {
-        return null;
-      }
-
-      return payload.value;
-    } catch (error) {
-      console.error(
-        '[menu-content] Failed to fetch social media category.',
-        error
-      );
+    if (!payload.isSuccess || !payload.value) {
       return null;
     }
+
+    return payload.value;
   }
 );
 
