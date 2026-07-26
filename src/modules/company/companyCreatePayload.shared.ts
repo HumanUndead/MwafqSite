@@ -20,6 +20,7 @@ export function buildCompanyCreateUpstreamForm(dto: CompanyCreateDto): FormData 
   form.set('CRNumber', dto.crNumber?.trim() ?? '');
   form.set('VATNumber', dto.vatNumber?.trim() ?? '');
   form.set('Rank', String(dto.rank));
+  form.set('Identifier', dto.identifier);
   form.set('CountryId', dto.countryId);
   form.set('CityId', dto.cityId);
   form.set('CompanyTypeId', dto.companyTypeId);

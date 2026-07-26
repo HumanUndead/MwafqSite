@@ -988,6 +988,7 @@ const en = {
       contactLastName: 'Last Name',
       contactEmail: 'Email',
       contactPhone: 'Phone',
+      contactPhoneVerified: 'Verified',
       parentCompany: 'Parent Company',
       rank: 'Rank',
       companyPhone: 'Company Phone',
@@ -1023,6 +1024,10 @@ const en = {
       uploadLogo: 'Upload',
       changeLogo: 'Change',
     },
+    verify: {
+      button: 'Verify Number',
+      verified: 'Verified',
+    },
     validation: {
       nameEnRequired: 'Company name in English is required',
       nameArRequired: 'Company name in Arabic is required',
@@ -1043,6 +1048,7 @@ const en = {
       contactLastNameRequired: 'Last name is required',
       contactEmailRequired: 'Email is required',
       contactPhoneRequired: 'Phone is required',
+      contactPhoneNotVerified: 'Please verify the contact phone number',
     },
     contact: {
       noResults: 'No users found',

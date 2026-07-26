@@ -979,6 +979,7 @@ const ar = {
       contactLastName: 'اسم العائلة',
       contactEmail: 'البريد الإلكتروني',
       contactPhone: 'الهاتف',
+      contactPhoneVerified: 'موثّق',
       parentCompany: 'الشركة الأم',
       rank: 'الترتيب',
       companyPhone: 'هاتف الشركة',
@@ -1014,6 +1015,10 @@ const ar = {
       uploadLogo: 'رفع',
       changeLogo: 'تغيير',
     },
+    verify: {
+      button: 'تحقق من الرقم',
+      verified: 'تم التحقق',
+    },
     validation: {
       nameEnRequired: 'اسم الشركة بالإنجليزية مطلوب',
       nameArRequired: 'اسم الشركة بالعربية مطلوب',
@@ -1034,6 +1039,7 @@ const ar = {
       contactLastNameRequired: 'اسم العائلة مطلوب',
       contactEmailRequired: 'البريد الإلكتروني مطلوب',
       contactPhoneRequired: 'رقم الجوال مطلوب',
+      contactPhoneNotVerified: 'يرجى التحقق من رقم هاتف التواصل',
     },
     contact: {
       noResults: 'لا يوجد مستخدمون',
