@@ -1260,7 +1260,7 @@ function buildSectionOrder(
 }
 
 function buildHomePageContent(
-  rootCategory: RecursiveArticleCategoryDto,
+  rootCategory: RecursiveArticleCategoryDto | null,
   companiesCategory: RecursiveArticleCategoryDto | null,
   langId: number
 ): HomePageContent {
@@ -1302,30 +1302,36 @@ const fetchCompaniesCategoryTree = cache(
 
     endpoint.searchParams.set('Id', String(COMPANIES_CATEGORY_ID));
 
-    const response = await fetch(endpoint.toString(), {
-      cache: 'force-cache',
-      next: {
-        revalidate: HOME_CONTENT_REVALIDATE_SECONDS,
-        tags: [HOME_CONTENT_CACHE_TAG],
-      },
-    });
+    try {
+      const response = await fetch(endpoint.toString(), {
+        cache: 'force-cache',
+        next: {
+          revalidate: HOME_CONTENT_REVALIDATE_SECONDS,
+          tags: [HOME_CONTENT_CACHE_TAG],
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
 
-    const payload = (await response.json()) as RecursiveArticleCategoryResponse;
+      const payload =
+        (await response.json()) as RecursiveArticleCategoryResponse;
 
-    if (!payload.isSuccess || !payload.value) {
+      if (!payload.isSuccess || !payload.value) {
+        return null;
+      }
+
+      return payload.value;
+    } catch (error) {
+      console.error('Failed to load companies category tree', error);
       return null;
     }
-
-    return payload.value;
   }
 );
 
 const fetchHomeContentTree = cache(
-  async (): Promise<RecursiveArticleCategoryDto> => {
+  async (): Promise<RecursiveArticleCategoryDto | null> => {
     const endpoint = new URL(
       '/api/General/ArticleCategory/GetRecursiveById',
       HOME_CONTENT_API_BASE_URL
@@ -1333,13 +1339,16 @@ const fetchHomeContentTree = cache(
 
     endpoint.searchParams.set('Id', String(HOME_CONTENT_ROOT_CATEGORY_ID));
 
-    const response = await fetchWithErrorHandling<
-      RecursiveArticleCategoryResponse['value']
-    >(endpoint.toString(), {
-      cache: 'no-store',
-    });
-
-    return response;
+    try {
+      return await fetchWithErrorHandling<
+        RecursiveArticleCategoryResponse['value']
+      >(endpoint.toString(), {
+        cache: 'no-store',
+      });
+    } catch (error) {
+      console.error('Failed to load home content tree', error);
+      return null;
+    }
   }
 );
 
