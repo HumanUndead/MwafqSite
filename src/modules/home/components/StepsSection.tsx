@@ -198,7 +198,7 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                   <span className='relative mb-7 inline-block px-[30px] py-3 text-[17px] font-bold uppercase leading-none tracking-[2.2px] text-[#00a8f1] before:absolute before:left-0 before:top-0 before:h-[18px] before:w-[18px] before:border-l-4 before:border-t-4 before:border-current after:absolute after:bottom-0 after:right-0 after:h-[18px] after:w-[18px] after:border-b-4 after:border-r-4 after:border-current'>
                     {content.eyebrow}
                   </span>
-                  <h2 className={cn('font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]', marketingSectionHeadingClass)}>
+                  <h2 className={cn('font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]', marketingSectionHeadingClass, 'text-[clamp(22px,3vw,36px)] min-[1920px]:text-[clamp(36px,2.2vw,54px)] min-[2560px]:text-[clamp(42px,2.4vw,62px)]')}>
                     {content.title}{' '}
                     <span className='text-[#00a8f1]'>{content.highlight}</span>
                   </h2>
