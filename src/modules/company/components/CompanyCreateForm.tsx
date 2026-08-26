@@ -652,6 +652,7 @@ export function CompanyCreateForm({ onSuccess }: { onSuccess?: () => void }) {
         loading={phoneVerification.otpLoading}
         error={phoneVerification.otpError}
         onVerify={phoneVerification.verifyOtp}
+        onResend={phoneVerification.resendOtp}
         onClose={phoneVerification.closeOtpModal}
       />
 

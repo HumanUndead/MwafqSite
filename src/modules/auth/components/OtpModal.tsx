@@ -28,7 +28,7 @@ export function OtpModal({
 }: Props) {
   const auth = useTranslations('auth');
   const [otp, setOtp] = useState('');
-  const { seconds, isRunning, start } = useCountdown(90);
+  const { seconds, isRunning, start } = useCountdown(60);
   const otpLength = 4;
   const formattedTime = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 

@@ -73,6 +73,7 @@ export interface HomeHeroContent {
   liveBookings: string;
   liveBookingsLabel: string;
   floatingCards: readonly HomeFloatingCardContent[];
+  statsHeading: string;
 }
 
 export interface HomeServiceItemContent {
@@ -118,6 +119,8 @@ export interface HomeBookingContent {
     search: HomeActionContent;
   };
   examOptions: string[];
+  optionsTitle: string;
+  optionsNote: string;
 }
 
 export interface HomeStepsMetricContent {
@@ -206,6 +209,7 @@ export interface HomeAcademyContent {
   eyebrow: string;
   title: string;
   accent: string;
+  body: string;
   ctaLabel: string;
   items: HomeAcademyItemContent[];
 }

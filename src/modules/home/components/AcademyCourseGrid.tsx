@@ -48,6 +48,11 @@ export function AcademyCourseGrid({ content }: Props) {
                 </>
               )}
             </h2>
+            {content.body && (
+              <p className='mt-4 max-w-135 leading-[1.6] text-[#6b7196]'>
+                {content.body}
+              </p>
+            )}
           </div>
         </div>
       </ScrollReveal>
@@ -86,15 +91,17 @@ export function AcademyCourseGrid({ content }: Props) {
               <div className='mb-5 min-h-16 text-[13.5px] leading-[1.6] text-[#6b7196]'>
                 {course.detail}
               </div>
-              <div className='flex items-center justify-between border-t-2 border-[#e5e7f0] pt-4'>
-                <div className='flex items-center gap-1.5 text-[13px] font-bold text-[#1e2364]'>
-                  <StarIcon />
-                  {course.ratingValue}
-                  <span className='font-medium text-[#6b7196]'>
-                    ({course.ratingCount})
-                  </span>
+              {course.ratingValue && (
+                <div className='flex items-center justify-between border-t-2 border-[#e5e7f0] pt-4'>
+                  <div className='flex items-center gap-1.5 text-[13px] font-bold text-[#1e2364]'>
+                    <StarIcon />
+                    {course.ratingValue}
+                    <span className='font-medium text-[#6b7196]'>
+                      ({course.ratingCount})
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </ScrollReveal>
         ))}

@@ -82,6 +82,7 @@ export const FOOTER_ARTICLE_RANKS = {
 export const HERO_WORDS_ARTICLE_RANKS = {
   rotatingWords: 1,
   content: 2,
+  statsHeading: 50,
 } as const;
 
 export const SERVICES_ARTICLE_RANKS = {
@@ -96,6 +97,10 @@ export const BOOKING_ARTICLE_RANKS = {
   header: 1,
 } as const;
 
+export const BOOKING_OPTIONS_ARTICLE_RANKS = {
+  header: 1,
+} as const;
+
 export const STEPS_ARTICLE_RANKS = {
   header: 1,
   cta: 2,
@@ -104,6 +109,12 @@ export const STEPS_ARTICLE_RANKS = {
 export const APP_ARTICLE_RANKS = {
   header: 1,
 } as const;
+
+// CMS data quirk: article 374 (the App section's title/eyebrow/body) is
+// filed under the schedule child category (173) at rank 1, the same rank
+// as the real schedule label article (375). Disambiguate by id.
+export const APP_HEADER_FALLBACK_ARTICLE_ID = 374;
+export const APP_SCHEDULE_LABEL_ARTICLE_ID = 375;
 
 export const ACADEMY_ARTICLE_RANKS = {
   header: 1,

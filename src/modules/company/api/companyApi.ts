@@ -57,4 +57,14 @@ export const companyApi = {
     const form = buildCompanyCreateUpstreamForm(dto);
     return http.post<CompanyCreateResponse>('/api/company/create', form);
   },
+
+  sendPhoneOtp: (identifier: string, phone: string) =>
+    http.post<null>('/api/company/otp/send', { identifier, phone }),
+
+  verifyPhoneOtp: (identifier: string, phone: string, otp: string) =>
+    http.post<{ verified: boolean }>('/api/company/otp/verify', {
+      identifier,
+      phone,
+      otp,
+    }),
 };

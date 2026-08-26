@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { AppleIcon } from './AppleIcon';
+import { BellIcon } from './BellIcon';
 import { CalendarIcon } from './CalendarIcon';
 import { EmailIcon } from './EmailIcon';
 import { GooglePlayIcon } from './GooglePlayIcon';
@@ -32,6 +33,8 @@ export function getUtilityIconByKey(iconKey?: string | null): ReactNode {
       return <HeartPulseIcon />;
     case 'icon-safety-bundle':
       return <SafetyBundleIcon />;
+    case 'bell-solid-full':
+      return <BellIcon />;
     default:
       return null;
   }

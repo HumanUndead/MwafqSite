@@ -133,9 +133,7 @@ export function B2BServicesMobileView({
         height: `calc(100dvh + ${dist + MOBILE_LAST_CHAPTER_DWELL_PX}px)`,
       }}
     >
-      <div
-        className='sticky top-0 z-[5] flex h-dvh flex-col overflow-y-auto bg-[#f4f4f6] px-4 pb-8 pt-6 sm:px-6'
-      >
+      <div className='sticky top-0 z-[5] flex h-dvh flex-col overflow-y-auto bg-[#f4f4f6] px-4 pb-8 pt-6 sm:px-6'>
         <MobileServicesContent
           cards={cards}
           dashboard={dashboard}

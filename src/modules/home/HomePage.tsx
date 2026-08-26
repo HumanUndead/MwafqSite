@@ -80,6 +80,12 @@ export async function HomePage({ locale }: Props) {
   const content = await getHomePageContent(locale);
   const rtl = isRtl(locale);
 
+  console.log('Booking section content (category 164):', content.booking);
+  console.log('Hero section content:', content.hero);
+  console.log('Steps section content (ابدأ الحجز CTA, category 165):', content.steps);
+  console.log('App section content (category 166):', content.app);
+  console.log('Academy section content (category 167):', content.academy);
+
   return (
     <main className='bg-[#eeeeef] text-[#1e2364]'>
       {content.sectionOrder.map((key) =>

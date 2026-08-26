@@ -1,10 +1,6 @@
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
-import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
-import {
-  getServiceGroupDetailPath,
-} from '@/modules/services/booking.shared';
-import { getTranslation } from '@/shared/lib/getTranslationName';
+import { localizePathname } from '@/i18n/routing';
 import type { HomeServicesContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
 import { ServicesScrollList } from './ServicesScrollList';
@@ -20,35 +16,8 @@ interface Props {
   content: HomeServicesContent;
 }
 
-interface ServiceCardData {
-  id: number;
-  title: string;
-}
-
-async function getServiceCards(locale: Locale): Promise<ServiceCardData[]> {
-  try {
-    const page = await fetchServiceGroupsList({
-      pageNumber: 1,
-      pageSize: 6,
-    });
-
-    return (page.data ?? [])
-      .map((group) => {
-        const translation = getTranslation(group.translations, locale);
-        return {
-          id: group.id,
-          title: translation?.name?.trim() ?? '',
-        };
-      })
-      .filter((card) => card.title.length > 0)
-      .slice(0, 6);
-  } catch {
-    return [];
-  }
-}
-
-export async function ServicesSection({ locale, content }: Props) {
-  const services = await getServiceCards(locale);
+export function ServicesSection({ locale, content }: Props) {
+  const services = content.items.filter((item) => item.title.length > 0);
   const rtl = isRtl(locale);
 
   return (
@@ -61,7 +30,12 @@ export async function ServicesSection({ locale, content }: Props) {
         <div className='mb-10 md:mb-15 flex flex-wrap items-end justify-start gap-12.5'>
           <div className=''>
             <Eyebrow>{content.eyebrow}</Eyebrow>
-            <h2 className={cn('font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]', marketingSectionHeadingClass)}>
+            <h2
+              className={cn(
+                'font-extrabold leading-[1.08] tracking-[-1.6px] text-[#1e2364]',
+                marketingSectionHeadingClass
+              )}
+            >
               {content.title}
               {content.accent && (
                 <>
@@ -72,16 +46,21 @@ export async function ServicesSection({ locale, content }: Props) {
                 </>
               )}
             </h2>
-            <p className={cn('mt-4 max-w-135 leading-[1.6] text-[#6b7196] min-[1920px]:max-w-none', marketingLeadTextClass)}>
+            <p
+              className={cn(
+                'mt-4 max-w-135 leading-[1.6] text-[#6b7196] min-[1920px]:max-w-none',
+                marketingLeadTextClass
+              )}
+            >
               {content.body}
             </p>
           </div>
         </div>
 
         <ServicesScrollList
-          services={services.map((service) => ({
-            id: service.id,
-            href: getServiceGroupDetailPath(locale, service.id),
+          services={services.map((service, index) => ({
+            id: index,
+            href: service.path ? localizePathname(service.path, locale) : '#',
             title: service.title,
           }))}
           rtl={rtl}

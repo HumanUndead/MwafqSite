@@ -28,8 +28,11 @@ import {
   ACADEMY_ARTICLE_RANKS,
   APP_ARTICLE_RANKS,
   APP_CHILD_CATEGORY_IDS,
+  APP_HEADER_FALLBACK_ARTICLE_ID,
+  APP_SCHEDULE_LABEL_ARTICLE_ID,
   BOOKING_ARTICLE_RANKS,
   BOOKING_CHILD_CATEGORY_IDS,
+  BOOKING_OPTIONS_ARTICLE_RANKS,
   COMPANIES_CATEGORY_ID,
   FINAL_CTA_ARTICLE_RANKS,
   FINAL_CTA_CATEGORY_ID,
@@ -136,6 +139,15 @@ function getArticleByRank(
   );
 }
 
+function getArticleById(
+  category: RecursiveArticleCategoryDto | null,
+  id: number
+): RecursiveArticleDto | null {
+  return (
+    getVisibleArticles(category).find((article) => article.id === id) ?? null
+  );
+}
+
 function getArticleTranslation(
   article: RecursiveArticleDto,
   langId: number
@@ -228,7 +240,11 @@ function parseRatingMeta(extraInfo: string | null): {
   ratingValue: string;
   ratingCount: string;
 } {
-  const [ratingValue = '', ratingCount = ''] = (extraInfo ?? '').split('|');
+  if (!extraInfo || !extraInfo.includes('|')) {
+    return { ratingValue: '', ratingCount: '' };
+  }
+
+  const [ratingValue = '', ratingCount = ''] = extraInfo.split('|');
 
   return {
     ratingValue: ratingValue.trim(),
@@ -391,6 +407,7 @@ function mapHeroContent(
       liveBookings: '',
       liveBookingsLabel: '',
       floatingCards: [],
+      statsHeading: '',
     };
   }
 
@@ -406,11 +423,18 @@ function mapHeroContent(
     wordsCategory,
     HERO_WORDS_ARTICLE_RANKS.content
   );
+  const statsHeadingArticle = getArticleByRank(
+    wordsCategory,
+    HERO_WORDS_ARTICLE_RANKS.statsHeading
+  );
   const contentTranslation = contentArticle
     ? getArticleTranslation(contentArticle, langId)
     : null;
   const rotatingWordsTranslation = rotatingWordsArticle
     ? getArticleTranslation(rotatingWordsArticle, langId)
+    : null;
+  const statsHeadingTranslation = statsHeadingArticle
+    ? getArticleTranslation(statsHeadingArticle, langId)
     : null;
   const actionsCategory = getChildCategoryById(
     heroCategory,
@@ -492,6 +516,7 @@ function mapHeroContent(
         detail: trimToNull(translation.description) ?? '',
       };
     }),
+    statsHeading: trimToNull(statsHeadingTranslation?.name) ?? '',
   };
 }
 
@@ -590,6 +615,8 @@ function mapBookingContent(
         search: { label: '', path: null },
       },
       examOptions: [],
+      optionsTitle: '',
+      optionsNote: '',
     };
   }
 
@@ -612,6 +639,13 @@ function mapBookingContent(
   const cityField = getArticleByRank(fieldsCategory, 20);
   const dateField = getArticleByRank(fieldsCategory, 30);
   const searchField = getArticleByRank(fieldsCategory, 40);
+  const optionsHeaderArticle = getArticleByRank(
+    optionsCategory,
+    BOOKING_OPTIONS_ARTICLE_RANKS.header
+  );
+  const optionsHeaderTranslation = optionsHeaderArticle
+    ? getArticleTranslation(optionsHeaderArticle, langId)
+    : null;
 
   return {
     eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
@@ -656,9 +690,13 @@ function mapBookingContent(
       },
       search: toActionContent(searchField, langId),
     },
-    examOptions: getVisibleArticles(optionsCategory).map(
-      (article) => getArticleTranslation(article, langId).name
-    ),
+    examOptions: getVisibleArticles(optionsCategory)
+      .filter(
+        (article) => article.rank !== BOOKING_OPTIONS_ARTICLE_RANKS.header
+      )
+      .map((article) => getArticleTranslation(article, langId).name),
+    optionsTitle: trimToNull(optionsHeaderTranslation?.name) ?? '',
+    optionsNote: trimToNull(optionsHeaderTranslation?.shortDescription) ?? '',
   };
 }
 
@@ -775,14 +813,16 @@ function mapAppContent(
     };
   }
 
-  const headerArticle = getArticleByRank(appCategory, APP_ARTICLE_RANKS.header);
-  const headerTranslation = headerArticle
-    ? getArticleTranslation(headerArticle, langId)
-    : null;
   const scheduleCategory = getChildCategoryById(
     appCategory,
     APP_CHILD_CATEGORY_IDS.schedule
   );
+  const headerArticle =
+    getArticleByRank(appCategory, APP_ARTICLE_RANKS.header) ??
+    getArticleById(scheduleCategory, APP_HEADER_FALLBACK_ARTICLE_ID);
+  const headerTranslation = headerArticle
+    ? getArticleTranslation(headerArticle, langId)
+    : null;
   const statusCategory = getChildCategoryById(
     appCategory,
     APP_CHILD_CATEGORY_IDS.status
@@ -800,7 +840,10 @@ function mapAppContent(
     APP_CHILD_CATEGORY_IDS.links
   );
 
-  const scheduleHeader = getArticleByRank(scheduleCategory, 1);
+  const scheduleHeader = getArticleById(
+    scheduleCategory,
+    APP_SCHEDULE_LABEL_ARTICLE_ID
+  );
   const scheduleAppointment = getArticleByRank(scheduleCategory, 10);
   const statusHeader = getArticleByRank(statusCategory, 1);
   const reportsHeader = getArticleByRank(reportsCategory, 1);
@@ -927,7 +970,14 @@ function mapAcademyContent(
   );
 
   if (!academyCategory) {
-    return { eyebrow: '', title: '', accent: '', ctaLabel: '', items: [] };
+    return {
+      eyebrow: '',
+      title: '',
+      accent: '',
+      body: '',
+      ctaLabel: '',
+      items: [],
+    };
   }
 
   const headerArticle = getArticleByRank(
@@ -946,6 +996,7 @@ function mapAcademyContent(
     eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
     title: trimToNull(headerTranslation?.name) ?? '',
     accent: trimToNull(headerTranslation?.extraInfo) ?? '',
+    body: trimToNull(headerTranslation?.description) ?? '',
     ctaLabel:
       trimToNull(
         ctaArticle ? getArticleTranslation(ctaArticle, langId).name : null
@@ -959,7 +1010,10 @@ function mapAcademyContent(
         return {
           title: trimToNull(translation.name) ?? '',
           detail: trimToNull(translation.description) ?? '',
-          meta: trimToNull(translation.shortDescription) ?? '',
+          meta:
+            trimToNull(translation.shortDescription) ??
+            (rating.ratingValue ? '' : trimToNull(translation.extraInfo)) ??
+            '',
           ratingValue: rating.ratingValue,
           ratingCount: rating.ratingCount,
           path: trimToNull(article.path),

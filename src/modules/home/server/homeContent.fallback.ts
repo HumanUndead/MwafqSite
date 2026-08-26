@@ -57,6 +57,7 @@ export function buildEmptyHomeFallback(): HomePageContent {
       liveBookings: '',
       liveBookingsLabel: '',
       floatingCards: [],
+      statsHeading: '',
     },
     companies: {
       items: [],
@@ -84,6 +85,8 @@ export function buildEmptyHomeFallback(): HomePageContent {
         search: { ...EMPTY_ACTION },
       },
       examOptions: [],
+      optionsTitle: '',
+      optionsNote: '',
     },
     steps: {
       eyebrow: '',
@@ -111,6 +114,7 @@ export function buildEmptyHomeFallback(): HomePageContent {
       eyebrow: '',
       title: '',
       accent: '',
+      body: '',
       ctaLabel: '',
       items: [],
     },

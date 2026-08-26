@@ -278,39 +278,46 @@ export function HeroSection({ locale, content, isRtl }: Props) {
           </div>
         </div>
 
-        <div
-          className={cn(
-            'relative z-10 order-3 grid grid-cols-3 gap-4 max-[599px]:mt-8 sm:gap-7.5',
-            'min-[600px]:max-lg:mt-10 lg:mt-12 lg:self-start [@media(max-height:740px)]:lg:mt-8!',
-            'min-[1920px]:mt-14 min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-12',
-            'min-[2560px]:gap-20'
-          )}
-        >
-          {content.stats.map((stat) => (
-            <div key={stat.label} className='text-center'>
-              <div
-                className={cn(
-                  'inline-flex items-baseline gap-0.5 whitespace-nowrap font-extrabold leading-none tracking-[-1px] text-[#1e2364]',
-                  marketingInlineStatValueClass
-                )}
-              >
-                <CountUp
-                  value={stat.value}
-                  suffix={stat.suffix}
-                  decimals={stat.decimals}
-                  trigger='mount'
-                />
+        <div className='relative z-10 order-3 max-[599px]:mt-8 min-[600px]:max-lg:mt-10 lg:mt-12 lg:self-start [@media(max-height:740px)]:lg:mt-8! min-[1920px]:mt-14'>
+          {content.statsHeading ? (
+            <p className='mb-4 text-[17px] font-extrabold tracking-[-0.3px] text-[#1e2364] sm:mb-5 sm:text-[19px] min-[1920px]:text-[22px]'>
+              {content.statsHeading}
+            </p>
+          ) : null}
+
+          <div
+            className={cn(
+              'grid grid-cols-3 gap-4 sm:gap-7.5',
+              'min-[2000px]:flex min-[2000px]:w-fit min-[2000px]:max-w-full min-[2000px]:flex-wrap min-[2000px]:justify-start min-[2000px]:gap-12',
+              'min-[2560px]:gap-20'
+            )}
+          >
+            {content.stats.map((stat) => (
+              <div key={stat.label} className='text-center'>
+                <div
+                  className={cn(
+                    'inline-flex items-baseline gap-0.5 whitespace-nowrap font-extrabold leading-none tracking-[-1px] text-[#1e2364]',
+                    marketingInlineStatValueClass
+                  )}
+                >
+                  <CountUp
+                    value={stat.value}
+                    suffix={stat.suffix}
+                    decimals={stat.decimals}
+                    trigger='mount'
+                  />
+                </div>
+                <p
+                  className={cn(
+                    'mt-1 font-medium tracking-[0.4px] text-[#6b7196]',
+                    marketingInlineStatLabelClass
+                  )}
+                >
+                  {stat.label}
+                </p>
               </div>
-              <p
-                className={cn(
-                  'mt-1 font-medium tracking-[0.4px] text-[#6b7196]',
-                  marketingInlineStatLabelClass
-                )}
-              >
-                {stat.label}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

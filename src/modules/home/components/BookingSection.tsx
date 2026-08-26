@@ -164,60 +164,56 @@ function SearchSelect({
   );
 }
 
-function ServiceSelect({
-  locale,
+function ExamSelect({
+  examOptions,
   value,
-  onChange,
+  onSelect,
   placeholder,
   disabled = false,
 }: {
-  locale: Locale;
+  examOptions: string[];
   value: string;
-  onChange: (option: Option) => void;
+  onSelect: (option: Option) => void;
   placeholder: string;
   disabled?: boolean;
 }) {
   const [query, setQuery] = useState('');
-  const [options, setOptions] = useState<ServiceGroupItem[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (disabled) return;
-
-    const controller = new AbortController();
-    const timer = setTimeout(() => {
-      setLoading(true);
-      const params = new URLSearchParams({ culture: locale });
-      if (query.trim()) params.set('search', query.trim());
-
-      fetch(`/api/services/service-groups?${params.toString()}`, {
-        signal: controller.signal,
-      })
-        .then((res) => res.json())
-        .then((payload) => {
-          if (payload.success) setOptions(payload.data);
-        })
-        .catch(() => {})
-        .finally(() => setLoading(false));
-    }, 300);
-
-    return () => {
-      controller.abort();
-      clearTimeout(timer);
-    };
-  }, [locale, query, disabled]);
+  const term = query.trim().toLowerCase();
+  const options: Option[] = examOptions
+    .filter((name) => (term ? name.toLowerCase().includes(term) : true))
+    .map((name) => ({ id: name, name }));
 
   return (
     <SearchSelect
       value={value}
-      onSelect={onChange}
+      onSelect={onSelect}
       placeholder={placeholder}
       options={options}
-      loading={loading}
+      loading={false}
       query={query}
       onQueryChange={setQuery}
       disabled={disabled}
     />
+  );
+}
+
+async function resolveServiceGroupByName(
+  name: string,
+  locale: Locale
+): Promise<ServiceGroupItem | null> {
+  const params = new URLSearchParams({ culture: locale, search: name });
+  const response = await fetch(
+    `/api/services/service-groups?${params.toString()}`
+  );
+  const payload = await response.json();
+
+  if (!payload.success) return null;
+
+  const items: ServiceGroupItem[] = payload.data;
+  return (
+    items.find((item) => item.name.trim() === name.trim()) ??
+    items[0] ??
+    null
   );
 }
 
@@ -286,16 +282,27 @@ interface BookingSectionProps {
 
 export function BookingSection({ locale, content }: BookingSectionProps) {
   const router = useRouter();
-  const [service, setService] = useState<Option | null>(null);
+  const [exam, setExam] = useState<Option | null>(null);
   const [city, setCity] = useState('');
+  const [resolving, setResolving] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const hasCity = city.trim().length > 0;
-  const canSearch = hasCity && service !== null;
+  const canSearch = hasCity && exam !== null && !resolving;
+  const title = content.title || content.optionsTitle;
+  const eyebrow = content.eyebrow || content.optionsNote;
 
-  const handleSearch = () => {
-    if (!service) return;
-    router.push(getServiceGroupBuyPath(locale, Number(service.id)));
+  const handleSearch = async () => {
+    if (!exam) return;
+    setResolving(true);
+    try {
+      const serviceGroup = await resolveServiceGroupByName(exam.name, locale);
+      if (serviceGroup) {
+        router.push(getServiceGroupBuyPath(locale, serviceGroup.id));
+      }
+    } finally {
+      setResolving(false);
+    }
   };
 
   return (
@@ -303,7 +310,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
       id='booking'
       className='relative z-50 mt-10 px-4 pb-5 pt-2 md:mt-14 md:px-7 md:pb-6 md:pt-2 min-[1024px]:pb-0 min-[1024px]:-mb-3'
     >
-      <BookingMascot locale={locale} cardRef={cardRef} label={content.title} />
+      <BookingMascot locale={locale} cardRef={cardRef} label={title} />
 
       <div className='relative mx-auto w-full min-w-0 max-w-275 min-[1920px]:max-w-[min(72vw,1280px)]'>
         <div
@@ -325,11 +332,11 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
           />
 
           <span className="relative left-1/2 mb-3.5 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-[rgba(0,222,201,0.16)] px-3.5 py-1.25 text-[12px] font-bold uppercase tracking-[2px] text-[#007a6e] before:h-1.75 before:w-1.75 before:rounded-full before:bg-[#00dec9] before:shadow-[0_0_8px_#00dec9] before:content-['']">
-            {content.eyebrow}
+            {eyebrow}
           </span>
 
           <h2 className='relative z-10 mx-auto mb-6 text-[clamp(24px,3.4vw,42px)] font-extrabold leading-[1.1] tracking-[-1.2px] text-[#1e2364] md:mb-9'>
-            {content.title}
+            {title}
           </h2>
 
           <form
@@ -351,10 +358,10 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
               <label className='mb-2 ml-1.5 block rtl:text-right text-[13px] font-bold text-[#1e2364]'>
                 {content.fields.exam.label}
               </label>
-              <ServiceSelect
-                locale={locale}
-                value={service?.name ?? ''}
-                onChange={setService}
+              <ExamSelect
+                examOptions={content.examOptions}
+                value={exam?.name ?? ''}
+                onSelect={setExam}
                 placeholder={content.fields.exam.placeholder}
                 disabled={!hasCity}
               />

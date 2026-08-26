@@ -187,28 +187,45 @@ export function useCompanyCreate(onSuccess?: () => void) {
     [verifiedPhone]
   );
 
-  const openOtpModal = useCallback(() => {
+  const openOtpModal = useCallback(async () => {
     setOtpError(null);
     setIsOtpModalOpen(true);
-  }, []);
+    try {
+      await companyApi.sendPhoneOtp(identifierRef.current, form.contactPhone);
+    } catch (err) {
+      setOtpError(err instanceof ApiError ? err.message : company.create.error);
+    }
+  }, [form.contactPhone, company.create.error]);
 
   const closeOtpModal = useCallback(() => {
     setIsOtpModalOpen(false);
   }, []);
 
-  // TODO: OTP verification API is not available yet — statically accept any code.
+  const resendOtp = useCallback(async () => {
+    await companyApi.sendPhoneOtp(identifierRef.current, form.contactPhone);
+  }, [form.contactPhone]);
+
   const verifyOtp = useCallback(
-    async (_otp: string) => {
+    async (otp: string) => {
       setOtpLoading(true);
       setOtpError(null);
-      await Promise.resolve();
-      setIsPhoneVerified(true);
-      setVerifiedPhone(form.contactPhone);
-      setOtpLoading(false);
-      setIsOtpModalOpen(false);
-      toast.success(company.verify.verified);
+      try {
+        await companyApi.verifyPhoneOtp(
+          identifierRef.current,
+          form.contactPhone,
+          otp
+        );
+        setIsPhoneVerified(true);
+        setVerifiedPhone(form.contactPhone);
+        setIsOtpModalOpen(false);
+        toast.success(company.verify.verified);
+      } catch (err) {
+        setOtpError(err instanceof ApiError ? err.message : company.create.error);
+      } finally {
+        setOtpLoading(false);
+      }
     },
-    [form.contactPhone, company.verify.verified]
+    [form.contactPhone, company.verify.verified, company.create.error]
   );
 
   const toggleTag = useCallback((id: string) => {
@@ -337,6 +354,7 @@ export function useCompanyCreate(onSuccess?: () => void) {
       isPhoneVerified: isPhoneVerified && verifiedPhone === form.contactPhone,
       openOtpModal,
       closeOtpModal,
+      resendOtp,
       verifyOtp,
     },
   };
