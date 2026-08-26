@@ -1,4 +1,4 @@
-const DEFAULT_MWAFQ_API_BASE_URL = 'https://devapi.mwafq.com/';
+const DEFAULT_MWAFQ_API_BASE_URL = 'https://stagingapi.mwafq.com/';
 
 /** SSO project registration page — "Register with Mwafq" destination. */
 export const MWAFQ_REGISTER_URL =
@@ -17,10 +17,9 @@ export const SITE_URL = (
  * Mwafq infrastructure origin (external SSO). No `/api` suffix — paths include it.
  * SERVER-ONLY, required — must be set in the environment (no default).
  */
-export const INFRASTRUCTURE_URL = (process.env.INFRASTRUCTURE_URL ?? '').replace(
-  /\/$/,
-  ''
-);
+export const INFRASTRUCTURE_URL = (
+  process.env.INFRASTRUCTURE_URL ?? ''
+).replace(/\/$/, '');
 
 /**
  * OAuth client id for the external SSO flow. SERVER-ONLY — never expose via
