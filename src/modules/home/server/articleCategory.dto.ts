@@ -44,3 +44,25 @@ export interface RecursiveArticleCategoryResponse {
   value: RecursiveArticleCategoryDto;
   isSuccess: boolean;
 }
+
+export interface ArticleCategoryListItemDto {
+  id: number;
+  rank: number;
+  published: boolean;
+  parentId: number | null;
+  image: string | null;
+  hasChild: boolean;
+  hasArticle: boolean;
+  translations: ArticleCategoryTranslationDto[];
+}
+
+export interface ArticleCategoryListResponse {
+  value: {
+    pageNumber: number;
+    pageSize: number;
+    totalRecords: number;
+    totalPages: number;
+    data: ArticleCategoryListItemDto[];
+  };
+  isSuccess: boolean;
+}

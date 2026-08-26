@@ -52,9 +52,12 @@ import {
   STATS_ARTICLE_RANKS,
   STEPS_ARTICLE_RANKS,
   STEPS_CHILD_CATEGORY_IDS,
+  STEPS_HEADING_PARENT_CATEGORY_ID,
   WHY_ARTICLE_RANKS,
 } from './homeContent.config';
 import type {
+  ArticleCategoryListItemDto,
+  ArticleCategoryListResponse,
   RecursiveArticleCategoryDto,
   RecursiveArticleCategoryResponse,
   RecursiveArticleDto,
@@ -700,9 +703,15 @@ function mapBookingContent(
   };
 }
 
+interface StepsHeadingOverride {
+  eyebrow: string;
+  title: string;
+}
+
 function mapStepsContent(
   rootCategory: RecursiveArticleCategoryDto | null,
-  langId: number
+  langId: number,
+  headingOverride: StepsHeadingOverride | null
 ): HomeStepsContent {
   const stepsCategory = getChildCategoryById(
     rootCategory,
@@ -711,8 +720,8 @@ function mapStepsContent(
 
   if (!stepsCategory) {
     return {
-      eyebrow: '',
-      title: '',
+      eyebrow: headingOverride?.eyebrow ?? '',
+      title: headingOverride?.title ?? '',
       highlight: '',
       cta: { label: '', path: null },
       items: [],
@@ -734,9 +743,15 @@ function mapStepsContent(
   ];
 
   return {
-    eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
-    title: trimToNull(headerTranslation?.name) ?? '',
-    highlight: trimToNull(headerTranslation?.extraInfo) ?? '',
+    eyebrow:
+      headingOverride?.eyebrow ??
+      trimToNull(headerTranslation?.shortDescription) ??
+      '',
+    title:
+      headingOverride?.title ?? trimToNull(headerTranslation?.name) ?? '',
+    highlight: headingOverride
+      ? ''
+      : trimToNull(headerTranslation?.extraInfo) ?? '',
     cta: toActionContent(ctaArticle, langId),
     items: stepCategories.map((category) => {
       const contentArticle = getArticleByRank(category, 1);
@@ -1316,6 +1331,7 @@ function buildSectionOrder(
 function buildHomePageContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   companiesCategory: RecursiveArticleCategoryDto | null,
+  stepsHeadingOverride: StepsHeadingOverride | null,
   langId: number
 ): HomePageContent {
   return {
@@ -1324,7 +1340,7 @@ function buildHomePageContent(
     services: mapServicesContent(rootCategory, langId),
     why: mapWhyContent(rootCategory, langId),
     booking: mapBookingContent(rootCategory, langId),
-    steps: mapStepsContent(rootCategory, langId),
+    steps: mapStepsContent(rootCategory, langId, stepsHeadingOverride),
     app: mapAppContent(rootCategory, langId),
     academy: mapAcademyContent(rootCategory, langId),
     stats: mapStatsContent(rootCategory, langId),
@@ -1406,14 +1422,81 @@ const fetchHomeContentTree = cache(
   }
 );
 
+const fetchStepsHeadingCategory = cache(
+  async (locale: Locale): Promise<ArticleCategoryListItemDto | null> => {
+    const endpoint = new URL(
+      '/api/General/ArticleCategory/List',
+      HOME_CONTENT_API_BASE_URL
+    );
+
+    endpoint.searchParams.set(
+      'parentId',
+      String(STEPS_HEADING_PARENT_CATEGORY_ID)
+    );
+    endpoint.searchParams.set('langId', String(localeToLangId[locale]));
+    endpoint.searchParams.set('culture', locale);
+
+    try {
+      const response = await fetch(endpoint.toString(), {
+        cache: 'force-cache',
+        next: {
+          revalidate: HOME_CONTENT_REVALIDATE_SECONDS,
+          tags: [HOME_CONTENT_CACHE_TAG],
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const payload = (await response.json()) as ArticleCategoryListResponse;
+
+      if (!payload.isSuccess) {
+        return null;
+      }
+
+      return payload.value.data[0] ?? null;
+    } catch (error) {
+      console.error('Failed to load steps heading category', error);
+      return null;
+    }
+  }
+);
+
+function mapStepsHeadingOverride(
+  category: ArticleCategoryListItemDto | null,
+  langId: number
+): StepsHeadingOverride | null {
+  if (!category) {
+    return null;
+  }
+
+  const translation = getPreferredTranslation(category.translations, langId);
+  const eyebrow = trimToNull(translation?.name);
+  const title = trimToNull(stripHtmlToNull(translation?.description));
+
+  if (!eyebrow && !title) {
+    return null;
+  }
+
+  return { eyebrow: eyebrow ?? '', title: title ?? '' };
+}
+
 export const getHomePageContent = cache(
   async (locale: Locale): Promise<HomePageContent> => {
     const langId = localeToLangId[locale];
-    const [rootCategory, companiesCategory] = await Promise.all([
-      fetchHomeContentTree(),
-      fetchCompaniesCategoryTree(),
-    ]);
+    const [rootCategory, companiesCategory, stepsHeadingCategory] =
+      await Promise.all([
+        fetchHomeContentTree(),
+        fetchCompaniesCategoryTree(),
+        fetchStepsHeadingCategory(locale),
+      ]);
 
-    return buildHomePageContent(rootCategory, companiesCategory, langId);
+    return buildHomePageContent(
+      rootCategory,
+      companiesCategory,
+      mapStepsHeadingOverride(stepsHeadingCategory, langId),
+      langId
+    );
   }
 );
