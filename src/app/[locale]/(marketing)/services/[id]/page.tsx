@@ -8,9 +8,9 @@ import { ROUTES } from '@/shared/constants/routes';
 import { getCurrentUser } from '@/modules/auth/server/authSession';
 import { ServiceGroupDetailsView } from '@/modules/services/ServiceGroupDetailsView';
 import {
-  fetchServiceGroupById,
-  fetchServiceGroupsList,
-} from '@/modules/auth/server/ServiceGroupService';
+  fetchServiceById,
+  fetchServicesList,
+} from '@/modules/services/server/servicesService';
 import { FetchResponseError } from '@/shared/lib/fetchWithErrorHandling.shared';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 import { SITE_URL } from '@/shared/constants/config';
@@ -30,15 +30,13 @@ export async function generateMetadata({
 
   const locale = await GetLocale();
   const langId = localeToLangId[locale];
-  const serviceGroup = await fetchServiceGroupById(numericId, {
-    isMandatoryTest: true,
-  }).catch((error) => {
+  const service = await fetchServiceById(numericId).catch((error) => {
     if (error instanceof FetchResponseError) notFound();
     throw error;
   });
   const translation =
-    serviceGroup.translations.find((t) => t.langId === langId) ??
-    serviceGroup.translations[0];
+    service.translations.find((t) => t.langId === langId) ??
+    service.translations[0];
   if (!translation) notFound();
 
   return buildPageMetadata({
@@ -56,25 +54,23 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
     notFound();
   }
 
-  const [locale, serviceGroup, relatedList, currentUser] = await Promise.all([
+  const [locale, service, relatedList, currentUser] = await Promise.all([
     GetLocale(),
-    fetchServiceGroupById(numericId, { isMandatoryTest: true }).catch(
-      (error) => {
-        if (error instanceof FetchResponseError) notFound();
-        throw error;
-      }
-    ),
-    fetchServiceGroupsList({ pageNumber: 1, pageSize: 6 }),
+    fetchServiceById(numericId).catch((error) => {
+      if (error instanceof FetchResponseError) notFound();
+      throw error;
+    }),
+    fetchServicesList({ pageNumber: 1, pageSize: 6 }),
     getCurrentUser(),
   ]);
 
   const langId = localeToLangId[locale];
   const relatedPackages = relatedList.data
-    .filter((pkg) => pkg.id !== numericId)
+    .filter((item) => item.id !== numericId)
     .slice(0, 5);
   const translation =
-    serviceGroup.translations.find((t) => t.langId === langId) ??
-    serviceGroup.translations[0];
+    service.translations.find((t) => t.langId === langId) ??
+    service.translations[0];
 
   if (!translation) {
     notFound();
@@ -94,7 +90,7 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
       <ServiceGroupDetailsView
         locale={locale}
         langId={langId}
-        serviceGroup={serviceGroup}
+        service={service}
         relatedPackages={relatedPackages}
         isAuthenticated={currentUser !== null}
       />

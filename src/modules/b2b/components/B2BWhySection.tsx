@@ -1,10 +1,25 @@
-import type { Dictionary } from '@/locales/types';
+import type { ComponentType } from 'react';
+import type { WhyContent } from '@/modules/b2b/server/b2bContentService';
 
 interface Props {
-  content: Dictionary['b2b']['why'];
+  content: WhyContent;
 }
 
-const icons = [BulkIcon, ReportsIcon, ShieldIcon, RefreshIcon];
+const ICON_BY_KEYWORD: [pattern: RegExp, icon: ComponentType][] = [
+  [/automat|time/i, RefreshIcon],
+  [/complian|legal|regulat/i, ShieldIcon],
+  [/cost|expense|operational/i, CostIcon],
+  [/report|dashboard|analytic/i, ReportsIcon],
+  [/bulk|booking/i, BulkIcon],
+  [/pocket|download|pdf/i, ReportsIcon],
+  [/certif|reliab|trust/i, ShieldIcon],
+  [/flexib|manage|control/i, RefreshIcon],
+];
+
+function getWhyIcon(key: string): ComponentType {
+  const match = ICON_BY_KEYWORD.find(([pattern]) => pattern.test(key));
+  return match?.[1] ?? BulkIcon;
+}
 
 export function B2BWhySection({ content }: Props) {
   return (
@@ -20,11 +35,11 @@ export function B2BWhySection({ content }: Props) {
         </div>
 
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-          {content.items.map((item, index) => {
-            const Icon = icons[index] ?? BulkIcon;
+          {content.items.map((item) => {
+            const Icon = getWhyIcon(item.key);
             return (
               <article
-                key={item.title}
+                key={item.key}
                 className='grid grid-cols-[auto_1fr] grid-rows-[44px_auto] items-center gap-x-3.5 gap-y-3.5 overflow-hidden rounded-[28px] border-2 border-[#e5e7f0] bg-white px-7 pb-6 pt-5'
               >
                 <span
@@ -64,6 +79,28 @@ function BulkIcon() {
       <path d='M9 11V6a3 3 0 0 1 6 0v5' />
       <path d='M5 11h14l-1 9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z' />
       <line x1='12' y1='15' x2='12' y2='18' />
+    </svg>
+  );
+}
+
+function CostIcon() {
+  return (
+    <svg
+      width='28'
+      height='28'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      aria-hidden='true'
+    >
+      <circle cx='12' cy='12' r='9' />
+      <path d='M14.5 9.5a2.5 2.5 0 0 0-2.5-1.5h-.5a2 2 0 0 0 0 4h1a2 2 0 0 1 0 4h-.5a2.5 2.5 0 0 1-2.5-1.5' />
+      <line x1='12' y1='6' x2='12' y2='7.6' />
+      <line x1='12' y1='16.4' x2='12' y2='18' />
+      <path d='M17 15l-2 2-2-2' />
     </svg>
   );
 }

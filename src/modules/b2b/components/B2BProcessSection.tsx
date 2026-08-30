@@ -18,81 +18,15 @@ interface Stage {
   description: string;
 }
 
-interface JourneyContent {
-  eyebrow: string;
-  title: string;
-  stages: Stage[];
+const ARABIC_DIGITS = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+function toArabicDigits(value: string): string {
+  return value.replace(/[0-9]/g, (d) => ARABIC_DIGITS[Number(d)] ?? d);
 }
 
-const CONTENT: Record<string, JourneyContent> = {
-  en: {
-    eyebrow: 'How it works',
-    title: 'The Mwafq Journey',
-    stages: [
-      {
-        number: '01',
-        title: 'Register',
-        description:
-          'Create your account and verify your CR number in minutes.',
-      },
-      {
-        number: '02',
-        title: 'Set Up Your Team',
-        description:
-          'Upload employees, assign departments, and set approval workflows.',
-      },
-      {
-        number: '03',
-        title: 'Book Services',
-        description:
-          'Book exams, certifications, and visa checks in one click.',
-      },
-      {
-        number: '04',
-        title: 'Track in Real Time',
-        description:
-          'Track every request live with instant alerts and one dashboard.',
-      },
-      {
-        number: '05',
-        title: 'Scale with Confidence',
-        description:
-          'Mwafq scales with you — auto renewals, analytics, and compliance reports.',
-      },
-    ],
-  },
-  ar: {
-    eyebrow: 'كيف يعمل',
-    title: 'رحلة موفق',
-    stages: [
-      {
-        number: '٠١',
-        title: 'التسجيل',
-        description: 'أنشئ حسابك وتحقق من رقم السجل التجاري في دقائق.',
-      },
-      {
-        number: '٠٢',
-        title: 'إعداد فريقك',
-        description: 'أضف الموظفين وحدد الأقسام وأتمت مسارات الموافقة.',
-      },
-      {
-        number: '٠٣',
-        title: 'حجز الخدمات',
-        description: 'احجز الفحوصات والشهادات وفحوصات التأشيرة بنقرة واحدة.',
-      },
-      {
-        number: '٠٤',
-        title: 'التتبع اللحظي',
-        description: 'تابع كل طلب مباشرةً مع تنبيهات فورية ولوحة تحكم واحدة.',
-      },
-      {
-        number: '٠٥',
-        title: 'التوسع بثقة',
-        description:
-          'موفق تنمو معك — تجديد تلقائي وتحليلات وتقارير امتثال جاهزة.',
-      },
-    ],
-  },
+const SECTION_META: Record<string, { eyebrow: string; title: string }> = {
+  en: { eyebrow: 'How it works', title: 'The Mwafq Journey' },
+  ar: { eyebrow: 'كيف يعمل', title: 'رحلة موفق' },
 };
 
 const STAGE_META = [
@@ -589,7 +523,7 @@ function StageLabelContent({
           marginBottom: isFinale ? '8px' : '6px',
         }}
       >
-        {stage.number} / 0{total}
+        {stage.number} / {rtl ? toArabicDigits(`0${total}`) : `0${total}`}
       </span>
       <span
         style={{
@@ -642,12 +576,17 @@ function StageLabelContent({
 
 interface Props {
   locale: Locale;
+  stages: Stage[];
 }
 
-export function B2BProcessSection({ locale }: Props) {
+export function B2BProcessSection({ locale, stages: cmsStages }: Props) {
   const rtl = isRtl(locale);
-  const content = CONTENT[locale as keyof typeof CONTENT] ?? CONTENT.en;
-  const { eyebrow, title, stages } = content;
+  const meta = SECTION_META[locale] ?? SECTION_META.en!;
+  const { eyebrow, title } = meta;
+  const stages = cmsStages.map((stage) => ({
+    ...stage,
+    number: rtl ? toArabicDigits(stage.number) : stage.number,
+  }));
 
   const sectionRef = useRef<HTMLElement>(null);
   const pathRef = useRef<SVGPathElement>(null);

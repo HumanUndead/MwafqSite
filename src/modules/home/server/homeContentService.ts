@@ -64,6 +64,8 @@ import type {
 } from './articleCategory.dto';
 import { stripHtmlToNull } from '@/shared/lib/text';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
+import { fetchServicesList } from '@/modules/services/server/servicesService';
+import type { ServiceListItem } from '@/modules/services/types/services.types';
 
 interface CmsTranslationSnapshot {
   name: string;
@@ -523,18 +525,31 @@ function mapHeroContent(
   };
 }
 
+function mapServiceListItemToHomeItem(
+  service: ServiceListItem,
+  langId: number
+): HomeServicesContent['items'][number] {
+  const translation =
+    service.translations.find((tr) => tr.langId === langId) ??
+    service.translations[0];
+
+  return {
+    title: trimToNull(translation?.name) ?? '',
+    description: stripHtmlToNull(translation?.description) ?? '',
+    path: `/services/${service.id}`,
+    iconKey: null,
+  };
+}
+
 function mapServicesContent(
   rootCategory: RecursiveArticleCategoryDto | null,
+  services: ServiceListItem[],
   langId: number
 ): HomeServicesContent {
   const servicesCategory = getChildCategoryById(
     rootCategory,
     HOME_SECTION_IDS.services
   );
-
-  if (!servicesCategory) {
-    return { eyebrow: '', title: '', accent: '', body: '', items: [] };
-  }
 
   const headerArticle = getArticleByRank(
     servicesCategory,
@@ -543,18 +558,10 @@ function mapServicesContent(
   const headerTranslation = headerArticle
     ? getArticleTranslation(headerArticle, langId)
     : null;
-  const items = getVisibleArticles(servicesCategory)
-    .filter((article) => article.rank !== SERVICES_ARTICLE_RANKS.header)
-    .map((article) => {
-      const translation = getArticleTranslation(article, langId);
 
-      return {
-        title: trimToNull(translation.name) ?? '',
-        description: trimToNull(translation.description) ?? '',
-        path: trimToNull(article.path),
-        iconKey: extractIconKey(article.image),
-      };
-    });
+  const items = services
+    .map((service) => mapServiceListItemToHomeItem(service, langId))
+    .filter((item) => item.title.length > 0);
 
   return {
     eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
@@ -747,11 +754,10 @@ function mapStepsContent(
       headingOverride?.eyebrow ??
       trimToNull(headerTranslation?.shortDescription) ??
       '',
-    title:
-      headingOverride?.title ?? trimToNull(headerTranslation?.name) ?? '',
+    title: headingOverride?.title ?? trimToNull(headerTranslation?.name) ?? '',
     highlight: headingOverride
       ? ''
-      : trimToNull(headerTranslation?.extraInfo) ?? '',
+      : (trimToNull(headerTranslation?.extraInfo) ?? ''),
     cta: toActionContent(ctaArticle, langId),
     items: stepCategories.map((category) => {
       const contentArticle = getArticleByRank(category, 1);
@@ -1332,12 +1338,13 @@ function buildHomePageContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   companiesCategory: RecursiveArticleCategoryDto | null,
   stepsHeadingOverride: StepsHeadingOverride | null,
+  services: ServiceListItem[],
   langId: number
 ): HomePageContent {
   return {
     hero: mapHeroContent(rootCategory, langId),
     companies: mapCompaniesContent(companiesCategory),
-    services: mapServicesContent(rootCategory, langId),
+    services: mapServicesContent(rootCategory, services, langId),
     why: mapWhyContent(rootCategory, langId),
     booking: mapBookingContent(rootCategory, langId),
     steps: mapStepsContent(rootCategory, langId, stepsHeadingOverride),
@@ -1422,6 +1429,19 @@ const fetchHomeContentTree = cache(
   }
 );
 
+const fetchHomeServices = cache(async (): Promise<ServiceListItem[]> => {
+  try {
+    const page = await fetchServicesList({
+      Target: 2,
+      OrderDirection: true,
+    });
+    return page.data;
+  } catch (error) {
+    console.error('Failed to load home services', error);
+    return [];
+  }
+});
+
 const fetchStepsHeadingCategory = cache(
   async (locale: Locale): Promise<ArticleCategoryListItemDto | null> => {
     const endpoint = new URL(
@@ -1482,20 +1502,30 @@ function mapStepsHeadingOverride(
   return { eyebrow: eyebrow ?? '', title: title ?? '' };
 }
 
+export const getHomeStatsContent = cache(
+  async (locale: Locale): Promise<HomeStatsContent> => {
+    const langId = localeToLangId[locale];
+    const rootCategory = await fetchHomeContentTree();
+    return mapStatsContent(rootCategory, langId);
+  }
+);
+
 export const getHomePageContent = cache(
   async (locale: Locale): Promise<HomePageContent> => {
     const langId = localeToLangId[locale];
-    const [rootCategory, companiesCategory, stepsHeadingCategory] =
+    const [rootCategory, companiesCategory, stepsHeadingCategory, services] =
       await Promise.all([
         fetchHomeContentTree(),
         fetchCompaniesCategoryTree(),
         fetchStepsHeadingCategory(locale),
+        fetchHomeServices(),
       ]);
 
     return buildHomePageContent(
       rootCategory,
       companiesCategory,
       mapStepsHeadingOverride(stepsHeadingCategory, langId),
+      services,
       langId
     );
   }

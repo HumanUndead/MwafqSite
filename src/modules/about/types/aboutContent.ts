@@ -54,9 +54,15 @@ export interface AboutWhyContent {
   items: AboutListItemContent[];
 }
 
+export interface AboutValueItemContent {
+  key: string;
+  title: string;
+  body: string;
+}
+
 export interface AboutValuesContent {
   eyebrow: string;
-  items: AboutListItemContent[];
+  items: AboutValueItemContent[];
 }
 
 export interface AboutMilestoneItemContent {

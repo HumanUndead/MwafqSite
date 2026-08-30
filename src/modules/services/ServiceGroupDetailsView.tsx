@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 import type { Locale } from '@/i18n/config';
 import { getTranslations } from '@/i18n/server';
@@ -7,10 +7,7 @@ import { getLocalizedRoute } from '@/i18n/routing';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { marketingAlignedShellClass } from '@/shared/components/marketing';
 import { ROUTES } from '@/shared/constants/routes';
-import type {
-  ServiceGroupDetail,
-  ServiceGroupListItem,
-} from '@/modules/auth/serviceGroup.types';
+import type { ServiceDetail, ServiceListItem } from './types/services.types';
 // import { getServiceGroupBuyPath } from '@/modules/services/booking.shared';
 import { PackageCard } from './components/PackageCard';
 // import { BuyNowButton } from './components/BuyNowButton';
@@ -30,15 +27,15 @@ function plainTextFromHtml(value: string): string {
 export type ServiceGroupDetailsViewProps = {
   locale: Locale;
   langId: number;
-  serviceGroup: ServiceGroupDetail;
-  relatedPackages: ServiceGroupListItem[];
+  service: ServiceDetail;
+  relatedPackages: ServiceListItem[];
   isAuthenticated: boolean;
 };
 
 export async function ServiceGroupDetailsView({
   locale,
   langId,
-  serviceGroup,
+  service,
   relatedPackages,
   isAuthenticated,
 }: ServiceGroupDetailsViewProps) {
@@ -48,22 +45,17 @@ export async function ServiceGroupDetailsView({
   const servicesHref = getLocalizedRoute(locale, ROUTES.SERVICES);
 
   const translation =
-    serviceGroup.translations.find((tr) => tr.langId === langId) ??
-    serviceGroup.translations[0];
+    service.translations.find((tr) => tr.langId === langId) ??
+    service.translations[0];
 
   const title = translation?.name?.trim() ?? '';
   const descriptionHtml = translation?.description?.trim() ?? '';
   const descriptionPlain = plainTextFromHtml(descriptionHtml);
 
-  // const buyPath = getServiceGroupBuyPath(locale, serviceGroup.id);
+  // const buyPath = getServiceGroupBuyPath(locale, service.id);
   // const buyHref = isAuthenticated
   //   ? buyPath
   //   : `${getLocalizedRoute(locale, ROUTES.LOGIN)}?redirect=${encodeURIComponent(buyPath)}`;
-
-  const requirements =
-    serviceGroup.requirements?.filter((r) => r.langId === langId) ?? [];
-
-  const conditions = serviceGroup.conditions ?? [];
 
   return (
     <div className='overflow-x-clip text-[#1e2364]'>
@@ -99,60 +91,6 @@ export async function ServiceGroupDetailsView({
                   ) : (
                     <div className='mb-10' />
                   )}
-
-                  <div className='mb-9'>
-                    <h2 className='mb-3 text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                      {t.requirementsTitle.replace('{{name}}', title)}
-                    </h2>
-                    {requirements.length > 0 ? (
-                      <ul className='flex flex-col gap-2.5'>
-                        {requirements.map((item) => (
-                          <li
-                            key={item.id}
-                            className='flex items-start gap-3.5 text-[14.5px] leading-[1.55] text-[#4a4f78]'
-                          >
-                            <ArrowRight
-                              className='mt-0.5 size-[14px] shrink-0 text-[#00a8f1] rtl:rotate-180'
-                              strokeWidth={2.4}
-                              aria-hidden
-                            />
-                            <span>{item.requirement}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className='text-[14.5px] text-[#6b7196]'>
-                        {t.emptyRequirements}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <h2 className='mb-3 text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                      {t.conditionsTitle}
-                    </h2>
-                    {conditions.length > 0 ? (
-                      <ul className='flex flex-col gap-2.5'>
-                        {conditions.map((item) => (
-                          <li
-                            key={item.id}
-                            className='flex items-start gap-3.5 text-[14.5px] leading-[1.55] text-[#4a4f78]'
-                          >
-                            <ArrowRight
-                              className='mt-0.5 size-[14px] shrink-0 text-[#00a8f1] rtl:rotate-180'
-                              strokeWidth={2.4}
-                              aria-hidden
-                            />
-                            <span>{item.value}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className='text-[14.5px] text-[#6b7196]'>
-                        {t.emptyConditions}
-                      </p>
-                    )}
-                  </div>
                 </div>
               </ScrollReveal>
 
@@ -163,12 +101,11 @@ export async function ServiceGroupDetailsView({
                 className='mx-auto min-w-0 w-full max-w-[380px] lg:mx-0 lg:max-w-full'
               >
                 <div className='flex min-w-0 flex-col gap-4'>
-                  <div className='relative aspect-4/3 w-full overflow-hidden rounded-[8px] border-2 border-[#e5e7f0]'>
+                  <div className='relative aspect-4/3 w-full overflow-hidden rounded-[8px] border-2 border-[#e5e7f0] bg-white'>
                     <ServiceGroupDetailImage
-                      icon={serviceGroup.icon}
-                      serviceGroupId={serviceGroup.id}
+                      icon={service.icon}
                       alt={title}
-                      className='object-cover object-center'
+                      className='object-contain object-center p-20'
                       priority
                       sizes='(max-width: 1024px) 380px, 420px'
                     />

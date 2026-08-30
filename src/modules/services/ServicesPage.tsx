@@ -12,14 +12,14 @@ import {
 } from '@/shared/lib/scrollToSection';
 import { FilterSection } from './components/FilterSection';
 import { PackageCard } from './components/PackageCard';
-import type { ServiceGroupListItem } from '../auth/serviceGroup.types';
+import type { ServiceListItem } from './types/services.types';
 
 function scrollToPackagesGrid() {
   scrollToSectionIdWithRetries('packagesGrid');
 }
 
 type ServicesPageProps = {
-  services: ServiceGroupListItem[];
+  services: ServiceListItem[];
   page: number;
   totalPages: number;
 };

@@ -14,6 +14,11 @@ export const B2B_SECTION_RANKS = {
   finalCta: 6,
 } as const;
 
+// Article added later in the CMS (hero category, rank 55) that overrides
+// the hero eyebrow/heading/lead: name -> eyebrow, extraInfo -> heading,
+// shortDescription -> lead.
+export const B2B_HERO_OVERRIDE_ARTICLE_ID = 535;
+
 // Hero articles (in category rank 1):
 //   rank 1  → eyebrow (description field contains HTML — strip tags)
 //   rank 2  → headingLead (name) / headingAccent (extraInfo, linked)
@@ -51,11 +56,17 @@ export const B2B_WHY_ARTICLE_RANKS = {
 // Services articles (in category rank 3):
 //   rank 1 → header: titleLead (name), titleAccent (extraInfo)
 //   rank 2 → body (name)
-//   rank 3+ → items: title (name), body (shortDescription)
+//   ranks 3/4/6 → older thin placeholder items, no longer used
+//   ranks 123/323/3211 → current products (ids 536/538/537), selected by id
 export const B2B_SERVICES_ARTICLE_RANKS = {
   header: 1,
   body: 2,
 } as const;
+
+// Current product articles, in display order — matches the 3 hand-written
+// fallback items in en.ts/ar.ts (Medical Examinations, Occupational Health,
+// Academy Training).
+export const B2B_SERVICES_PRODUCT_ARTICLE_IDS = [536, 538, 537] as const;
 
 // Steps articles (in category rank 4):
 //   rank 1 → header: titleLead (name), titleAccent (shortDescription, linked)
@@ -91,3 +102,27 @@ export const B2B_BUSINESS_ARTICLE_IDS = {
   primaryAction: 401,
   secondaryAction: 402,
 } as const;
+
+// Journey section (category 216, "journey" — direct child of root 140).
+// 5 stage articles; CMS ranks are not sequential, so display order is fixed
+// by explicit article id: name -> title, extraInfo -> body.
+export const B2B_JOURNEY_CATEGORY_ID = 216;
+
+export const B2B_JOURNEY_STAGE_ARTICLE_IDS = [
+  539, // Registration & Governance
+  540, // Set Up the Organizational Structure
+  541, // Booking & Service Issuance
+  542, // Real-Time Tracking & Control
+  543, // Scale with Confidence
+] as const;
+
+// FAQ section (category 217, "faq" — direct child of root 140).
+// 3 question articles; CMS ranks are not sequential, so display order is
+// fixed by explicit article id: name -> question, shortDescription -> answer.
+export const B2B_FAQ_CATEGORY_ID = 217;
+
+export const B2B_FAQ_ARTICLE_IDS = [
+  544, // How to Register
+  545, // Payment Method
+  546, // How to Receive Results
+] as const;

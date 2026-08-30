@@ -3,7 +3,7 @@ import { hasLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 import { buildPageMetadata } from '@/i18n/seo';
 import { ROUTES } from '@/shared/constants/routes';
-import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
+import { fetchServicesList } from '@/modules/services/server/servicesService';
 import { ServicesPage } from '@/modules/services';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 
@@ -32,10 +32,11 @@ export default async function ServicesRoute({
 }) {
   const { search, page } = await searchParams;
 
-  const data = await fetchServiceGroupsList({
+  const data = await fetchServicesList({
     pageNumber: page ? +page : 1,
     pageSize: 8,
-    search,
+    Target: 2,
+    Search: search,
   });
 
   return (

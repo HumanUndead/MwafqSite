@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { locales } from '@/i18n/config';
 import { ROUTES } from '@/shared/constants/routes';
 import { SITE_URL } from '@/shared/constants/config';
-import { fetchServiceGroupsList } from '@/modules/auth/server/ServiceGroupService';
+import { fetchServicesList } from '@/modules/services/server/servicesService';
 // import { fetchCourseList } from '@/modules/auth/server/courseListService';
 
 // Courses section is hidden from the frontend for now — re-add ROUTES.COURSES
@@ -40,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   try {
-    const services = await fetchServiceGroupsList({
+    const services = await fetchServicesList({
       pageNumber: 1,
       pageSize: 200,
     });

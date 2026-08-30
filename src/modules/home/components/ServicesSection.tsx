@@ -1,7 +1,11 @@
+import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
-import { localizePathname } from '@/i18n/routing';
+import { getLocalizedRoute, localizePathname } from '@/i18n/routing';
+import { getTranslations } from '@/i18n/server';
+import { ROUTES } from '@/shared/constants/routes';
 import type { HomeServicesContent } from '../home.types';
+import { ArrowIcon } from '@/shared/components/icons/home';
 import { Eyebrow } from './Eyebrow';
 import { ServicesScrollList } from './ServicesScrollList';
 import { cn } from '@/shared/lib/cn';
@@ -11,14 +15,19 @@ import {
   marketingSectionShellClass,
 } from '@/shared/components/marketing/marketingLayout';
 
+const MAX_HOME_SERVICES = 6;
+
 interface Props {
   locale: Locale;
   content: HomeServicesContent;
 }
 
-export function ServicesSection({ locale, content }: Props) {
-  const services = content.items.filter((item) => item.title.length > 0);
+export async function ServicesSection({ locale, content }: Props) {
+  const services = content.items
+    .filter((item) => item.title.length > 0)
+    .slice(0, MAX_HOME_SERVICES);
   const rtl = isRtl(locale);
+  const t = await getTranslations('services');
 
   return (
     <section id='services' className='relative px-4 py-10 md:py-16 md:px-7'>
@@ -27,7 +36,7 @@ export function ServicesSection({ locale, content }: Props) {
         aria-hidden='true'
       />
       <div className={cn('relative', marketingSectionShellClass)}>
-        <div className='mb-10 md:mb-15 flex flex-wrap items-end justify-start gap-12.5'>
+        <div className='mb-10 md:mb-15 flex flex-wrap items-end justify-between gap-12.5'>
           <div className=''>
             <Eyebrow>{content.eyebrow}</Eyebrow>
             <h2
@@ -55,6 +64,19 @@ export function ServicesSection({ locale, content }: Props) {
               {content.body}
             </p>
           </div>
+
+          <Link
+            href={getLocalizedRoute(locale, ROUTES.SERVICES)}
+            className='group inline-flex shrink-0 items-center gap-2 text-[15px] font-bold text-[#1e2364] transition-colors hover:text-[#00a8f1]'
+          >
+            {t.viewAll}
+            <ArrowIcon
+              className={cn(
+                'size-4 transition-transform group-hover:translate-x-1',
+                rtl && 'rotate-180 group-hover:-translate-x-1'
+              )}
+            />
+          </Link>
         </div>
 
         <ServicesScrollList

@@ -33,15 +33,8 @@ export const ABOUT_MV_ARTICLE_RANKS = {
   vision: 2,
 } as const;
 
-// Stats (category rank 4):
-//   CMS provides only the label (name field). Value & suffix are static.
-//   CMS article ranks are 2–5; rank 1 is absent.
-export const ABOUT_STATS_CONFIG = [
-  { rank: 5, value: 50000, suffix: 'K+' }, // Completed Exams
-  { rank: 2, value: 100, suffix: '+' }, // Clinics & Labs
-  { rank: 3, value: 10, suffix: '+' }, // Certified Partners
-  { rank: 4, value: 500, suffix: '+' }, // Corporate Users
-] as const;
+// Stats (category rank 4): unused — the About page reuses Home's stats
+// content (see getHomeStatsContent) so both pages stay in sync.
 
 // What we do (category rank 5):
 //   rank 1 → eyebrow (name), titleLead (extraInfo)

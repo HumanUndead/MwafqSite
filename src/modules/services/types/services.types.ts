@@ -1,22 +1,55 @@
-export type ExamType =
-  | 'pre-employment'
-  | 'driving'
-  | 'residency'
-  | 'visa'
-  | 'general';
+import type {
+  PaginatedResponse,
+  UpstreamApiResponse,
+} from '@/shared/types/api.types';
 
-export type PackageTag = 'popular' | 'new';
+export interface ServiceTranslation {
+  id: number;
+  serviceId: number;
+  name: string;
+  description: string | null;
+  langId: number;
+}
 
-export type ServicePackage = {
-  id: string;
-  titleEn: string;
-  titleAr: string;
-  descEn: string;
-  descAr: string;
-  duration: number;
-  tests: number;
+export interface ServicePricing {
+  id: number;
+  serviceId: number;
+  serviceProviderClassificationId: number;
+  serviceProviderClassificationName: string;
   price: number;
-  tag?: PackageTag;
-  image: string;
-  examType: ExamType;
+}
+
+/** A single service item from `GET /api/Service/Service/List`. */
+export interface ServiceListItem {
+  id: number;
+  serviceTypeId: number;
+  isAvailable: boolean;
+  type: number;
+  sla: number;
+  serviceTime: number;
+  isRequired: boolean;
+  isRequiredAttachment: boolean;
+  isMandatoryTest: boolean;
+  status: boolean;
+  target: number;
+  icon: string;
+  isFeatured: boolean;
+  translations: ServiceTranslation[];
+  serviceType: string;
+  pricing: ServicePricing[];
+}
+
+export type ServiceDetail = ServiceListItem;
+
+export type ServiceListPage = PaginatedResponse<ServiceListItem>;
+
+export type ServiceListResponse = UpstreamApiResponse<ServiceListPage>;
+
+export type FetchServiceListParams = {
+  pageNumber?: number;
+  pageSize?: number;
+  Target?: number;
+  Search?: string;
+  OrderBy?: string;
+  OrderDirection?: boolean;
 };

@@ -13,6 +13,7 @@ export const ROUTES = {
   PERSONAL_INFO: '/personal-info',
   ACADEMY_COURSES: '/academy-courses',
   MY_RESERVATIONS: '/my-reservations',
+  PRIVACY_POLICY: '/privacy-policy',
 } as const;
 
 export type Route = (typeof ROUTES)[keyof typeof ROUTES];

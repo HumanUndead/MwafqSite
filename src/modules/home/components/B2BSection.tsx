@@ -3,10 +3,7 @@ import type { HomeBusinessContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
 import { HomeActionLinks } from './HomeActionLinks';
 import { cn } from '@/shared/lib/cn';
-import {
-  marketingSectionHeadingClass,
-  marketingSectionShellClass,
-} from '@/shared/components/marketing/marketingLayout';
+import { marketingSectionShellClass } from '@/shared/components/marketing/marketingLayout';
 
 interface Props {
   locale: Locale;
@@ -45,7 +42,7 @@ export function B2BSection({ locale, content }: Props) {
         <div className='grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20'>
           <div className='min-w-0'>
             <Eyebrow dark>{content.eyebrow}</Eyebrow>
-            <h2 className={cn('mb-7 font-extrabold leading-[1.08] tracking-[-0.1px] sm:tracking-[-1.6px] text-white', marketingSectionHeadingClass)}>
+            <h2 className='mb-7 text-[clamp(24px,3.2vw,40px)] font-extrabold leading-[1.08] tracking-[-0.1px] text-white sm:tracking-[-1.2px]'>
               {content.title}
               {content.accent ? (
                 <>

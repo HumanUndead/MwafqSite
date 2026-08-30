@@ -1,5 +1,8 @@
 export { CareIcon } from './CareIcon';
+export { CollaborationIcon } from './CollaborationIcon';
 export { CornerBracketIcon } from './CornerBracketIcon';
+export { FlexibilityIcon } from './FlexibilityIcon';
+export { InnovationIcon } from './InnovationIcon';
 export { MissionIcon } from './MissionIcon';
 export { SpeedIcon } from './SpeedIcon';
 export { TrustIcon } from './TrustIcon';

@@ -1,0 +1,2064 @@
+{
+  "id": 140,
+  "rank": 2,
+  "published": true,
+  "parentId": null,
+  "image": "",
+  "hasChild": true,
+  "hasArticle": false,
+  "translations": [
+    {
+      "id": 253,
+      "articleCategoryId": 140,
+      "name": "B2B Portal",
+      "description": "<p>b2b portal</p>",
+      "langId": 1
+    },
+    {
+      "id": 254,
+      "articleCategoryId": 140,
+      "name": "b2b portal",
+      "description": "<p>b2b portal&nbsp;</p>",
+      "langId": 2
+    }
+  ],
+  "children": [
+    {
+      "id": 141,
+      "rank": 1,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 255,
+          "articleCategoryId": 141,
+          "name": "b2b Hero",
+          "description": "<p>b2b Hero</p>",
+          "langId": 1
+        },
+        {
+          "id": 256,
+          "articleCategoryId": 141,
+          "name": "b2b Hero",
+          "description": "<p>b2b Hero</p>",
+          "langId": 2
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 294,
+          "articleCategoryId": 141,
+          "rank": 1,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 577,
+              "articleId": 294,
+              "langId": 1,
+              "name": "title",
+              "description": "<p><span class=\"mb-2 inline-block text-[clamp(40px,5.6vw,72px)] font-extrabold leading-none tracking-[-2.2px] text-[#1e2364]\">B2B Portal</span></p>",
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 578,
+              "articleId": 294,
+              "langId": 2,
+              "name": "title",
+              "description": "<p><span class=\"mb-2 inline-block text-[clamp(40px,5.6vw,72px)] font-extrabold leading-none tracking-[-2.2px] text-[#1e2364]\">بوابة الشركات</span></p>",
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 295,
+          "articleCategoryId": 141,
+          "rank": 2,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 579,
+              "articleId": 295,
+              "langId": 1,
+              "name": "Corporate Solutions",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 580,
+              "articleId": 295,
+              "langId": 2,
+              "name": "حلول الشركات",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 296,
+          "articleCategoryId": 141,
+          "rank": 3,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 581,
+              "articleId": 296,
+              "langId": 1,
+              "name": "Book residency, driving-license, municipality, and occupational-health exams from one trusted platform, then receive your certified result directly on your phone.",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 582,
+              "articleId": 296,
+              "langId": 2,
+              "name": "أدر فحوصات فريقك الطبية بسهولة. توفر منصة موافق لمديري الموارد البشرية أداة موحّدة للحجوزات الجماعية ومتابعة الموظفين واستلام التقارير المعتمدة.",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 297,
+          "articleCategoryId": 141,
+          "rank": 4,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 583,
+              "articleId": 297,
+              "langId": 1,
+              "name": "Register Your Company",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 584,
+              "articleId": 297,
+              "langId": 2,
+              "name": "سجّل شركتك",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 298,
+          "articleCategoryId": 141,
+          "rank": 5,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 585,
+              "articleId": 298,
+              "langId": 1,
+              "name": "Contact Sales",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 586,
+              "articleId": 298,
+              "langId": 2,
+              "name": "تواصل مع المبيعات",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 299,
+          "articleCategoryId": 141,
+          "rank": 6,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 587,
+              "articleId": 299,
+              "langId": 1,
+              "name": "Welcome,",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 588,
+              "articleId": 299,
+              "langId": 2,
+              "name": "مرحبًا،",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 300,
+          "articleCategoryId": 141,
+          "rank": 7,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 589,
+              "articleId": 300,
+              "langId": 1,
+              "name": "Acme HR",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 590,
+              "articleId": 300,
+              "langId": 2,
+              "name": "فريق الموارد",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 301,
+          "articleCategoryId": 141,
+          "rank": 8,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 591,
+              "articleId": 301,
+              "langId": 1,
+              "name": "Bulk Book Exam",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "For your team"
+            },
+            {
+              "id": 592,
+              "articleId": 301,
+              "langId": 2,
+              "name": "احجز للجميع",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "لفريقك"
+            }
+          ]
+        },
+        {
+          "id": 302,
+          "articleCategoryId": 141,
+          "rank": 9,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 593,
+              "articleId": 302,
+              "langId": 1,
+              "name": "Team status",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 594,
+              "articleId": 302,
+              "langId": 2,
+              "name": "حالة الفريق",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 303,
+          "articleCategoryId": 141,
+          "rank": 10,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 595,
+              "articleId": 303,
+              "langId": 1,
+              "name": "Ahmad S.",
+              "description": null,
+              "shortDescription": "Done",
+              "extraInfo": "Driving"
+            },
+            {
+              "id": 596,
+              "articleId": 303,
+              "langId": 2,
+              "name": "أحمد ص.",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 304,
+          "articleCategoryId": 141,
+          "rank": 11,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 597,
+              "articleId": 304,
+              "langId": 1,
+              "name": "Fatima R.",
+              "description": null,
+              "shortDescription": "Active",
+              "extraInfo": "Residency"
+            },
+            {
+              "id": 598,
+              "articleId": 304,
+              "langId": 2,
+              "name": "فاطمة ر.",
+              "description": null,
+              "shortDescription": "جارٍ",
+              "extraInfo": "إقامة"
+            }
+          ]
+        },
+        {
+          "id": 305,
+          "articleCategoryId": 141,
+          "rank": 12,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 599,
+              "articleId": 305,
+              "langId": 1,
+              "name": "Khalid M.",
+              "description": null,
+              "shortDescription": "Wait",
+              "extraInfo": "Municipality"
+            },
+            {
+              "id": 600,
+              "articleId": 305,
+              "langId": 2,
+              "name": "خالد م.",
+              "description": null,
+              "shortDescription": "انتظار",
+              "extraInfo": "بلدية"
+            }
+          ]
+        },
+        {
+          "id": 306,
+          "articleCategoryId": 141,
+          "rank": 13,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 601,
+              "articleId": 306,
+              "langId": 1,
+              "name": "Noura A.",
+              "description": null,
+              "shortDescription": "Wait",
+              "extraInfo": "Occupational"
+            },
+            {
+              "id": 602,
+              "articleId": 306,
+              "langId": 2,
+              "name": "نورة ع.",
+              "description": null,
+              "shortDescription": "انتظار",
+              "extraInfo": "مهنية"
+            }
+          ]
+        },
+        {
+          "id": 307,
+          "articleCategoryId": 141,
+          "rank": 14,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 603,
+              "articleId": 307,
+              "langId": 1,
+              "name": "Bulk Book",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "One click · 142 emps."
+            },
+            {
+              "id": 604,
+              "articleId": 307,
+              "langId": 2,
+              "name": "حجز جماعي",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "بنقرة واحدة · 142 موظفًا"
+            }
+          ]
+        },
+        {
+          "id": 308,
+          "articleCategoryId": 141,
+          "rank": 15,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 605,
+              "articleId": 308,
+              "langId": 1,
+              "name": "247 Employees",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "Tracked live"
+            },
+            {
+              "id": 606,
+              "articleId": 308,
+              "langId": 2,
+              "name": "247 موظفًا",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "متابعة لحظية"
+            }
+          ]
+        },
+        {
+          "id": 309,
+          "articleCategoryId": 141,
+          "rank": 16,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 607,
+              "articleId": 309,
+              "langId": 1,
+              "name": "Reports Ready",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "PDF · 1-click"
+            },
+            {
+              "id": 608,
+              "articleId": 309,
+              "langId": 2,
+              "name": "التقارير جاهزة",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "PDF · بنقرة"
+            }
+          ]
+        },
+        {
+          "id": 535,
+          "articleCategoryId": 141,
+          "rank": 55,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1059,
+              "articleId": 535,
+              "langId": 1,
+              "name": "Mwafq Business",
+              "description": null,
+              "shortDescription": "Automate your employees’ medical examinations in minutes. An integrated system for managing appointments, tracking reports and results, and sending smart reminders for periodic examinations—all at standardized prices through a nationwide network of accredited medical centers.",
+              "extraInfo": "A Comprehensive System for Businesses and Human Resources Management"
+            },
+            {
+              "id": 1060,
+              "articleId": 535,
+              "langId": 2,
+              "name": "موفق أعمال",
+              "description": null,
+              "shortDescription": "أتمتة الفحوصات الطبية لموظفيك في دقائق. نظام  متكامل لإدارة الحجوزات، وتتبع التقارير والنتائج، والتذكير الذكي بمواعيد الفحوصات الدورية ؛ بأسعار موحدة وشبكة مراكز طبية معتمدة حول المملكة.",
+              "extraInfo": "نظام متكامل للشركات وإدارة الموارد البشرية"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 142,
+      "rank": 2,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 257,
+          "articleCategoryId": 142,
+          "name": "b2b why",
+          "description": "<p>b2b why&nbsp;</p>",
+          "langId": 1
+        },
+        {
+          "id": 258,
+          "articleCategoryId": 142,
+          "name": "b2b why",
+          "description": "<p>b2b why&nbsp;</p>",
+          "langId": 2
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 310,
+          "articleCategoryId": 142,
+          "rank": 1,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 609,
+              "articleId": 310,
+              "langId": 1,
+              "name": "Why Mwafq Business Matters for Companies",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 610,
+              "articleId": 310,
+              "langId": 2,
+              "name": "لماذا موفق أعمال مهم للشركات",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 311,
+          "articleCategoryId": 142,
+          "rank": 2,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 611,
+              "articleId": 311,
+              "langId": 1,
+              "name": "Digital Reports & Unified Dashboard",
+              "description": null,
+              "shortDescription": "We provide management with a smart dashboard to centrally monitor employees’ medical examination status, results, and occupational health indicators in real time, with customizable administrative access permissions.",
+              "extraInfo": null
+            },
+            {
+              "id": 612,
+              "articleId": 311,
+              "langId": 2,
+              "name": "تقارير رقمية ولوحة تحكم موحدة",
+              "description": null,
+              "shortDescription": "نمنح الإدارة شاشة تحكم ذكية لمتابعة حالة فحوصات الموظفين ، النتائج ، مؤشرات الصحة المهنية فوريا وبشكل مركزي، مع قابلية تخصيص الصلاحيات الادارية.",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 312,
+          "articleCategoryId": 142,
+          "rank": 3,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 613,
+              "articleId": 312,
+              "langId": 1,
+              "name": "Reduced Operational Costs",
+              "description": null,
+              "shortDescription": "We protect your business continuity and reduce the costs associated with inconsistent examination and training programs across centers, branches, and cities throughout the Kingdom.",
+              "extraInfo": null
+            },
+            {
+              "id": 614,
+              "articleId": 312,
+              "langId": 2,
+              "name": "خفض التكاليف التشغيلية",
+              "description": null,
+              "shortDescription": "نحمي استمرارية اعمالك ونقلل من تكلفة الفحوصات وبرامج التدريب المتذبذبة في المراكز بين الفروع وبين مختلف مدن المملكة.",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 313,
+          "articleCategoryId": 142,
+          "rank": 4,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 615,
+              "articleId": 313,
+              "langId": 1,
+              "name": "100% Guaranteed Legal Compliance",
+              "description": null,
+              "shortDescription": "We integrate your company with an employee records management system to streamline renewals and provide timely alerts for the expiration dates of licenses and training certificates.",
+              "extraInfo": null
+            },
+            {
+              "id": 616,
+              "articleId": 313,
+              "langId": 2,
+              "name": "امتثال قانوني مضمون 100%",
+              "description": null,
+              "shortDescription": "نعمل على ربط شركتك بنظام إدارة ملفات الموظفين ، للتجديد والحصول على تنبيهات توضح تواريخ انتهاء صلاحيات الرخص والشهادات التدريبية.",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 314,
+          "articleCategoryId": 142,
+          "rank": 5,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 617,
+              "articleId": 314,
+              "langId": 1,
+              "name": "Full Automation & Time Savings",
+              "description": null,
+              "shortDescription": "We eliminate the burden of manual follow-ups and traditional Excel files by scheduling and automating your employees’ medical examinations through a smart tracking system that ensures operational efficiency and quality.",
+              "extraInfo": null
+            },
+            {
+              "id": 618,
+              "articleId": 314,
+              "langId": 2,
+              "name": "أتمتة كاملة وتوفير للوقت",
+              "description": null,
+              "shortDescription": "نحمل عنك عبء المتابعة اليدوية وملفات الإكسل التقليدية بجدولة وأتمتة الفحوصات الطبية لموظفيك عبر نظام متابعة ذكية تضمن جودة العمل.",
+              "extraInfo": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 143,
+      "rank": 3,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 259,
+          "articleCategoryId": 143,
+          "name": "b2b services",
+          "description": "<p>b2b services</p>",
+          "langId": 1
+        },
+        {
+          "id": 260,
+          "articleCategoryId": 143,
+          "name": "b2b services",
+          "description": "<p>b2b services</p>",
+          "langId": 2
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 315,
+          "articleCategoryId": 143,
+          "rank": 1,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 619,
+              "articleId": 315,
+              "langId": 1,
+              "name": "Our",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "Product"
+            },
+            {
+              "id": 620,
+              "articleId": 315,
+              "langId": 2,
+              "name": "منتجاتنا",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 316,
+          "articleCategoryId": 143,
+          "rank": 2,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 621,
+              "articleId": 316,
+              "langId": 1,
+              "name": "Organise residency exams, work permit renewals, and municipality health certificates for large numbers of employees at the same time.",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 622,
+              "articleId": 316,
+              "langId": 2,
+              "name": "نظّم فحوصات الإقامة وتجديد تصاريح العمل والشهادات الصحية (البلدية) لأعداد كبيرة من الموظفين في وقتٍ واحد.",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 317,
+          "articleCategoryId": 143,
+          "rank": 3,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 623,
+              "articleId": 317,
+              "langId": 1,
+              "name": "Examinations",
+              "description": null,
+              "shortDescription": "Run full pre-hire medical checks for new joiners across multiple clinics in one coordinated flow.",
+              "extraInfo": null
+            },
+            {
+              "id": 624,
+              "articleId": 317,
+              "langId": 2,
+              "name": "فحوصات",
+              "description": null,
+              "shortDescription": "أجرِ الفحوصات الطبية الشاملة للمعيّنين الجدد عبر عدة عيادات في تدفق موحّد.",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 318,
+          "articleCategoryId": 143,
+          "rank": 4,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 625,
+              "articleId": 318,
+              "langId": 1,
+              "name": "Academy",
+              "description": null,
+              "shortDescription": "Iqama medical screenings for your entire workforce, recognised by the Ministry of Health across KSA.",
+              "extraInfo": null
+            },
+            {
+              "id": 626,
+              "articleId": 318,
+              "langId": 2,
+              "name": "أكاديمية",
+              "description": "<article class=\"relative flex flex-col items-start overflow-hidden rounded-[18px] border-2 border-[#1e2364] bg-[#1e2364] px-8 pb-8 pt-9 sm:px-9\">\r\n<p class=\"relative z-[2] text-[14px] leading-[1.6] text-white/80\">فحوصات الإقامة الطبية لكل القوى العاملة، معتمدة من وزارة الصحة في جميع أنحاء المملكة.</p>\r\n</article>",
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 320,
+          "articleCategoryId": 143,
+          "rank": 6,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 629,
+              "articleId": 320,
+              "langId": 1,
+              "name": "Occupational Health",
+              "description": null,
+              "shortDescription": "Workplace health screenings and periodic checks trusted by 500+ employers across the Kingdom.",
+              "extraInfo": null
+            },
+            {
+              "id": 630,
+              "articleId": 320,
+              "langId": 2,
+              "name": "الصحة المهنية",
+              "description": null,
+              "shortDescription": "فحوصات الصحة المهنية والدورية الموثوقة لدى أكثر من 500 صاحب عمل في المملكة.",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 536,
+          "articleCategoryId": 143,
+          "rank": 123,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1061,
+              "articleId": 536,
+              "langId": 1,
+              "name": "Medical Examinations",
+              "description": "<p><strong>Automated Booking &amp; Follow-Up</strong></p>\r\n<p><strong>Unified Reporting Platform</strong></p>\r\n<p><strong>Direct Integration with Medical Centers</strong></p>\r\n<p><strong>Smart Tracking &amp; License Expiry Alerts</strong></p>",
+              "shortDescription": null,
+              "extraInfo": "Schedule employee medical examinations through a wide network of accredited medical centers."
+            },
+            {
+              "id": 1062,
+              "articleId": 536,
+              "langId": 2,
+              "name": "الفحوصات الطبية",
+              "description": "<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: .25in; text-align: right; direction: rtl; unicode-bidi: embed;\"><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">&nbsp;أتمتة الحجز والمتابعة</span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: .25in; text-align: right; direction: rtl; unicode-bidi: embed;\"><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">&nbsp;منصة موحدة للتقارير</span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: .25in; text-align: right; direction: rtl; unicode-bidi: embed;\"><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">&nbsp;ربط مباشر مع المراكز الطبية</span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: .25in; text-align: right; direction: rtl; unicode-bidi: embed;\"><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">&nbsp; متابعة ذكية وتنبيهات بصلاحية الرخص</span></p>",
+              "shortDescription": null,
+              "extraInfo": "جدول فحوصات الموظفين عبر شبكة واسعة من المراكز الطبية المعتمدة."
+            }
+          ]
+        },
+        {
+          "id": 538,
+          "articleCategoryId": 143,
+          "rank": 323,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1065,
+              "articleId": 538,
+              "langId": 1,
+              "name": "Occupational Health",
+              "description": "<p><strong>Occupational Health Examination Automation &amp; Management</strong></p>\r\n<p><strong>Centralized Employee Management Dashboard</strong></p>\r\n<p><strong>Direct Integration with Medical Centers</strong></p>\r\n<p><strong>Smart Monitoring &amp; Occupational Health Indicator Alerts</strong></p>",
+              "shortDescription": null,
+              "extraInfo": "Integrated management of environmental and occupational medical examinations to protect your organization and ensure operational and legal continuity."
+            },
+            {
+              "id": 1066,
+              "articleId": 538,
+              "langId": 2,
+              "name": "الصحة المهنية",
+              "description": "<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: .5in; text-align: right; text-indent: -.25in; mso-list: l0 level1 lfo1; direction: rtl; unicode-bidi: embed; border: none; mso-padding-alt: 31.0pt 31.0pt 31.0pt 31.0pt; mso-border-shadow: yes;\"><span lang=\"EN-GB\" style=\"font-family: 'Bahij TheSansArabic Plain'; mso-fareast-font-family: 'Bahij TheSansArabic Plain'; mso-bidi-font-family: 'Bahij TheSansArabic Plain'; color: black;\"><span style=\"mso-list: Ignore;\"><span style=\"font: 7.0pt 'Times New Roman';\">&nbsp; &nbsp; &nbsp;</span></span></span><!--[endif]--><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">اتمتة اوادارة فحوصات الصحة المهنية </span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: .5in; text-align: right; text-indent: -.25in; mso-list: l0 level1 lfo1; direction: rtl; unicode-bidi: embed; border: none; mso-padding-alt: 31.0pt 31.0pt 31.0pt 31.0pt; mso-border-shadow: yes;\"><span lang=\"EN-GB\" style=\"font-family: 'Bahij TheSansArabic Plain'; mso-fareast-font-family: 'Bahij TheSansArabic Plain'; mso-bidi-font-family: 'Bahij TheSansArabic Plain';\"><span style=\"mso-list: Ignore;\"><span style=\"font: 7.0pt 'Times New Roman';\">&nbsp; &nbsp; &nbsp; &nbsp;</span></span></span><!--[endif]--><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">لوحة تحكم وإدارة مركزية للموظفين</span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: .5in; text-align: right; text-indent: -.25in; mso-list: l0 level1 lfo1; direction: rtl; unicode-bidi: embed; border: none; mso-padding-alt: 31.0pt 31.0pt 31.0pt 31.0pt; mso-border-shadow: yes;\"><span lang=\"EN-GB\" style=\"font-family: 'Bahij TheSansArabic Plain'; mso-fareast-font-family: 'Bahij TheSansArabic Plain'; mso-bidi-font-family: 'Bahij TheSansArabic Plain';\"><span style=\"mso-list: Ignore;\"><span style=\"font: 7.0pt 'Times New Roman';\">&nbsp; &nbsp; &nbsp; </span></span></span><!--[endif]--><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">ربط مباشر مع المراكز الطبية<br><br><span dir=\"RTL\" lang=\"AR-SA\" style=\"font-size: 11.0pt; line-height: 107%; font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light'; mso-ansi-language: EN-GB; mso-fareast-language: EN-US; mso-bidi-language: AR-SA;\">متابعة ذكية وتنبيهات بمؤشرات الصحة المهنية</span><br></span></p>",
+              "shortDescription": null,
+              "extraInfo": "إدارة متكاملة للفحوصات الطبية البيئية والمهنية لحماية المنشأة وضمان استقرارها التشغيلي والقانوني"
+            }
+          ]
+        },
+        {
+          "id": 537,
+          "articleCategoryId": 143,
+          "rank": 3211,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1063,
+              "articleId": 537,
+              "langId": 1,
+              "name": "Educational & Training Services at Mwafq Academy",
+              "description": "<p><strong>Fully Automated Online Processes</strong></p>\r\n<p><strong>Centralized Employee Management Dashboard</strong></p>\r\n<p><strong>Smart Tracking &amp; Certificate Expiry Alerts</strong></p>\r\n<p><strong>Training Aligned with Certification Requirements</strong></p>",
+              "shortDescription": null,
+              "extraInfo": "Train and develop your workforce through specialized, accredited programs delivered through fully automated processes."
+            },
+            {
+              "id": 1064,
+              "articleId": 537,
+              "langId": 2,
+              "name": "ألخدمات التعليمية والتدريب في اكاديمية موفق",
+              "description": "<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: 1.0in; text-align: right; text-indent: -.25in; mso-list: l0 level1 lfo1; direction: rtl; unicode-bidi: embed; border: none; mso-padding-alt: 31.0pt 31.0pt 31.0pt 31.0pt; mso-border-shadow: yes;\"><span lang=\"EN-GB\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\"><span style=\"mso-list: Ignore;\"><span style=\"font: 7.0pt 'Times New Roman';\">&nbsp; &nbsp; &nbsp; &nbsp;</span></span></span><!--[endif]--><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">إجراءات مؤتمتة اون لاين</span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: 1.0in; text-align: right; text-indent: -.25in; mso-list: l0 level1 lfo1; direction: rtl; unicode-bidi: embed; border: none; mso-padding-alt: 31.0pt 31.0pt 31.0pt 31.0pt; mso-border-shadow: yes;\"><span lang=\"EN-GB\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\"><span style=\"mso-list: Ignore;\"><span style=\"font: 7.0pt 'Times New Roman';\">&nbsp; &nbsp; &nbsp; &nbsp;</span></span></span><!--[endif]--><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">لوحة تحكم وإدارة مركزية للموظفين</span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: 1.0in; text-align: right; text-indent: -.25in; mso-list: l0 level1 lfo1; direction: rtl; unicode-bidi: embed; border: none; mso-padding-alt: 31.0pt 31.0pt 31.0pt 31.0pt; mso-border-shadow: yes;\"><span lang=\"EN-GB\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\"><span style=\"mso-list: Ignore;\"><span style=\"font: 7.0pt 'Times New Roman';\">&nbsp; &nbsp; </span></span></span><!--[endif]--><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">متابعة ذكية وتنبيهات بصلاحية الشهادة</span></p>\r\n<p class=\"MsoNormal\" dir=\"RTL\" style=\"margin-right: 1.0in; text-align: right; text-indent: -.25in; mso-list: l0 level1 lfo1; direction: rtl; unicode-bidi: embed; border: none; mso-padding-alt: 31.0pt 31.0pt 31.0pt 31.0pt; mso-border-shadow: yes;\"><span lang=\"EN-GB\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\"><span style=\"mso-list: Ignore;\"><span style=\"font: 7.0pt 'Times New Roman';\">&nbsp; &nbsp; &nbsp; &nbsp; </span></span></span><!--[endif]--><span lang=\"AR-SA\" style=\"font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">تدريب متوافق مع متطلبات الشهادات</span></p>",
+              "shortDescription": null,
+              "extraInfo": "تأهيل وتدريب الكوادر البشرية والمهنية عبر برامج تخصصية معتمدة ومؤتمتة بالكامل"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 144,
+      "rank": 4,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 261,
+          "articleCategoryId": 144,
+          "name": "Team's Exams",
+          "description": "<h2 class=\"text-[clamp(28px,4.2vw,52px)] font-extrabold leading-[1.1] tracking-[-1.4px] text-[#1e2364]\">Team's Exams</h2>",
+          "langId": 1
+        },
+        {
+          "id": 262,
+          "articleCategoryId": 144,
+          "name": "Team's Exams",
+          "description": "<h2 class=\"text-[clamp(28px,4.2vw,52px)] font-extrabold leading-[1.1] tracking-[-1.4px] text-[#1e2364]\">Team's Exams</h2>",
+          "langId": 2
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 321,
+          "articleCategoryId": 144,
+          "rank": 1,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 631,
+              "articleId": 321,
+              "langId": 1,
+              "name": "Steps to Manage Your Team's Exams",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 632,
+              "articleId": 321,
+              "langId": 2,
+              "name": "خطوات إدارة فحوصات فريقك",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 323,
+          "articleCategoryId": 144,
+          "rank": 2,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 635,
+              "articleId": 323,
+              "langId": 1,
+              "name": "Instant Scheduling",
+              "description": null,
+              "shortDescription": "Book medical examinations, professional certifications, and visa examinations through a unified network of medical centers with just one click.",
+              "extraInfo": "2"
+            },
+            {
+              "id": 636,
+              "articleId": 323,
+              "langId": 2,
+              "name": "الجدولة الفورية",
+              "description": null,
+              "shortDescription": "حجز الفحوصات الطبية ، الشهادات المهنية ، التأشيرات عبر شبكة مراكز طبية موحدة بنقرة.",
+              "extraInfo": "2"
+            }
+          ]
+        },
+        {
+          "id": 322,
+          "articleCategoryId": 144,
+          "rank": 3,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 633,
+              "articleId": 322,
+              "langId": 1,
+              "name": "Tracking & Compliance",
+              "description": null,
+              "shortDescription": "Monitor results in real time through a single centralized dashboard, with renewal alerts enabled.",
+              "extraInfo": "3"
+            },
+            {
+              "id": 634,
+              "articleId": 322,
+              "langId": 2,
+              "name": "التتبع والامتثال",
+              "description": null,
+              "shortDescription": "مراقبة النتائج مباشرة عبر لوحة تحكم مركزية واحدة مع تفعيل تنبيهات التجديد",
+              "extraInfo": "3"
+            }
+          ]
+        },
+        {
+          "id": 324,
+          "articleCategoryId": 144,
+          "rank": 3,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 637,
+              "articleId": 324,
+              "langId": 1,
+              "name": "Documentation & Setup",
+              "description": null,
+              "shortDescription": "Register your organization, verify its commercial registration, and enter your team’s information digitally in just minutes.",
+              "extraInfo": "1"
+            },
+            {
+              "id": 638,
+              "articleId": 324,
+              "langId": 2,
+              "name": "التوثيق والاعداد",
+              "description": null,
+              "shortDescription": "تسجيل منشأتك، التحقق من السجل التجاري، إدخال بيانات فريقك رقمياً في دقائق.",
+              "extraInfo": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 145,
+      "rank": 6,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 263,
+          "articleCategoryId": 145,
+          "name": "b2b Streamline",
+          "description": "<p>b2b Streamline&nbsp;</p>",
+          "langId": 1
+        },
+        {
+          "id": 264,
+          "articleCategoryId": 145,
+          "name": "b2b Streamline",
+          "description": "<p>b2b Streamline&nbsp;</p>",
+          "langId": 2
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 325,
+          "articleCategoryId": 145,
+          "rank": 2,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 639,
+              "articleId": 325,
+              "langId": 1,
+              "name": "Ready to Simplify Your",
+              "description": null,
+              "shortDescription": "Join hundreds of companies that protect their growth and manage their workforce’s compliance digitally with Mwafq.",
+              "extraInfo": "Organization’s Processes؟"
+            },
+            {
+              "id": 640,
+              "articleId": 325,
+              "langId": 2,
+              "name": "جاهز لتبسيط",
+              "description": null,
+              "shortDescription": "انضم إلى مئات الشركات التي تحمي نموها وتدير امتثال طواقمها الرقمي مع موفق.",
+              "extraInfo": "إجراءات منشأتك؟"
+            }
+          ]
+        },
+        {
+          "id": 326,
+          "articleCategoryId": 145,
+          "rank": 2,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 641,
+              "articleId": 326,
+              "langId": 1,
+              "name": "Get Started as a Business Today",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 642,
+              "articleId": 326,
+              "langId": 2,
+              "name": "ابدأ كشركة الآن",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 327,
+          "articleCategoryId": 145,
+          "rank": 3,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 643,
+              "articleId": 327,
+              "langId": 1,
+              "name": "Book a Demo",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 644,
+              "articleId": 327,
+              "langId": 2,
+              "name": "احجز عرض تجريبي",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 169,
+      "rank": 100,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 311,
+          "articleCategoryId": 169,
+          "name": "Business",
+          "description": "<p>Business</p>",
+          "langId": 1
+        },
+        {
+          "id": 312,
+          "articleCategoryId": 169,
+          "name": "Business",
+          "description": "<p>Business</p>",
+          "langId": 2
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 396,
+          "articleCategoryId": 169,
+          "rank": 1,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 787,
+              "articleId": 396,
+              "langId": 1,
+              "name": "Comprehensive Training & Development Programs,",
+              "description": "<p>An intelligent learning ecosystem that prepares your workforce for health and professional requirements, ensuring continuous compliance with minimal operational effort.</p>",
+              "shortDescription": "MWAFQ ACADEMY",
+              "extraInfo": "Through a Single Learning Platform."
+            },
+            {
+              "id": 788,
+              "articleId": 396,
+              "langId": 2,
+              "name": "برامج تأهيل تدريبية متكاملة ,",
+              "description": "<p class=\"MsoNormal\" dir=\"RTL\" style=\"text-align: right; direction: rtl; unicode-bidi: embed;\"><span lang=\"AR-SA\" style=\"font-size: 12.0pt; line-height: 107%; font-family: 'Lama Sans Light'; mso-fareast-font-family: 'Lama Sans Light'; mso-bidi-font-family: 'Lama Sans Light';\">منظومة تعليمية ذكية تؤهل كوادر منشأتك صحياً ومهنيا لضمان الامتثال المستمر وبأقل مجهود تشغيلي.</span></p>",
+              "shortDescription": "أكاديمية موفق",
+              "extraInfo": "عبر منصة تعلم واحدة."
+            }
+          ]
+        },
+        {
+          "id": 409,
+          "articleCategoryId": 169,
+          "rank": 1,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 807,
+              "articleId": 409,
+              "langId": 1,
+              "name": "Overview",
+              "description": null,
+              "shortDescription": "Employees",
+              "extraInfo": "Reports"
+            },
+            {
+              "id": 808,
+              "articleId": 409,
+              "langId": 2,
+              "name": "نظرة عامة",
+              "description": null,
+              "shortDescription": "الموظفون",
+              "extraInfo": "التقارير"
+            }
+          ]
+        },
+        {
+          "id": 397,
+          "articleCategoryId": 169,
+          "rank": 10,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 795,
+              "articleId": 397,
+              "langId": 1,
+              "name": "Flexible, Automated Training in Seven Global Languages",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 796,
+              "articleId": 397,
+              "langId": 2,
+              "name": "تدريب مرن ومؤتمت بسبع لغاتٍ عالمية",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 398,
+          "articleCategoryId": 169,
+          "rank": 20,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 797,
+              "articleId": 398,
+              "langId": 1,
+              "name": "Standardized Pricing with Flexible Payment & Invoicing Options",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 798,
+              "articleId": 398,
+              "langId": 2,
+              "name": "أسعار موحدة وخيارات دفع وفوترة ميسرة",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 404,
+          "articleCategoryId": 169,
+          "rank": 20,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 785,
+              "articleId": 404,
+              "langId": 1,
+              "name": "Sara M.",
+              "description": "Residency Exam · Jeddah",
+              "shortDescription": "In Progress",
+              "extraInfo": null
+            },
+            {
+              "id": 786,
+              "articleId": 404,
+              "langId": 2,
+              "name": "سارة م.",
+              "description": "فحص الإقامة · جدة",
+              "shortDescription": "قيد التنفيذ",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 407,
+          "articleCategoryId": 169,
+          "rank": 20,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 789,
+              "articleId": 407,
+              "langId": 1,
+              "name": "96%",
+              "description": "Cleared",
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 790,
+              "articleId": 407,
+              "langId": 2,
+              "name": "96%",
+              "description": "معتمد",
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 399,
+          "articleCategoryId": 169,
+          "rank": 30,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 799,
+              "articleId": 399,
+              "langId": 1,
+              "name": "High-Quality Digital Dashboard & Tracking",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 800,
+              "articleId": 399,
+              "langId": 2,
+              "name": "لوحة تحكم وتتبع رقمي عالي الجودة",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 405,
+          "articleCategoryId": 169,
+          "rank": 30,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 783,
+              "articleId": 405,
+              "langId": 1,
+              "name": "Faisal H.",
+              "description": "Occupational Exam · Dammam",
+              "shortDescription": "Scheduled",
+              "extraInfo": null
+            },
+            {
+              "id": 784,
+              "articleId": 405,
+              "langId": 2,
+              "name": "فيصل هـ.",
+              "description": "فحص مهني · الدمام",
+              "shortDescription": "مجدول",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 408,
+          "articleCategoryId": 169,
+          "rank": 30,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 793,
+              "articleId": 408,
+              "langId": 1,
+              "name": "12",
+              "description": "Pending",
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 794,
+              "articleId": 408,
+              "langId": 2,
+              "name": "12",
+              "description": "قيد الانتظار",
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 400,
+          "articleCategoryId": 169,
+          "rank": 40,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 801,
+              "articleId": 400,
+              "langId": 1,
+              "name": "Smart Alerts & Automated Certificate Renewal Reminders",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 802,
+              "articleId": 400,
+              "langId": 2,
+              "name": "تنبيهات ذكية وتذكير آلي لتجديد الشهادات",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 401,
+          "articleCategoryId": 169,
+          "rank": 50,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": "/b2b/open-corporate-account",
+          "translations": [
+            {
+              "id": 803,
+              "articleId": 401,
+              "langId": 1,
+              "name": "Open Corporate Account",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 804,
+              "articleId": 401,
+              "langId": 2,
+              "name": "افتح حساب شركة",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 402,
+          "articleCategoryId": 169,
+          "rank": 60,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": "/b2b/book-demo",
+          "translations": [
+            {
+              "id": 805,
+              "articleId": 402,
+              "langId": 1,
+              "name": "Book a Demo",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 806,
+              "articleId": 402,
+              "langId": 2,
+              "name": "احجز عرضاً تجريبياً",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 403,
+          "articleCategoryId": 169,
+          "rank": 70,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 781,
+              "articleId": 403,
+              "langId": 1,
+              "name": "Ahmad K.",
+              "description": "<p>Pre-Employment Basic &middot; Riyadh</p>",
+              "shortDescription": "Completed",
+              "extraInfo": null
+            },
+            {
+              "id": 782,
+              "articleId": 403,
+              "langId": 2,
+              "name": "أحمد ك.",
+              "description": "ما قبل التوظيف · الرياض",
+              "shortDescription": "مكتمل",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 406,
+          "articleCategoryId": 169,
+          "rank": 80,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 791,
+              "articleId": 406,
+              "langId": 1,
+              "name": "248",
+              "description": "<p>Employees</p>",
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 792,
+              "articleId": 406,
+              "langId": 2,
+              "name": "248",
+              "description": "<p>الموظفون</p>",
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 171,
+      "rank": 120,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 315,
+          "articleCategoryId": 171,
+          "name": "FinalCta",
+          "description": "<p>FinalCta</p>",
+          "langId": 1
+        },
+        {
+          "id": 316,
+          "articleCategoryId": 171,
+          "name": "FinalCta",
+          "description": "FinalCta",
+          "langId": 2
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 410,
+          "articleCategoryId": 171,
+          "rank": 1,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 809,
+              "articleId": 410,
+              "langId": 1,
+              "name": "Ready to make medical exams actually easy?",
+              "description": "Join 10,000+ users and 500+ companies already managing their healthcare on Mwafq.",
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 810,
+              "articleId": 410,
+              "langId": 2,
+              "name": "جاهز لتجعل الفحوصات الطبية أسهل فعلاً؟",
+              "description": "انضم لأكثر من 10,000 مستخدم و500 شركة يديرون الرعاية الصحية عبر موافق.",
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 411,
+          "articleCategoryId": 171,
+          "rank": 10,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": "#booking",
+          "translations": [
+            {
+              "id": 811,
+              "articleId": 411,
+              "langId": 1,
+              "name": "Book Now",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 812,
+              "articleId": 411,
+              "langId": 2,
+              "name": "احجز الآن",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 412,
+          "articleCategoryId": 171,
+          "rank": 20,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": "#contact",
+          "translations": [
+            {
+              "id": 813,
+              "articleId": 412,
+              "langId": 1,
+              "name": "Let's Talk",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            },
+            {
+              "id": 814,
+              "articleId": 412,
+              "langId": 2,
+              "name": "تحدث إلينا",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 217,
+      "rank": 552,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 394,
+          "articleCategoryId": 217,
+          "name": "faq",
+          "description": "<p>faq</p>",
+          "langId": 1
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 545,
+          "articleCategoryId": 217,
+          "rank": 212,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1079,
+              "articleId": 545,
+              "langId": 1,
+              "name": "Payment Method",
+              "description": null,
+              "shortDescription": "Payment Method",
+              "extraInfo": null
+            },
+            {
+              "id": 1080,
+              "articleId": 545,
+              "langId": 2,
+              "name": "طريقة السداد",
+              "description": null,
+              "shortDescription": "طريقة السداد",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 546,
+          "articleCategoryId": 217,
+          "rank": 2123,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1081,
+              "articleId": 546,
+              "langId": 1,
+              "name": "How to Receive Results",
+              "description": null,
+              "shortDescription": "How to Receive Results",
+              "extraInfo": null
+            },
+            {
+              "id": 1082,
+              "articleId": 546,
+              "langId": 2,
+              "name": "طريقة استلام النتائج",
+              "description": null,
+              "shortDescription": "طريقة استلام النتائج",
+              "extraInfo": null
+            }
+          ]
+        },
+        {
+          "id": 544,
+          "articleCategoryId": 217,
+          "rank": 225321,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1077,
+              "articleId": 544,
+              "langId": 1,
+              "name": "How to Register",
+              "description": null,
+              "shortDescription": "How to Register",
+              "extraInfo": null
+            },
+            {
+              "id": 1078,
+              "articleId": 544,
+              "langId": 2,
+              "name": "كيفية التسجيل",
+              "description": null,
+              "shortDescription": "كيفية التسجيل",
+              "extraInfo": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 216,
+      "rank": 21313,
+      "published": true,
+      "parentId": 140,
+      "image": "",
+      "hasChild": false,
+      "hasArticle": true,
+      "translations": [
+        {
+          "id": 393,
+          "articleCategoryId": 216,
+          "name": "journey",
+          "description": "<p>journey</p>",
+          "langId": 1
+        }
+      ],
+      "children": [],
+      "articles": [
+        {
+          "id": 541,
+          "articleCategoryId": 216,
+          "rank": 525,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1071,
+              "articleId": 541,
+              "langId": 1,
+              "name": "Booking & Service Issuance",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "Schedule medical examinations, professional certifications, and visa examinations through a unified network of medical centers."
+            },
+            {
+              "id": 1072,
+              "articleId": 541,
+              "langId": 2,
+              "name": "حجز واصدار الخدمات",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "جدولة الفحوصات الطبية، الشهادات المهنية ، وفحوصات التأشيرات عبر شبكة مراكز طبية موحدة."
+            }
+          ]
+        },
+        {
+          "id": 539,
+          "articleCategoryId": 216,
+          "rank": 2555,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1067,
+              "articleId": 539,
+              "langId": 1,
+              "name": "Registration & Governance",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "**Digitally verify and authenticate your organization’s commercial registration instantly in just minutes.**"
+            },
+            {
+              "id": 1068,
+              "articleId": 539,
+              "langId": 2,
+              "name": "التسجيل والحوكمة",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "توثيق المنشأة والتحقق الفوري من السجل التجاري رقمياً في دقائق"
+            }
+          ]
+        },
+        {
+          "id": 540,
+          "articleCategoryId": 216,
+          "rank": 5631,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1069,
+              "articleId": 540,
+              "langId": 1,
+              "name": "Set Up the Organizational Structure",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "Enter your workforce data, organize departments, and automate approval workflows and access permissions."
+            },
+            {
+              "id": 1070,
+              "articleId": 540,
+              "langId": 2,
+              "name": "إعداد الهيكل الإداري",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "إدخال بيانات طاقمك، تنظيم الأقسام ، وأتمتة مسارات الموافقة والصلاحيات"
+            }
+          ]
+        },
+        {
+          "id": 543,
+          "articleCategoryId": 216,
+          "rank": 5854,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1075,
+              "articleId": 543,
+              "langId": 1,
+              "name": "Scale with Confidence",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "Enable automatic renewals and generate compliance reports and analytics to safeguard your organization’s growth"
+            },
+            {
+              "id": 1076,
+              "articleId": 543,
+              "langId": 2,
+              "name": "التوسع بثقة",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "تفعيل التجديد التلقائي وإصدار تقارير وتحليلات الامتثال لحماية نمو منشأتك"
+            }
+          ]
+        },
+        {
+          "id": 542,
+          "articleCategoryId": 216,
+          "rank": 345324,
+          "published": true,
+          "image": "",
+          "images": "",
+          "path": null,
+          "translations": [
+            {
+              "id": 1073,
+              "articleId": 542,
+              "langId": 1,
+              "name": "Real-Time Tracking & Control",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "Monitor request statuses and results in real time through a single centralized dashboard"
+            },
+            {
+              "id": 1074,
+              "articleId": 542,
+              "langId": 2,
+              "name": "التتبع اللحظي والسيطرة",
+              "description": null,
+              "shortDescription": null,
+              "extraInfo": "مراقبة حالة الطلبات والنتائج مباشرة عبر لوحة مركزية واحدة"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "articles": []
+}

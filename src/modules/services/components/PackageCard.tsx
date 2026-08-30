@@ -16,7 +16,7 @@ import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { cn } from '@/lib/utils';
 import { BuyNowButton } from './BuyNowButton';
 import { packageCardVariants, packageMediaVariants } from '../constants';
-import type { ServiceGroupListItem } from '@/modules/auth/serviceGroup.types';
+import type { ServiceListItem } from '../types/services.types';
 import { type Locale, localeToLangId } from '@/i18n/config';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
@@ -47,7 +47,7 @@ function formatPrice(price: number): string {
 }
 
 type PackageCardProps = {
-  pkg: ServiceGroupListItem;
+  pkg: ServiceListItem;
   locale: Locale;
   t: {
     popularTag: string;
@@ -95,9 +95,9 @@ export function PackageCard({
     ? getServiceGroupBuyPath(locale, pkg.id)
     : `${getLocalizedRoute(locale, ROUTES.LOGIN)}?redirect=${encodeURIComponent(getServiceGroupBuyPath(locale, pkg.id))}`;
   const packageDetailHref = `${getLocalizedRoute(locale, ROUTES.SERVICES)}/${pkg.id}`;
-  const price = lowestServiceGroupPrice(pkg.serviceGroupClassificationPricings);
+  const price = lowestServiceGroupPrice(pkg.pricing);
   const [imageSrc, setImageSrc] = useState(() =>
-    serviceGroupImageSrc(pkg.icon, pkg.id)
+    serviceGroupImageSrc(pkg.icon)
   );
 
   const cardMotion =
@@ -122,9 +122,9 @@ export function PackageCard({
           ? '(max-width: 480px) 100vw, 20vw'
           : '(max-width: 640px) 100vw, 240px'
       }
-      className='object-cover'
+      className='object-contain p-16'
       loading='lazy'
-      onError={() => setImageSrc(serviceGroupImageFallback(pkg.id))}
+      onError={() => setImageSrc(serviceGroupImageFallback())}
     />
   );
 
@@ -137,7 +137,7 @@ export function PackageCard({
     >
       <Link
         href={packageDetailHref}
-        className='relative block aspect-square overflow-hidden bg-[#f2f2f2]'
+        className='relative block aspect-square overflow-hidden bg-white'
       >
         <motion.div className='absolute inset-0' {...mediaMotion}>
           {image}
@@ -174,7 +174,7 @@ export function PackageCard({
     >
       <Link
         href={packageDetailHref}
-        className='relative block aspect-4/3 w-full shrink-0 overflow-hidden bg-[#1e2364]'
+        className='relative block aspect-4/3 w-full shrink-0 overflow-hidden bg-white'
       >
         <motion.div className='absolute inset-0 z-0' {...mediaMotion}>
           {image}

@@ -188,13 +188,17 @@ export function B2BServicesStack({
           className='pointer-events-none absolute inset-0 opacity-[0.16]'
           aria-hidden='true'
           style={{
-            backgroundImage: 'radial-gradient(circle, #1e2364 1.5px, transparent 1.5px)',
+            backgroundImage:
+              'radial-gradient(circle, #1e2364 1.5px, transparent 1.5px)',
             backgroundSize: '32px 32px',
           }}
         />
 
         {/* Top rule */}
-        <div className='pointer-events-none absolute left-0 right-0 top-0 h-px bg-[#1e2364]/[0.1]' aria-hidden='true' />
+        <div
+          className='pointer-events-none absolute left-0 right-0 top-0 h-px bg-[#1e2364]/[0.1]'
+          aria-hidden='true'
+        />
 
         {/* ── Content layout ── */}
         <div className='relative flex h-full flex-col px-10 xl:px-16'>
@@ -205,7 +209,9 @@ export function B2BServicesStack({
               style={{ borderBottom: `1px solid #e5e7f0` }}
             >
               {/* Eyebrow + big title */}
-              <div className={cn('flex flex-col gap-1.5', isRtl && 'text-right')}>
+              <div
+                className={cn('flex flex-col gap-1.5', isRtl && 'text-right')}
+              >
                 {/* Eyebrow row */}
                 <div className='flex items-center gap-2.5'>
                   <motion.span
@@ -242,7 +248,10 @@ export function B2BServicesStack({
               </div>
 
               {/* Trust chips */}
-              <ul className='mb-0.5 flex shrink-0 gap-2' aria-label='Service highlights'>
+              <ul
+                className='mb-0.5 flex shrink-0 gap-2'
+                aria-label='Service highlights'
+              >
                 {content.trustChips.slice(0, 3).map((chip) => (
                   <li
                     key={chip}
@@ -260,7 +269,12 @@ export function B2BServicesStack({
                 naturally. Adding flex-row-reverse would double-flip it back to LTR. */}
             <div className='flex flex-1 items-center gap-10 xl:gap-16 pb-6'>
               {/* LEFT — text narrative */}
-              <div className={cn('relative min-w-0 flex-[5] 2xl:flex-[4]', isRtl && 'text-right')}>
+              <div
+                className={cn(
+                  'relative min-w-0 flex-[5] 2xl:flex-[4]',
+                  isRtl && 'text-right'
+                )}
+              >
                 {/* Decorative large step number */}
                 <AnimatePresence mode='wait'>
                   <motion.div
@@ -312,7 +326,7 @@ export function B2BServicesStack({
                       </div>
                       <h2
                         className={cn(
-                          'text-[clamp(26px,2.8vw,52px)] font-extrabold leading-[1.08] tracking-[-1.5px] text-[#1e2364]',
+                          'text-[clamp(16px,1.6vw,28px)] font-extrabold leading-[1.15] tracking-[-1px] text-[#1e2364]',
                           isRtl && 'text-right'
                         )}
                       >
@@ -323,7 +337,7 @@ export function B2BServicesStack({
                     {/* Outcome */}
                     <p
                       className={cn(
-                        'mb-4 text-[clamp(14px,1.3vw,20px)] font-semibold leading-[1.45]',
+                        'mb-4 text-[clamp(12px,1.05vw,16px)] font-semibold leading-[1.45]',
                         isRtl && 'text-right'
                       )}
                       style={{ color: accent }}
@@ -470,7 +484,12 @@ function FloatWrapper({
   return (
     <motion.div
       animate={{ y: [0, -amplitude, 0] }}
-      transition={{ duration: 4.5 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
+      transition={{
+        duration: 4.5 + delay,
+        repeat: Infinity,
+        ease: 'easeInOut',
+        delay,
+      }}
     >
       {children}
     </motion.div>
@@ -500,9 +519,16 @@ function useCountUp(target: number, durationMs = 1100): number {
   return count;
 }
 
-function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) {
+function ServiceVisual({
+  item,
+  dashboard,
+  accent,
+  accentRgba,
+}: DashboardProps) {
   const mock = item.dashboardMock;
-  const { num: clearedNum, suffix: clearedSuffix } = parseStatValue(mock.stats.cleared.value);
+  const { num: clearedNum, suffix: clearedSuffix } = parseStatValue(
+    mock.stats.cleared.value
+  );
   const { num: empNum } = parseStatValue(mock.stats.employees.value);
   const { num: pendingNum } = parseStatValue(mock.stats.pending.value);
 
@@ -517,7 +543,6 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
 
   return (
     <div className='flex gap-4 select-none'>
-
       {/* ── LEFT: Radial Gauge ─────────────────────── */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -540,7 +565,10 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
               </span>
               <span
                 className='flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[8.5px] font-extrabold'
-                style={{ background: `rgba(${accentRgba},0.15)`, color: accent }}
+                style={{
+                  background: `rgba(${accentRgba},0.15)`,
+                  color: accent,
+                }}
               >
                 <motion.span
                   className='block size-1.5 rounded-full'
@@ -554,42 +582,89 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
             </div>
 
             {/* Ring */}
-            <div className='relative mx-auto mb-5' style={{ width: 124, height: 124 }}>
+            <div
+              className='relative mx-auto mb-5'
+              style={{ width: 124, height: 124 }}
+            >
               <svg
-                width={124} height={124}
+                width={124}
+                height={124}
                 className='absolute inset-0 opacity-0'
                 style={{ transform: 'rotate(-90deg)' }}
                 aria-hidden='true'
               >
                 <motion.circle
-                  cx={62} cy={62} r={R}
-                  fill='none' stroke={accent} strokeWidth={SW + 5} strokeLinecap='round'
+                  cx={62}
+                  cy={62}
+                  r={R}
+                  fill='none'
+                  stroke={accent}
+                  strokeWidth={SW + 5}
+                  strokeLinecap='round'
                   strokeDasharray={CIRC}
                   initial={{ strokeDashoffset: CIRC }}
                   animate={{ strokeDashoffset: ringOffset }}
-                  transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                  transition={{
+                    duration: 1.4,
+                    ease: [0.22, 1, 0.36, 1],
+                    delay: 0.2,
+                  }}
                 />
               </svg>
-              <svg width={124} height={124} style={{ transform: 'rotate(-90deg)' }} aria-hidden='true'>
-                <circle cx={62} cy={62} r={R} fill='none' stroke='#e5e7f0' strokeWidth={SW} />
+              <svg
+                width={124}
+                height={124}
+                style={{ transform: 'rotate(-90deg)' }}
+                aria-hidden='true'
+              >
+                <circle
+                  cx={62}
+                  cy={62}
+                  r={R}
+                  fill='none'
+                  stroke='#e5e7f0'
+                  strokeWidth={SW}
+                />
                 <motion.circle
-                  cx={62} cy={62} r={R}
-                  fill='none' stroke={accent} strokeWidth={SW} strokeLinecap='round'
+                  cx={62}
+                  cy={62}
+                  r={R}
+                  fill='none'
+                  stroke={accent}
+                  strokeWidth={SW}
+                  strokeLinecap='round'
                   strokeDasharray={CIRC}
                   initial={{ strokeDashoffset: CIRC }}
                   animate={{ strokeDashoffset: ringOffset }}
-                  transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                  transition={{
+                    duration: 1.4,
+                    ease: [0.22, 1, 0.36, 1],
+                    delay: 0.2,
+                  }}
                 />
               </svg>
               <div className='absolute inset-0 flex flex-col items-center justify-center'>
-                <RingCounter target={ringPercent} suffix={clearedSuffix || '%'} accent={accent} />
+                <RingCounter
+                  target={ringPercent}
+                  suffix={clearedSuffix || '%'}
+                  accent={accent}
+                />
               </div>
             </div>
 
             {/* Sub-stats */}
             <div className='grid grid-cols-2 gap-2'>
-              <MiniStat value={empNum} label={dashboard.statEmployeesLabel} accent={accent} />
-              <MiniStat value={pendingNum} label={dashboard.statPendingLabel} accent={accent} muted />
+              <MiniStat
+                value={empNum}
+                label={dashboard.statEmployeesLabel}
+                accent={accent}
+              />
+              <MiniStat
+                value={pendingNum}
+                label={dashboard.statPendingLabel}
+                accent={accent}
+                muted
+              />
             </div>
           </div>
         </FloatWrapper>
@@ -597,7 +672,6 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
 
       {/* ── RIGHT: Bar chart + Activity feed ──────── */}
       <div className='flex min-w-0 flex-1 flex-col gap-3'>
-
         {/* Trend chart */}
         <motion.div
           initial={{ opacity: 0, x: 24, y: -12 }}
@@ -606,7 +680,10 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
           style={{ filter: 'none' }}
         >
           <FloatWrapper delay={0.5} amplitude={7}>
-            <div className={card('p-4')} style={{ boxShadow: '0 2px 10px rgba(30,35,100,0.04)' }}>
+            <div
+              className={card('p-4')}
+              style={{ boxShadow: '0 2px 10px rgba(30,35,100,0.04)' }}
+            >
               <div className='mb-3 flex items-center justify-between'>
                 <span className='text-[9.5px] font-bold uppercase tracking-[0.28em] text-[#1e2364]/45'>
                   {dashboard.statEmployeesLabel}
@@ -619,10 +696,19 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
                   {mock.stats.employees.value}
                 </motion.span>
               </div>
-              <TrendBars bars={mock.stats.employees.bars} accent={accent} accentRgba={accentRgba} />
+              <TrendBars
+                bars={mock.stats.employees.bars}
+                accent={accent}
+                accentRgba={accentRgba}
+              />
               <div className='mt-2.5 flex items-center justify-between'>
-                <span className='text-[9px] text-[#6b7196]/70'>Last 7 periods</span>
-                <span className='text-[9px] font-bold' style={{ color: accent }}>
+                <span className='text-[9px] text-[#6b7196]/70'>
+                  Last 7 periods
+                </span>
+                <span
+                  className='text-[9px] font-bold'
+                  style={{ color: accent }}
+                >
                   ↑ {mock.stats.cleared.value} rate
                 </span>
               </div>
@@ -637,7 +723,10 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
         >
           <FloatWrapper delay={1} amplitude={8}>
-            <div className={card('p-4')} style={{ boxShadow: '0 2px 10px rgba(30,35,100,0.04)' }}>
+            <div
+              className={card('p-4')}
+              style={{ boxShadow: '0 2px 10px rgba(30,35,100,0.04)' }}
+            >
               <div className='mb-3 flex items-center gap-2'>
                 <motion.span
                   className='block size-2 rounded-full'
@@ -656,7 +745,11 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
                     key={`${emp.name}-${idx}`}
                     initial={{ opacity: 0, x: 12 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.3 + idx * 0.09, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.3,
+                      delay: 0.3 + idx * 0.09,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                     className='flex items-center gap-2.5'
                   >
                     <span
@@ -664,15 +757,22 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
                       style={
                         idx === 0
                           ? { background: accent, color: 'white' }
-                          : { background: 'rgba(30,35,100,0.08)', color: '#6b7196' }
+                          : {
+                              background: 'rgba(30,35,100,0.08)',
+                              color: '#6b7196',
+                            }
                       }
                       aria-hidden='true'
                     >
                       {emp.initials}
                     </span>
                     <div className='min-w-0 flex-1'>
-                      <strong className='block truncate text-[10.5px] font-bold text-[#1e2364]/80'>{emp.name}</strong>
-                      <span className='block truncate text-[9px] text-[#6b7196]/80'>{emp.detail}</span>
+                      <strong className='block truncate text-[10.5px] font-bold text-[#1e2364]/80'>
+                        {emp.name}
+                      </strong>
+                      <span className='block truncate text-[9px] text-[#6b7196]/80'>
+                        {emp.detail}
+                      </span>
                     </div>
                     <StatusBadge status={emp.status} label={emp.statusLabel} />
                   </motion.li>
@@ -688,24 +788,54 @@ function ServiceVisual({ item, dashboard, accent, accentRgba }: DashboardProps) 
 
 /* ─── ServiceVisual helpers ──────────────────────────────────────── */
 
-function RingCounter({ target, suffix, accent }: { target: number; suffix: string; accent: string }) {
+function RingCounter({
+  target,
+  suffix,
+  accent,
+}: {
+  target: number;
+  suffix: string;
+  accent: string;
+}) {
   const count = useCountUp(target, 1300);
   return (
     <>
-      <span className='text-[28px] font-extrabold leading-none text-[#1e2364]'>{count}</span>
-      <span className='mt-0.5 text-[11px] font-semibold' style={{ color: accent }}>{suffix}</span>
+      <span className='text-[28px] font-extrabold leading-none text-[#1e2364]'>
+        {count}
+      </span>
+      <span
+        className='mt-0.5 text-[11px] font-semibold'
+        style={{ color: accent }}
+      >
+        {suffix}
+      </span>
     </>
   );
 }
 
-function MiniStat({ value, label, muted }: { value: number; label: string; accent?: string; muted?: boolean }) {
+function MiniStat({
+  value,
+  label,
+  muted,
+}: {
+  value: number;
+  label: string;
+  accent?: string;
+  muted?: boolean;
+}) {
   const count = useCountUp(value, 1000);
   return (
     <div
       className='rounded-[10px] p-2.5'
-      style={{ background: 'rgba(30,35,100,0.04)', border: '1px solid #e5e7f0' }}
+      style={{
+        background: 'rgba(30,35,100,0.04)',
+        border: '1px solid #e5e7f0',
+      }}
     >
-      <p className='text-[15px] font-extrabold leading-none' style={{ color: muted ? '#6b7196' : '#1e2364' }}>
+      <p
+        className='text-[15px] font-extrabold leading-none'
+        style={{ color: muted ? '#6b7196' : '#1e2364' }}
+      >
         {count}
       </p>
       <p className='mt-0.5 text-[8.5px] text-[#6b7196]/80'>{label}</p>
@@ -713,11 +843,23 @@ function MiniStat({ value, label, muted }: { value: number; label: string; accen
   );
 }
 
-function TrendBars({ bars, accent, accentRgba }: { bars: readonly number[]; accent: string; accentRgba: string }) {
+function TrendBars({
+  bars,
+  accent,
+  accentRgba,
+}: {
+  bars: readonly number[];
+  accent: string;
+  accentRgba: string;
+}) {
   const max = Math.max(...bars);
   const lastIdx = bars.length - 1;
   return (
-    <svg viewBox={`0 0 ${bars.length * 13} 44`} className='w-full' aria-hidden='true'>
+    <svg
+      viewBox={`0 0 ${bars.length * 13} 44`}
+      className='w-full'
+      aria-hidden='true'
+    >
       {bars.map((val, i) => {
         const h = Math.max(4, Math.round((val / max) * 40));
         const isLast = i === lastIdx;
@@ -725,18 +867,36 @@ function TrendBars({ bars, accent, accentRgba }: { bars: readonly number[]; acce
           <g key={i}>
             {isLast && (
               <motion.rect
-                x={i * 13 + 1} y={44 - h - 2} width={10} height={h + 2} rx={3}
+                x={i * 13 + 1}
+                y={44 - h - 2}
+                width={10}
+                height={h + 2}
+                rx={3}
                 fill={`rgba(${accentRgba},0.12)`}
-                initial={{ scaleY: 0 }} animate={{ scaleY: 1 }}
-                transition={{ duration: 0.4, delay: 0.15 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.15 + i * 0.05,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 style={{ transformOrigin: 'bottom', transformBox: 'fill-box' }}
               />
             )}
             <motion.rect
-              x={i * 13 + 1} y={44 - h} width={10} height={h} rx={3}
+              x={i * 13 + 1}
+              y={44 - h}
+              width={10}
+              height={h}
+              rx={3}
               fill={isLast ? accent : `rgba(${accentRgba},0.28)`}
-              initial={{ scaleY: 0 }} animate={{ scaleY: 1 }}
-              transition={{ duration: 0.45, delay: 0.15 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.45,
+                delay: 0.15 + i * 0.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               style={{ transformOrigin: 'bottom', transformBox: 'fill-box' }}
             />
           </g>

@@ -10,7 +10,6 @@ import {
 
 type ServiceGroupDetailImageProps = {
   icon: string;
-  serviceGroupId: number;
   alt: string;
   className?: string;
   sizes?: string;
@@ -19,15 +18,12 @@ type ServiceGroupDetailImageProps = {
 
 export function ServiceGroupDetailImage({
   icon,
-  serviceGroupId,
   alt,
   className,
   sizes = '(max-width: 1024px) 100vw, 330px',
   priority = false,
 }: ServiceGroupDetailImageProps) {
-  const [src, setSrc] = useState(() =>
-    serviceGroupImageSrc(icon, serviceGroupId)
-  );
+  const [src, setSrc] = useState(() => serviceGroupImageSrc(icon));
 
   return (
     <Image
@@ -37,7 +33,7 @@ export function ServiceGroupDetailImage({
       priority={priority}
       sizes={sizes}
       className={className}
-      onError={() => setSrc(serviceGroupImageFallback(serviceGroupId))}
+      onError={() => setSrc(serviceGroupImageFallback())}
     />
   );
 }

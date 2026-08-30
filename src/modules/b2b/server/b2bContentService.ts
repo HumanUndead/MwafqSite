@@ -17,9 +17,15 @@ import {
   B2B_CONTENT_CACHE_TAG,
   B2B_CONTENT_REVALIDATE_SECONDS,
   B2B_CONTENT_ROOT_CATEGORY_ID,
+  B2B_FAQ_ARTICLE_IDS,
+  B2B_FAQ_CATEGORY_ID,
   B2B_HERO_ARTICLE_RANKS,
+  B2B_HERO_OVERRIDE_ARTICLE_ID,
+  B2B_JOURNEY_CATEGORY_ID,
+  B2B_JOURNEY_STAGE_ARTICLE_IDS,
   B2B_SECTION_RANKS,
   B2B_SERVICES_ARTICLE_RANKS,
+  B2B_SERVICES_PRODUCT_ARTICLE_IDS,
   B2B_STEPS_ARTICLE_RANKS,
   B2B_WHY_ARTICLE_RANKS,
 } from './b2bContent.config';
@@ -166,6 +172,13 @@ function trimToNull(value: string | null | undefined): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 const HTML_ENTITIES: Record<string, string> = {
   '&middot;': '·',
   '&amp;': '&',
@@ -211,7 +224,16 @@ function normalizeStatus(value: string | null | undefined): string {
 // ─── Section mappers ──────────────────────────────────────────────────────────
 
 type HeroContent = Dictionary['b2b']['hero'];
-type WhyContent = Dictionary['b2b']['why'];
+export interface WhyItemContent {
+  key: string;
+  title: string;
+  body: string;
+}
+export interface WhyContent {
+  titleLead: string;
+  titleAccent: string;
+  items: WhyItemContent[];
+}
 type ServicesContent = Dictionary['b2b']['services'];
 type StepsContent = Dictionary['b2b']['steps'];
 type FinalCtaContent = Dictionary['b2b']['finalCta'];
@@ -236,6 +258,10 @@ function mapHeroContent(
   const leadArticle = getArticleByRank(
     heroCategory,
     B2B_HERO_ARTICLE_RANKS.lead
+  );
+  const heroOverrideArticle = getArticleById(
+    heroCategory,
+    B2B_HERO_OVERRIDE_ARTICLE_ID
   );
   const primaryCtaArticle = getArticleByRank(
     heroCategory,
@@ -269,7 +295,9 @@ function mapHeroContent(
       a.rank <= B2B_HERO_ARTICLE_RANKS.employeeEnd
   );
   const floatingCardArticles = allArticles.filter(
-    (a) => a.rank >= B2B_HERO_ARTICLE_RANKS.floatingCardStart
+    (a) =>
+      a.rank >= B2B_HERO_ARTICLE_RANKS.floatingCardStart &&
+      a.id !== B2B_HERO_OVERRIDE_ARTICLE_ID
   );
 
   // Eyebrow: CMS stores the value as HTML in `description` of rank-1 article.
@@ -279,6 +307,12 @@ function mapHeroContent(
 
   const headingT = headingArticle
     ? getArticleTranslation(headingArticle, langId)
+    : null;
+
+  // Override: a later CMS article replaces eyebrow/heading/lead wholesale
+  // (name -> eyebrow, extraInfo -> heading, shortDescription -> lead).
+  const heroOverrideT = heroOverrideArticle
+    ? getArticleTranslation(heroOverrideArticle, langId)
     : null;
   const phoneGreetingT = phoneGreetingArticle
     ? getArticleTranslation(phoneGreetingArticle, langId)
@@ -317,13 +351,19 @@ function mapHeroContent(
   });
 
   return {
-    eyebrow: stripHtmlTags(eyebrowT?.description) ?? '',
-    headingLead: trimToNull(headingT?.name) ?? '',
-    headingAccent: trimToNull(headingT?.extraInfo) ?? '',
+    eyebrow:
+      trimToNull(heroOverrideT?.name) ??
+      stripHtmlTags(eyebrowT?.description) ??
+      '',
+    headingLead:
+      trimToNull(heroOverrideT?.extraInfo) ?? trimToNull(headingT?.name) ?? '',
+    headingAccent: heroOverrideT ? '' : (trimToNull(headingT?.extraInfo) ?? ''),
     lead:
+      trimToNull(heroOverrideT?.shortDescription) ??
       trimToNull(
         leadArticle ? getArticleTranslation(leadArticle, langId).name : null
-      ) ?? '',
+      ) ??
+      '',
     primaryCta:
       trimToNull(
         primaryCtaArticle
@@ -368,11 +408,13 @@ function mapWhyContent(
     ? getArticleTranslation(headerArticle, langId)
     : null;
 
-  const items = getVisibleArticles(whyCategory)
+  const items: WhyItemContent[] = getVisibleArticles(whyCategory)
     .filter((a) => a.rank !== B2B_WHY_ARTICLE_RANKS.header)
     .map((article) => {
       const t = getArticleTranslation(article, langId);
+      const englishT = getArticleTranslation(article, localeToLangId.en);
       return {
+        key: slugify(englishT.name),
         title: trimToNull(t.name) ?? '',
         body: trimToNull(t.shortDescription) ?? '',
       };
@@ -407,19 +449,16 @@ function mapServicesContent(
     ? getArticleTranslation(headerArticle, langId)
     : null;
 
-  const cmsItems = getVisibleArticles(servicesCategory)
-    .filter(
-      (a) =>
-        a.rank !== B2B_SERVICES_ARTICLE_RANKS.header &&
-        a.rank !== B2B_SERVICES_ARTICLE_RANKS.body
-    )
-    .map((article) => {
-      const t = getArticleTranslation(article, langId);
-      return {
-        title: trimToNull(t.name) ?? '',
-        body: trimToNull(t.shortDescription) ?? '',
-      };
-    });
+  const cmsItems = B2B_SERVICES_PRODUCT_ARTICLE_IDS.map((id) => {
+    const article = getArticleById(servicesCategory, id);
+    if (!article) return null;
+    const t = getArticleTranslation(article, langId);
+    const summary = trimToNull(t.shortDescription) ?? trimToNull(t.extraInfo);
+    return {
+      title: trimToNull(t.name) ?? '',
+      body: summary,
+    };
+  });
 
   const items = fallback.items.map((item, index) => {
     const cms = cmsItems[index];
@@ -428,7 +467,8 @@ function mapServicesContent(
     return {
       ...item,
       title: cms.title || item.title,
-      body: cms.body || item.body,
+      body: cms.body ?? item.body,
+      outcome: cms.body ?? item.outcome,
     };
   });
 
@@ -463,15 +503,20 @@ function mapStepsContent(
     ? getArticleTranslation(headerArticle, langId)
     : null;
 
+  // CMS `rank` is unreliable here (two step articles share rank 3) — the
+  // intended order is stored in each article's `extraInfo` ("1", "2", "3").
   const items = getVisibleArticles(stepsCategory)
     .filter((a) => a.rank !== B2B_STEPS_ARTICLE_RANKS.header)
     .map((article) => {
       const t = getArticleTranslation(article, langId);
       return {
+        order: Number(t.extraInfo) || Number.MAX_SAFE_INTEGER,
         title: trimToNull(t.name) ?? '',
         body: trimToNull(t.shortDescription) ?? '',
       };
-    });
+    })
+    .sort((a, b) => a.order - b.order)
+    .map(({ title, body }) => ({ title, body }));
 
   return {
     titleLead: trimToNull(headerT?.name) ?? '',
@@ -642,6 +687,77 @@ function mapBusinessContent(
   };
 }
 
+// ─── Journey ──────────────────────────────────────────────────────────────────
+
+export interface JourneyStageContent {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface JourneyContent {
+  stages: JourneyStageContent[];
+}
+
+function mapJourneyContent(
+  rootCategory: CategoryDto | null,
+  langId: number
+): JourneyContent {
+  const journeyCategory = getChildCategoryById(
+    rootCategory,
+    B2B_JOURNEY_CATEGORY_ID
+  );
+
+  const stages = B2B_JOURNEY_STAGE_ARTICLE_IDS.map((id, index) => {
+    const article = getArticleById(journeyCategory, id);
+    const t = article ? getArticleTranslation(article, langId) : null;
+    return {
+      number: String(index + 1).padStart(2, '0'),
+      title: trimToNull(t?.name) ?? '',
+      body: trimToNull(t?.extraInfo) ?? '',
+    };
+  }).filter((stage) => stage.title || stage.body);
+
+  return {
+    stages: stages.map((stage) => ({
+      number: stage.number,
+      title: stage.title,
+      description: stage.body,
+    })),
+  };
+}
+
+// ─── FAQ ──────────────────────────────────────────────────────────────────────
+
+export interface FaqItemContent {
+  question: string;
+  answer: string;
+}
+
+export interface FaqContent {
+  title: string;
+  items: FaqItemContent[];
+}
+
+function mapFaqContent(
+  rootCategory: CategoryDto | null,
+  langId: number,
+  title: string
+): FaqContent {
+  const faqCategory = getChildCategoryById(rootCategory, B2B_FAQ_CATEGORY_ID);
+
+  const items = B2B_FAQ_ARTICLE_IDS.map((id) => {
+    const article = getArticleById(faqCategory, id);
+    const t = article ? getArticleTranslation(article, langId) : null;
+    return {
+      question: trimToNull(t?.name) ?? '',
+      answer: trimToNull(t?.shortDescription) ?? '',
+    };
+  }).filter((item) => item.question || item.answer);
+
+  return { title, items };
+}
+
 // ─── Companies ────────────────────────────────────────────────────────────────
 
 function resolveCmsAssetUrl(value: string | null | undefined): string | null {
@@ -668,9 +784,12 @@ function mapB2BCompaniesContent(
 
 // ─── Build ────────────────────────────────────────────────────────────────────
 
-export type B2BPageContent = Dictionary['b2b'] & {
+export type B2BPageContent = Omit<Dictionary['b2b'], 'why' | 'faq'> & {
+  why: WhyContent;
   companies: HomeCompaniesContent;
   business: HomeBusinessContent;
+  journey: JourneyContent;
+  faq: FaqContent;
 };
 
 function buildB2BContent(
@@ -689,6 +808,8 @@ function buildB2BContent(
     finalCta: mapFinalCtaContent(rootCategory, langId),
     companies: mapB2BCompaniesContent(companiesCategory),
     business,
+    journey: mapJourneyContent(rootCategory, langId),
+    faq: mapFaqContent(rootCategory, langId, dict.b2b.faq.title),
   };
 }
 

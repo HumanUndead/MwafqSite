@@ -13,9 +13,11 @@ import type {
   AboutSectionWithItemsContent,
   AboutStatItemContent,
   AboutStoryContent,
+  AboutValueItemContent,
   AboutValuesContent,
   AboutWhyContent,
 } from '@/modules/about/types/aboutContent';
+import { getHomeStatsContent } from '@/modules/home/server/homeContentService';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import { stripHtmlToNull } from '@/shared/lib/text';
 import {
@@ -30,7 +32,6 @@ import {
   ABOUT_MILESTONES_ARTICLE_RANKS,
   ABOUT_MV_ARTICLE_RANKS,
   ABOUT_SECTION_RANKS,
-  ABOUT_STATS_CONFIG,
   ABOUT_VALUES_ARTICLE_RANKS,
   ABOUT_WHAT_ARTICLE_RANKS,
   ABOUT_WHY_ARTICLE_RANKS,
@@ -161,6 +162,12 @@ function trimToNull(value: string | null | undefined): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
 function getCategoryTranslation(
   category: CategoryDto | null,
@@ -272,26 +279,6 @@ function mapMvContent(
   };
 }
 
-function mapStatsContent(
-  rootCategory: CategoryDto | null,
-  langId: number
-): AboutStatItemContent[] {
-  const statsCategory = getChildCategoryByRank(
-    rootCategory,
-    ABOUT_SECTION_RANKS.stats
-  );
-
-  return ABOUT_STATS_CONFIG.map(({ rank, value, suffix }) => {
-    const article = getArticleByRank(statsCategory, rank);
-    const t = article ? getArticleTranslation(article, langId) : null;
-    return {
-      value,
-      suffix,
-      label: trimToNull(t?.name) ?? '',
-    };
-  });
-}
-
 function mapWhatContent(
   rootCategory: CategoryDto | null,
   langId: number
@@ -389,11 +376,13 @@ function mapValuesContent(
     ? getArticleTranslation(headerArticle, langId)
     : null;
 
-  const items = getVisibleArticles(valuesCategory)
+  const items: AboutValueItemContent[] = getVisibleArticles(valuesCategory)
     .filter((a) => a.rank !== ABOUT_VALUES_ARTICLE_RANKS.header)
     .map((article) => {
       const t = getArticleTranslation(article, langId);
+      const enT = getArticleTranslation(article, localeToLangId.en);
       return {
+        key: slugify(enT.name),
         title: trimToNull(t.name) ?? '',
         body: trimToNull(t.shortDescription) ?? '',
       };
@@ -574,6 +563,7 @@ function mapFinalCtaContent(
 
 function buildAboutContent(
   rootCategory: CategoryDto | null,
+  stats: AboutStatItemContent[],
   langId: number
 ): AboutPageContent {
   return {
@@ -581,7 +571,7 @@ function buildAboutContent(
     hero: mapHeroContent(rootCategory, langId),
     story: mapStoryContent(rootCategory, langId),
     mv: mapMvContent(rootCategory, langId),
-    stats: mapStatsContent(rootCategory, langId),
+    stats,
     what: mapWhatContent(rootCategory, langId),
     why: mapWhyContent(rootCategory, langId),
     values: mapValuesContent(rootCategory, langId),
@@ -613,7 +603,15 @@ const fetchAboutContentTree = cache(async (): Promise<CategoryDto | null> => {
 export const getAboutPageContent = cache(
   async (locale: Locale): Promise<AboutPageContent> => {
     const langId = localeToLangId[locale];
-    const rootCategory = await fetchAboutContentTree();
-    return buildAboutContent(rootCategory, langId);
+    const [rootCategory, homeStats] = await Promise.all([
+      fetchAboutContentTree(),
+      getHomeStatsContent(locale),
+    ]);
+    const stats: AboutStatItemContent[] = homeStats.items.map((item) => ({
+      value: item.value,
+      suffix: item.suffix ?? '',
+      label: item.label,
+    }));
+    return buildAboutContent(rootCategory, stats, langId);
   }
 );
