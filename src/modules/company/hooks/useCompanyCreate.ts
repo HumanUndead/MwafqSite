@@ -107,10 +107,8 @@ export function useCompanyCreate(onSuccess?: () => void) {
     companyApi
       .getTypes()
       .then(setTypes)
-      .catch(console.error)
       .finally(() => setTypesLoading(false));
     // Tags section hidden — skip fetch until classification is re-enabled
-    // companyApi.getTags(tagsType).then(setTags).catch(console.error).finally(() => setTagsLoading(false));
   }, [tagsType]);
 
   useEffect(() => {
@@ -133,7 +131,6 @@ export function useCompanyCreate(onSuccess?: () => void) {
           );
         }
       })
-      .catch(console.error)
       .finally(() => setCountriesLoading(false));
   }, [locale]);
 
@@ -153,7 +150,6 @@ export function useCompanyCreate(onSuccess?: () => void) {
         if (!data || cancelled) return;
         setCities(data);
       })
-      .catch(console.error)
       .finally(() => {
         if (!cancelled) setCitiesLoading(false);
       });

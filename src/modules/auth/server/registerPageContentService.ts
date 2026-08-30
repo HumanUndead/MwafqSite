@@ -253,10 +253,6 @@ const fetchRegisterPageContentTree = cache(
 
       return payload.value;
     } catch (error) {
-      console.error(
-        '[register-page-content] Failed to fetch register page content.',
-        error
-      );
       return null;
     }
   }

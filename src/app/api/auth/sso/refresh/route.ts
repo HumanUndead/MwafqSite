@@ -72,7 +72,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error('[auth/sso/refresh] Token refresh failed.', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

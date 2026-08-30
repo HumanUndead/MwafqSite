@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
-    console.error('[payment/check-status] failed', error);
     return NextResponse.json(
       { success: false, message: 'Payment status check failed', data: null },
       { status: 500 }

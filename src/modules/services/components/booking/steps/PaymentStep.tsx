@@ -183,7 +183,6 @@ export function PaymentStep({
       onPaymentSuccess();
     },
     onError(error) {
-      console.error('[payment/check-status] failed', error);
       setPayError(
         error instanceof Error && error.message
           ? error.message

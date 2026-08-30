@@ -102,7 +102,6 @@ export async function POST(request: NextRequest) {
       data: payload,
     });
   } catch (error) {
-    console.error('[company/create] Failed', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

@@ -85,7 +85,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: items });
   } catch (error) {
-    console.error('[services/service-groups] Fetch failed', error);
     return NextResponse.json(
       { success: false, data: [], message: 'Internal server error' },
       { status: 500 }

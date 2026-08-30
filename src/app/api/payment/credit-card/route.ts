@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('[payment/credit-card] failed', error);
     return NextResponse.json(
       { success: false, message: 'Payment initialization failed', data: null },
       { status: 500 }

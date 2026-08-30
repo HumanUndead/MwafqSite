@@ -38,7 +38,6 @@ export function academyRouteError(error: unknown, label: string): NextResponse {
     );
   }
 
-  console.error(`${label} Request failed.`, error);
   return NextResponse.json(
     { success: false, message: 'Internal server error', data: null },
     { status: 500 }

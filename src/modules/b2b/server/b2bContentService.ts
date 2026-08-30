@@ -824,7 +824,6 @@ const fetchB2BContentTree = cache(async (): Promise<CategoryDto | null> => {
       }
     );
   } catch (error) {
-    console.error('[b2b-content] Failed to fetch B2B content tree.', error);
     return null;
   }
 });
@@ -842,7 +841,6 @@ const fetchB2BCompaniesCategoryTree = cache(
         }
       );
     } catch (error) {
-      console.error('[b2b-content] Failed to fetch companies category.', error);
       return null;
     }
   }

@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, message: 'OK', data });
   } catch (error) {
-    console.error('[academy/courses] Request failed.', error);
     return NextResponse.json(
       { success: false, message: 'Failed to fetch courses', data: null },
       { status: 500 }

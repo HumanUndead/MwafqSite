@@ -102,7 +102,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error('[auth/sso/authorize] SSO authorize failed.', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

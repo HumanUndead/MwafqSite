@@ -137,7 +137,6 @@ export function CreditCardForm({
     },
     onSuccess: onCompleted,
     onError: (err) => {
-      console.error('[payment/credit-card] failed', err);
       onFailure(err instanceof Error ? err.message : errorLabel);
     },
   });
@@ -150,7 +149,6 @@ export function CreditCardForm({
   }
 
   const formError = error instanceof Error ? error.message : null;
-  console.log('🚀 ~ CreditCardForm ~ formError:', formError);
 
   return (
     <form onSubmit={handleSubmit} className='space-y-4' noValidate>

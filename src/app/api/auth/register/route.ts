@@ -190,8 +190,6 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('[auth/register] Registration request failed.', error);
-
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

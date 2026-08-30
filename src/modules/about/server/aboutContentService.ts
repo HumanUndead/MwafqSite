@@ -593,7 +593,6 @@ const fetchAboutContentTree = cache(async (): Promise<CategoryDto | null> => {
       }
     );
   } catch (error) {
-    console.error('[about-content] Failed to fetch About content tree.', error);
     return null;
   }
 });

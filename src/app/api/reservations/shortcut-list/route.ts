@@ -29,8 +29,6 @@ export async function GET() {
       );
     }
 
-    console.error('[reservations/shortcut-list] Request failed.', error);
-
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

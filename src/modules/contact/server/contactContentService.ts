@@ -125,7 +125,6 @@ const fetchContactContentTree = cache(async (): Promise<CategoryDto | null> => {
       }
     );
   } catch (error) {
-    console.error('[contact-content] Failed to fetch Contact content tree.', error);
     return null;
   }
 });

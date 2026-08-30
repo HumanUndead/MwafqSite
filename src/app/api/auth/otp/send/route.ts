@@ -74,7 +74,6 @@ export async function POST(request: NextRequest) {
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     createEmailOtp(otp, email);
-    console.log(`[DEV] OTP for ${email}: ${otp}`);
 
     return NextResponse.json({
       success: true,

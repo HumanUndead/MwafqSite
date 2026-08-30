@@ -1401,7 +1401,6 @@ const fetchCompaniesCategoryTree = cache(
 
       return payload.value;
     } catch (error) {
-      console.error('Failed to load companies category tree', error);
       return null;
     }
   }
@@ -1423,7 +1422,6 @@ const fetchHomeContentTree = cache(
         cache: 'no-store',
       });
     } catch (error) {
-      console.error('Failed to load home content tree', error);
       return null;
     }
   }
@@ -1437,7 +1435,6 @@ const fetchHomeServices = cache(async (): Promise<ServiceListItem[]> => {
     });
     return page.data;
   } catch (error) {
-    console.error('Failed to load home services', error);
     return [];
   }
 });
@@ -1477,7 +1474,6 @@ const fetchStepsHeadingCategory = cache(
 
       return payload.value.data[0] ?? null;
     } catch (error) {
-      console.error('Failed to load steps heading category', error);
       return null;
     }
   }

@@ -44,8 +44,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.error('[academy/my-courses] Request failed.', error);
-
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

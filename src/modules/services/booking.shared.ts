@@ -69,7 +69,6 @@ export function mapServiceGroupCoursesToOptions(
   courses: CourseListItem[],
   localeOrLangId: Locale | number
 ): ServiceGroupCourseOption[] {
-  console.log('🚀 ~ mapServiceGroupCoursesToOptions ~ courses:', courses);
   return courses
     .filter((course) => course.status)
     .map((course) => mapServiceGroupCourseToOption(course, localeOrLangId));

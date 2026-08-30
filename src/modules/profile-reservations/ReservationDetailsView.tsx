@@ -46,7 +46,6 @@ function InfoIcon() {
 export default function ReservationDetailsView({
   details,
 }: ReservationDetailsViewProps) {
-  console.log('🚀 ~ ReservationDetailsView ~ details:', details);
   const locale = useLocale() as Locale;
   const rtl = isRtl(locale);
   const t = useTranslations('profileReservations').detailPage;

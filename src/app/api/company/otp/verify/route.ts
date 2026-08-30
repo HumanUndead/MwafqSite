@@ -64,7 +64,6 @@ export async function POST(request: NextRequest) {
       data: { verified: true, raw: payload },
     });
   } catch (error) {
-    console.error('[company/otp/verify] Failed', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }

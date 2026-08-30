@@ -71,8 +71,6 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('[auth/otp/resend] Resend request failed.', error);
-
     return NextResponse.json(
       { success: false, message: 'Internal server error', data: null },
       { status: 500 }
