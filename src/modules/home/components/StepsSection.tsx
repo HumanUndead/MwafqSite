@@ -241,7 +241,7 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                             <p className='text-[16.5px] leading-[1.65] text-[#6b7196]'>
                               {step.body}
                             </p>
-                            <div className='mt-[18px] flex items-center gap-[22px] border-t-[1.5px] border-[#e5e7f0] pt-[18px] text-[14.5px] text-[#6b7196]'>
+                            {/* <div className='mt-[18px] flex items-center gap-[22px] border-t-[1.5px] border-[#e5e7f0] pt-[18px] text-[14.5px] text-[#6b7196]'>
                               <span>
                                 <b className='font-bold text-[#1e2364]'>
                                   {step.meta1.value}
@@ -254,7 +254,7 @@ export function StepsSection({ locale, content }: StepsSectionProps) {
                                 </b>{' '}
                                 {step.meta2.label}
                               </span>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>

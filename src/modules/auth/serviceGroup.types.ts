@@ -50,9 +50,10 @@ export interface ServiceGroupCondition {
 export interface ServiceGroupListItem {
   id: number;
   target: number;
-  sla: number;
+  sla: number | null;
   isRenewal: boolean;
   isMandatoryTest: boolean;
+  isFeatured: boolean;
   icon: string;
   translations: ServiceGroupTranslation[];
   serviceGroupServices: ServiceGroupServiceLink[];

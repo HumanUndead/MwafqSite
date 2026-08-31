@@ -278,8 +278,6 @@ export interface HomeFooterContent {
   newsletterPlaceholder: string;
   newsletterEyebrow: string;
   newsletterAction: string;
-  copyrightLabel: string;
-  copyrightBody: string;
   pages: HomeFooterGroupContent;
   contact: HomeFooterGroupContent;
   socialLinks: HomeSocialLinkContent[];

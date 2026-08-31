@@ -2,12 +2,17 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Locale } from '@/i18n/config';
+import { isRtl, type Locale } from '@/i18n/config';
 import type { ServiceGroupItem } from '@/app/api/services/service-groups/route';
 import type { CityItem } from '@/app/api/general/cities/route';
 import { getServiceGroupBuyPath } from '@/modules/services/booking.shared';
 import type { HomeBookingContent } from '../home.types';
 import { BookingMascot } from './BookingMascot';
+
+const SOON_LABEL: Record<'en' | 'ar', string> = {
+  en: 'Soon',
+  ar: 'قريبًا',
+};
 
 const KSA_COUNTRY_ID = 14;
 
@@ -401,6 +406,31 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
             <p className='text-[11.5px] font-medium leading-[1.45] text-[#6b7196]'>
               {content.note}
             </p>
+          </div>
+
+          <div
+            aria-hidden='true'
+            className='absolute inset-0 z-20 flex items-center justify-center rounded-[32px] bg-white/35 backdrop-blur-[3px]'
+          >
+            <div className='relative flex flex-col items-center'>
+              <span className='text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-1px] text-[#1e2364] drop-shadow-[0_2px_10px_rgba(255,255,255,0.9)]'>
+                {isRtl(locale) ? SOON_LABEL.ar : SOON_LABEL.en}
+              </span>
+              <svg
+                className='mt-2 h-3 w-[70%] text-[#00a8f1]'
+                viewBox='0 0 200 12'
+                fill='none'
+                preserveAspectRatio='none'
+                aria-hidden='true'
+              >
+                <path
+                  d='M2 8.5C40 2.5 90 2 130 6C155 8.5 175 4 198 6.5'
+                  stroke='currentColor'
+                  strokeWidth='5'
+                  strokeLinecap='round'
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>

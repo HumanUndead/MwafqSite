@@ -246,21 +246,6 @@ export function B2BServicesStack({
                   )}
                 </div>
               </div>
-
-              {/* Trust chips */}
-              <ul
-                className='mb-0.5 flex shrink-0 gap-2'
-                aria-label='Service highlights'
-              >
-                {content.trustChips.slice(0, 3).map((chip) => (
-                  <li
-                    key={chip}
-                    className='rounded-full border-2 border-[#e5e7f0] bg-white px-3 py-1.5 text-[11px] font-semibold text-[#6b7196]'
-                  >
-                    {chip}
-                  </li>
-                ))}
-              </ul>
             </div>
 
             {/* ── Main chapter split ── */}
@@ -389,20 +374,6 @@ export function B2BServicesStack({
                         </motion.li>
                       ))}
                     </ul>
-
-                    {/* Trust badge — block wrapper lets text-right push it to the correct edge */}
-                    <div>
-                      <span
-                        className='inline-flex rounded-full px-3.5 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.07em]'
-                        style={{
-                          background: `rgba(${accentRgba},0.12)`,
-                          color: accent,
-                          border: `1px solid rgba(${accentRgba},0.35)`,
-                        }}
-                      >
-                        {activeItem.trustLabel}
-                      </span>
-                    </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -561,7 +532,7 @@ function ServiceVisual({
           >
             <div className='mb-4 flex items-center justify-between'>
               <span className='text-[9.5px] font-bold uppercase tracking-[0.28em] text-[#1e2364]/45'>
-                {dashboard.statClearedLabel}
+                {mock.stats.cleared.label}
               </span>
               <span
                 className='flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[8.5px] font-extrabold'
@@ -656,12 +627,12 @@ function ServiceVisual({
             <div className='grid grid-cols-2 gap-2'>
               <MiniStat
                 value={empNum}
-                label={dashboard.statEmployeesLabel}
+                label={mock.stats.employees.label}
                 accent={accent}
               />
               <MiniStat
                 value={pendingNum}
-                label={dashboard.statPendingLabel}
+                label={mock.stats.pending.label}
                 accent={accent}
                 muted
               />
@@ -686,7 +657,7 @@ function ServiceVisual({
             >
               <div className='mb-3 flex items-center justify-between'>
                 <span className='text-[9.5px] font-bold uppercase tracking-[0.28em] text-[#1e2364]/45'>
-                  {dashboard.statEmployeesLabel}
+                  {mock.stats.employees.label}
                 </span>
                 <motion.span
                   className='text-[14px] font-extrabold leading-none'
@@ -703,13 +674,13 @@ function ServiceVisual({
               />
               <div className='mt-2.5 flex items-center justify-between'>
                 <span className='text-[9px] text-[#6b7196]/70'>
-                  Last 7 periods
+                  {dashboard.trendPeriodLabel}
                 </span>
                 <span
                   className='text-[9px] font-bold'
                   style={{ color: accent }}
                 >
-                  ↑ {mock.stats.cleared.value} rate
+                  ↑ {mock.stats.cleared.value} {dashboard.rateSuffix}
                 </span>
               </div>
             </div>
@@ -736,7 +707,7 @@ function ServiceVisual({
                   aria-hidden='true'
                 />
                 <span className='text-[9.5px] font-bold uppercase tracking-[0.28em] text-[#1e2364]/45'>
-                  {dashboard.tabEmployees}
+                  {mock.listLabel}
                 </span>
               </div>
               <ul className='flex flex-col gap-2'>

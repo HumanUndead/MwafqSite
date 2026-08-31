@@ -263,21 +263,15 @@ const ar = {
       titleLead: 'مشاكل',
       titleAccent: '',
       body: 'نظّم فحوصات الإقامة وتجديد تصاريح العمل والشهادات الصحية (البلدية) لأعداد كبيرة من الموظفين في وقتٍ واحد.',
-      trustChips: [
-        'حجز جماعي',
-        'متابعة الموظفين مباشرة',
-        'تقارير PDF معتمدة',
-        'فحوصات معتمدة من وزارة الصحة',
-      ],
+      trustChips: ['فحوصات معتمدة من وزارة الصحة'],
       previewLabel: 'معاينة لوحة التحكم',
       dashboard: {
         viewingLabel: 'تعرض الآن',
         tabOverview: 'نظرة عامة',
         tabEmployees: 'الموظفون',
         tabReports: 'التقارير',
-        statEmployeesLabel: 'الموظفون',
-        statClearedLabel: 'معتمد',
-        statPendingLabel: 'قيد الانتظار',
+        trendPeriodLabel: 'آخر 7 فترات',
+        rateSuffix: 'نسبة',
       },
       items: [
         {
@@ -300,10 +294,23 @@ const ar = {
             statusLabel: 'معتمد',
           },
           dashboardMock: {
+            listLabel: 'أحدث الفحوصات',
             stats: {
-              employees: { value: '142', bars: [8, 12, 6, 14, 10, 16, 18] },
-              cleared: { value: '91%', bars: [6, 10, 8, 16, 12, 14, 18] },
-              pending: { value: '8', bars: [10, 14, 8, 12, 6, 16, 10] },
+              employees: {
+                label: 'فحوصات محجوزة',
+                value: '142',
+                bars: [11, 13, 12, 14, 15, 17, 18],
+              },
+              cleared: {
+                label: 'معتمد',
+                value: '91%',
+                bars: [12, 13, 14, 14, 16, 17, 18],
+              },
+              pending: {
+                label: 'نتائج معلّقة',
+                value: '8',
+                bars: [14, 12, 10, 11, 9, 7, 6],
+              },
             },
             employees: [
               {
@@ -318,14 +325,14 @@ const ar = {
                 name: 'سارة ك.',
                 detail: 'فحص طبي · جدة',
                 status: 'active',
-                statusLabel: 'قيد التنفيذ',
+                statusLabel: 'بانتظار النتيجة',
               },
               {
                 initials: 'ع ت',
                 name: 'عمر ت.',
                 detail: 'فحص طبي · الدمام',
                 status: 'wait',
-                statusLabel: 'مجدول',
+                statusLabel: 'موعد مجدول',
               },
             ],
           },
@@ -350,10 +357,23 @@ const ar = {
             statusLabel: 'قيد التنفيذ',
           },
           dashboardMock: {
+            listLabel: 'حالة الطاقم',
             stats: {
-              employees: { value: '248', bars: [8, 12, 6, 14, 10, 16, 18] },
-              cleared: { value: '96%', bars: [6, 10, 8, 16, 12, 14, 18] },
-              pending: { value: '12', bars: [10, 14, 8, 12, 6, 16, 10] },
+              employees: {
+                label: 'طاقم مشمول',
+                value: '248',
+                bars: [15, 10, 17, 9, 16, 11, 14],
+              },
+              cleared: {
+                label: 'ممتثل',
+                value: '96%',
+                bars: [13, 15, 14, 16, 15, 17, 18],
+              },
+              pending: {
+                label: 'بحاجة متابعة',
+                value: '12',
+                bars: [7, 9, 6, 10, 6, 8, 5],
+              },
             },
             employees: [
               {
@@ -361,21 +381,21 @@ const ar = {
                 name: 'فاطمة ر.',
                 detail: 'الصحة المهنية · جدة',
                 status: 'active',
-                statusLabel: 'قيد التنفيذ',
+                statusLabel: 'فحص مستحق',
               },
               {
                 initials: 'ن أ',
                 name: 'نورة أ.',
                 detail: 'الصحة المهنية · الرياض',
                 status: 'wait',
-                statusLabel: 'مجدول',
+                statusLabel: 'رخصة تنتهي قريباً',
               },
               {
                 initials: 'ي ح',
                 name: 'يوسف ح.',
                 detail: 'الصحة المهنية · الدمام',
                 status: 'done',
-                statusLabel: 'معتمد',
+                statusLabel: 'ممتثل',
               },
             ],
           },
@@ -400,10 +420,23 @@ const ar = {
             statusLabel: 'مجدول',
           },
           dashboardMock: {
+            listLabel: 'أحدث التسجيلات',
             stats: {
-              employees: { value: '86', bars: [12, 8, 14, 6, 10, 16, 12] },
-              cleared: { value: '88%', bars: [8, 14, 10, 12, 6, 16, 14] },
-              pending: { value: '18', bars: [14, 10, 12, 8, 16, 6, 10] },
+              employees: {
+                label: 'متدربون مسجّلون',
+                value: '86',
+                bars: [6, 8, 9, 11, 13, 15, 18],
+              },
+              cleared: {
+                label: 'حاصل على شهادة',
+                value: '88%',
+                bars: [7, 9, 10, 12, 14, 16, 17],
+              },
+              pending: {
+                label: 'قيد التدريب',
+                value: '18',
+                bars: [9, 12, 14, 11, 13, 10, 8],
+              },
             },
             employees: [
               {
@@ -411,21 +444,21 @@ const ar = {
                 name: 'خالد م.',
                 detail: 'تدريب الأكاديمية · الدمام',
                 status: 'wait',
-                statusLabel: 'مجدول',
+                statusLabel: 'قيد التدريب',
               },
               {
                 initials: 'ل ب',
                 name: 'ليلى ب.',
                 detail: 'تدريب الأكاديمية · الرياض',
                 status: 'active',
-                statusLabel: 'قيد التنفيذ',
+                statusLabel: 'التقييم النهائي',
               },
               {
                 initials: 'ح غ',
                 name: 'حسن غ.',
                 detail: 'تدريب الأكاديمية · جدة',
                 status: 'done',
-                statusLabel: 'معتمد',
+                statusLabel: 'حاصل على شهادة',
               },
             ],
           },
@@ -470,7 +503,7 @@ const ar = {
     description: 'هل لديك سؤال أو تحتاج إلى مساعدة؟ يسعدنا أن نسمع منك.',
     info: {
       email: { label: 'البريد الإلكتروني', value: 'support@mwafq.com' },
-      phone: { label: 'الهاتف', value: '+966 11 000 0000' },
+      phone: { label: 'الهاتف', value: '+966599695023' },
       address: { label: 'المكتب', value: 'الرياض، المملكة العربية السعودية' },
     },
     form: {
@@ -1054,6 +1087,31 @@ const ar = {
       noOptions: 'لا توجد خيارات متاحة',
       selectCountryFirst: 'اختر دولة أولاً',
     },
+  },
+  businessShowcase: {
+    featuredCourseBadge: 'متابعة',
+    featuredCoursePercent: 'اكتمل {{percent}}%',
+    featuredCourseTitle: 'أساسيات السلامة المهنية',
+    statusCompleted: 'مكتمل',
+    statusInProgress: 'قيد التنفيذ',
+    statusScheduled: 'مجدول',
+    learners: [
+      {
+        name: 'أحمد ك.',
+        course: 'أساسيات السلامة المهنية',
+        status: 'completed',
+      },
+      {
+        name: 'سارة م.',
+        course: 'شهادة الإسعافات الأولية',
+        status: 'inProgress',
+      },
+      {
+        name: 'فيصل هـ.',
+        course: 'تدريب السلامة من الحريق',
+        status: 'scheduled',
+      },
+    ],
   },
   services: {
     viewAll: 'عرض الكل',

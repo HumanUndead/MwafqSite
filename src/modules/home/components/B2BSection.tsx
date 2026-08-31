@@ -1,4 +1,6 @@
 import type { Locale } from '@/i18n/config';
+import { getTranslations } from '@/i18n/server';
+import type { Dictionary } from '@/locales/types';
 import type { HomeBusinessContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
 import { HomeActionLinks } from './HomeActionLinks';
@@ -10,21 +12,36 @@ interface Props {
   content: HomeBusinessContent;
 }
 
-function getStatusClassName(status: string) {
-  const normalized = status.toLowerCase();
+type LearnerStatus = Dictionary['businessShowcase']['learners'][number]['status'];
 
-  if (normalized.includes('complete')) {
+function getStatusClassName(status: LearnerStatus) {
+  if (status === 'completed') {
     return 'border-transparent bg-[rgba(0,222,201,0.14)] text-[#00867a]';
   }
 
-  if (normalized.includes('progress')) {
+  if (status === 'inProgress') {
     return 'border-transparent bg-[rgba(217,116,60,0.14)] text-[#a65528]';
   }
 
   return 'border-transparent bg-[rgba(111,143,207,0.16)] text-[#4a6cb8]';
 }
 
-export function B2BSection({ locale, content }: Props) {
+function statusLabel(
+  t: Dictionary['businessShowcase'],
+  status: LearnerStatus
+) {
+  if (status === 'completed') return t.statusCompleted;
+  if (status === 'inProgress') return t.statusInProgress;
+  return t.statusScheduled;
+}
+
+export async function B2BSection({ locale, content }: Props) {
+  const t = await getTranslations('businessShowcase');
+  const featuredCoursePercent = t.featuredCoursePercent.replace(
+    '{{percent}}',
+    '68'
+  );
+
   return (
     <section
       id='b2b'
@@ -125,14 +142,14 @@ export function B2BSection({ locale, content }: Props) {
               <div className='min-w-0 flex-1'>
                 <div className='mb-1 flex items-center gap-2'>
                   <span className='rounded-full bg-[rgba(0,168,241,0.12)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.4px] text-[#00a8f1]'>
-                    Continue
+                    {t.featuredCourseBadge}
                   </span>
                   <span className='text-[11px] font-semibold text-[#6b7196]'>
-                    68% complete
+                    {featuredCoursePercent}
                   </span>
                 </div>
                 <strong className='block truncate text-[13.5px] font-bold tracking-[-0.2px] text-[#1e2364]'>
-                  Occupational Health & Safety Essentials
+                  {t.featuredCourseTitle}
                 </strong>
                 <div className='mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#e5e7f0]'>
                   <div
@@ -180,9 +197,9 @@ export function B2BSection({ locale, content }: Props) {
             </div>
 
             {/* Learner / course rows */}
-            {content.employees.map((employee, index) => (
+            {t.learners.map((learner, index) => (
               <div
-                key={employee.name}
+                key={learner.name}
                 className='mb-2 flex items-center gap-3 rounded-[14px] border-2 border-[#e5e7f0] bg-white px-3.5 py-2.75'
               >
                 <div
@@ -197,16 +214,16 @@ export function B2BSection({ locale, content }: Props) {
                 </div>
                 <div className='min-w-0 flex-1'>
                   <strong className='block truncate text-[13px] font-bold tracking-[-0.2px] text-[#1e2364]'>
-                    {employee.name}
+                    {learner.name}
                   </strong>
                   <span className='block truncate text-[11px] text-[#6b7196]'>
-                    {employee.exam}
+                    {learner.course}
                   </span>
                 </div>
                 <span
-                  className={`shrink-0 rounded-full border-2 px-2.5 py-1.25 text-[10px] font-bold uppercase tracking-[0.4px] ${getStatusClassName(employee.status)}`}
+                  className={`shrink-0 rounded-full border-2 px-2.5 py-1.25 text-[10px] font-bold uppercase tracking-[0.4px] ${getStatusClassName(learner.status)}`}
                 >
-                  {employee.status}
+                  {statusLabel(t, learner.status)}
                 </span>
               </div>
             ))}

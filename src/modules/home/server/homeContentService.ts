@@ -2,6 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import type { Locale } from '@/i18n/config';
+import { ROUTES } from '@/shared/constants/routes';
 import type {
   HomeAcademyContent,
   HomeActionContent,
@@ -64,8 +65,6 @@ import type {
 } from './articleCategory.dto';
 import { stripHtmlToNull } from '@/shared/lib/text';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
-import { fetchServicesList } from '@/modules/services/server/servicesService';
-import type { ServiceListItem } from '@/modules/services/types/services.types';
 
 interface CmsTranslationSnapshot {
   name: string;
@@ -525,25 +524,27 @@ function mapHeroContent(
   };
 }
 
-function mapServiceListItemToHomeItem(
-  service: ServiceListItem,
-  langId: number
-): HomeServicesContent['items'][number] {
-  const translation =
-    service.translations.find((tr) => tr.langId === langId) ??
-    service.translations[0];
-
-  return {
-    title: trimToNull(translation?.name) ?? '',
-    description: stripHtmlToNull(translation?.description) ?? '',
-    path: `/services/${service.id}`,
-    iconKey: null,
-  };
-}
+const HOME_SERVICES_OVERRIDE: Record<number, string[]> = {
+  1: [
+    'Driving license exam and delivery representative exam',
+    'Residency exams and residency renewal exams',
+    'Pre-marital exams and pre-school exams',
+    'Health certificate exams',
+    'Employee and labor exams',
+    'Custom exams based on need',
+  ],
+  2: [
+    'فحص رخصة القيادة وفحص مناديب التوصيل',
+    'فحوصات الإقامة وتجديد الإقامة',
+    'فحوصات ما قبل الزواج وفحص ما قبل المدرسة',
+    'فحص فحوصات الشهادة الصحية',
+    'فحوصات الموظفين والعمالة',
+    'فحوصات مخصصة حسب الاحتياج',
+  ],
+};
 
 function mapServicesContent(
   rootCategory: RecursiveArticleCategoryDto | null,
-  services: ServiceListItem[],
   langId: number
 ): HomeServicesContent {
   const servicesCategory = getChildCategoryById(
@@ -559,9 +560,14 @@ function mapServicesContent(
     ? getArticleTranslation(headerArticle, langId)
     : null;
 
-  const items = services
-    .map((service) => mapServiceListItemToHomeItem(service, langId))
-    .filter((item) => item.title.length > 0);
+  const items = (
+    HOME_SERVICES_OVERRIDE[langId] ?? HOME_SERVICES_OVERRIDE[1]
+  ).map((title) => ({
+    title,
+    description: '',
+    path: ROUTES.SERVICES,
+    iconKey: null,
+  }));
 
   return {
     eyebrow: trimToNull(headerTranslation?.shortDescription) ?? '',
@@ -1266,18 +1272,11 @@ export function mapFooterContent(
     footerCategory,
     FOOTER_ARTICLE_RANKS.newsletter
   );
-  const copyrightArticle = getArticleByRank(
-    footerCategory,
-    FOOTER_ARTICLE_RANKS.copyright
-  );
   const brandTranslation = brandArticle
     ? getArticleTranslation(brandArticle, langId)
     : null;
   const newsletterTranslation = newsletterArticle
     ? getArticleTranslation(newsletterArticle, langId)
-    : null;
-  const copyrightTranslation = copyrightArticle
-    ? getArticleTranslation(copyrightArticle, langId)
     : null;
 
   return {
@@ -1289,8 +1288,6 @@ export function mapFooterContent(
     newsletterEyebrow:
       trimToNull(newsletterTranslation?.shortDescription) ?? '',
     newsletterAction: trimToNull(newsletterTranslation?.extraInfo) ?? '',
-    copyrightLabel: trimToNull(copyrightTranslation?.name) ?? '',
-    copyrightBody: trimToNull(copyrightTranslation?.description) ?? '',
     pages: mapFooterGroup(
       getChildCategoryById(footerCategory, FOOTER_CHILD_CATEGORY_IDS.pages),
       langId
@@ -1338,13 +1335,12 @@ function buildHomePageContent(
   rootCategory: RecursiveArticleCategoryDto | null,
   companiesCategory: RecursiveArticleCategoryDto | null,
   stepsHeadingOverride: StepsHeadingOverride | null,
-  services: ServiceListItem[],
   langId: number
 ): HomePageContent {
   return {
     hero: mapHeroContent(rootCategory, langId),
     companies: mapCompaniesContent(companiesCategory),
-    services: mapServicesContent(rootCategory, services, langId),
+    services: mapServicesContent(rootCategory, langId),
     why: mapWhyContent(rootCategory, langId),
     booking: mapBookingContent(rootCategory, langId),
     steps: mapStepsContent(rootCategory, langId, stepsHeadingOverride),
@@ -1427,18 +1423,6 @@ const fetchHomeContentTree = cache(
   }
 );
 
-const fetchHomeServices = cache(async (): Promise<ServiceListItem[]> => {
-  try {
-    const page = await fetchServicesList({
-      Target: 2,
-      OrderDirection: true,
-    });
-    return page.data;
-  } catch (error) {
-    return [];
-  }
-});
-
 const fetchStepsHeadingCategory = cache(
   async (locale: Locale): Promise<ArticleCategoryListItemDto | null> => {
     const endpoint = new URL(
@@ -1506,22 +1490,27 @@ export const getHomeStatsContent = cache(
   }
 );
 
+export const getHomeCompaniesContent = cache(
+  async (): Promise<HomeCompaniesContent> => {
+    const companiesCategory = await fetchCompaniesCategoryTree();
+    return mapCompaniesContent(companiesCategory);
+  }
+);
+
 export const getHomePageContent = cache(
   async (locale: Locale): Promise<HomePageContent> => {
     const langId = localeToLangId[locale];
-    const [rootCategory, companiesCategory, stepsHeadingCategory, services] =
+    const [rootCategory, companiesCategory, stepsHeadingCategory] =
       await Promise.all([
         fetchHomeContentTree(),
         fetchCompaniesCategoryTree(),
         fetchStepsHeadingCategory(locale),
-        fetchHomeServices(),
       ]);
 
     return buildHomePageContent(
       rootCategory,
       companiesCategory,
       mapStepsHeadingOverride(stepsHeadingCategory, langId),
-      services,
       langId
     );
   }

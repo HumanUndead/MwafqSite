@@ -260,23 +260,17 @@ const en = {
     },
     services: {
       titleLead: 'Our',
-      titleAccent: 'Services',
+      titleAccent: '',
       body: 'Organise residency exams, work permit renewals, and municipality health certificates for large numbers of employees at the same time.',
-      trustChips: [
-        'Bulk booking',
-        'Live employee tracking',
-        'Certified PDF reports',
-        'MOH-aligned exams',
-      ],
+      trustChips: ['MOH-aligned exams'],
       previewLabel: 'Dashboard preview',
       dashboard: {
         viewingLabel: 'Currently viewing',
         tabOverview: 'Overview',
         tabEmployees: 'Employees',
         tabReports: 'Reports',
-        statEmployeesLabel: 'Employees',
-        statClearedLabel: 'Cleared',
-        statPendingLabel: 'Pending',
+        trendPeriodLabel: 'Last 7 periods',
+        rateSuffix: 'rate',
       },
       items: [
         {
@@ -299,10 +293,23 @@ const en = {
             statusLabel: 'Cleared',
           },
           dashboardMock: {
+            listLabel: 'Recent Exams',
             stats: {
-              employees: { value: '142', bars: [8, 12, 6, 14, 10, 16, 18] },
-              cleared: { value: '91%', bars: [6, 10, 8, 16, 12, 14, 18] },
-              pending: { value: '8', bars: [10, 14, 8, 12, 6, 16, 10] },
+              employees: {
+                label: 'Exams Booked',
+                value: '142',
+                bars: [11, 13, 12, 14, 15, 17, 18],
+              },
+              cleared: {
+                label: 'Cleared',
+                value: '91%',
+                bars: [12, 13, 14, 14, 16, 17, 18],
+              },
+              pending: {
+                label: 'Results Pending',
+                value: '8',
+                bars: [14, 12, 10, 11, 9, 7, 6],
+              },
             },
             employees: [
               {
@@ -317,14 +324,14 @@ const en = {
                 name: 'Sara K.',
                 detail: 'Medical Examination · Jeddah',
                 status: 'active',
-                statusLabel: 'In progress',
+                statusLabel: 'Result pending',
               },
               {
                 initials: 'OT',
                 name: 'Omar T.',
                 detail: 'Medical Examination · Dammam',
                 status: 'wait',
-                statusLabel: 'Scheduled',
+                statusLabel: 'Exam scheduled',
               },
             ],
           },
@@ -349,10 +356,23 @@ const en = {
             statusLabel: 'In progress',
           },
           dashboardMock: {
+            listLabel: 'Workforce Status',
             stats: {
-              employees: { value: '248', bars: [8, 12, 6, 14, 10, 16, 18] },
-              cleared: { value: '96%', bars: [6, 10, 8, 16, 12, 14, 18] },
-              pending: { value: '12', bars: [10, 14, 8, 12, 6, 16, 10] },
+              employees: {
+                label: 'Workforce Covered',
+                value: '248',
+                bars: [15, 10, 17, 9, 16, 11, 14],
+              },
+              cleared: {
+                label: 'Compliant',
+                value: '96%',
+                bars: [13, 15, 14, 16, 15, 17, 18],
+              },
+              pending: {
+                label: 'At Risk',
+                value: '12',
+                bars: [7, 9, 6, 10, 6, 8, 5],
+              },
             },
             employees: [
               {
@@ -360,21 +380,21 @@ const en = {
                 name: 'Fatima R.',
                 detail: 'Occupational Health · Jeddah',
                 status: 'active',
-                statusLabel: 'In progress',
+                statusLabel: 'Screening due',
               },
               {
                 initials: 'NA',
                 name: 'Noura A.',
                 detail: 'Occupational Health · Riyadh',
                 status: 'wait',
-                statusLabel: 'Scheduled',
+                statusLabel: 'License expiring',
               },
               {
                 initials: 'YH',
                 name: 'Youssef H.',
                 detail: 'Occupational Health · Dammam',
                 status: 'done',
-                statusLabel: 'Cleared',
+                statusLabel: 'Compliant',
               },
             ],
           },
@@ -399,10 +419,23 @@ const en = {
             statusLabel: 'Scheduled',
           },
           dashboardMock: {
+            listLabel: 'Recent Enrollments',
             stats: {
-              employees: { value: '86', bars: [12, 8, 14, 6, 10, 16, 12] },
-              cleared: { value: '88%', bars: [8, 14, 10, 12, 6, 16, 14] },
-              pending: { value: '18', bars: [14, 10, 12, 8, 16, 6, 10] },
+              employees: {
+                label: 'Trainees Enrolled',
+                value: '86',
+                bars: [6, 8, 9, 11, 13, 15, 18],
+              },
+              cleared: {
+                label: 'Certified',
+                value: '88%',
+                bars: [7, 9, 10, 12, 14, 16, 17],
+              },
+              pending: {
+                label: 'In Training',
+                value: '18',
+                bars: [9, 12, 14, 11, 13, 10, 8],
+              },
             },
             employees: [
               {
@@ -410,21 +443,21 @@ const en = {
                 name: 'Khalid M.',
                 detail: 'Academy Training · Dammam',
                 status: 'wait',
-                statusLabel: 'Scheduled',
+                statusLabel: 'In training',
               },
               {
                 initials: 'LB',
                 name: 'Layla B.',
                 detail: 'Academy Training · Riyadh',
                 status: 'active',
-                statusLabel: 'In progress',
+                statusLabel: 'Final assessment',
               },
               {
                 initials: 'HG',
                 name: 'Hassan G.',
                 detail: 'Academy Training · Jeddah',
                 status: 'done',
-                statusLabel: 'Cleared',
+                statusLabel: 'Certified',
               },
             ],
           },
@@ -469,7 +502,7 @@ const en = {
     description: "Have a question or need help? We'd love to hear from you.",
     info: {
       email: { label: 'Email', value: 'support@mwafq.com' },
-      phone: { label: 'Phone', value: '+966 11 000 0000' },
+      phone: { label: 'Phone', value: '+966599695023' },
       address: { label: 'Office', value: 'Riyadh, Saudi Arabia' },
     },
     form: {
@@ -1063,6 +1096,31 @@ const en = {
       noOptions: 'No options available',
       selectCountryFirst: 'Select a country first',
     },
+  },
+  businessShowcase: {
+    featuredCourseBadge: 'Continue',
+    featuredCoursePercent: '{{percent}}% complete',
+    featuredCourseTitle: 'Workplace Safety Fundamentals',
+    statusCompleted: 'Completed',
+    statusInProgress: 'In progress',
+    statusScheduled: 'Scheduled',
+    learners: [
+      {
+        name: 'Ahmad K.',
+        course: 'Workplace Safety Fundamentals',
+        status: 'completed',
+      },
+      {
+        name: 'Sara M.',
+        course: 'First Aid Certification',
+        status: 'inProgress',
+      },
+      {
+        name: 'Faisal H.',
+        course: 'Fire Safety Training',
+        status: 'scheduled',
+      },
+    ],
   },
   services: {
     viewAll: 'View All',

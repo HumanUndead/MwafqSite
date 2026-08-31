@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
-import { getUtilityIconByKey, StarIcon } from '@/shared/components/icons/home';
+import { getUtilityIconByKey } from '@/shared/components/icons/home';
+// import { StarIcon } from '@/shared/components/icons/home';
 import type { HomeAcademyContent } from '../home.types';
 import { Eyebrow } from './Eyebrow';
 import { marketingSectionHeadingClass } from '@/shared/components/marketing/marketingLayout';
@@ -79,11 +80,11 @@ export function AcademyCourseGrid({ content }: Props) {
                 <div className='flex size-13.5 shrink-0 items-center justify-center rounded-[14px_4px_14px_4px] border-2 border-[#e5e7f0] bg-[#fbfcff] group-hover:border-[#00a8f1]'>
                   {getUtilityIconByKey(course.iconKey)}
                 </div>
-                <span
+                {/* <span
                   className={`rounded-full border-2 px-3 py-1.25 text-[11px] font-bold uppercase tracking-[0.5px] ${index === 2 ? 'border-transparent bg-[rgba(217,116,60,0.14)] text-[#a65528]' : 'border-[#00a8f1] bg-white text-[#00a8f1]'}`}
                 >
                   {course.meta}
-                </span>
+                </span> */}
               </div>
               <div className='mb-2.5 min-h-11.5 text-[18px] font-bold leading-[1.3] tracking-[-0.3px] text-[#1e2364]'>
                 {course.title}
@@ -91,7 +92,7 @@ export function AcademyCourseGrid({ content }: Props) {
               <div className='mb-5 min-h-16 text-[13.5px] leading-[1.6] text-[#6b7196]'>
                 {course.detail}
               </div>
-              {course.ratingValue && (
+              {/* {course.ratingValue && (
                 <div className='flex items-center justify-between border-t-2 border-[#e5e7f0] pt-4'>
                   <div className='flex items-center gap-1.5 text-[13px] font-bold text-[#1e2364]'>
                     <StarIcon />
@@ -101,7 +102,7 @@ export function AcademyCourseGrid({ content }: Props) {
                     </span>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </ScrollReveal>
         ))}

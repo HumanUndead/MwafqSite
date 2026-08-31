@@ -86,9 +86,11 @@ export const getMenuContent = cache(
       fetchSocialMediaCategoryTree(),
     ]);
 
+    const footer = mapFooterContent(menuCategory, langId, socialMediaCategory);
+
     return {
       header: mapHeaderContent(menuCategory, langId),
-      footer: mapFooterContent(menuCategory, langId, socialMediaCategory),
+      footer,
     };
   }
 );

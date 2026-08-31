@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
 import { cn } from '@/shared/lib/cn';
+import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 
 interface Stage {
   number: string;
@@ -574,6 +575,64 @@ function StageLabelContent({
   );
 }
 
+function MobileJourneyTimeline({
+  stages,
+  rtl,
+  eyebrow,
+  title,
+}: {
+  stages: Stage[];
+  rtl: boolean;
+  eyebrow: string;
+  title: string;
+}) {
+  return (
+    <section className='relative bg-[#f4f4f6] px-5 py-14 max-[560px]:px-4'>
+      <div className='mx-auto mb-10 max-w-lg text-center'>
+        <span className='font-mono text-[12px] font-medium uppercase tracking-[0.28em] text-[#1e2364]/40'>
+          {eyebrow}
+        </span>
+        <h2 className='mt-2 text-[clamp(26px,6.5vw,34px)] font-extrabold leading-[1.05] tracking-[-0.8px] text-[#1e2364]'>
+          {title}
+        </h2>
+      </div>
+
+      <ol className='relative mx-auto flex max-w-lg flex-col gap-6'>
+        <span
+          aria-hidden='true'
+          className='absolute top-2 bottom-2 start-[19px] w-px bg-gradient-to-b from-[#1e2364] to-[#00a8f1]'
+        />
+
+        {stages.map((stage, index) => (
+          <ScrollReveal
+            key={stage.number}
+            variant='y'
+            transitionDelay={Math.min(index, 3) * 0.05}
+          >
+            <li className='relative flex min-h-[104px] gap-4'>
+              <span
+                className='relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-[#00a8f1] bg-[#f4f4f6] font-mono text-[13px] font-bold text-[#00a8f1]'
+                aria-hidden='true'
+              >
+                {stage.number}
+              </span>
+
+              <div className='min-w-0 flex-1 pt-1.5'>
+                <h3 className='mb-1.5 text-[18px] font-extrabold leading-[1.2] tracking-[-0.4px] text-[#1e2364]'>
+                  {stage.title}
+                </h3>
+                <p className='text-[13px] leading-[1.55] text-[#6b7196]'>
+                  {stage.description}
+                </p>
+              </div>
+            </li>
+          </ScrollReveal>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 interface Props {
   locale: Locale;
   stages: Stage[];
@@ -588,10 +647,48 @@ export function B2BProcessSection({ locale, stages: cmsStages }: Props) {
     number: rtl ? toArabicDigits(stage.number) : stage.number,
   }));
 
+  const [compact, setCompact] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)');
+    const update = () => setCompact(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  if (compact) {
+    return (
+      <MobileJourneyTimeline
+        stages={stages}
+        rtl={rtl}
+        eyebrow={eyebrow}
+        title={title}
+      />
+    );
+  }
+
+  return <B2BProcessSectionDesktop stages={cmsStages} rtl={rtl} />;
+}
+
+function B2BProcessSectionDesktop({
+  stages: cmsStages,
+  rtl,
+}: {
+  stages: Stage[];
+  rtl: boolean;
+}) {
+  const meta = SECTION_META[rtl ? 'ar' : 'en']!;
+  const { eyebrow, title } = meta;
+  const stages = cmsStages.map((stage) => ({
+    ...stage,
+    number: rtl ? toArabicDigits(stage.number) : stage.number,
+  }));
+  const compact = false;
+
   const sectionRef = useRef<HTMLElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
 
-  const [compact, setCompact] = useState(false);
   const [pathLength, setPathLength] = useState(0);
   const [nodePathProgress, setNodePathProgress] = useState<number[]>([
     ...NODE_PATH_PROGRESS,
@@ -610,15 +707,7 @@ export function B2BProcessSection({ locale, stages: cmsStages }: Props) {
 
   useLayoutEffect(() => {
     measurePath();
-  }, [measurePath, compact]);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1023px)');
-    const update = () => setCompact(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
+  }, [measurePath]);
 
   useEffect(() => {
     let frame = 0;

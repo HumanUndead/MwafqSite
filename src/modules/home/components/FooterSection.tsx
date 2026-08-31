@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import type { Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/DictionaryProvider';
 import {
   getSocialIcon,
   getSocialIconStyle,
@@ -71,6 +72,12 @@ function ContactLink({
 }
 
 export function FooterSection({ locale, content }: Props) {
+  const footer = useTranslations('footer');
+  const copyright = footer.copyright.replace(
+    '{{year}}',
+    String(new Date().getFullYear())
+  );
+
   return (
     <footer id='contact' className='bg-[#eeeeef] px-4 pb-3 pt-0 md:px-6 md:pb-4'>
       <div className={marketingSectionShellClass}>
@@ -120,7 +127,7 @@ export function FooterSection({ locale, content }: Props) {
             )}
 
             <p className='mt-3 text-[12px] text-[rgba(30,35,100,0.45)]'>
-              {content.copyrightLabel} {content.copyrightBody}
+              {copyright}
             </p>
           </div>
 

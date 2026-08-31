@@ -67,31 +67,28 @@ export const B2BSharedServiceDashboard = memo(
           <div className='grid grid-cols-3 gap-2'>
             <StatCard
               value={mock.stats.employees.value}
-              label={dashboard.statEmployeesLabel}
+              label={mock.stats.employees.label}
               numColor='#1565c0'
               barColor='#1e88e5'
               bars={mock.stats.employees.bars}
             />
             <StatCard
               value={mock.stats.cleared.value}
-              label={dashboard.statClearedLabel}
+              label={mock.stats.cleared.label}
               numColor='#00897b'
               barColor='#00dec9'
               bars={mock.stats.cleared.bars}
             />
             <StatCard
               value={mock.stats.pending.value}
-              label={dashboard.statPendingLabel}
+              label={mock.stats.pending.label}
               numColor='#e65100'
               barColor='#ff9800'
               bars={mock.stats.pending.bars}
             />
           </div>
 
-          <ul
-            className='flex flex-col gap-2'
-            aria-label={dashboard.tabEmployees}
-          >
+          <ul className='flex flex-col gap-2' aria-label={mock.listLabel}>
             {mock.employees.map((employee, index) => (
               <li
                 key={`${employee.name}-${index}`}

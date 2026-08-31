@@ -3,7 +3,10 @@ import { hasLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 import { buildPageMetadata } from '@/i18n/seo';
 import { ROUTES } from '@/shared/constants/routes';
-import { fetchServicesList } from '@/modules/services/server/servicesService';
+import {
+  fetchServiceGroupsList,
+  serviceGroupToServiceListItem,
+} from '@/modules/auth/server/ServiceGroupService';
 import { ServicesPage } from '@/modules/services';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 
@@ -32,17 +35,17 @@ export default async function ServicesRoute({
 }) {
   const { search, page } = await searchParams;
 
-  const data = await fetchServicesList({
+  const data = await fetchServiceGroupsList({
     pageNumber: page ? +page : 1,
     pageSize: 8,
-    Target: 2,
     Search: search,
+    OrderDirection: true,
   });
 
   return (
     <MarketingStickyHeaderOffset variant='filter'>
       <ServicesPage
-        services={data.data}
+        services={data.data.map(serviceGroupToServiceListItem)}
         page={data.pageNumber}
         totalPages={data.totalPages}
       />

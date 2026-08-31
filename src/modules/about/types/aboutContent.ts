@@ -1,3 +1,5 @@
+import type { HomeCompaniesContent } from '@/modules/home/home.types';
+
 export interface AboutMetaContent {
   title: string;
   description: string;
@@ -26,12 +28,6 @@ export interface AboutMissionVisionBlockContent {
 export interface AboutMvContent {
   mission: AboutMissionVisionBlockContent;
   vision: AboutMissionVisionBlockContent;
-}
-
-export interface AboutStatItemContent {
-  value: number;
-  suffix: string;
-  label: string;
 }
 
 export interface AboutListItemContent {
@@ -100,11 +96,11 @@ export interface AboutPageContent {
   hero: AboutHeroContent;
   story: AboutStoryContent;
   mv: AboutMvContent;
-  stats: AboutStatItemContent[];
   what: AboutSectionWithItemsContent;
   why: AboutWhyContent;
   values: AboutValuesContent;
   how: AboutSectionWithItemsContent;
+  companies: HomeCompaniesContent;
   milestones: AboutMilestonesContent;
   b2b: AboutB2bSnippetContent;
   finalCta: AboutFinalCtaContent;

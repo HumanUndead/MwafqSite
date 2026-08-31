@@ -756,16 +756,16 @@
               "id": 619,
               "articleId": 315,
               "langId": 1,
-              "name": "Our",
+              "name": "Our Solutions & Products",
               "description": null,
               "shortDescription": null,
-              "extraInfo": "Product"
+              "extraInfo": null
             },
             {
               "id": 620,
               "articleId": 315,
               "langId": 2,
-              "name": "منتجاتنا",
+              "name": "حلولنا ومنتجاتنا",
               "description": null,
               "shortDescription": null,
               "extraInfo": null
@@ -1957,7 +1957,7 @@
               "name": "Registration & Governance",
               "description": null,
               "shortDescription": null,
-              "extraInfo": "**Digitally verify and authenticate your organization’s commercial registration instantly in just minutes.**"
+              "extraInfo": "Digitally verify and authenticate your organization’s commercial registration instantly in just minutes."
             },
             {
               "id": 1068,

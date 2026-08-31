@@ -42,7 +42,7 @@ export function AboutFinalCtaSection({ locale, content }: Props) {
             ) : null}
             {secondaryLabel ? (
               <a
-                href={getLocalizedRoute(locale, ROUTES.CONTACT)}
+                href={getLocalizedRoute(locale, ROUTES.REGISTER)}
                 className={buttonVariants({
                   variant: 'brandOutline',
                   size: 'hero',

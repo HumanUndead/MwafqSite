@@ -7,7 +7,8 @@ import { getLocalizedRoute } from '@/i18n/routing';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { marketingAlignedShellClass } from '@/shared/components/marketing';
 import { ROUTES } from '@/shared/constants/routes';
-import type { ServiceDetail, ServiceListItem } from './types/services.types';
+import type { ServiceListItem } from './types/services.types';
+import type { ServiceGroupDetail } from '@/modules/auth/serviceGroup.types';
 // import { getServiceGroupBuyPath } from '@/modules/services/booking.shared';
 import { PackageCard } from './components/PackageCard';
 // import { BuyNowButton } from './components/BuyNowButton';
@@ -27,7 +28,7 @@ function plainTextFromHtml(value: string): string {
 export type ServiceGroupDetailsViewProps = {
   locale: Locale;
   langId: number;
-  service: ServiceDetail;
+  service: ServiceGroupDetail;
   relatedPackages: ServiceListItem[];
   isAuthenticated: boolean;
 };

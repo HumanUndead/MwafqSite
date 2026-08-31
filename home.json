@@ -1,0 +1,690 @@
+{
+  "hero": {
+    "badge": "موثوق من أكثر من 500 شريك صحي في المملكة",
+    "badgeImages": [
+      {
+        "src": "/demo-assets/img1.jpg",
+        "alt": "موفق.."
+      },
+      {
+        "src": "/demo-assets/img2.jpg",
+        "alt": "موفق.."
+      },
+      {
+        "src": "/demo-assets/img3.jpg",
+        "alt": "موفق.."
+      }
+    ],
+    "titleLead": "موفق..",
+    "titleMiddle": "فحوصاتك الطبية",
+    "rotatingWords": ["أسهل.", "أوفر.", "أفضل."],
+    "subtitle": "أتمته ذكية للأفراد والشركات ، الحل الرقمي الأسرع لادارة واتمتة الفحوصات الطبية الإلزامية في المملكة ، بمميزات مدعومة بالذكاء الاصطناعي.",
+    "primaryAction": {
+      "label": "للحجز الفوري",
+      "path": "#booking"
+    },
+    "secondaryAction": {
+      "label": "تواصل معنا",
+      "path": "#app"
+    },
+    "stats": [
+      {
+        "value": 214,
+        "suffix": "+",
+        "label": "مركز طبي معتمد"
+      },
+      {
+        "value": 38,
+        "suffix": "+",
+        "label": "مدينة حول المملكة"
+      },
+      {
+        "value": 100,
+        "suffix": "%",
+        "label": "نتائج صحيحة وموثوقة"
+      }
+    ],
+    "phoneGreeting": "مرحباً،",
+    "phoneName": "أحمد",
+    "phoneSearchPlaceholder": "ابحث عن فحصك",
+    "servicesTitle": "الخدمات",
+    "servicesLink": "عرض الكل",
+    "phoneTiles": [
+      {
+        "title": "القيادة",
+        "subtitle": "الرخصة",
+        "iconKey": "icon-driving-license"
+      },
+      {
+        "title": "الإقامة",
+        "subtitle": "إقامة",
+        "iconKey": "icon-residency-exam"
+      },
+      {
+        "title": "الشهادة الصحية",
+        "subtitle": "إصدار وتجديد",
+        "iconKey": "icon-municipality"
+      },
+      {
+        "title": "ما قبل الزواج",
+        "subtitle": "معتمد",
+        "iconKey": "icon-occupational-health"
+      }
+    ],
+    "liveBookings": "247",
+    "liveBookingsLabel": "حجزوا اليوم",
+    "floatingCards": [
+      {
+        "title": "أقرب مركز طبي",
+        "detail": "مدينة الرياض"
+      },
+      {
+        "title": "نتيجتك صدرت",
+        "detail": "لائق"
+      },
+      {
+        "title": "تم الحجز",
+        "detail": "غداً · 9:00 صباحاً"
+      }
+    ],
+    "statsHeading": "موفق في أرقام"
+  },
+  "companies": {
+    "items": [
+      {
+        "id": 503,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/503/AF"
+      },
+      {
+        "id": 504,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/504/zawitco"
+      },
+      {
+        "id": 505,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/505/TD"
+      },
+      {
+        "id": 506,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/506/stc"
+      },
+      {
+        "id": 507,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/507/sofitel"
+      },
+      {
+        "id": 508,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/508/nova"
+      },
+      {
+        "id": 509,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/509/ninja"
+      },
+      {
+        "id": 510,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/510/meat"
+      },
+      {
+        "id": 511,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/511/cenomi"
+      },
+      {
+        "id": 512,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/512/anoosh"
+      },
+      {
+        "id": 513,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/513/╪º┘ä╪╖╪º╪▓╪¼"
+      },
+      {
+        "id": 514,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/514/╪º┘ä╪│╪╣┘ê╪»┘è╪⌐ ┘ä┘ä┘é┘ç┘ê╪⌐"
+      },
+      {
+        "id": 515,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/515/╪¼┘ê┘ä┘ü ╪º┘ä╪│╪╣┘ê╪»┘è╪⌐"
+      },
+      {
+        "id": 517,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/517/┘å╪╣┘å╪º╪╣"
+      },
+      {
+        "id": 516,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/516/┘à╪╢╪║┘ê╪╖ ╪¿┘è╪¬┘å╪º"
+      },
+      {
+        "id": 518,
+        "imageSrc": "https://stagingapi.mwafq.com/content/Article/518/╪╣┘å┘ê╪º┘å ╪º┘ä┘é┘ç┘ê╪⌐"
+      }
+    ]
+  },
+  "services": {
+    "eyebrow": "خدماتنا",
+    "title": "كل الفحوصات الطبية الإلزامية ..",
+    "accent": "في منصة واحدة !",
+    "body": "حجز فوري يختصر عليك الوقت والجهد",
+    "items": [
+      {
+        "title": "Heavy Metal Exposure Screening",
+        "description": "",
+        "path": "/services/162",
+        "iconKey": null
+      },
+      {
+        "title": "Parvovirus B19 Assessment",
+        "description": "",
+        "path": "/services/161",
+        "iconKey": null
+      },
+      {
+        "title": "Dermatological Examination",
+        "description": "",
+        "path": "/services/160",
+        "iconKey": null
+      },
+      {
+        "title": "Animal Allergen Sensitivity Assessment",
+        "description": "",
+        "path": "/services/159",
+        "iconKey": null
+      },
+      {
+        "title": "Total LGE Level",
+        "description": "",
+        "path": "/services/158",
+        "iconKey": null
+      },
+      {
+        "title": "Anti-Tetanus Serum",
+        "description": "Anti-Tetanus Serum",
+        "path": "/services/157",
+        "iconKey": null
+      },
+      {
+        "title": "PCV (Pneumococcal Conjugate Vaccine)",
+        "description": "PCV (Pneumococcal Conjugate Vaccine)",
+        "path": "/services/156",
+        "iconKey": null
+      },
+      {
+        "title": "Hepatitis A Vaccine (Adult)",
+        "description": "Hepatitis A Vaccine (Adult)",
+        "path": "/services/155",
+        "iconKey": null
+      },
+      {
+        "title": "Hepatitis B Vaccine",
+        "description": "Hepatitis B Vaccine",
+        "path": "/services/154",
+        "iconKey": null
+      },
+      {
+        "title": "TDAP VACCINE",
+        "description": "TDAP VACCINE",
+        "path": "/services/153",
+        "iconKey": null
+      },
+      {
+        "title": "MMR VACCINE",
+        "description": "MMR VACCINE",
+        "path": "/services/152",
+        "iconKey": null
+      },
+      {
+        "title": "Varicella VACCINE",
+        "description": "Varicella VACCINE",
+        "path": "/services/151",
+        "iconKey": null
+      },
+      {
+        "title": "Height, Weight ,Pulse Measurements, Blood Pressure & Heart Rate Assessment",
+        "description": "Medical services",
+        "path": "/services/150",
+        "iconKey": null
+      },
+      {
+        "title": "Occupational Asthma Screening",
+        "description": "doctor consultation",
+        "path": "/services/149",
+        "iconKey": null
+      },
+      {
+        "title": "Respirator Fit Testing",
+        "description": "doctor consultation",
+        "path": "/services/148",
+        "iconKey": null
+      },
+      {
+        "title": "Spirometry / Pulmonary Function Test (PFT)",
+        "description": "",
+        "path": "/services/147",
+        "iconKey": null
+      },
+      {
+        "title": "Animal allergy test",
+        "description": "lab",
+        "path": "/services/146",
+        "iconKey": null
+      },
+      {
+        "title": "Hepatitis B Surface (HBS) ABS",
+        "description": "lab",
+        "path": "/services/145",
+        "iconKey": null
+      },
+      {
+        "title": "HBA1C",
+        "description": "lab",
+        "path": "/services/144",
+        "iconKey": null
+      },
+      {
+        "title": "Varicella Zoster Virus (VZV) Antibodies",
+        "description": "lab",
+        "path": "/services/143",
+        "iconKey": null
+      },
+      {
+        "title": "Rubella Antibodies",
+        "description": "lab",
+        "path": "/services/142",
+        "iconKey": null
+      },
+      {
+        "title": "Mumps Antibodies",
+        "description": "lab",
+        "path": "/services/141",
+        "iconKey": null
+      },
+      {
+        "title": "Measles Antibodies",
+        "description": "lab",
+        "path": "/services/140",
+        "iconKey": null
+      },
+      {
+        "title": "Hepatitis A Antibodies",
+        "description": "lab",
+        "path": "/services/139",
+        "iconKey": null
+      },
+      {
+        "title": "IGRA (Tuberculosis Screening)",
+        "description": "lab",
+        "path": "/services/138",
+        "iconKey": null
+      },
+      {
+        "title": "Fasting Blood Sugar (FBS)",
+        "description": "lab",
+        "path": "/services/137",
+        "iconKey": null
+      },
+      {
+        "title": "Kidney Function Test (Na, K, Urea)",
+        "description": "lab",
+        "path": "/services/136",
+        "iconKey": null
+      },
+      {
+        "title": "HIV Antibodies",
+        "description": "lab",
+        "path": "/services/135",
+        "iconKey": null
+      },
+      {
+        "title": "Medical Fitness Evaluation",
+        "description": "Medical Services",
+        "path": "/services/134",
+        "iconKey": null
+      },
+      {
+        "title": "Cardiovascular Examination",
+        "description": "Doctor consultaion",
+        "path": "/services/133",
+        "iconKey": null
+      },
+      {
+        "title": "Neurological Examination",
+        "description": "Doctor consultation",
+        "path": "/services/132",
+        "iconKey": null
+      },
+      {
+        "title": "Respiratory Bedside Examination",
+        "description": "Doctor consultation",
+        "path": "/services/131",
+        "iconKey": null
+      },
+      {
+        "title": "Behavioral & Mental Health Assessment",
+        "description": "Doctor consultation",
+        "path": "/services/130",
+        "iconKey": null
+      },
+      {
+        "title": "Smell, Taste & Speech Assessment",
+        "description": "E.N.T",
+        "path": "/services/129",
+        "iconKey": null
+      },
+      {
+        "title": "Audiometry (Hearing Test)",
+        "description": "E.N.T",
+        "path": "/services/128",
+        "iconKey": null
+      },
+      {
+        "title": "Color Vision Testing",
+        "description": "eye test",
+        "path": "/services/127",
+        "iconKey": null
+      },
+      {
+        "title": "ECG",
+        "description": "Medical Services",
+        "path": "/services/126",
+        "iconKey": null
+      },
+      {
+        "title": "Baladiya Vaccine",
+        "description": "Baladiya Vaccine",
+        "path": "/services/125",
+        "iconKey": null
+      },
+      {
+        "title": "Meningococcal Vaccine A&C Vial",
+        "description": "Meningococcal Vaccine A&amp;C Vial",
+        "path": "/services/119",
+        "iconKey": null
+      },
+      {
+        "title": "Ophthalmology / Vision Testing",
+        "description": "EYE TEST",
+        "path": "/services/98",
+        "iconKey": null
+      }
+    ]
+  },
+  "why": {
+    "eyebrow": "لماذا موفق",
+    "title": "نؤتمت الفحوصات الطبية لنمنح الأفراد والشركات والمراكز خدمة أسرع وأكثر كفاءة",
+    "items": [
+      {
+        "title": "حجز ودفع فوري",
+        "description": "تابع كل حالة من قبول الحجز حتى الاعتماد النهائي بدون اتصالات متكررة.",
+        "iconKey": "icon-tracking"
+      },
+      {
+        "title": "إدارة ذكية للتقارير",
+        "description": "حمّل تقريرك المعتمد فور جاهزية النتيجة.",
+        "iconKey": "icon-reports"
+      },
+      {
+        "title": "معتمد وآمن وموثوق",
+        "description": "مبني حول مزودين موثقين وفئات الفحوصات الرسمية في السعودية.",
+        "iconKey": "icon-certified"
+      },
+      {
+        "title": "فحوصات متكاملة",
+        "description": "يخدم الأفراد وفرق الموارد البشرية من نفس المسار الهادئ والواضح.",
+        "iconKey": "icon-flexibility"
+      }
+    ]
+  },
+  "booking": {
+    "eyebrow": "",
+    "title": "",
+    "note": "",
+    "fields": {
+      "exam": {
+        "label": "نوع الفحص",
+        "placeholder": "اختر الفحص الطبي"
+      },
+      "city": {
+        "label": "المدينة أو المركز",
+        "placeholder": "اختر اسم المدينة أو المركز"
+      },
+      "date": {
+        "label": "التاريخ",
+        "placeholder": "يوم / شهر / سنة"
+      },
+      "search": {
+        "label": "عرض المواعيد",
+        "path": "#booking"
+      }
+    },
+    "examOptions": [
+      "فحص رخصة القيادة وفحص مناديب التوصيل",
+      "فحوصات الإقامة وتجديد الإقامة",
+      "فحوصات ما قبل الزواج وفحص ما قبل المدرسة",
+      "فحص فحوصات الشهادة الصحية",
+      "فحوصات الموظفين والعمالة",
+      "فحوصات مخصصة حسب الاحتياج"
+    ],
+    "optionsTitle": "احجز موعدك الآن  بسهولة.",
+    "optionsNote": "ابحث عن الموعد المناسب"
+  },
+  "steps": {
+    "eyebrow": "كيف يعمل موفق للأفراد",
+    "title": "ثلاث خطوات فقط لانهاء فحصك الطبي",
+    "highlight": "",
+    "cta": {
+      "label": "ابدأ الحجز",
+      "path": "#booking"
+    },
+    "items": [
+      {
+        "title": "اختر فحصك وموعدك",
+        "body": "حدد نوع الفحص الطبي، المدينة، والتاريخ المناسب لك، ثم أكد حجزك وادفع بأمان عبر المنصة أو التطبيق.",
+        "meta1": {
+          "value": "30 ث",
+          "label": "متوسط الحجز"
+        },
+        "meta2": {
+          "value": "+100",
+          "label": "مراكز"
+        }
+      },
+      {
+        "title": "قم بزيارة المركز",
+        "body": "توجه إلى المركز الطبي المعتمد في موعدك لاجراء الفحص، وتابع حالة طلبك لحظة بلحظة عبر المنصة.",
+        "meta1": {
+          "value": "9 د",
+          "label": "متوسط الفحص"
+        },
+        "meta2": {
+          "value": "مباشر",
+          "label": "تحديثات الحالة"
+        }
+      },
+      {
+        "title": "استلم تقريرك المعتمد",
+        "body": "فور صدور نتيجتك، ستصلك رسالة نصية عبر هاتفك ، ويكون تقريرك الطبي المعتمد جاهزا للتحميل والمشاركة",
+        "meta1": {
+          "value": "<3 أيام",
+          "label": "متوسط التسليم"
+        },
+        "meta2": {
+          "value": "PDF",
+          "label": "على هاتفك"
+        }
+      }
+    ]
+  },
+  "app": {
+    "eyebrow": "تطبيق موفق",
+    "title": "بسهولة تنجز كل فحوصاتك",
+    "accent": "",
+    "body": "في شاشة واحدة: احجز فحصك ، تتبع موعدك ، واستلم نتيجتك فوراً.",
+    "scheduleCard": {
+      "label": "جدول اليوم",
+      "detail": "فحص رخصة القيادة · 09:00 ص · الرياض",
+      "appointment": {
+        "value": "12",
+        "detail": "09:00 ص &middot; الرياض",
+        "location": "مركز طبي",
+        "iconKey": "icon-calendar"
+      }
+    },
+    "statusCard": {
+      "label": "الحالة المباشرة",
+      "detail": "تم قبول الحجز · تم سحب العينة · مراجعة المختبر",
+      "status": "قيد التنفيذ"
+    },
+    "reportsCard": {
+      "label": "التقارير",
+      "detail": "تقارير PDF المعتمدة جاهزة للتحميل",
+      "status": "جاهز للتحميل",
+      "items": [
+        {
+          "title": "رخصة القيادة",
+          "detail": "صالح للخدمة",
+          "badge": "PDF",
+          "iconKey": "icon-pdf"
+        },
+        {
+          "title": "فحص الإقامة",
+          "detail": "معتمد · 12 مارس",
+          "badge": "PDF",
+          "iconKey": "icon-pdf"
+        }
+      ]
+    },
+    "points": [
+      {
+        "title": "متابعة لحظية للفحص",
+        "detail": "تتبع حالة فحصك لحظة بلحظة بدون تعب او مكالمات."
+      },
+      {
+        "title": "تقاريرك في جيبك",
+        "detail": "حمل ملف التقرير الطبي فوراً على جوالك"
+      },
+      {
+        "title": "تنبيهات تضمن التزامك",
+        "detail": "استلم اشعارات وتذكيرات ذكية بالفحوصات الطبية الدورية قبل انتهاء صلاحيتها. ."
+      }
+    ],
+    "downloadLinks": [
+      {
+        "label": "App Store",
+        "path": "/download/ios",
+        "iconKey": "icon-apple"
+      },
+      {
+        "label": "Google Play",
+        "path": "/download/android",
+        "iconKey": "icon-google-play"
+      }
+    ]
+  },
+  "academy": {
+    "eyebrow": "أكاديمية موفق",
+    "title": "تأهيل تدريبي متكامل لمهاراتك",
+    "accent": "",
+    "body": "من الخطوات الأولى للتدريب وحتى اجتياز الاختبار",
+    "ctaLabel": "سجّل الآن ←",
+    "items": [
+      {
+        "title": "من الخطوات الأولى للتدريب وحتى اجتياز الاختبار",
+        "detail": "تدريب مرن بـ7 لغات: دورات تدريبية مسجلة واختبارات تجريبية مصغرة، متاحة لك في أي وقت ومكان.",
+        "meta": "تقييم 4.8",
+        "ratingValue": "4.8",
+        "ratingCount": "12",
+        "path": "/academy/advanced-first-aid",
+        "iconKey": "icon-first-aid"
+      },
+      {
+        "title": "أسعار موحدة وطرق سداد ميسرة",
+        "detail": "تكلفة ثابته ومعتمدة لكافة برامج التأهيل عبر المملكة ، مع خيارات دفع وفوترة ميسرة.",
+        "meta": "الأكثر طلباً",
+        "ratingValue": "4.8",
+        "ratingCount": "12",
+        "path": "/academy/cpr-basics",
+        "iconKey": "icon-cpr"
+      },
+      {
+        "title": "لوحة تحكم وتوثيق عالي الجودة",
+        "detail": "تتبع لحظي لمسار انجاز التدريب ، مع توثيق رقمي لكافة الوثائق.",
+        "meta": "وفّر 30%",
+        "ratingValue": "4.8",
+        "ratingCount": "12",
+        "path": "/academy/safety-officer-bundle",
+        "iconKey": "icon-safety-bundle"
+      },
+      {
+        "title": "متابعة ذكية وتنبيهات آلية",
+        "detail": "اشعارات وتذكيرات آلية تصلك قبل انتهاء صلاحية الشهادات لتجديدها في الوقت المناسب.",
+        "meta": "الثقة والتقدير",
+        "ratingValue": "",
+        "ratingCount": "",
+        "path": null,
+        "iconKey": "bell-solid-full"
+      }
+    ]
+  },
+  "stats": {
+    "title": "الأكاديمية في أرقام",
+    "items": [
+      {
+        "value": 93,
+        "suffix": "%",
+        "label": "نسبة النجاح في الاختبار باللغة العربية"
+      },
+      {
+        "value": 7,
+        "suffix": "+",
+        "label": "لغات تدريبية معتمدة"
+      },
+      {
+        "value": 81,
+        "suffix": "%",
+        "label": "نسبة النجاح في الاختبارات باللغات الأخرى"
+      }
+    ]
+  },
+  "testimonial": [
+    {
+      "quote": "أنجزنا فحوصات الإقامة لـ 240 موظفاً في أسبوع واحد. مع موافق، ما كان يستغرق شهراً صار يأخذ",
+      "highlight": "ثلاثة أيام.",
+      "author": "شهادة مجهولة",
+      "role": "مدير موارد بشرية · شركة لوجستية في الرياض"
+    },
+    {
+      "quote": "تيستت",
+      "highlight": "يست",
+      "author": "تيستتت",
+      "role": "&lt;تيستستستستس"
+    },
+    {
+      "quote": "test huiiiii",
+      "highlight": "",
+      "author": "",
+      "role": ""
+    }
+  ],
+  "finalCta": {
+    "title": "",
+    "highlight": "",
+    "body": "",
+    "primaryAction": {
+      "label": "",
+      "path": null
+    },
+    "secondaryAction": {
+      "label": "",
+      "path": null
+    }
+  },
+  "sectionOrder": [
+    "hero",
+    "companies",
+    "services",
+    "why",
+    "booking",
+    "steps",
+    "app",
+    "academy",
+    "stats",
+    "testimonial"
+  ]
+}

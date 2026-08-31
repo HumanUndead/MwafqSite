@@ -79,18 +79,7 @@ export function B2BServiceCapabilityCard({ item, isRtl, isActive }: Props) {
         ))}
       </ul>
 
-      <div className='mt-auto border-t border-[#e5e7f0]/80 pt-3'>
-        <span
-          className={cn(
-            'inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.06em] lg:text-[11px]',
-            isActive
-              ? 'border-[#00a8f1]/35 bg-[#00a8f1]/10 text-[#00a8f1]'
-              : 'border-[#e5e7f0] bg-[#f4f4f6] text-[#6b7196]'
-          )}
-        >
-          {item.trustLabel}
-        </span>
-      </div>
+      <div className='mt-auto border-t border-[#e5e7f0]/80 pt-3'></div>
     </article>
   );
 }

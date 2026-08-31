@@ -33,8 +33,7 @@ export const ABOUT_MV_ARTICLE_RANKS = {
   vision: 2,
 } as const;
 
-// Stats (category rank 4): unused — the About page reuses Home's stats
-// content (see getHomeStatsContent) so both pages stay in sync.
+// Stats (category rank 4): unused — the stats section was removed from the About page.
 
 // What we do (category rank 5):
 //   rank 1 → eyebrow (name), titleLead (extraInfo)

@@ -11,13 +11,13 @@ import type {
   AboutMvContent,
   AboutPageContent,
   AboutSectionWithItemsContent,
-  AboutStatItemContent,
   AboutStoryContent,
   AboutValueItemContent,
   AboutValuesContent,
   AboutWhyContent,
 } from '@/modules/about/types/aboutContent';
-import { getHomeStatsContent } from '@/modules/home/server/homeContentService';
+import type { HomeCompaniesContent } from '@/modules/home/home.types';
+import { getHomeCompaniesContent } from '@/modules/home/server/homeContentService';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import { stripHtmlToNull } from '@/shared/lib/text';
 import {
@@ -563,7 +563,7 @@ function mapFinalCtaContent(
 
 function buildAboutContent(
   rootCategory: CategoryDto | null,
-  stats: AboutStatItemContent[],
+  companies: HomeCompaniesContent,
   langId: number
 ): AboutPageContent {
   return {
@@ -571,11 +571,11 @@ function buildAboutContent(
     hero: mapHeroContent(rootCategory, langId),
     story: mapStoryContent(rootCategory, langId),
     mv: mapMvContent(rootCategory, langId),
-    stats,
     what: mapWhatContent(rootCategory, langId),
     why: mapWhyContent(rootCategory, langId),
     values: mapValuesContent(rootCategory, langId),
     how: mapHowContent(rootCategory, langId),
+    companies,
     milestones: mapMilestonesContent(rootCategory, langId),
     b2b: mapB2bSnippetContent(rootCategory, langId),
     finalCta: mapFinalCtaContent(rootCategory, langId),
@@ -602,15 +602,10 @@ const fetchAboutContentTree = cache(async (): Promise<CategoryDto | null> => {
 export const getAboutPageContent = cache(
   async (locale: Locale): Promise<AboutPageContent> => {
     const langId = localeToLangId[locale];
-    const [rootCategory, homeStats] = await Promise.all([
+    const [rootCategory, companies] = await Promise.all([
       fetchAboutContentTree(),
-      getHomeStatsContent(locale),
+      getHomeCompaniesContent(),
     ]);
-    const stats: AboutStatItemContent[] = homeStats.items.map((item) => ({
-      value: item.value,
-      suffix: item.suffix ?? '',
-      label: item.label,
-    }));
-    return buildAboutContent(rootCategory, stats, langId);
+    return buildAboutContent(rootCategory, companies, langId);
   }
 );

@@ -6,11 +6,12 @@ import { GetLocale } from '@/i18n/server';
 import { buildPageMetadata } from '@/i18n/seo';
 import { ROUTES } from '@/shared/constants/routes';
 import { getCurrentUser } from '@/modules/auth/server/authSession';
-import { ServiceGroupDetailsView } from '@/modules/services/ServiceGroupDetailsView';
 import {
-  fetchServiceById,
-  fetchServicesList,
-} from '@/modules/services/server/servicesService';
+  fetchServiceGroupById,
+  fetchServiceGroupsList,
+  serviceGroupToServiceListItem,
+} from '@/modules/auth/server/ServiceGroupService';
+import { ServiceGroupDetailsView } from '@/modules/services/ServiceGroupDetailsView';
 import { FetchResponseError } from '@/shared/lib/fetchWithErrorHandling.shared';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 import { SITE_URL } from '@/shared/constants/config';
@@ -30,10 +31,12 @@ export async function generateMetadata({
 
   const locale = await GetLocale();
   const langId = localeToLangId[locale];
-  const service = await fetchServiceById(numericId).catch((error) => {
-    if (error instanceof FetchResponseError) notFound();
-    throw error;
-  });
+  const service = await fetchServiceGroupById(numericId, { locale }).catch(
+    (error) => {
+      if (error instanceof FetchResponseError) notFound();
+      throw error;
+    }
+  );
   const translation =
     service.translations.find((t) => t.langId === langId) ??
     service.translations[0];
@@ -54,20 +57,21 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
     notFound();
   }
 
-  const [locale, service, relatedList, currentUser] = await Promise.all([
-    GetLocale(),
-    fetchServiceById(numericId).catch((error) => {
+  const locale = await GetLocale();
+  const [service, relatedList, currentUser] = await Promise.all([
+    fetchServiceGroupById(numericId, { locale }).catch((error) => {
       if (error instanceof FetchResponseError) notFound();
       throw error;
     }),
-    fetchServicesList({ pageNumber: 1, pageSize: 6 }),
+    fetchServiceGroupsList({ pageNumber: 1, pageSize: 6 }),
     getCurrentUser(),
   ]);
 
   const langId = localeToLangId[locale];
   const relatedPackages = relatedList.data
     .filter((item) => item.id !== numericId)
-    .slice(0, 5);
+    .slice(0, 5)
+    .map(serviceGroupToServiceListItem);
   const translation =
     service.translations.find((t) => t.langId === langId) ??
     service.translations[0];

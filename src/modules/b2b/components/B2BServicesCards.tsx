@@ -18,13 +18,7 @@ export function B2BServicesCards({ content, isRtl }: Props) {
 
   return (
     <>
-      <B2BServicesMobileView
-        cards={cards}
-        dashboard={content.dashboard}
-        content={content}
-        isRtl={isRtl}
-        sectionLabel={sectionLabel}
-      />
+      <B2BServicesMobileView cards={cards} content={content} isRtl={isRtl} />
 
       <div className='hidden lg:block'>
         <B2BServicesStack
