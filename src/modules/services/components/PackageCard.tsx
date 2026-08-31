@@ -181,7 +181,7 @@ export function PackageCard({
         </motion.div>
       </Link>
 
-      <CardContent className='flex flex-1 flex-col gap-2 px-5 pt-4 pb-3'>
+      <CardContent className='flex flex-1 flex-col gap-2 bg-[#f5f6fa] px-5 pt-4 pb-3'>
         <Link href={packageDetailHref} className='block'>
           <CardTitle className='min-h-15 text-[17px] font-extrabold leading-tight tracking-[-0.3px] text-[#1e2364]'>
             {title}

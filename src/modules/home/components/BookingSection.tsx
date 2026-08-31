@@ -165,23 +165,48 @@ function SearchSelect({
 }
 
 function ExamSelect({
-  examOptions,
+  locale,
   value,
   onSelect,
   placeholder,
   disabled = false,
 }: {
-  examOptions: string[];
+  locale: Locale;
   value: string;
   onSelect: (option: Option) => void;
   placeholder: string;
   disabled?: boolean;
 }) {
   const [query, setQuery] = useState('');
+  const [groups, setGroups] = useState<ServiceGroupItem[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => {
+      setLoading(true);
+      const params = new URLSearchParams({ culture: locale, pagesize: '50' });
+      fetch(`/api/services/service-groups?${params.toString()}`, {
+        signal: controller.signal,
+      })
+        .then((res) => res.json())
+        .then((payload) => {
+          if (payload.success) setGroups(payload.data);
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
+    }, 0);
+
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
+  }, [locale]);
+
   const term = query.trim().toLowerCase();
-  const options: Option[] = examOptions
-    .filter((name) => (term ? name.toLowerCase().includes(term) : true))
-    .map((name) => ({ id: name, name }));
+  const options: Option[] = groups
+    .filter((group) => (term ? group.name.toLowerCase().includes(term) : true))
+    .map((group) => ({ id: group.id, name: group.name }));
 
   return (
     <SearchSelect
@@ -189,31 +214,11 @@ function ExamSelect({
       onSelect={onSelect}
       placeholder={placeholder}
       options={options}
-      loading={false}
+      loading={loading}
       query={query}
       onQueryChange={setQuery}
       disabled={disabled}
     />
-  );
-}
-
-async function resolveServiceGroupByName(
-  name: string,
-  locale: Locale
-): Promise<ServiceGroupItem | null> {
-  const params = new URLSearchParams({ culture: locale, search: name });
-  const response = await fetch(
-    `/api/services/service-groups?${params.toString()}`
-  );
-  const payload = await response.json();
-
-  if (!payload.success) return null;
-
-  const items: ServiceGroupItem[] = payload.data;
-  return (
-    items.find((item) => item.name.trim() === name.trim()) ??
-    items[0] ??
-    null
   );
 }
 
@@ -292,17 +297,10 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
   const title = content.title || content.optionsTitle;
   const eyebrow = content.eyebrow || content.optionsNote;
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (!exam) return;
     setResolving(true);
-    try {
-      const serviceGroup = await resolveServiceGroupByName(exam.name, locale);
-      if (serviceGroup) {
-        router.push(getServiceGroupBuyPath(locale, serviceGroup.id));
-      }
-    } finally {
-      setResolving(false);
-    }
+    router.push(getServiceGroupBuyPath(locale, Number(exam.id)));
   };
 
   return (
@@ -359,7 +357,7 @@ export function BookingSection({ locale, content }: BookingSectionProps) {
                 {content.fields.exam.label}
               </label>
               <ExamSelect
-                examOptions={content.examOptions}
+                locale={locale}
                 value={exam?.name ?? ''}
                 onSelect={setExam}
                 placeholder={content.fields.exam.placeholder}

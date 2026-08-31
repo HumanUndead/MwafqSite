@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 import { authTokenCookieName } from '@/modules/auth/session.shared';
 import { localeToLangId } from '@/i18n/config';
+
+const SERVICE_API_BASE_URL = 'https://api.mwafq.com';
 
 interface TranslationDto {
   name: string;
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get(authTokenCookieName)?.value;
 
-    const url = new URL('/api/Service/ServiceGroup/List', MWAFQ_API_BASE_URL);
+    const url = new URL('/api/Service/ServiceGroup/List', SERVICE_API_BASE_URL);
     url.searchParams.set('pagenumber', '1');
     url.searchParams.set('pagesize', pagesize);
     if (search) url.searchParams.set('search', search);

@@ -10,6 +10,8 @@ import type {
   ServiceListItem,
 } from '../types/services.types';
 
+const SERVICE_API_BASE_URL = 'https://api.mwafq.com';
+
 export async function fetchServicesList(
   query: FetchServiceListParams = {}
 ): Promise<PaginatedResponse<ServiceListItem>> {
@@ -18,13 +20,13 @@ export async function fetchServicesList(
     { skipNull: true }
   );
   return fetchWithErrorHandling<PaginatedResponse<ServiceListItem>>(
-    `/api/Service/Service/List?${params}`
+    `${SERVICE_API_BASE_URL}/api/Service/Service/List?${params}`
   );
 }
 
 export async function fetchServiceById(id: number): Promise<ServiceDetail> {
   const params = queryString.stringify({ id }, { skipNull: true });
   return fetchWithErrorHandling<ServiceDetail>(
-    `/api/Service/Service/GetById?${params}`
+    `${SERVICE_API_BASE_URL}/api/Service/Service/GetById?${params}`
   );
 }
