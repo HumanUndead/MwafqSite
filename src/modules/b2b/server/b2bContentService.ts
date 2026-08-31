@@ -9,6 +9,7 @@ import type {
   HomeCompaniesContent,
 } from '@/modules/home/home.types';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
+import { stripHtmlTags } from '@/shared/lib/htmlText';
 import {
   B2B_BUSINESS_ARTICLE_IDS,
   B2B_BUSINESS_CATEGORY_ID,
@@ -177,32 +178,6 @@ function slugify(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
-}
-
-const HTML_ENTITIES: Record<string, string> = {
-  '&middot;': '·',
-  '&amp;': '&',
-  '&lt;': '<',
-  '&gt;': '>',
-  '&quot;': '"',
-  '&#39;': "'",
-  '&apos;': "'",
-  '&nbsp;': ' ',
-  '&mdash;': '—',
-  '&ndash;': '–',
-};
-
-function decodeHtmlEntities(value: string): string {
-  return value
-    .replace(/&[a-zA-Z]+;/g, (entity) => HTML_ENTITIES[entity] ?? entity)
-    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)));
-}
-
-function stripHtmlTags(html: string | null | undefined): string | null {
-  const trimmed = trimToNull(html);
-  if (!trimmed) return null;
-  const stripped = decodeHtmlEntities(trimmed.replace(/<[^>]*>/g, '')).trim();
-  return stripped.length > 0 ? stripped : null;
 }
 
 // Derives initials from a display name, Unicode-safe (handles Arabic names).

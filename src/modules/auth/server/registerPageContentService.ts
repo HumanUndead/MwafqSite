@@ -3,6 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/locales/types';
+import { stripHtmlTags } from '@/shared/lib/htmlText';
 import type { RegisterPageContent } from '../registerPage.types';
 import {
   REGISTER_PAGE_ARTICLE_RANKS,
@@ -187,14 +188,18 @@ function mapRegisterPageContent(
     REGISTER_PAGE_CHILD_CATEGORY_RANKS.stats
   );
 
-  const steps = getVisibleArticles(stepsCategory).map((article) => {
-    const translation = getArticleTranslation(article, langId);
+  // Real steps are ranked 10, 20, 30, ...; rank 1 is a stray hero-content
+  // duplicate that sometimes appears in this category and must be excluded.
+  const steps = getVisibleArticles(stepsCategory)
+    .filter((article) => article.rank >= 10)
+    .map((article) => {
+      const translation = getArticleTranslation(article, langId);
 
-    return {
-      title: trimToNull(translation.name) ?? '',
-      body: trimToNull(translation.description) ?? '',
-    };
-  });
+      return {
+        title: trimToNull(translation.name) ?? '',
+        body: stripHtmlTags(translation.description) ?? '',
+      };
+    });
 
   const stats = getVisibleArticles(statsCategory).map((article) => {
     const translation = getArticleTranslation(article, langId);
@@ -202,7 +207,7 @@ function mapRegisterPageContent(
     return {
       value: trimToNull(translation.name) ?? '',
       label:
-        trimToNull(translation.description) ??
+        stripHtmlTags(translation.description) ??
         trimToNull(translation.shortDescription) ??
         '',
     };
@@ -214,7 +219,7 @@ function mapRegisterPageContent(
       trimToNull(heroTranslation?.extraInfo) ??
       trimToNull(heroTranslation?.shortDescription) ??
       fallback.titleAccent,
-    body: trimToNull(heroTranslation?.description) ?? fallback.body,
+    body: stripHtmlTags(heroTranslation?.description) ?? fallback.body,
     steps: steps.length > 0 ? steps : fallback.steps,
     stats: stats.length > 0 ? stats : fallback.stats,
   };

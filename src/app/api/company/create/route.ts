@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 import { authTokenCookieName } from '@/modules/auth/session.shared';
 import {
   extractUpstreamMessage,
@@ -9,6 +8,9 @@ import {
   normalizeUpstreamStatus,
 } from '@/modules/auth/server/upstreamAuthResult';
 import { forwardCompanyCreateFormData } from '@/modules/company/companyCreatePayload.shared';
+
+/** Company creation always targets production, regardless of MWAFQ_API_BASE_URL. */
+const COMPANY_CREATE_API_BASE_URL = 'https://api.mwafq.com';
 
 function toString(v: FormDataEntryValue | null): string {
   return typeof v === 'string' ? v.trim() : '';
@@ -63,7 +65,10 @@ export async function POST(request: NextRequest) {
 
     const upstreamForm = forwardCompanyCreateFormData(incomingForm);
 
-    const endpoint = new URL('/api/Company/Company/Create', MWAFQ_API_BASE_URL);
+    const endpoint = new URL(
+      '/api/Company/Company/Create',
+      COMPANY_CREATE_API_BASE_URL
+    );
 
     const upstreamHeaders: Record<string, string> = {};
     if (token) {
