@@ -18,7 +18,6 @@ import { B2BServicesStaticList } from './B2BServicesStaticList';
 /* ─── Chapter theme per service ──────────────────────────────────── */
 const ACCENTS = ['#00a8f1', '#00a8f1', '#00a8f1'] as const;
 const ACCENT_RGBA = ['0,168,241', '0,168,241', '0,168,241'] as const;
-const STEP_LABELS = ['01', '02', '03'] as const;
 
 /* ─── Scroll constants ────────────────────────────────────────────── */
 const STEP_PX = 600;
@@ -169,7 +168,6 @@ export function B2BServicesStack({
 
   const accent = ACCENTS[activeIndex] ?? ACCENTS[0];
   const accentRgba = ACCENT_RGBA[activeIndex] ?? ACCENT_RGBA[0];
-  const stepLabel = STEP_LABELS[activeIndex] ?? '01';
   const activeItem = cards[activeIndex] ?? cards[0];
 
   return (
@@ -260,24 +258,6 @@ export function B2BServicesStack({
                   isRtl && 'text-right'
                 )}
               >
-                {/* Decorative large step number */}
-                <AnimatePresence mode='wait'>
-                  <motion.div
-                    key={`step-bg-${stepLabel}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className={cn(
-                      'pointer-events-none absolute -top-6 select-none text-[clamp(120px,14vw,180px)] font-extrabold leading-none tracking-[-6px] text-[#1e2364]/[0.06]',
-                      isRtl ? 'right-0' : 'left-[-8px]'
-                    )}
-                    aria-hidden='true'
-                  >
-                    {stepLabel}
-                  </motion.div>
-                </AnimatePresence>
-
                 <AnimatePresence mode='wait'>
                   <motion.div
                     key={`chapter-${activeIndex}`}

@@ -23,12 +23,6 @@ const StepsSection = dynamic(() =>
   import('./components/StepsSection').then((m) => ({ default: m.StepsSection }))
 );
 
-const TestimonialSection = dynamic(() =>
-  import('./components/TestimonialSection').then((m) => ({
-    default: m.TestimonialSection,
-  }))
-);
-
 interface Props {
   locale: Locale;
 }
@@ -70,7 +64,7 @@ function renderSection(
     case 'stats':
       return <StatsSection key={key} content={content.stats} />;
     case 'testimonial':
-      return <TestimonialSection key={key} items={content.testimonial} />;
+      return null;
     default:
       return null;
   }

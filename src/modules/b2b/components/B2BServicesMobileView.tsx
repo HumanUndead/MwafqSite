@@ -9,7 +9,6 @@ import type { B2BServiceItem } from './B2BServiceCapabilityCard';
 
 const ACCENTS = ['#00a8f1', '#00a8f1', '#00a8f1'] as const;
 const ACCENT_RGBA = ['0,168,241', '0,168,241', '0,168,241'] as const;
-const STEP_LABELS = ['01', '02', '03'] as const;
 
 interface Props {
   cards: B2BServiceItem[];
@@ -90,9 +89,6 @@ function ServiceChapterPanel({ item, index, isRtl }: ServiceChapterPanelProps) {
           {getServiceIconByKey(item.iconKey)}
         </div>
         <div>
-          <span className='block text-[9px] font-bold uppercase tracking-[0.18em] text-[#1e2364]/40'>
-            {STEP_LABELS[index]}
-          </span>
           <h3
             className={cn(
               'text-[24px] font-extrabold leading-[1.15] tracking-[-0.6px] text-[#1e2364]',

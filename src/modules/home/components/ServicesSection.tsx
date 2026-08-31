@@ -67,7 +67,7 @@ export async function ServicesSection({ locale, content }: Props) {
 
           <Link
             href={getLocalizedRoute(locale, ROUTES.SERVICES)}
-            className='group inline-flex shrink-0 items-center gap-2 text-[15px] font-bold text-[#1e2364] transition-colors hover:text-[#00a8f1]'
+            className='group ms-auto inline-flex shrink-0 items-center gap-2 text-[15px] font-bold text-[#1e2364] transition-colors hover:text-[#00a8f1] md:ms-0'
           >
             {t.viewAll}
             <ArrowIcon

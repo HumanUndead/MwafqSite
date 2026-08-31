@@ -25,9 +25,9 @@ function toArabicDigits(value: string): string {
   return value.replace(/[0-9]/g, (d) => ARABIC_DIGITS[Number(d)] ?? d);
 }
 
-const SECTION_META: Record<string, { eyebrow: string; title: string }> = {
-  en: { eyebrow: 'How it works', title: 'The Mwafq Journey' },
-  ar: { eyebrow: 'كيف يعمل', title: 'رحلة موفق' },
+const SECTION_META: Record<string, { title: string }> = {
+  en: { title: 'The Mwafq Journey' },
+  ar: { title: 'رحلة موفق' },
 };
 
 const STAGE_META = [
@@ -578,21 +578,16 @@ function StageLabelContent({
 function MobileJourneyTimeline({
   stages,
   rtl,
-  eyebrow,
   title,
 }: {
   stages: Stage[];
   rtl: boolean;
-  eyebrow: string;
   title: string;
 }) {
   return (
     <section className='relative bg-[#f4f4f6] px-5 py-14 max-[560px]:px-4'>
       <div className='mx-auto mb-10 max-w-lg text-center'>
-        <span className='font-mono text-[12px] font-medium uppercase tracking-[0.28em] text-[#1e2364]/40'>
-          {eyebrow}
-        </span>
-        <h2 className='mt-2 text-[clamp(26px,6.5vw,34px)] font-extrabold leading-[1.05] tracking-[-0.8px] text-[#1e2364]'>
+        <h2 className='text-[clamp(26px,6.5vw,34px)] font-extrabold leading-[1.05] tracking-[-0.8px] text-[#1e2364]'>
           {title}
         </h2>
       </div>
@@ -641,7 +636,7 @@ interface Props {
 export function B2BProcessSection({ locale, stages: cmsStages }: Props) {
   const rtl = isRtl(locale);
   const meta = SECTION_META[locale] ?? SECTION_META.en!;
-  const { eyebrow, title } = meta;
+  const { title } = meta;
   const stages = cmsStages.map((stage) => ({
     ...stage,
     number: rtl ? toArabicDigits(stage.number) : stage.number,
@@ -659,12 +654,7 @@ export function B2BProcessSection({ locale, stages: cmsStages }: Props) {
 
   if (compact) {
     return (
-      <MobileJourneyTimeline
-        stages={stages}
-        rtl={rtl}
-        eyebrow={eyebrow}
-        title={title}
-      />
+      <MobileJourneyTimeline stages={stages} rtl={rtl} title={title} />
     );
   }
 
@@ -679,7 +669,7 @@ function B2BProcessSectionDesktop({
   rtl: boolean;
 }) {
   const meta = SECTION_META[rtl ? 'ar' : 'en']!;
-  const { eyebrow, title } = meta;
+  const { title } = meta;
   const stages = cmsStages.map((stage) => ({
     ...stage,
     number: rtl ? toArabicDigits(stage.number) : stage.number,
@@ -823,37 +813,10 @@ function B2BProcessSectionDesktop({
           }}
         />
 
-        <div
-          className={cn(
-            'relative z-10 shrink-0',
-            compact
-              ? 'px-5 pb-2 pt-[52px] max-[560px]:pt-[36px] sm:px-6'
-              : 'flex flex-col items-center px-4 pt-10 pb-3 sm:px-7'
-          )}
-        >
-          {compact ? (
-            <div className='mx-auto w-full max-w-lg text-center'>
-              <div className='mb-2'>
-                <span className='font-mono text-[12px] font-medium uppercase tracking-[0.28em] text-[#1e2364]/40 sm:text-[15px]'>
-                  {eyebrow}
-                </span>
-              </div>
-              <h2 className='text-[clamp(26px,6.5vw,34px)] font-extrabold leading-[1.05] tracking-[-0.8px] text-[#1e2364]'>
-                {title}
-              </h2>
-            </div>
-          ) : (
-            <>
-              <div className='mb-3'>
-                <span className='font-mono text-[13px] font-medium uppercase tracking-[0.28em] text-[#1e2364]/40 sm:text-[15px] min-[1920px]:text-[17px]'>
-                  {eyebrow}
-                </span>
-              </div>
-              <h2 className='text-center text-[clamp(28px,3.5vw,52px)] font-extrabold leading-none tracking-[-1px] text-[#1e2364] min-[1920px]:text-[clamp(44px,2.8vw,60px)]'>
-                {title}
-              </h2>
-            </>
-          )}
+        <div className='relative z-10 flex shrink-0 flex-col items-center px-4 pb-3 pt-10 sm:px-7'>
+          <h2 className='text-center text-[clamp(28px,3.5vw,52px)] font-extrabold leading-none tracking-[-1px] text-[#1e2364] min-[1920px]:text-[clamp(44px,2.8vw,60px)]'>
+            {title}
+          </h2>
         </div>
 
         <div className='relative z-0 min-h-0 flex-1 overflow-hidden'>
