@@ -1230,6 +1230,29 @@ const en = {
       },
     },
   },
+  chatbot: {
+    launcherOpen: 'Open Abu Sahel, the Mwafq assistant',
+    launcherClose: 'Close Abu Sahel, the Mwafq assistant',
+    title: 'Abu Sahel',
+    subtitle: 'Always here to help',
+    online: 'Online',
+    greetingTitle: 'Hi there 👋',
+    greetingBody:
+      "I'm Abu Sahel. Ask me anything about Mwafq — medical examinations, booking, payments, or our business solutions.",
+    suggestionsLabel: 'Suggested questions',
+    suggestions: [
+      'What is Mwafq?',
+      'What services do you offer?',
+      'How do I book a medical exam?',
+    ],
+    inputPlaceholder: 'Write your message…',
+    send: 'Send message',
+    stop: 'Stop generating',
+    clear: 'Clear conversation',
+    thinking: 'Thinking…',
+    error: 'Something went wrong. Please try again.',
+    disclaimer: 'Answers are generated and may not always be accurate.',
+  },
 } as const;
 
 export default en;
