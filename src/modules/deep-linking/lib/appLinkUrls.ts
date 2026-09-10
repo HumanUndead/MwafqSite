@@ -39,3 +39,21 @@ export function buildAndroidIntentUrl(currentUrl: string): string {
     'end',
   ].join(';');
 }
+
+/**
+ * Where an `/app/*` page should send the visitor the moment it loads. Reaching
+ * the page at all means the OS did not intercept the link, so the browser has
+ * to make the handoff itself:
+ *
+ * - Android — `intent://`, which opens the app or falls back to Play Store.
+ * - iOS — the App Store, since a Universal Link that failed cannot be retried.
+ * - Desktop / unknown — `null`, stay on the page and show the store links.
+ */
+export function resolveAppHandoffUrl(
+  platform: MobilePlatform,
+  currentUrl: string
+): string | null {
+  if (platform === 'android') return buildAndroidIntentUrl(currentUrl);
+  if (platform === 'ios') return APP_STORE_URL;
+  return null;
+}

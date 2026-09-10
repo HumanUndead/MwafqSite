@@ -11,13 +11,15 @@ interface Props {
 }
 
 /**
- * Web fallback for a shared `/app/*` deep link. People with the app never reach
- * it — the OS intercepts the URL before any request — so this page only serves
- * the store-fallback case.
+ * Web fallback for a shared `/app/*` deep link. Two layers get the visitor into
+ * the app before this card matters: the OS intercepts a verified link before any
+ * request, and `AppLinkActions` re-attempts the handoff on mount for the browsers
+ * that slipped through (in-app webviews, unverified installs).
  *
- * Deliberately static: no reveal animation. This is the last resort when the
- * app handoff failed, so it must render with zero JS. `ScrollReveal` would emit
- * `opacity: 0` server-side and leave a blank card if the bundle never runs.
+ * So it renders only for desktop, and for mobile browsers where both layers
+ * failed. Deliberately static: no reveal animation, since it must render with
+ * zero JS. `ScrollReveal` would emit `opacity: 0` server-side and leave a blank
+ * card if the bundle never runs.
  */
 export async function AppLinkPage({ locale }: Props) {
   const { appLink } = await getDictionary(locale);

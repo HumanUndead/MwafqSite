@@ -1,12 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useAppHandoff } from '@/modules/deep-linking/hooks/useAppHandoff';
 import {
   APP_STORE_URL,
-  buildAndroidIntentUrl,
-  detectMobilePlatform,
   PLAY_STORE_URL,
-  type MobilePlatform,
 } from '@/modules/deep-linking/lib/appLinkUrls';
 import { buttonVariants } from '@/shared/lib/variants';
 
@@ -27,22 +24,13 @@ interface AppLinkAction {
   external: boolean;
 }
 
+/**
+ * Manual retry for the handoff `useAppHandoff` already attempted on mount —
+ * for browsers that swallow it (Firefox on Android ignores `intent://`) and
+ * for the desktop case, which has no handoff at all.
+ */
 export function AppLinkActions({ labels }: Props) {
-  const [platform, setPlatform] = useState<MobilePlatform>('other');
-  const [intentUrl, setIntentUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    const detected = detectMobilePlatform(
-      navigator.userAgent,
-      navigator.maxTouchPoints
-    );
-
-    setPlatform(detected);
-
-    if (detected === 'android') {
-      setIntentUrl(buildAndroidIntentUrl(window.location.href));
-    }
-  }, []);
+  const { platform, intentUrl } = useAppHandoff();
 
   const actions: AppLinkAction[] = [];
 

@@ -60,18 +60,35 @@ Expect `200`, `content-type: application/json`, and no `location` header.
 
 Both render `AppLinkPage` from `@/modules/deep-linking`.
 
-People with the app never see these — the OS matches the URL against the
-verified domain and opens the app before any HTTP request happens. These pages
-exist only for people without the app, which is the chosen fallback behaviour.
+People with the app rarely see these — the OS matches the URL against the
+verified domain and opens the app before any HTTP request happens. When that
+first layer misses (in-app webviews such as WhatsApp or Instagram, an Android
+install whose App Links were never verified), the page itself retries the
+handoff on mount, so the visitor still lands in the app or the store without
+tapping anything. See §4.
 
 The catch-all means any path shared in future already has a live fallback; no
 route work is needed per link type. Pages are `noindex` and `/app` is in the
 `robots.txt` disallow list.
 
-## 4. Store fallback
+## 4. Automatic handoff and store fallback
 
-[src/modules/deep-linking/components/AppLinkActions.tsx](../src/modules/deep-linking/components/AppLinkActions.tsx)
-detects the platform on mount and renders:
+[src/modules/deep-linking/hooks/useAppHandoff.ts](../src/modules/deep-linking/hooks/useAppHandoff.ts)
+detects the platform on mount and immediately navigates away:
+
+- **Android** — `window.location.replace(<intent:// URL>)`. Chrome opens the
+  app, or follows `browser_fallback_url` to Play Store.
+- **iOS** — the App Store. Reaching the page means the Universal Link already
+  failed and there is no way to retry it from JavaScript.
+- **Desktop / unknown** — no navigation; the card stays.
+
+The attempt is claimed in `sessionStorage`, keyed by pathname. Without that
+guard, backing out of the store re-fires the redirect and traps the visitor.
+Blocked storage (private mode) degrades to "attempt once, no back guard".
+
+[AppLinkActions.tsx](../src/modules/deep-linking/components/AppLinkActions.tsx)
+then renders the manual retry, for desktop and for browsers that swallowed the
+automatic attempt (Firefox on Android ignores `intent://`):
 
 - **Android** — primary button is an `intent://` URL for the current page:
 
@@ -95,8 +112,9 @@ detects the platform on mount and renders:
 `config.ts`, overridable via `NEXT_PUBLIC_IOS_APP_STORE_ID`.
 
 **Known state: the app is under review, not released.** Until it goes live the
-App Store button and the Smart App Banner point at a store page that does not
-resolve — `itunes.apple.com/lookup?id=6806986285` returns `resultCount: 0` on
+automatic iOS redirect, the App Store button and the Smart App Banner all point
+at a store page that does not resolve — `itunes.apple.com/lookup?id=6806986285`
+returns `resultCount: 0` on
 both the US and SA storefronts. This was accepted deliberately so nothing has to
 change at release; the links start working on their own the moment the app
 publishes.
