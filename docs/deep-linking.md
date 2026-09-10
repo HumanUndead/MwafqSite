@@ -74,21 +74,35 @@ route work is needed per link type. Pages are `noindex` and `/app` is in the
 ## 4. Automatic handoff and store fallback
 
 [src/modules/deep-linking/hooks/useAppHandoff.ts](../src/modules/deep-linking/hooks/useAppHandoff.ts)
-detects the platform on mount and immediately navigates away:
+detects the platform on mount:
 
 - **Android** — `window.location.replace(<intent:// URL>)`. Chrome opens the
-  app, or follows `browser_fallback_url` to Play Store.
-- **iOS** — the App Store. Reaching the page means the Universal Link already
-  failed and there is no way to retry it from JavaScript.
-- **Desktop / unknown** — no navigation; the card stays.
+  app, or follows `browser_fallback_url`.
+- **iOS / desktop / unknown** — no navigation; the card stays.
 
-The attempt is claimed in `sessionStorage`, keyed by pathname. Without that
-guard, backing out of the store re-fires the redirect and traps the visitor.
-Blocked storage (private mode) degrades to "attempt once, no back guard".
+### The automatic attempt must not fall back to a store
+
+Chrome follows `browser_fallback_url` whenever the intent does **not** launch,
+and that happens with the app installed too:
+
+- no user gesture — an automatic `location.replace` on mount is exactly this
+  case, and Chrome blocks the external launch;
+- the app's manifest does not claim that exact host + path.
+
+Pointing the automatic attempt at Play Store therefore sends _installed_ users
+to the store every time. So the automatic attempt falls back to **the same page
+plus `?applink=web`**, and only the manual button (a real tap) falls back to
+the store. That marker is also the attempt guard: a load already carrying it
+does not retry, which is what keeps the fallback from looping.
+
+iOS gets no automatic redirect, for the same reason — reaching the page does not
+prove the app is missing, and an App Store bounce is unrecoverable.
+
+The attempt is additionally claimed in `sessionStorage`, keyed by pathname, so
+backing out of the app does not re-fire it.
 
 [AppLinkActions.tsx](../src/modules/deep-linking/components/AppLinkActions.tsx)
-then renders the manual retry, for desktop and for browsers that swallowed the
-automatic attempt (Firefox on Android ignores `intent://`):
+renders the manual retry:
 
 - **Android** — primary button is an `intent://` URL for the current page:
 
@@ -104,6 +118,23 @@ automatic attempt (Firefox on Android ignores `intent://`):
   in [metadata.ts](../src/modules/deep-linking/metadata.ts)).
 
 - **Desktop / unknown** — both store links.
+
+### If the manual button also lands on Play Store
+
+Then the intent resolves to no activity, and the cause is native, not web:
+
+```bash
+# 1. Is the installed app claiming the domain at all?
+adb shell pm get-app-links com.kensoftware.mwafq
+# 2. What does the installed build's manifest declare?
+adb shell dumpsys package com.kensoftware.mwafq | grep -A20 "android.intent.action.VIEW"
+# 3. Does the installed signing cert match the fingerprint in config.ts?
+adb shell dumpsys package com.kensoftware.mwafq | grep -i signature
+```
+
+`verified` on all three path prefixes (§5) means the OS should have intercepted
+the link before the browser ever loaded. If the page still renders, the link was
+opened in an in-app webview, or "Open supported links" is off for the app.
 
 ### iOS App Store id
 

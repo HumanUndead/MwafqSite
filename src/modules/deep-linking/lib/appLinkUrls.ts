@@ -10,6 +10,13 @@ export const APP_STORE_URL: string | null = IOS_APP_STORE_ID
   ? `https://apps.apple.com/app/id${IOS_APP_STORE_ID}`
   : null;
 
+/**
+ * Query flag the automatic handoff bounces back to when the app did not open.
+ * It is the attempt guard: present means "already tried, stay on the page".
+ */
+const HANDOFF_TRIED_PARAM = 'applink';
+const HANDOFF_TRIED_VALUE = 'web';
+
 export type MobilePlatform = 'ios' | 'android' | 'other';
 
 /** iPadOS 13+ reports a desktop Safari UA, so touch points disambiguate it. */
@@ -24,36 +31,68 @@ export function detectMobilePlatform(
 }
 
 /**
- * Android `intent://` handoff for the current URL: opens the app when it is
- * installed, and Chrome sends the user to `browser_fallback_url` when it isn't.
- * `scheme=https` reuses the App Link — no custom URL scheme needed.
+ * Android `intent://` handoff for the current URL. `scheme=https` reuses the
+ * App Link, so no custom URL scheme is needed.
+ *
+ * `fallbackUrl` is where Chrome goes when the intent does not launch — which
+ * happens with an installed app too (no user gesture, or a manifest that does
+ * not claim this exact path), so only the manual button points it at the store.
  */
-export function buildAndroidIntentUrl(currentUrl: string): string {
-  const { host, pathname, search } = new URL(currentUrl);
+export function buildAndroidIntentUrl(
+  currentUrl: string,
+  fallbackUrl: string = PLAY_STORE_URL
+): string {
+  const { host, pathname, search } = withoutHandoffMarker(currentUrl);
 
   return [
     `intent://${host}${pathname}${search}#Intent`,
     'scheme=https',
     `package=${ANDROID_PACKAGE_NAME}`,
-    `S.browser_fallback_url=${encodeURIComponent(PLAY_STORE_URL)}`,
+    `S.browser_fallback_url=${encodeURIComponent(fallbackUrl)}`,
     'end',
   ].join(';');
 }
 
 /**
  * Where an `/app/*` page should send the visitor the moment it loads. Reaching
- * the page at all means the OS did not intercept the link, so the browser has
- * to make the handoff itself:
+ * the page at all means the OS did not intercept the link, so the browser tries
+ * the handoff itself:
  *
- * - Android — `intent://`, which opens the app or falls back to Play Store.
- * - iOS — the App Store, since a Universal Link that failed cannot be retried.
+ * - Android — `intent://`, falling back to this same page rather than the store,
+ *   so an attempt that fails while the app *is* installed does not strand the
+ *   visitor on Play Store. The card then offers the store explicitly.
+ * - iOS — `null`. A Universal Link that failed cannot be retried, and bouncing
+ *   to the App Store would punish visitors who already have the app.
  * - Desktop / unknown — `null`, stay on the page and show the store links.
+ *
+ * `null` once the fallback marker is present: the attempt already happened.
  */
 export function resolveAppHandoffUrl(
   platform: MobilePlatform,
   currentUrl: string
 ): string | null {
-  if (platform === 'android') return buildAndroidIntentUrl(currentUrl);
-  if (platform === 'ios') return APP_STORE_URL;
-  return null;
+  if (platform !== 'android' || hasHandoffMarker(currentUrl)) return null;
+
+  return buildAndroidIntentUrl(currentUrl, buildHandoffFallbackUrl(currentUrl));
+}
+
+/** The current page, flagged so the returning load does not attempt again. */
+function buildHandoffFallbackUrl(currentUrl: string): string {
+  const url = new URL(currentUrl);
+  url.searchParams.set(HANDOFF_TRIED_PARAM, HANDOFF_TRIED_VALUE);
+  return url.toString();
+}
+
+function hasHandoffMarker(currentUrl: string): boolean {
+  return (
+    new URL(currentUrl).searchParams.get(HANDOFF_TRIED_PARAM) ===
+    HANDOFF_TRIED_VALUE
+  );
+}
+
+/** The app must receive the shared link, not our bookkeeping flag. */
+function withoutHandoffMarker(currentUrl: string): URL {
+  const url = new URL(currentUrl);
+  url.searchParams.delete(HANDOFF_TRIED_PARAM);
+  return url;
 }
