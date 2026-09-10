@@ -14,6 +14,7 @@ export const ROUTES = {
   ACADEMY_COURSES: '/academy-courses',
   MY_RESERVATIONS: '/my-reservations',
   PRIVACY_POLICY: '/privacy-policy',
+  APP: '/app',
 } as const;
 
 export type Route = (typeof ROUTES)[keyof typeof ROUTES];

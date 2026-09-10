@@ -11,6 +11,7 @@ const PRIVATE_ROUTES = [
   ROUTES.PERSONAL_INFO,
   ROUTES.ACADEMY_COURSES,
   ROUTES.MY_RESERVATIONS,
+  ROUTES.APP,
 ];
 
 export default function robots(): MetadataRoute.Robots {
