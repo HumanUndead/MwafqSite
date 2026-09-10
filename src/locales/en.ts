@@ -1287,6 +1287,19 @@ const en = {
     error: 'Something went wrong. Please try again.',
     disclaimer: 'Answers are generated and may not always be accurate.',
   },
+  appLink: {
+    eyebrow: 'Mwafq app',
+    title: 'Open this link in the Mwafq app',
+    message:
+      'This link opens inside the Mwafq mobile app. Install the app to continue, or keep browsing on the website.',
+    openInApp: 'Open in the app',
+    playStore: 'Get it on Google Play',
+    appStore: 'Download on the App Store',
+    continueOnWeb: 'Continue on the website',
+    metaTitle: 'Open in the Mwafq app',
+    metaDescription:
+      'Open this Mwafq link in the mobile app, or install it from the App Store or Google Play.',
+  },
 } as const;
 
 export default en;

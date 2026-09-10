@@ -1276,6 +1276,19 @@ const ar = {
     error: 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
     disclaimer: 'الإجابات مولّدة تلقائيًا وقد لا تكون دقيقة دائمًا.',
   },
+  appLink: {
+    eyebrow: 'تطبيق موفق',
+    title: 'افتح هذا الرابط في تطبيق موفق',
+    message:
+      'يُفتح هذا الرابط داخل تطبيق موفق للجوال. ثبّت التطبيق للمتابعة، أو تابع التصفّح عبر الموقع.',
+    openInApp: 'الفتح في التطبيق',
+    playStore: 'التحميل من Google Play',
+    appStore: 'التحميل من App Store',
+    continueOnWeb: 'المتابعة عبر الموقع',
+    metaTitle: 'الفتح في تطبيق موفق',
+    metaDescription:
+      'افتح رابط موفق هذا في تطبيق الجوال، أو ثبّت التطبيق من App Store أو Google Play.',
+  },
 } as const;
 
 export default ar;

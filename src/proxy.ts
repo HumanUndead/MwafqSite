@@ -27,6 +27,12 @@ const PROTECTED_PATTERNS = [
 
 const PUBLIC_FILE = /\.[^/]+$/;
 
+/**
+ * Apple and Google fetch the association files from here and reject any
+ * redirect, so this prefix must never be locale-prefixed.
+ */
+const WELL_KNOWN_PREFIX = '/.well-known';
+
 export default function proxy(request: NextRequest) {
   const token = request.cookies.get(authTokenCookieName)?.value;
   const authSession = request.cookies.get(authSessionCookieName)?.value;
@@ -37,6 +43,7 @@ export default function proxy(request: NextRequest) {
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
+    pathname.startsWith(WELL_KNOWN_PREFIX) ||
     PUBLIC_FILE.test(pathname)
   ) {
     return NextResponse.next();
@@ -88,5 +95,5 @@ export default function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|\\.well-known).*)'],
 };
