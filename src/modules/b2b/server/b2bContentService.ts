@@ -10,11 +10,11 @@ import type {
 } from '@/modules/home/home.types';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import { stripHtmlTags } from '@/shared/lib/htmlText';
+import { MWAFQ_MEDIA_BASE_URL } from '@/shared/constants/config';
 import {
   B2B_BUSINESS_ARTICLE_IDS,
   B2B_BUSINESS_CATEGORY_ID,
   B2B_COMPANIES_CATEGORY_ID,
-  B2B_CONTENT_API_BASE_URL,
   B2B_CONTENT_CACHE_TAG,
   B2B_CONTENT_REVALIDATE_SECONDS,
   B2B_CONTENT_ROOT_CATEGORY_ID,
@@ -739,7 +739,7 @@ function resolveCmsAssetUrl(value: string | null | undefined): string | null {
   const trimmed = (value ?? '').trim().replace(/\\/g, '/');
   if (!trimmed) return null;
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
-  const base = B2B_CONTENT_API_BASE_URL.replace(/\/+$/, '');
+  const base = MWAFQ_MEDIA_BASE_URL.replace(/\/+$/, '');
   return `${base}/${trimmed.replace(/^\/+/, '')}`;
 }
 

@@ -8,6 +8,10 @@ export const MWAFQ_REGISTER_URL =
 export const MWAFQ_API_BASE_URL =
   process.env.MWAFQ_API_BASE_URL ?? DEFAULT_MWAFQ_API_BASE_URL;
 
+/** CMS media/asset origin (images served under /content/...). No `/api` suffix. */
+export const MWAFQ_MEDIA_BASE_URL =
+  process.env.MWAFQ_MEDIA_BASE_URL ?? 'https://api.mwafq.com/';
+
 /** Canonical production origin — used for metadataBase, sitemap, robots, canonical/hreflang tags. */
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://site.mwafq.com'
