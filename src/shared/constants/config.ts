@@ -1,4 +1,4 @@
-const DEFAULT_MWAFQ_API_BASE_URL = 'https://stagingapi.mwafq.com/';
+const DEFAULT_MWAFQ_API_BASE_URL = 'https://api.mwafq.com/api';
 
 /** SSO project registration page — "Register with Mwafq" destination. */
 export const MWAFQ_REGISTER_URL =
