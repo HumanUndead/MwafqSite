@@ -14,7 +14,7 @@ export const MWAFQ_MEDIA_BASE_URL =
 
 /** Canonical production origin — used for metadataBase, sitemap, robots, canonical/hreflang tags. */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://site.mwafq.com'
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.mwafq.com'
 ).replace(/\/$/, '');
 
 /**
