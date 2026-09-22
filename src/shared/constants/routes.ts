@@ -15,7 +15,7 @@ export const ROUTES = {
   MY_RESERVATIONS: '/my-reservations',
   PRIVACY_POLICY: '/privacy-policy',
   APP: '/app',
-  DEACTIVATE_ACCOUNT: '/deactivate-account',
+  DEACTIVATE_ACCOUNT: '/delete-account',
   DEACTIVATE_ACCOUNT_RESULT: '/app/deactivate-account-result',
 } as const;
 

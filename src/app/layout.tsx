@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { cookies, headers } from 'next/headers';
 import localFont from 'next/font/local';
 import { ToastContainer } from '@/shared/components/feedback/Toast';
+import { ChunkErrorReloader } from '@/shared/components/feedback/ChunkErrorReloader';
 import {
   defaultLocale,
   hasLocale,
@@ -73,6 +74,7 @@ export default async function RootLayout({
       <body className='min-h-full bg-[#f3f4f8] text-[#1e2364]'>
         {children}
         <ToastContainer />
+        <ChunkErrorReloader />
       </body>
     </html>
   );
