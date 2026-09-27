@@ -96,6 +96,7 @@ export function transformCourseDetailToCourseData(
         rank: 999,
         isExam: quiz.isExam,
         lessonId: `${lesson.id}`,
+        isRevision: quiz.isRevision,
       });
     });
 
@@ -107,6 +108,7 @@ export function transformCourseDetailToCourseData(
         title: lesson.name || 'N/A',
         items: items.sort((a, b) => a.rank - b.rank),
         rank: lesson.rank,
+        isRevision: lesson.isRevision,
       },
     });
   });
@@ -122,6 +124,7 @@ export function transformCourseDetailToCourseData(
       rank: quiz.lessonId || 999,
       isExam: quiz.isExam,
       lessonId: null,
+      isRevision: quiz.isRevision,
     };
 
     sections.push({
@@ -143,5 +146,7 @@ export function transformCourseDetailToCourseData(
     whatYouLearn: splitCsv(courseDetail.whatWeWillLearn),
     sections,
     currentProgress: courseDetail.courseProgressPercentage,
+    isRevisionAvailable: courseDetail.isRevisionAvailable,
+    revisionProgress: courseDetail.revisionProgressPercentage,
   };
 }

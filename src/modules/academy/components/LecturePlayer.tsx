@@ -342,6 +342,11 @@ export function LecturePlayer({
                   translation?.name || t.lecture
                 )}
               </h1>
+              {lecture.isRevision && (
+                <span className='shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold uppercase text-amber-700'>
+                  {t.revision}
+                </span>
+              )}
             </div>
             {isCompleted && (
               <span className='flex items-center gap-2 rounded-lg bg-green-100 px-4 py-2 text-green-700'>

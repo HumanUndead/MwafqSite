@@ -7,14 +7,19 @@ import type {
 /** Lessons (ordered, items sorted) used for sequential locking. */
 function orderedLessons(
   sections: CourseData['sections']
-): Array<{ lessonId: string; items: CourseItem[] }> {
-  const result: Array<{ lessonId: string; items: CourseItem[] }> = [];
+): Array<{ lessonId: string; items: CourseItem[]; isRevision?: boolean }> {
+  const result: Array<{
+    lessonId: string;
+    items: CourseItem[];
+    isRevision?: boolean;
+  }> = [];
   sections.forEach((section) => {
     if (section.type === 'lesson') {
       const lesson = section.data as CoursePlayerLesson;
       result.push({
         lessonId: lesson.id,
         items: [...lesson.items].sort((a, b) => a.rank - b.rank),
+        isRevision: lesson.isRevision,
       });
     }
   });
@@ -22,38 +27,49 @@ function orderedLessons(
 }
 
 /**
- * An item is locked until all required (non-extra) items in previous lessons
- * and all required earlier items in the same lesson are completed. Extra
- * lectures never lock and never block.
+ * An item is locked until all required (non-extra, non-revision) items in
+ * previous lessons and all required earlier items in the same lesson are
+ * completed. Extra lectures never lock and never block. Revision content is
+ * gated by the backend (`isRevisionAvailable`) rather than by progress.
  */
 export function isItemLocked(
-  sections: CourseData['sections'],
+  courseData: CourseData,
   lessonId: string,
   itemIndex: number
 ): boolean {
-  const lessons = orderedLessons(sections);
+  const lessons = orderedLessons(courseData.sections);
   const currentLessonIndex = lessons.findIndex((l) => l.lessonId === lessonId);
   if (currentLessonIndex === -1) return false;
 
-  const currentItems = lessons[currentLessonIndex].items;
+  const currentLesson = lessons[currentLessonIndex];
+  const currentItems = currentLesson.items;
+
+  if (currentLesson.isRevision || currentItems[itemIndex]?.isRevision) {
+    return !courseData.isRevisionAvailable;
+  }
+
   if (currentItems[itemIndex]?.isExtraLecture) return false;
 
   for (let i = 0; i < currentLessonIndex; i++) {
+    if (lessons[i].isRevision) continue;
     for (const item of lessons[i].items) {
-      if (item.isExtraLecture) continue;
+      if (item.isExtraLecture || item.isRevision) continue;
       if (!item.isCompleted) return true;
     }
   }
 
   for (let i = 0; i < itemIndex; i++) {
-    if (currentItems[i].isExtraLecture) continue;
+    if (currentItems[i].isExtraLecture || currentItems[i].isRevision) continue;
     if (!currentItems[i].isCompleted) return true;
   }
 
   return false;
 }
 
-/** Flatten all lesson/attachment/quiz items in display order. */
+/**
+ * Flatten all lesson/attachment/quiz items in display order. Revision lessons
+ * are excluded: they are optional and must not gate anything.
+ */
 export function getAllCourseItems(
   sections: CourseData['sections']
 ): CourseItem[] {
@@ -61,6 +77,7 @@ export function getAllCourseItems(
   sections.forEach((section) => {
     if (section.type === 'lesson' || section.type === 'attachments') {
       const lesson = section.data as CoursePlayerLesson;
+      if (lesson.isRevision) return;
       [...lesson.items]
         .sort((a, b) => a.rank - b.rank)
         .forEach((item) => items.push(item));
@@ -76,14 +93,19 @@ export function getAllCourseItems(
  * Exams lock until every required (non-extra) lecture is complete.
  */
 export function isCourseQuizLocked(
-  sections: CourseData['sections'],
+  courseData: CourseData,
   quizItem: CourseItem
 ): boolean {
+  if (quizItem.isRevision) {
+    return !courseData.isRevisionAvailable;
+  }
+
   if (quizItem.isExam) {
     const lectures: CourseItem[] = [];
-    sections.forEach((section) => {
+    courseData.sections.forEach((section) => {
       if (section.type === 'lesson') {
         const lesson = section.data as CoursePlayerLesson;
+        if (lesson.isRevision) return;
         lesson.items.forEach((item) => {
           if (item.type === 'lecture' && !item.isExtraLecture) {
             lectures.push(item);
@@ -94,12 +116,12 @@ export function isCourseQuizLocked(
     return !lectures.every((lecture) => lecture.isCompleted);
   }
 
-  const allItems = getAllCourseItems(sections);
+  const allItems = getAllCourseItems(courseData.sections);
   const quizIndex = allItems.findIndex((item) => item.id === quizItem.id);
   if (quizIndex === -1) return false;
 
   for (let i = 0; i < quizIndex; i++) {
-    if (allItems[i].isExtraLecture) continue;
+    if (allItems[i].isExtraLecture || allItems[i].isRevision) continue;
     if (!allItems[i].isCompleted) return true;
   }
 

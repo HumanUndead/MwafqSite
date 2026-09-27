@@ -536,6 +536,7 @@ const en = {
       welcomeBack:
         'Welcome back to Mwafq. Sign in with your verification code to continue.',
       otpSent: 'OTP sent successfully. Enter the 4-digit code to sign in.',
+      or: 'or',
     },
     ssoLogin: {
       loadingTitle: 'Signing you in…',
@@ -651,6 +652,7 @@ const en = {
       wrongOtpCode: 'The verification code is incorrect.',
       userAlreadyExists: 'This user already exists.',
       invalidIdentityNumber: 'National ID / Iqama is incorrect.',
+      identityRequired: 'Enter your National ID / Iqama.',
     },
     registerPage: {
       hero: {
@@ -780,6 +782,8 @@ const en = {
     courseAttachments: 'Course attachments',
     files: 'files',
     extraContent: 'New',
+    revision: 'Revision',
+    revisionProgress: 'Revision progress',
     whatYouLearn: "What you'll learn",
     loading: 'Loading course…',
     notFoundTitle: 'Course not found',
@@ -817,6 +821,7 @@ const en = {
     loadError: 'Failed to load the lecture.',
     progressSaved: 'Lecture completed!',
     lecture: 'Lecture',
+    revision: 'Revision',
     lectureProgress: 'Lecture progress',
     courseInfo: 'Course info',
     downloadResources: 'Download resources',
@@ -881,6 +886,12 @@ const en = {
     exitWarning: 'Your progress will be lost.',
     cancel: 'Cancel',
     exit: 'Exit',
+    confirmSubmit:
+      'Are you sure you want to submit? You will not be able to change your answers.',
+    answerAllRequired: 'Answer all questions before submitting.',
+    timeUpTitle: "Time's up",
+    timeUp: 'Your time has run out. The quiz was submitted automatically.',
+    attemptsPage: 'Page {{current}} of {{total}}',
   },
   maintenance: {
     title: 'Under Maintenance',

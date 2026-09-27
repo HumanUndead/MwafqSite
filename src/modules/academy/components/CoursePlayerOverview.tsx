@@ -274,6 +274,25 @@ export function CoursePlayerOverview({
             </div>
           </div>
           <p className='text-sm text-gray-600'>{t.keepGoing}</p>
+
+          {courseData.isRevisionAvailable && (
+            <div className='space-y-2 border-t border-gray-100 pt-4'>
+              <div className='flex items-center justify-between'>
+                <h3 className='text-sm font-semibold text-gray-900'>
+                  {t.revisionProgress}
+                </h3>
+                <span className='text-lg font-bold text-amber-600'>
+                  {courseData.revisionProgress ?? 0}%
+                </span>
+              </div>
+              <div className='relative h-3 overflow-hidden rounded-full bg-gray-200'>
+                <div
+                  className='absolute inset-y-0 start-0 rounded-full bg-amber-500 transition-all duration-500 ease-out'
+                  style={{ width: `${courseData.revisionProgress ?? 0}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -395,10 +414,15 @@ export function CoursePlayerOverview({
                                   )}
                                 </div>
                                 <div className='min-w-0 flex-1'>
-                                  <h3 className='mb-2 text-lg font-semibold text-gray-900'>
+                                  <h3 className='mb-2 flex flex-wrap items-center gap-2 text-lg font-semibold text-gray-900'>
                                     {isAttachments
                                       ? t.courseAttachments
                                       : lesson.title}
+                                    {lesson.isRevision && (
+                                      <span className='rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold uppercase text-amber-700'>
+                                        {t.revision}
+                                      </span>
+                                    )}
                                   </h3>
                                   <div className='flex items-center gap-4 text-sm text-gray-600'>
                                     <span>
@@ -442,7 +466,7 @@ export function CoursePlayerOverview({
                                     isAttachments
                                       ? false
                                       : isItemLocked(
-                                          courseData.sections,
+                                          courseData,
                                           lesson.id,
                                           itemIndex
                                         )
@@ -460,10 +484,7 @@ export function CoursePlayerOverview({
                   }
 
                   const quizItem = section.data as CourseItem;
-                  const locked = isCourseQuizLocked(
-                    courseData.sections,
-                    quizItem
-                  );
+                  const locked = isCourseQuizLocked(courseData, quizItem);
                   const isExam = section.type === 'exam' || quizItem.isExam;
 
                   return (
@@ -491,6 +512,11 @@ export function CoursePlayerOverview({
                                 {isExam && (
                                   <span className='rounded-full bg-gray-200 px-2 py-0.5 text-xs font-bold uppercase text-gray-600'>
                                     {t.exam}
+                                  </span>
+                                )}
+                                {quizItem.isRevision && (
+                                  <span className='rounded-full bg-gray-200 px-2 py-0.5 text-xs font-bold uppercase text-gray-600'>
+                                    {t.revision}
                                   </span>
                                 )}
                               </div>
@@ -532,6 +558,11 @@ export function CoursePlayerOverview({
                                 {isExam && (
                                   <span className='rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold uppercase text-red-700'>
                                     {t.exam}
+                                  </span>
+                                )}
+                                {quizItem.isRevision && (
+                                  <span className='rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold uppercase text-amber-700'>
+                                    {t.revision}
                                   </span>
                                 )}
                               </div>
@@ -641,6 +672,7 @@ function labelsFrom(t: Dictionary['academyPlayer']) {
     minutes: t.minutes,
     history: t.history,
     extraContent: t.extraContent,
+    revision: t.revision,
     lecture: t.lecture,
     quiz: t.quiz,
     attachment: t.attachment,
@@ -707,6 +739,11 @@ function CurriculumItemRow({
           {item.isExtraLecture && (
             <span className='rounded-full border border-blue-200 bg-blue-100 px-2 py-0.5 font-medium text-blue-700'>
               {labels.extraContent}
+            </span>
+          )}
+          {item.isRevision && (
+            <span className='rounded-full border border-amber-200 bg-amber-100 px-2 py-0.5 font-medium text-amber-700'>
+              {labels.revision}
             </span>
           )}
           {locked && (

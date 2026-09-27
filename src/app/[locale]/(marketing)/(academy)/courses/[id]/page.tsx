@@ -31,7 +31,7 @@ export async function generateMetadata({
   if (!Number.isFinite(numericId)) return {};
 
   const locale = await GetLocale();
-  const courseView = await fetchCourseViewById(numericId);
+  const courseView = await fetchCourseViewById(numericId, locale);
 
   return buildPageMetadata({
     locale,
@@ -48,10 +48,10 @@ export default async function CourseDetailsPage({ params }: PageProps) {
     notFound();
   }
 
-  const [locale, course, courseView] = await Promise.all([
-    GetLocale(),
-    fetchCourseById(numericId),
-    fetchCourseViewById(numericId),
+  const locale = await GetLocale();
+  const [course, courseView] = await Promise.all([
+    fetchCourseById(numericId, locale),
+    fetchCourseViewById(numericId, locale),
   ]);
 
   const langId = localeToLangId[locale];

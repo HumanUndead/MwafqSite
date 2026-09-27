@@ -31,6 +31,8 @@ export interface EnrolledQuiz {
   description: string | null;
   /** true when completed, false/null otherwise. */
   isComplete: boolean | null;
+  /** Revision content — gated by the backend, not by course progress. */
+  isRevision?: boolean;
 }
 
 export interface EnrolledLesson {
@@ -42,6 +44,8 @@ export interface EnrolledLesson {
   description: string | null;
   lectures: EnrolledLecture[];
   quizzes: EnrolledQuiz[];
+  /** Revision lesson — optional content, never gates other items. */
+  isRevision?: boolean;
 }
 
 export interface EnrolledLastLecture {
@@ -79,6 +83,9 @@ export interface EnrolledCourseDetail {
   lessons: EnrolledLesson[];
   /** Course-level quizzes/exams. */
   quizzes: EnrolledQuiz[];
+  /** Backend gate for all revision content in this course. */
+  isRevisionAvailable?: boolean;
+  revisionProgressPercentage?: number;
 }
 
 export interface EnrolledCourseDetailResponse {

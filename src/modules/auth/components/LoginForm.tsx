@@ -5,11 +5,17 @@ import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { toast } from '@/shared/components/feedback/Toast';
 import { Button } from '@/shared/components/ui/Button';
 import { MWAFQ_REGISTER_URL } from '@/shared/constants/config';
+import { useDeveloperMode } from '@/shared/hooks/useDeveloperMode';
 import { authApi } from '../api/authApi';
+import { useOtpLogin } from '../hooks/useOtpLogin';
+import { AuthTextField } from './AuthTextField';
+import { OtpModal } from './OtpModal';
 
 export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
   const auth = useTranslations('auth');
   const locale = useLocale();
+  const developerMode = useDeveloperMode();
+  const otpLogin = useOtpLogin(redirectTo);
   const [loading, setLoading] = useState(false);
 
   const handleRegister = () => {
@@ -40,6 +46,39 @@ export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
 
   return (
     <div className='flex flex-col gap-4'>
+      {developerMode && (
+        <form
+          className='flex flex-col gap-3'
+          onSubmit={(event) => {
+            event.preventDefault();
+            void otpLogin.sendOtp();
+          }}
+        >
+          <AuthTextField
+            label={auth.fields.identityNumber}
+            value={otpLogin.userName}
+            onChange={(event) => otpLogin.setUserName(event.target.value)}
+            error={otpLogin.fieldError ?? undefined}
+            inputMode='numeric'
+            autoComplete='username'
+          />
+          <Button
+            type='submit'
+            loading={otpLogin.loading}
+            variant='brand'
+            size='lg'
+            className='w-full rounded-[14px] py-3 text-[15px]'
+          >
+            {auth.login.title}
+          </Button>
+          <div className='flex items-center gap-3 text-xs text-[#a3a8c4]'>
+            <span className='h-px flex-1 bg-[#d9ddea]' />
+            {auth.login.or}
+            <span className='h-px flex-1 bg-[#d9ddea]' />
+          </div>
+        </form>
+      )}
+
       <Button
         type='button'
         onClick={handleLogin}
@@ -72,6 +111,18 @@ export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
         </Link>
       </p>
       */}
+
+      {developerMode && (
+        <OtpModal
+          open={otpLogin.isOtpModalOpen}
+          destinationLabel={otpLogin.userName}
+          loading={otpLogin.loading}
+          error={otpLogin.error}
+          onVerify={otpLogin.verifyOtp}
+          onResend={otpLogin.resendOtp}
+          onClose={otpLogin.closeOtpModal}
+        />
+      )}
     </div>
   );
 }
