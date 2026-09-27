@@ -65,6 +65,7 @@ import type {
 } from './articleCategory.dto';
 import { stripHtmlToNull } from '@/shared/lib/text';
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
+import { MWAFQ_MEDIA_BASE_URL } from '@/shared/constants/config';
 
 interface CmsTranslationSnapshot {
   name: string;
@@ -286,7 +287,7 @@ function resolveCmsAssetUrl(value: string | null | undefined): string | null {
     return `/${localPath}`;
   }
 
-  const baseUrl = HOME_CONTENT_API_BASE_URL.replace(/\/+$/, '');
+  const baseUrl = MWAFQ_MEDIA_BASE_URL.replace(/\/+$/, '');
   const relativePath = normalized.replace(/^\/+/, '');
 
   return `${baseUrl}/${relativePath}`;
