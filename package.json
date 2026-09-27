@@ -5,13 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "dev:https": "next dev --experimental-https",
+    "prepare": "git config core.hooksPath .githooks",
     "clean": "rimraf .next .next.zip",
     "compress-build": "node scripts/compressBuild.mjs",
     "build": "npm run clean && next build && node scripts/compressBuild.mjs",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "check:encoding": "node scripts/checkSourceEncoding.mjs --all"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
