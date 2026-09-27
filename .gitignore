@@ -43,3 +43,7 @@ certificates
 
 package-lock.json
 .next.zip
+
+# playwright mcp scratch output (snapshots / console logs)
+console-*.log
+page-*.yml
