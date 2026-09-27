@@ -142,8 +142,7 @@ export function Header({ locale, content }: HeaderProps) {
           'max-[560px]:top-2.5 max-[560px]:w-[calc(100%-16px)] max-[560px]:px-3.5',
           (isScrolled || isVideoHeroPage) &&
             'border-white/70 bg-white/62 backdrop-blur-md backdrop-saturate-150',
-          headerHidden &&
-            'pointer-events-none -translate-y-[160%] opacity-0'
+          headerHidden && 'pointer-events-none translate-y-[-160%] opacity-0'
         )}
       >
         <CmsLink
@@ -159,7 +158,9 @@ export function Header({ locale, content }: HeaderProps) {
             height={200}
             className={cn(
               'block w-auto transition-[height] duration-250 ease-in-out',
-              isScrolled ? 'h-11 max-[1100px]:h-10 max-[560px]:h-9 min-[1920px]:h-12 min-[2560px]:h-14' : 'h-14 max-[1100px]:h-12 max-[560px]:h-11 min-[1920px]:h-17 min-[2560px]:h-20'
+              isScrolled
+                ? 'h-11 max-[1100px]:h-10 max-[560px]:h-9 min-[1920px]:h-12 min-[2560px]:h-14'
+                : 'h-14 max-[1100px]:h-12 max-[560px]:h-11 min-[1920px]:h-17 min-[2560px]:h-20'
             )}
             loading='eager'
           />
@@ -181,7 +182,10 @@ export function Header({ locale, content }: HeaderProps) {
               >
                 <span
                   className={cn(
-                    cn('inline-block origin-center font-bold transition-colors duration-200 ease-out', marketingHeaderNavLinkClass),
+                    cn(
+                      'inline-block origin-center font-bold transition-colors duration-200 ease-out',
+                      marketingHeaderNavLinkClass
+                    ),
                     active
                       ? 'text-[#00a8f1]'
                       : 'text-[#1e2364]/80 group-hover:text-[#00a8f1]'
@@ -237,9 +241,14 @@ export function Header({ locale, content }: HeaderProps) {
             href={BUSINESS_LOGIN_URL}
             target='_blank'
             rel='noopener noreferrer'
-            className={cn('inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567] max-[1100px]:hidden', marketingHeaderButtonClass)}
+            className={cn(
+              'inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[50px] bg-[#1e2364] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567] max-[1100px]:hidden',
+              marketingHeaderButtonClass
+            )}
           >
-            <span>{locale === 'ar' ? 'تسجيل الدخول للأعمال' : 'Business sign in'}</span>
+            <span>
+              {locale === 'ar' ? 'تسجيل الدخول للأعمال' : 'Business sign in'}
+            </span>
           </CmsLink>
 
           <button
@@ -329,7 +338,9 @@ export function Header({ locale, content }: HeaderProps) {
                   className='flex h-11 items-center justify-center rounded-[50px] bg-[#1e2364] text-[15px] font-semibold text-white transition-[background] duration-200 hover:bg-[#233567]'
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {locale === 'ar' ? 'تسجيل الدخول للأعمال' : 'Business sign in'}
+                  {locale === 'ar'
+                    ? 'تسجيل الدخول للأعمال'
+                    : 'Business sign in'}
                 </CmsLink>
               </div>
             </motion.div>
