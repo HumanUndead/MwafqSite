@@ -85,7 +85,15 @@ function extractTokenFromPayload(payload: unknown): string | null {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, otp } = await request.json();
+    const { email, otp, userName } = await request.json();
+
+    // Iqama / passport login: verified by the backend.
+    if (typeof userName === 'string' && userName.trim()) {
+      return verifyUserNameOtp(
+        userName.trim(),
+        typeof otp === 'string' ? otp.trim() : ''
+      );
+    }
 
     if (!email || !otp) {
       return NextResponse.json(
@@ -119,11 +127,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+async function verifyUserNameOtp(userName: string, otp: string) {
   try {
-    const userName = request.nextUrl.searchParams.get('UserName')?.trim();
-    const otp = request.nextUrl.searchParams.get('OTP')?.trim();
-
     if (!userName || !otp) {
       return NextResponse.json(
         {
@@ -139,12 +144,13 @@ export async function GET(request: NextRequest) {
       '/api/Authenticate/Auth/VerifyOTP',
       MWAFQ_API_BASE_URL
     );
-    endpoint.searchParams.set('UserName', userName);
-    endpoint.searchParams.set('OTP', otp);
 
+    // Backend change: GET + query → POST with `{ userName, otp }` JSON body.
     const upstreamResponse = await performUpstreamTextRequest({
-      method: 'GET',
+      method: 'POST',
       url: endpoint,
+      authorization: null,
+      body: { userName, otp },
     });
 
     const responseText = upstreamResponse.body;

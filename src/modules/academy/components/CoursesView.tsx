@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import type { Locale } from '@/i18n/config';
 import { AcademyFilter } from '@/modules/auth/AcademyFilter';
 import type { CourseCategoryListItem } from '@/modules/auth/courseCategory.types';
+import { AcademyLanguagePicker } from './AcademyLanguagePicker';
 import { CourseSearchResults } from './CourseSearchResults';
 
 type ActiveFilters = {
@@ -37,6 +38,9 @@ export function CoursesView({
 
   return (
     <>
+      <div className='mx-auto mb-4 flex max-w-330 justify-end px-4 md:px-7'>
+        <AcademyLanguagePicker />
+      </div>
       <AcademyFilter
         categories={categories}
         locale={locale}
@@ -56,6 +60,7 @@ export function CoursesView({
               query={activeFilters.query}
               categoryId={activeFilters.categoryId}
               locale={locale}
+              onClear={() => setActiveFilters(null)}
             />
           </motion.div>
         ) : (

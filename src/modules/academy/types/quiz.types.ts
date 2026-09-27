@@ -93,6 +93,8 @@ export interface UserQuizAnswerAttempt {
 }
 
 export interface UserQuizAttempt {
+  /** Max score of the quiz for this attempt. */
+  quizScore?: number;
   id?: number;
   attemptId?: number;
   attemptScore: number;

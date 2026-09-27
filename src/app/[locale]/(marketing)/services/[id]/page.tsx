@@ -5,12 +5,7 @@ import { localeToLangId } from '@/i18n/config';
 import { GetLocale } from '@/i18n/server';
 import { buildPageMetadata } from '@/i18n/seo';
 import { ROUTES } from '@/shared/constants/routes';
-import { getCurrentUser } from '@/modules/auth/server/authSession';
-import {
-  fetchServiceGroupById,
-  fetchServiceGroupsList,
-  serviceGroupToServiceListItem,
-} from '@/modules/auth/server/ServiceGroupService';
+import { fetchServiceGroupById } from '@/modules/auth/server/ServiceGroupService';
 import { ServiceGroupDetailsView } from '@/modules/services/ServiceGroupDetailsView';
 import { FetchResponseError } from '@/shared/lib/fetchWithErrorHandling.shared';
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
@@ -58,20 +53,14 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
   }
 
   const locale = await GetLocale();
-  const [service, relatedList, currentUser] = await Promise.all([
-    fetchServiceGroupById(numericId, { locale }).catch((error) => {
+  const service = await fetchServiceGroupById(numericId, { locale }).catch(
+    (error) => {
       if (error instanceof FetchResponseError) notFound();
       throw error;
-    }),
-    fetchServiceGroupsList({ pageNumber: 1, pageSize: 6, culture: locale }),
-    getCurrentUser(),
-  ]);
+    }
+  );
 
   const langId = localeToLangId[locale];
-  const relatedPackages = relatedList.data
-    .filter((item) => item.id !== numericId)
-    .slice(0, 5)
-    .map(serviceGroupToServiceListItem);
   const translation =
     service.translations.find((t) => t.langId === langId) ??
     service.translations[0];
@@ -96,8 +85,6 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
         locale={locale}
         langId={langId}
         service={service}
-        relatedPackages={relatedPackages}
-        isAuthenticated={currentUser !== null}
       />
     </MarketingStickyHeaderOffset>
   );

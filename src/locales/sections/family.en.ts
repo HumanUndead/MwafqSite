@@ -1,0 +1,100 @@
+/** `family` namespace: related users (family) management. */
+const familyEn = {
+  metaTitle: 'Family members',
+  title: 'Family members',
+  subtitle: 'Link the people you book for, and manage who can book for you.',
+  you: 'You',
+  close: 'Close',
+  cancel: 'Cancel',
+  loadError: "We couldn't load your family members. Please try again.",
+  retry: 'Try again',
+  tabsAriaLabel: 'Family lists',
+  tabs: {
+    related: 'Related users',
+    belongTo: 'I belong to',
+  },
+  sections: {
+    accepted: 'Accepted',
+    rejected: 'Rejected',
+    pending: 'Pending',
+  },
+  status: {
+    pending: 'Pending',
+    accepted: 'Accepted',
+    rejected: 'Rejected',
+  },
+  empty: {
+    related: 'No related users found',
+    belongTo: 'No users you belong to',
+    sent: 'No sent requests',
+    received: 'No pending requests',
+  },
+  actions: {
+    add: 'Add family member',
+    linkExisting: 'Link an existing account',
+    createNew: 'Create related user',
+    remove: 'Unlink',
+    accept: 'Accept',
+    reject: 'Reject',
+    cancelRequest: 'Cancel request',
+  },
+  confirm: {
+    removeTitle: 'Unrelate user',
+    removeMessage: 'Are you sure you want to unrelate this user?',
+    cancelRequestTitle: 'Cancel request',
+    cancelRequestMessage:
+      'Are you sure you want to cancel this relation request?',
+    acceptTitle: 'Accept request',
+    acceptMessage: 'Are you sure you want to accept this relation request?',
+    rejectTitle: 'Reject request',
+    rejectMessage: 'Are you sure you want to reject this relation request?',
+  },
+  toasts: {
+    removed: 'Family member removed',
+    accepted: 'Request accepted',
+    rejected: 'Request rejected',
+    requestCancelled: 'Request cancelled',
+  },
+  requests: {
+    title: 'My requests',
+    description:
+      "Pending requests that haven't been finalized yet — whether sent by you or received from someone else.",
+    sent: 'Sent requests',
+    received: 'Received requests',
+    link: 'My requests',
+  },
+  link: {
+    title: 'Link an existing account',
+    usernameLabel: 'Username',
+    usernamePlaceholder: 'Username, identity number or phone',
+    helper: "Enter a member's username to send them a relation request",
+    searching: 'Searching…',
+    notFound: 'User not found',
+    submit: 'Send link request',
+    success: 'Relation request sent',
+  },
+  create: {
+    title: 'Create related user',
+    description:
+      'Create an account for a family member who does not have one yet. It is linked to you straight away.',
+    firstName: 'First name',
+    lastName: 'Last name',
+    phoneNumber: 'Phone number or email',
+    phonePlaceholder: '05XXXXXXXX',
+    identityNumber: 'Identity number',
+    dateOfBirth: 'Date of birth',
+    terms: 'I confirm this family member agrees to the',
+    termsLink: 'terms and privacy policy',
+    submit: 'Create member',
+    success: 'Family member created',
+  },
+  errors: {
+    required: 'This field is required',
+    phone: 'Enter a valid Saudi mobile number or email',
+    date: 'Enter a valid date of birth',
+    terms: 'Please accept the terms to continue',
+    generic: 'Something went wrong. Please try again.',
+  },
+} as const;
+
+export default familyEn;

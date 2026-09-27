@@ -22,8 +22,15 @@ export interface CourseLessonLecture {
   attachments?: string;
 }
 
-/** Quiz on a course lesson; extend when upstream shape is known. */
-export interface CourseLessonQuiz {}
+/** Quiz / exam on a lesson or course (`Course/View`). */
+export interface CourseLessonQuiz {
+  id: number;
+  title: string | null;
+  isExam: boolean;
+  timerMintues?: number;
+  timerMinutes?: number;
+  lessonId: number | null;
+}
 
 export interface CourseLesson {
   id: number;
@@ -45,6 +52,11 @@ export interface CourseListItem {
   target: string;
   fullImagePath: string;
   translations: CourseTranslation[];
+  featured?: boolean;
+  name?: string;
+  totalLectures?: number;
+  totalHours?: number;
+  paymentSettings?: CourseViewPaymentSettings | null;
 }
 
 export interface CourseListResponse extends UpstreamApiResponse<
@@ -60,8 +72,8 @@ export interface CourseViewPaymentSettings {
   sadadPrice: number;
 }
 
-/** Course-level quiz from `GET /api/Academy/Course/View`; extend when shape is known. */
-export interface CourseViewQuiz {}
+/** Course-level quiz / exam from `GET /api/Academy/Course/View`. */
+export type CourseViewQuiz = CourseLessonQuiz;
 
 /** Localized course detail from `GET /api/Academy/Course/View`. */
 export interface CourseViewItem {

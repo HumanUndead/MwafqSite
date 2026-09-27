@@ -127,3 +127,30 @@ export function isCourseQuizLocked(
 
   return false;
 }
+
+/**
+ * Lock state of a lecture / quiz by id, for direct-URL guards on the
+ * player pages. Unknown ids read as unlocked (the backend still decides).
+ */
+export function isActivityLockedById(
+  courseData: CourseData,
+  type: 'lecture' | 'quiz',
+  id: number | string
+): boolean {
+  const key = String(id);
+  for (const section of courseData.sections) {
+    if (section.type === 'lesson') {
+      const lesson = section.data as CoursePlayerLesson;
+      const items = [...lesson.items].sort((a, b) => a.rank - b.rank);
+      const index = items.findIndex((item) => item.type === type && item.id === key);
+      if (index !== -1) return isItemLocked(courseData, lesson.id, index);
+    } else if (
+      type === 'quiz' &&
+      (section.type === 'quiz' || section.type === 'exam')
+    ) {
+      const item = section.data as CourseItem;
+      if (item.id === key) return isCourseQuizLocked(courseData, item);
+    }
+  }
+  return false;
+}

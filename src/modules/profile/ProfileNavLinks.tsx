@@ -1,5 +1,6 @@
 'use client';
 
+import { Heart, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { Locale } from '@/i18n/config';
@@ -38,6 +39,8 @@ export function ProfileNavLinks({ locale }: { locale: Locale }) {
     pathWithoutLocale,
     ROUTES.MY_RESERVATIONS
   );
+  const familyActive = routeActive(pathWithoutLocale, ROUTES.FAMILY);
+  const favoritesActive = routeActive(pathWithoutLocale, ROUTES.FAVORITES);
 
   return (
     <>
@@ -67,6 +70,24 @@ export function ProfileNavLinks({ locale }: { locale: Locale }) {
       >
         <ReservationsChartIcon className='size-[18px] shrink-0 text-current' />
         {t.myReservations}
+      </Link>
+      <Link
+        href={`/${locale}${ROUTES.FAMILY}`}
+        className={cn(navBase, familyActive ? navActive : navIdle)}
+        aria-current={familyActive ? 'page' : undefined}
+        data-cursor
+      >
+        <Users className='size-[18px] shrink-0 text-current' aria-hidden />
+        {t.family}
+      </Link>
+      <Link
+        href={`/${locale}${ROUTES.FAVORITES}`}
+        className={cn(navBase, favoritesActive ? navActive : navIdle)}
+        aria-current={favoritesActive ? 'page' : undefined}
+        data-cursor
+      >
+        <Heart className='size-[18px] shrink-0 text-current' aria-hidden />
+        {t.favorites}
       </Link>
     </>
   );

@@ -49,25 +49,26 @@ export function QuizHistory({
   );
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Server-side paging (mobile `UserQuizAttempt/List` + PageNumber/PageSize).
   const { data, isLoading } = useQuizAttempts({
     userId: user?.id ?? '',
     quizId,
     userCourseId,
     lessonId,
     locale,
+    pageNumber: currentPage,
+    pageSize: ATTEMPTS_PAGE_SIZE,
   });
 
-  const attempts: UserQuizAttempt[] = data?.attempts ?? data?.data ?? [];
-  const total = data?.quizScore ?? 0;
+  const attempts: UserQuizAttempt[] = data?.data ?? data?.attempts ?? [];
+  const fallbackTotal = data?.quizScore ?? 0;
+  const totalRecords = data?.totalRecords ?? attempts.length;
   const totalPages = Math.max(
     1,
-    Math.ceil(attempts.length / ATTEMPTS_PAGE_SIZE)
+    data?.totalPages ?? Math.ceil(totalRecords / ATTEMPTS_PAGE_SIZE)
   );
   const pageStart = (currentPage - 1) * ATTEMPTS_PAGE_SIZE;
-  const pageAttempts = attempts.slice(
-    pageStart,
-    pageStart + ATTEMPTS_PAGE_SIZE
-  );
+  const pageAttempts = attempts;
   const BackIcon = rtl ? ChevronRight : ChevronLeft;
   const NextIcon = rtl ? ChevronLeft : ChevronRight;
 
@@ -118,10 +119,13 @@ export function QuizHistory({
               {pageAttempts.map((attempt, pageIndex) => {
                 const index = pageStart + pageIndex;
                 const id = attempt.id ?? attempt.attemptId ?? null;
+                const total = attempt.quizScore || fallbackTotal;
                 const percentage = getScorePercentage(
                   attempt.attemptScore,
                   total
                 );
+                // Newest first: number attempts chronologically.
+                const attemptNumber = Math.max(1, totalRecords - index);
                 const badge = getScoreBadgeColor(percentage);
 
                 return (
@@ -140,7 +144,7 @@ export function QuizHistory({
                     <div className='mb-4 flex items-start justify-between'>
                       <div className='flex-1'>
                         <div className='mb-1 text-sm text-gray-600'>
-                          {t.attempt} #{index + 1}
+                          {t.attempt} #{attemptNumber}
                         </div>
                         <div className='text-xs text-gray-500'>
                           {formatQuizDate(attempt.startTime, locale)}

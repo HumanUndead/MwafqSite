@@ -1,10 +1,14 @@
+import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { getAcademyCulture } from '@/modules/academy/server/academyLanguage';
 import { getMyCourses } from '@/modules/profile-academy/server/academyCoursesService';
 import { FetchResponseError } from '@/shared/lib/fetchWithErrorHandling.shared';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const courses = await getMyCourses();
+    const courses = await getMyCourses(
+      await getAcademyCulture(request.nextUrl.searchParams.get('locale'))
+    );
 
     return NextResponse.json({
       success: true,

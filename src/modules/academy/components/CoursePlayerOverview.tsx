@@ -18,7 +18,7 @@ import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import type { Dictionary } from '@/locales/types';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+import { attachmentUrl } from '@/shared/lib/media';
 import { useCourseDetail } from '../hooks/useCourseDetail';
 import {
   getAllCourseItems,
@@ -94,8 +94,32 @@ export function CoursePlayerOverview({
     String(courseId)
   );
   const allItems = getAllCourseItems(courseData.sections);
-  const firstLecture = allItems.find((item) => item.type === 'lecture');
-  const continueLectureId = courseDetail.lastLecture?.id ?? firstLecture?.id;
+  // Resume (mobile): the last lecture while unfinished, else the first
+  // required item still to do, else the last lecture / first lecture.
+  const lastLectureItem = courseDetail.lastLecture
+    ? allItems.find(
+        (item) =>
+          item.type === 'lecture' && item.id === String(courseDetail.lastLecture?.id)
+      )
+    : undefined;
+  const firstPending = allItems.find(
+    (item) =>
+      item.type !== 'attachment' &&
+      !item.isCompleted &&
+      !item.isExtraLecture &&
+      !item.isRevision
+  );
+  const resumeItem =
+    lastLectureItem && !lastLectureItem.isCompleted
+      ? lastLectureItem
+      : (firstPending ??
+        lastLectureItem ??
+        allItems.find((item) => item.type === 'lecture'));
+  const resumeHref = resumeItem
+    ? resumeItem.type === 'quiz'
+      ? quizPath(locale, userCourseId, courseId, resumeItem.id)
+      : lecturePath(locale, userCourseId, courseId, resumeItem.id)
+    : null;
   const myCoursesHref = getLocalizedRoute(locale, ROUTES.ACADEMY_COURSES);
 
   const totalItems = courseData.sections.reduce((acc, section) => {
@@ -193,6 +217,16 @@ export function CoursePlayerOverview({
                   </span>
                 </div>
               </div>
+
+              {resumeHref && (
+                <Link
+                  href={resumeHref}
+                  className='flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00a8f1] to-[#1e2364] py-4 font-bold text-white shadow-lg lg:hidden'
+                >
+                  <Play className='size-5' />
+                  {courseDetail.lastLecture ? t.continueLearning : t.startLearning}
+                </Link>
+              )}
             </div>
 
             {/* Desktop course card */}
@@ -215,21 +249,16 @@ export function CoursePlayerOverview({
                 <div className='space-y-4 p-6'>
                   <div className='flex items-center justify-between'>
                     <span className='text-sm text-gray-600'>
-                      {t.lastUpdated}
+                      {t.lectures}
                     </span>
                     <span className='text-sm font-medium text-gray-900'>
                       {courseDetail.totalLectures}
                     </span>
                   </div>
 
-                  {continueLectureId ? (
+                  {resumeHref ? (
                     <Link
-                      href={lecturePath(
-                        locale,
-                        userCourseId,
-                        courseId,
-                        continueLectureId
-                      )}
+                      href={resumeHref}
                       className='flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00a8f1] to-[#1e2364] py-4 font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl'
                     >
                       <Play className='size-5' />
@@ -765,7 +794,7 @@ function CurriculumItemRow({
       : item.type === 'quiz'
         ? quizPath(locale, userCourseId, courseId, item.id)
         : item.path
-          ? `${MWAFQ_API_BASE_URL}/${item.path}`
+          ? attachmentUrl(item.path)
           : '#';
 
   return (

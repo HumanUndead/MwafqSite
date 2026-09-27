@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { getAcademyCulture } from '@/modules/academy/server/academyLanguage';
 import { listQuizAttemptsWithToken } from '@/modules/academy/server/quizService';
 import {
   academyOk,
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId') || '';
     const quizId = Number(searchParams.get('quizId'));
     const userCourseId = Number(searchParams.get('userCourseId'));
-    const locale = searchParams.get('locale') || 'en';
+    const locale = await getAcademyCulture(searchParams.get('locale'));
 
     if (!userId || !Number.isFinite(quizId) || !Number.isFinite(userCourseId)) {
       return NextResponse.json(
@@ -31,6 +32,8 @@ export async function GET(request: NextRequest) {
       quizId,
       userCourseId,
       locale,
+      pageNumber: Math.max(1, Number(searchParams.get('pageNumber')) || 1),
+      pageSize: Math.min(50, Math.max(1, Number(searchParams.get('pageSize')) || 8)),
     });
 
     return academyOk(data, 'Attempts loaded');

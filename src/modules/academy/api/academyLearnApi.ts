@@ -5,10 +5,6 @@ import type {
   SetProgressResponse,
 } from '../types/lecture.types';
 import type {
-  PaymentInitData,
-  StartPaymentPayload,
-} from '../types/payment.types';
-import type {
   QuizAttemptDetail,
   QuizData,
   UserQuizAttemptsValue,
@@ -16,32 +12,6 @@ import type {
 
 /** Client wrappers over the `/api/academy/*` proxy routes. */
 export const academyLearnApi = {
-  // ── Enroll + payment ──────────────────────────────────────────────
-  enrollCourse(courseId: number, selectedService: number) {
-    return http.post<{ userCourseId: number }>('/api/academy/enroll', {
-      courseId,
-      selectedService,
-    });
-  },
-
-  startCreditCardPayment(payload: StartPaymentPayload) {
-    return http.post<PaymentInitData>(
-      '/api/academy/payment/credit-card',
-      payload
-    );
-  },
-
-  checkPaymentStatus(body: {
-    pendingTransactionId: string;
-    userId: string;
-    paymentId: string;
-  }) {
-    return http.post<{ paid: boolean }>(
-      '/api/academy/payment/check-status',
-      body
-    );
-  },
-
   // ── Player ────────────────────────────────────────────────────────
   getCourseByUserId(userCourseId: number, courseId: number, locale: string) {
     return http.get<EnrolledCourseDetail>(

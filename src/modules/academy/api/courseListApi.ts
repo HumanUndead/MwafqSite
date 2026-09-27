@@ -4,6 +4,7 @@ import type { CourseListItem } from '@/modules/auth/course.types';
 
 export type FetchCourseListParams = {
   categoryId?: number;
+  featured?: boolean;
   keyword?: string;
   pageNumber?: number;
   pageSize?: number;
@@ -14,6 +15,7 @@ export async function fetchCourseListClient(
 ): Promise<PaginatedResponse<CourseListItem>> {
   const query = new URLSearchParams();
   if (params.categoryId) query.set('categoryId', String(params.categoryId));
+  if (params.featured) query.set('featured', 'true');
   if (params.keyword) query.set('keyword', params.keyword);
   if (params.pageNumber) query.set('pageNumber', String(params.pageNumber));
   if (params.pageSize) query.set('pageSize', String(params.pageSize));

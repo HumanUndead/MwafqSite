@@ -1,22 +1,15 @@
-import ReservationDetailsView from '@/modules/profile-reservations/ReservationDetailsView';
-import { buildReservationDetailsViewModelFromPublic } from '@/modules/profile-reservations/reservationDetailsMapper';
-import { getReservationById } from '@/modules/profile-reservations/server/reservationsService';
+import type { Metadata } from 'next';
+import { getTranslations } from '@/i18n/server';
+import { ReservationDetailsView } from '@/modules/reservations';
 
-type ReservationDetailsPageProps = {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ view?: string }>;
-};
+type PageProps = { params: Promise<{ id: string }> };
 
-export default async function ReservationDetailsPage({
-  params,
-  searchParams,
-}: ReservationDetailsPageProps) {
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('reservations');
+  return { title: t.details.metaTitle };
+}
+
+export default async function ReservationDetailsPage({ params }: PageProps) {
   const { id } = await params;
-  const { view } = await searchParams;
-  const reservation = await getReservationById(id);
-  const details = buildReservationDetailsViewModelFromPublic(id, reservation, {
-    view,
-  });
-
-  return <ReservationDetailsView details={details} />;
+  return <ReservationDetailsView id={id} />;
 }

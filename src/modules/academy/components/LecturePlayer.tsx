@@ -8,6 +8,7 @@ import {
   Clock,
   Download,
   FileText,
+  Lock,
   Play,
   X,
 } from 'lucide-react';
@@ -19,7 +20,10 @@ import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { Button } from '@/shared/components/ui/Button';
 import { Modal } from '@/shared/components/ui/Modal';
 import { toast } from '@/shared/components/feedback/Toast';
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+import { attachmentUrl } from '@/shared/lib/media';
+import { safeHtml } from '@/shared/lib/safeHtml';
+import { isActivityLockedById } from '../courseLocking.shared';
+import { transformCourseDetailToCourseData } from '../courseTransform.shared';
 import { useCourseDetail } from '../hooks/useCourseDetail';
 import {
   useLectureDetail,
@@ -135,6 +139,8 @@ export function LecturePlayer({
     'overview'
   );
   const [locallyCompleted, setLocallyCompleted] = useState(false);
+  // The player API could not be driven: no `ended` event will ever come.
+  const [videoUnobservable, setVideoUnobservable] = useState(false);
   const [pendingQuizId, setPendingQuizId] = useState<number | null>(null);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -247,6 +253,7 @@ export function LecturePlayer({
       script.src = 'https://player.vimeo.com/api/player.js';
       script.async = true;
       script.onload = init;
+      script.onerror = () => setVideoUnobservable(true);
       document.body.appendChild(script);
     } else {
       init();
@@ -271,6 +278,33 @@ export function LecturePlayer({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [translation?.videoUrl, lectureId]);
+
+  const isLocked = courseDetail
+    ? isActivityLockedById(
+        transformCourseDetailToCourseData(courseDetail, String(courseId)),
+        'lecture',
+        lectureId
+      )
+    : false;
+
+  // Mobile completes a lecture on video end; without an observable video the
+  // learner confirms it instead, so the next topic can unlock.
+  const canMarkManually =
+    !isCompleted && (!translation?.videoUrl || videoUnobservable);
+
+  async function handleManualComplete() {
+    if (markingRef.current) return;
+    try {
+      markingRef.current = true;
+      await markComplete(lectureId);
+      setLocallyCompleted(true);
+      toast.success(t.progressSaved);
+    } catch {
+      toast.error(t.loadError);
+    } finally {
+      markingRef.current = false;
+    }
+  }
 
   const resources =
     translation?.attachments
@@ -317,6 +351,28 @@ export function LecturePlayer({
 
   const BackIcon = rtl ? ChevronRight : ChevronLeft;
   const NextIcon = rtl ? ChevronLeft : ChevronRight;
+
+  if (isLocked) {
+    return (
+      <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
+        <div className='mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8'>
+          <div className='space-y-4 rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-lg'>
+            <div className='mx-auto flex size-16 items-center justify-center rounded-full bg-gray-100'>
+              <Lock className='size-8 text-gray-500' aria-hidden />
+            </div>
+            <h1 className='text-xl font-bold text-gray-900'>{t.lockedTitle}</h1>
+            <p className='text-gray-600'>{t.lockedMessage}</p>
+            <Link
+              href={learnBasePath(locale, userCourseId, courseId)}
+              className='inline-block rounded-lg bg-[#00a8f1] px-6 py-3 font-medium text-white transition-all hover:opacity-90'
+            >
+              {t.backToCourse}
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
@@ -423,9 +479,17 @@ export function LecturePlayer({
                     <div
                       className='prose prose-sm max-w-none leading-relaxed text-gray-700'
                       dangerouslySetInnerHTML={{
-                        __html: translation?.description || t.noDescription,
+                        __html: safeHtml(translation?.description) || t.noDescription,
                       }}
                     />
+                    {translation?.textContent && (
+                      <div
+                        className='prose prose-sm max-w-none border-t border-gray-200 pt-4 leading-relaxed text-gray-700'
+                        dangerouslySetInnerHTML={{
+                          __html: safeHtml(translation.textContent),
+                        }}
+                      />
+                    )}
                   </div>
                 ) : (
                   <div className='space-y-4'>
@@ -447,7 +511,7 @@ export function LecturePlayer({
                             </p>
                           </div>
                           <a
-                            href={`${MWAFQ_API_BASE_URL}/${resource.path}`}
+                            href={attachmentUrl(resource.path)}
                             target='_blank'
                             rel='noopener noreferrer'
                             className='inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#00a8f1] px-4 py-2 text-sm font-medium text-white opacity-0 transition-all hover:opacity-90 group-hover:opacity-100'
@@ -474,6 +538,18 @@ export function LecturePlayer({
               <h3 className='text-lg font-bold text-gray-900'>
                 {t.lectureProgress}
               </h3>
+
+              {canMarkManually && (
+                <Button
+                  variant='brand'
+                  className='w-full'
+                  type='button'
+                  loading={progressMutation.isPending}
+                  onClick={() => void handleManualComplete()}
+                >
+                  {t.markComplete}
+                </Button>
+              )}
 
               {isCompleted && (
                 <div className='flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 py-3 font-bold text-white'>
@@ -541,7 +617,7 @@ export function LecturePlayer({
               <div className='flex items-start gap-3'>
                 <BookOpen className='mt-0.5 size-5 shrink-0 text-[#00a8f1]' />
                 <p className='font-medium text-gray-900'>
-                  {translation?.name || t.lecture}
+                  {lecture.courseName || translation?.name || t.lecture}
                 </p>
               </div>
             </div>

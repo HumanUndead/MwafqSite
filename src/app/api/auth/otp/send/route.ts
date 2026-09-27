@@ -31,15 +31,18 @@ export async function POST(request: NextRequest) {
         '/api/Authenticate/Auth/SendOtp',
         MWAFQ_API_BASE_URL
       );
-      endpoint.searchParams.set('UserName', userName.trim());
 
+      // Backend change: `userName` travels in the JSON body, not the query.
       const upstreamResponse = await performUpstreamTextRequest({
         method: 'POST',
         url: endpoint,
+        authorization: null,
+        body: { userName: userName.trim() },
       });
 
       const responseText = upstreamResponse.body;
       const payload = parseJsonSafe(responseText);
+
 
       const upstreamCode = extractUpstreamCode(payload);
 

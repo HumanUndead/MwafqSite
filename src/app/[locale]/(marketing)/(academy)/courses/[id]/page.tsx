@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { localeToLangId } from '@/i18n/config';
 import { GetLocale } from '@/i18n/server';
+import { getAcademyLanguage } from '@/modules/academy/server/academyLanguage';
 import { buildPageMetadata } from '@/i18n/seo';
 import { ROUTES } from '@/shared/constants/routes';
 import { CourseDetailsView } from '@/modules/auth/CourseDetailsView';
@@ -31,7 +32,8 @@ export async function generateMetadata({
   if (!Number.isFinite(numericId)) return {};
 
   const locale = await GetLocale();
-  const courseView = await fetchCourseViewById(numericId, locale);
+  const culture = await getAcademyLanguage(locale);
+  const courseView = await fetchCourseViewById(numericId, culture);
 
   return buildPageMetadata({
     locale,
@@ -49,9 +51,10 @@ export default async function CourseDetailsPage({ params }: PageProps) {
   }
 
   const locale = await GetLocale();
+  const culture = await getAcademyLanguage(locale);
   const [course, courseView] = await Promise.all([
-    fetchCourseById(numericId, locale),
-    fetchCourseViewById(numericId, locale),
+    fetchCourseById(numericId, culture),
+    fetchCourseViewById(numericId, culture),
   ]);
 
   const langId = localeToLangId[locale];
@@ -92,6 +95,9 @@ export default async function CourseDetailsPage({ params }: PageProps) {
         lecturesDuration={lecturesDuration}
         lessons={lessons}
         paymentSettings={courseView.paymentSettings}
+        courseQuizzes={courseView.quizzes ?? []}
+        totalHours={courseView.totalHours}
+        culture={culture}
       />
     </MarketingStickyHeaderOffset>
   );

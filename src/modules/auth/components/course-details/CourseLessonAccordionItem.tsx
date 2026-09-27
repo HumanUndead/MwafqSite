@@ -11,14 +11,16 @@ import {
   lessonDurationMinutes,
 } from '@/modules/auth/courseDetails.shared';
 
-import { CourseLectureRow } from './CourseLectureRow';
+import { CourseLectureRow, CourseQuizRow } from './CourseLectureRow';
 
 type CourseLessonAccordionItemProps = {
   lesson: CourseLesson;
+  labels: { quiz: string; finalExam: string; minutes: string };
 };
 
 export function CourseLessonAccordionItem({
   lesson,
+  labels,
 }: CourseLessonAccordionItemProps) {
   const duration = lessonDurationMinutes(lesson.lectures);
 
@@ -28,7 +30,7 @@ export function CourseLessonAccordionItem({
       className='border-b border-[#e5e7f0] last:border-b-0'
     >
       <AccordionTrigger className='flex w-full items-center justify-between gap-3 rounded-none border-0 bg-[#eef0f7] px-[18px] py-3.5 text-[14.5px] font-bold text-[#1e2364] hover:bg-[#e8ebf3] hover:no-underline focus-visible:ring-[#00a8f1]/20 [&_[data-slot=accordion-trigger-icon]]:hidden'>
-        <span className='flex min-w-0 flex-1 items-center gap-2.5 text-left'>
+        <span className='flex min-w-0 flex-1 items-center gap-2.5 text-start'>
           <ChevronDown className='size-4 shrink-0 text-[#1e2364] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-aria-expanded/accordion-trigger:rotate-180' />
           {lesson.name}
         </span>
@@ -42,6 +44,9 @@ export function CourseLessonAccordionItem({
         <ul>
           {lesson.lectures.map((lecture) => (
             <CourseLectureRow key={lecture.id} name={lecture.name} />
+          ))}
+          {(lesson.quizzes ?? []).map((quiz) => (
+            <CourseQuizRow key={`quiz-${quiz.id}`} quiz={quiz} labels={labels} />
           ))}
         </ul>
       </AccordionContent>

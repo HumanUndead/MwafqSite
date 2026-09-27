@@ -61,22 +61,24 @@ export type AcademyMyCoursesPage = PaginatedResponse<AcademyCourse>;
 export type AcademyMyCoursesResponse =
   UpstreamApiResponse<AcademyMyCoursesPage>;
 
-/** Row shape used by `AcademyCoursesView`. */
+/** Row shape used by `AcademyCoursesView` and the course-page ownership check. */
 export interface AcademyCourseRow {
   id: string;
   title: string;
   description: string;
-  imageSrc: string;
-  imageAlt: string;
   progress: number;
-  rating: number;
-  reviewCount: number;
   transitionDelay: number;
-  enrollmentId?: number;
-  courseId?: number;
+  /** User-course id. */
+  enrollmentId: number;
+  courseId: number;
   companyName?: string;
-  isCourseCompleted?: boolean;
-  isLocked?: boolean;
-  totalLectures?: number;
-  totalHours?: number;
+  isCourseCompleted: boolean;
+  isLocked: boolean;
+  totalLectures: number;
+  totalHours: number;
+  rank: number;
+  lastLectureName: string | null;
+  /** Payment still pending (`payment.status === 1`). */
+  awaitingPayment: boolean;
+  amountOwed: number;
 }

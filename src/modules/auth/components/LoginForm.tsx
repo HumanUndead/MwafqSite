@@ -71,34 +71,34 @@ export function LoginForm({ redirectTo }: { redirectTo?: string } = {}) {
           >
             {auth.login.title}
           </Button>
-          <div className='flex items-center gap-3 text-xs text-[#a3a8c4]'>
-            <span className='h-px flex-1 bg-[#d9ddea]' />
-            {auth.login.or}
-            <span className='h-px flex-1 bg-[#d9ddea]' />
-          </div>
         </form>
       )}
 
-      <Button
-        type='button'
-        onClick={handleLogin}
-        loading={loading}
-        variant='brand'
-        size='lg'
-        className='mt-2 w-full rounded-[14px] py-3 text-[15px]'
-      >
-        {auth.login.submit}
-      </Button>
+      {/* Developer mode signs in with ID + OTP only (no Mwafq SSO buttons). */}
+      {!developerMode && (
+        <>
+          <Button
+            type='button'
+            onClick={handleLogin}
+            loading={loading}
+            variant='brand'
+            size='lg'
+            className='mt-2 w-full rounded-[14px] py-3 text-[15px]'
+          >
+            {auth.login.submit}
+          </Button>
 
-      <Button
-        type='button'
-        onClick={handleRegister}
-        variant='outline'
-        size='lg'
-        className='w-full rounded-[14px] py-3 text-[15px]'
-      >
-        {locale === 'ar' ? 'التسجيل عبر موفق' : 'Register with Mwafq'}
-      </Button>
+          <Button
+            type='button'
+            onClick={handleRegister}
+            variant='outline'
+            size='lg'
+            className='w-full rounded-[14px] py-3 text-[15px]'
+          >
+            {locale === 'ar' ? 'التسجيل عبر موفق' : 'Register with Mwafq'}
+          </Button>
+        </>
+      )}
 
       {/* Sign-up link hidden — login only for now.
       <p className='text-center text-sm text-gray-600'>

@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { getAcademyCulture } from '@/modules/academy/server/academyLanguage';
 import { fetchEnrolledCourseWithToken } from '@/modules/academy/server/courseDetailService';
 import {
   academyOk,
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const userCourseId = Number(searchParams.get('userCourseId'));
     const courseId = Number(searchParams.get('courseId'));
-    const locale = searchParams.get('locale') || 'en';
+    const locale = await getAcademyCulture(searchParams.get('locale'));
 
     if (!Number.isFinite(userCourseId) || !Number.isFinite(courseId)) {
       return NextResponse.json(

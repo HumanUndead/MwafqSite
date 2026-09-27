@@ -6,8 +6,9 @@ import type {
   CourseSection,
 } from './types/player.types';
 
-const FALLBACK_IMAGE =
-  'https://loremflickr.com/800/450/online,course,training/all?lock=academy-learn';
+import { MEDIA_FALLBACK_IMAGE } from '@/shared/lib/media';
+
+const FALLBACK_IMAGE = MEDIA_FALLBACK_IMAGE;
 
 /** Format decimal hours into "2h 30m". */
 export function formatTotalHours(decimalHours: number): string {
@@ -23,8 +24,9 @@ export function formatTotalHours(decimalHours: number): string {
 export function resolveCourseImage(path: string | undefined | null): string {
   if (!path) return FALLBACK_IMAGE;
   const first = path.split(',')[0].trim();
-  if (first.startsWith('content/')) return FALLBACK_IMAGE;
-  if (first.startsWith('/') || first.startsWith('http')) return first;
+  // Attachment lists carry documents, not a cover: only accept image files.
+  if (!/\.(png|jpe?g|webp|svg)$/i.test(first)) return FALLBACK_IMAGE;
+  if (first.startsWith('http')) return first;
   return FALLBACK_IMAGE;
 }
 

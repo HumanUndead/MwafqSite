@@ -5,6 +5,7 @@ import { localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { Modal } from '@/shared/components/ui/Modal';
 import { useQuizAttempt } from '../hooks/useQuiz';
+import { MatchingAttemptReview } from './MatchingAttemptReview';
 import { getScorePercentage, getTranslation } from '../quizScoring.shared';
 import { QuestionType } from '../types/quiz.types';
 import type { QuizQuestion } from '../types/quiz.types';
@@ -71,6 +72,9 @@ export function QuizAttemptModal({
                 <p className='mb-2 text-sm font-semibold text-gray-900'>
                   {index + 1}. {questionText}
                 </p>
+                {question.type === QuestionType.Matching ? (
+                  <MatchingAttemptReview question={question} answers={attempt.answers} langId={langId} />
+                ) : (
                 <ul className='space-y-1.5'>
                   {question.quizQuestionAnswers.map((answer) => {
                     const answerText =
@@ -99,6 +103,7 @@ export function QuizAttemptModal({
                     );
                   })}
                 </ul>
+                )}
               </div>
             );
           })}

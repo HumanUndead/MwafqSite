@@ -14,13 +14,11 @@ import {
 } from '@/components/ui/card';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { cn } from '@/lib/utils';
-import { BuyNowButton } from './BuyNowButton';
 import { packageCardVariants, packageMediaVariants } from '../constants';
 import type { ServiceListItem } from '../types/services.types';
 import { type Locale, localeToLangId } from '@/i18n/config';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
-import { getServiceGroupBuyPath } from '@/modules/services/booking.shared';
 import {
   lowestServiceGroupPrice,
   serviceGroupImageFallback,
@@ -75,7 +73,6 @@ export function PackageCard({
   delay = 0,
   variant = 'default',
   withScrollReveal,
-  isAuthenticated = false,
   hidePrice = false,
   flat = false,
 }: PackageCardProps) {
@@ -84,16 +81,11 @@ export function PackageCard({
 
   const prefersReducedMotion = useReducedMotion();
   const localeId = localeToLangId[locale];
-  const isAr = localeId === 2;
   const translation =
     pkg.translations.find((tr) => tr.langId === localeId) ??
     pkg.translations[0];
   const title = translation?.name?.trim() ?? '';
   const desc = translation?.description;
-  const tagLabel = isRelated ? null : t.popularTag;
-  const buyHref = isAuthenticated
-    ? getServiceGroupBuyPath(locale, pkg.id)
-    : `${getLocalizedRoute(locale, ROUTES.LOGIN)}?redirect=${encodeURIComponent(getServiceGroupBuyPath(locale, pkg.id))}`;
   const packageDetailHref = `${getLocalizedRoute(locale, ROUTES.SERVICES)}/${pkg.id}`;
   const price = lowestServiceGroupPrice(pkg.pricing);
   const [imageSrc, setImageSrc] = useState(() =>

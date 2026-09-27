@@ -11,16 +11,18 @@ import { academyAuthedRequest } from './academyUpstream';
 export async function fetchQuizWithToken(
   token: string,
   quizId: number,
+  userCourseId: number,
   locale: string
 ): Promise<QuizData> {
   const params = new URLSearchParams({
     Id: String(quizId),
+    UserCourseId: String(userCourseId),
     culture: locale,
   });
 
   return academyAuthedRequest<QuizData>({
     method: 'GET',
-    path: `/api/Academy/Quiz/GetByUserId?${params.toString()}`,
+    path: `/api/Academy/Quiz/GetById?${params.toString()}`,
     token,
     fallbackMessage: 'Failed to load quiz',
   });
@@ -48,6 +50,8 @@ export async function listQuizAttemptsWithToken(
     quizId: number;
     userCourseId: number;
     locale: string;
+    pageNumber?: number;
+    pageSize?: number;
   }
 ): Promise<UserQuizAttemptsValue> {
   const query = new URLSearchParams({
@@ -55,6 +59,8 @@ export async function listQuizAttemptsWithToken(
     userId: params.userId,
     quizId: String(params.quizId),
     OrderDirection: 'true',
+    PageNumber: String(params.pageNumber ?? 1),
+    PageSize: String(params.pageSize ?? 8),
     culture: params.locale,
   });
 

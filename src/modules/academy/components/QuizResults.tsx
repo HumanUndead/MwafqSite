@@ -7,11 +7,22 @@ import {
   Trophy,
   XCircle,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
+import { useAuthStore } from '@/modules/auth/store/authStore';
+import { buttonVariants } from '@/shared/components/ui/Button';
+import { cn } from '@/shared/lib/cn';
+import { interpolate } from '@/shared/lib/interpolate';
+import { useQuizAttempts } from '../hooks/useQuiz';
+import { MatchingAttemptReview } from './MatchingAttemptReview';
 import type { Dictionary } from '@/locales/types';
 import { localeToLangId } from '@/i18n/config';
 import { Button } from '@/shared/components/ui/Button';
-import { getScorePercentage, getTranslation } from '../quizScoring.shared';
+import {
+  PASS_THRESHOLD_PERCENT,
+  getScorePercentage,
+  getTranslation,
+} from '../quizScoring.shared';
 import { QuestionType } from '../types/quiz.types';
 import type {
   QuizAttemptDetail,
@@ -22,6 +33,9 @@ import type {
 interface QuizResultsProps {
   quiz: QuizData;
   attempt: QuizAttemptDetail | null;
+  userCourseId: number;
+  /** Next topic (or the course page when this was the last). */
+  nextHref: string;
   onRetake: () => void;
   onBackToCourse: () => void;
 }
@@ -29,12 +43,34 @@ interface QuizResultsProps {
 export function QuizResults({
   quiz,
   attempt,
+  userCourseId,
+  nextHref,
   onRetake,
   onBackToCourse,
 }: QuizResultsProps) {
   const t = useTranslations('academyQuiz');
   const locale = useLocale();
   const langId = localeToLangId[locale];
+  const user = useAuthStore((state) => state.user);
+  const history = useQuizAttempts({
+    userId: user?.id ?? '',
+    quizId: quiz.id,
+    userCourseId,
+    locale,
+    enabled: attempt !== null,
+  });
+
+  const total = attempt ? attempt.quizScore || attempt.qustions.length || 0 : 0;
+  const percentage = attempt ? getScorePercentage(attempt.attemptScore, total) : 0;
+  const passed = percentage >= PASS_THRESHOLD_PERCENT;
+  const earlierAttempts = (history.data?.data ?? history.data?.attempts ?? []).filter(
+    (entry) => (entry.id ?? entry.attemptId) !== attempt?.id
+  );
+  const passedBefore = earlierAttempts.some(
+    (entry) =>
+      getScorePercentage(entry.attemptScore, history.data?.quizScore || total) >=
+      PASS_THRESHOLD_PERCENT
+  );
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
@@ -61,20 +97,49 @@ export function QuizResults({
             )}
           </div>
 
+          {/* Outcome (mobile: pass mark 80%) */}
+          {attempt && (
+            <div
+              className={cn(
+                'border-t px-6 py-5 text-center',
+                passed ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+              )}
+              role='status'
+            >
+              <p className={cn('text-lg font-bold', passed ? 'text-green-700' : 'text-red-700')}>
+                {passed ? t.passedTitle : t.failedTitle}
+              </p>
+              <p className='mt-1 text-sm text-gray-700'>
+                {passed
+                  ? interpolate(t.passedBody, { percentage })
+                  : interpolate(t.failedBody, {
+                      percentage,
+                      threshold: PASS_THRESHOLD_PERCENT,
+                    })}
+              </p>
+            </div>
+          )}
+
           {/* Actions */}
           <div className='flex flex-col gap-3 border-t border-gray-200 p-6 sm:flex-row sm:justify-center'>
-            <Button variant='outline' onClick={onRetake} type='button'>
-              <RotateCcw className='size-4' />
-              {t.retake}
-            </Button>
-            <Button
-              variant='brand'
-              className='bg-gradient-to-r from-[#00a8f1] to-[#1e2364]'
-              onClick={onBackToCourse}
-              type='button'
-            >
+            {attempt && passed ? (
+              <Link href={nextHref} className={buttonVariants({ variant: 'brand' })}>
+                {t.continueNext}
+                <ArrowRight className='size-4 rtl:-scale-x-100' />
+              </Link>
+            ) : (
+              <Button variant='brand' onClick={onRetake} type='button'>
+                <RotateCcw className='size-4' />
+                {t.retake}
+              </Button>
+            )}
+            {attempt && !passed && passedBefore && (
+              <Link href={nextHref} className={buttonVariants({ variant: 'outline' })}>
+                {t.continueAnyway}
+              </Link>
+            )}
+            <Button variant='outline' onClick={onBackToCourse} type='button'>
               {t.backToCourse}
-              <ArrowRight className='size-4 rtl:-scale-x-100' />
             </Button>
           </div>
         </div>
@@ -88,9 +153,21 @@ export function QuizResults({
             {flattenQuestions(attempt.qustions).map((question, index) => {
               const questionText =
                 getTranslation(question.translations, langId)?.text ?? '';
-              const userAnswerIds = attempt.answers
-                .filter((a) => a.questionId === question.id)
-                .map((a) => a.answerId);
+              const userAnswers = attempt.answers.filter(
+                (a) => a.questionId === question.id
+              );
+              const userAnswerIds = userAnswers.map((a) => a.answerId);
+
+              if (question.type === QuestionType.Matching) {
+                return (
+                  <div key={question.id} className='rounded-2xl border border-gray-200 bg-white p-5 shadow-sm'>
+                    <p className='mb-3 font-semibold text-gray-900'>
+                      {index + 1}. {questionText}
+                    </p>
+                    <MatchingAttemptReview question={question} answers={attempt.answers} langId={langId} />
+                  </div>
+                );
+              }
 
               return (
                 <div

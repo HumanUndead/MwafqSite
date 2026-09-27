@@ -11,6 +11,7 @@ import { SITE_URL } from '@/shared/constants/config';
 import { TokenValidator } from '@/modules/auth/components/TokenValidator';
 import { JsonLd } from '@/shared/components/seo/JsonLd';
 import { ChatbotWidget } from '@/modules/chatbot';
+import { PendingPaymentResumer } from '@/modules/payment';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -94,6 +95,7 @@ export default async function LocaleLayout({
       />
       <DictionaryProvider dict={dict} locale={locale}>
         <TokenValidator />
+        <PendingPaymentResumer />
         {children}
         <ChatbotWidget />
       </DictionaryProvider>

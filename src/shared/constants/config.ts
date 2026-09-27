@@ -12,6 +12,15 @@ export const MWAFQ_API_BASE_URL =
 export const MWAFQ_MEDIA_BASE_URL =
   process.env.MWAFQ_MEDIA_BASE_URL ?? 'https://api.mwafq.com/';
 
+/**
+ * Browser-safe API origin for uploaded media and attachments (images,
+ * course/reservation files). Always ends with `/`. Mirrors mobile
+ * `EXPO_PUBLIC_API_URL`: files are served at `<origin><path>`.
+ */
+export const PUBLIC_MEDIA_BASE_URL = (
+  process.env.NEXT_PUBLIC_MWAFQ_MEDIA_BASE_URL ?? 'https://api.mwafq.com/'
+).replace(/\/*$/, '/');
+
 /** Canonical production origin — used for metadataBase, sitemap, robots, canonical/hreflang tags. */
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.mwafq.com'

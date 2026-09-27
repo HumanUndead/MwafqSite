@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { getAcademyCulture } from '@/modules/academy/server/academyLanguage';
 import { fetchQuizWithToken } from '@/modules/academy/server/quizService';
 import {
   academyOk,
@@ -15,16 +16,17 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const id = Number(searchParams.get('id'));
-    const locale = searchParams.get('locale') || 'en';
+    const userCourseId = Number(searchParams.get('userCourseId'));
+    const locale = await getAcademyCulture(searchParams.get('locale'));
 
-    if (!Number.isFinite(id)) {
+    if (!Number.isInteger(id) || id <= 0 || !Number.isInteger(userCourseId) || userCourseId <= 0) {
       return NextResponse.json(
         { success: false, message: 'Invalid quiz id', data: null },
         { status: 400 }
       );
     }
 
-    const data = await fetchQuizWithToken(token, id, locale);
+    const data = await fetchQuizWithToken(token, id, userCourseId, locale);
     return academyOk(data, 'Quiz loaded');
   } catch (error) {
     return academyRouteError(error, '[academy/quiz]');

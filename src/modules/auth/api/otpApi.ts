@@ -14,7 +14,8 @@ export const otpApi = {
     http.post<{ verified: boolean }>('/api/auth/otp/verify', { email, otp }),
 
   verifyUserNameOtp: (userName: string, otp: string) =>
-    http.get<AuthResponse & { raw?: unknown }>(
-      `/api/auth/otp/verify?UserName=${encodeURIComponent(userName)}&OTP=${encodeURIComponent(otp)}`
-    ),
+    http.post<AuthResponse & { raw?: unknown }>('/api/auth/otp/verify', {
+      userName,
+      otp,
+    }),
 };

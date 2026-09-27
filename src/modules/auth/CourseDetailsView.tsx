@@ -2,24 +2,28 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  ArrowRight,
+  BookOpen,
   ChevronLeft,
   ClipboardCheck,
-  Download,
-  FileText,
-  Play,
-  Star,
+  Trophy,
   Video,
 } from 'lucide-react';
 
 import type { Locale } from '@/i18n/config';
-import { getTranslations } from '@/i18n/server';
+import { getAcademyTranslations } from '@/i18n/academyDictionary';
 import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+import { SarAmount } from '@/shared/components/ui/SarAmount';
+import { courseDisplayPrice } from '@/shared/lib/coursePlan.shared';
+import { interpolate } from '@/shared/lib/interpolate';
+import { ImageSize, imageUrl } from '@/shared/lib/media';
 import { CourseCarousel } from './CourseCarousel';
-import { EnrollButton } from '@/modules/academy/components/EnrollButton';
+import { CourseEnrollCta } from '@/modules/academy/components/CourseEnrollCta';
 import type { CoursePaymentSettings } from '@/modules/academy/types/payment.types';
-import type { CourseLesson, CourseListItem } from './course.types';
+import type {
+  CourseLesson,
+  CourseListItem,
+  CourseViewQuiz,
+} from './course.types';
 import {
   formatCourseDuration,
   plainTextFromHtml,
@@ -44,11 +48,10 @@ const CourseContentAccordion = dynamic(
 
 const easeClass = 'duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]';
 
-function courseImageSrc(course: CourseListItem): string {
-  if (course.fullImagePath) {
-    return `${MWAFQ_API_BASE_URL}/${course.fullImagePath}.png`;
-  }
-  return 'https://loremflickr.com/640/400/medical,training/all?lock=academy-detail';
+function courseImageSrc(course: CourseListItem): string | null {
+  return course.fullImagePath
+    ? imageUrl(course.fullImagePath, ImageSize.card)
+    : null;
 }
 
 export type CourseDetailsViewProps = {
@@ -58,6 +61,11 @@ export type CourseDetailsViewProps = {
   lecturesDuration: number;
   lessons: CourseLesson[];
   paymentSettings?: CoursePaymentSettings | null;
+  /** Course-level quizzes and exams (`Course/View`). */
+  courseQuizzes?: CourseViewQuiz[];
+  totalHours?: number;
+  /** Academy content language for related courses. */
+  culture?: string;
 };
 
 export async function CourseDetailsView({
@@ -67,9 +75,22 @@ export async function CourseDetailsView({
   lecturesDuration,
   lessons,
   paymentSettings,
+  courseQuizzes = [],
+  totalHours,
+  culture,
 }: CourseDetailsViewProps) {
-  const lecturesDurationInHours = Math.ceil(lecturesDuration / 60);
-  const t = await getTranslations('academyCourseDetails');
+  const lecturesDurationInHours =
+    totalHours && totalHours > 0
+      ? Math.round(totalHours * 10) / 10
+      : Math.ceil(lecturesDuration / 60);
+  const t = await getAcademyTranslations(locale, 'academyCourseDetails');
+  const allQuizzes = [
+    ...lessons.flatMap((lesson) => lesson.quizzes ?? []),
+    ...courseQuizzes,
+  ];
+  const quizCount = allQuizzes.filter((quiz) => !quiz.isExam).length;
+  const examCount = allQuizzes.filter((quiz) => quiz.isExam).length;
+  const price = courseDisplayPrice(paymentSettings);
   const courseTranslation = getTranslation(course.translations, langId);
   const coursesBase = `/${locale}/courses`;
 
@@ -154,46 +175,36 @@ export async function CourseDetailsView({
                   </div>
                   <ul className='flex flex-col gap-2.5'>
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                      <Video
-                        className='size-[18px] shrink-0 text-[#1e2364]'
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      {t.hoursOnDemandVideo.replace(
-                        '{{hours}}',
-                        String(lecturesDurationInHours)
-                      )}
+                      <Video className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
+                      {interpolate(t.hoursTotal, { count: lecturesDurationInHours })}
                     </li>
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                      <ClipboardCheck
-                        className='size-[18px] shrink-0 text-[#1e2364]'
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      {t.assignments}
+                      <BookOpen className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
+                      {interpolate(t.lecturesCount, { count: lectureCount })}
                     </li>
+                    {quizCount > 0 && (
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                      <FileText
-                        className='size-[18px] shrink-0 text-[#1e2364]'
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      {t.article}
-                    </li>
+                        <ClipboardCheck className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
+                        {interpolate(t.quizzesCount, { count: quizCount })}
+                      </li>
+                    )}
+                    {examCount > 0 && (
                     <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                      <Download
-                        className='size-[18px] shrink-0 text-[#1e2364]'
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      {t.downloadableResource}
-                    </li>
+                        <Trophy className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
+                        {interpolate(t.examsCount, { count: examCount })}
+                      </li>
+                    )}
                   </ul>
                 </div>
 
                 <CourseContentAccordion
                   lessons={lessons}
+                  courseQuizzes={courseQuizzes}
                   labels={{
+                    quiz: t.quiz,
+                    finalExam: t.finalExam,
+                    quizzesAndExams: t.quizzesAndExams,
+                    minutes: t.minutes,
                     title: t.courseContent.title,
                     meta: t.courseContent.sectionsMeta
                       .replace('{{sections}}', String(lessons.length))
@@ -216,62 +227,52 @@ export async function CourseDetailsView({
               <div
                 className={`group flex min-w-0 flex-col overflow-hidden rounded-[20px] border-2 border-[#e5e7f0] bg-white transition-all ${easeClass} hover:border-[#00a8f1] hover:bg-[#fbfcff]`}
               >
-                <div className='relative h-[260px] w-full overflow-hidden bg-[#1e2364]'>
-                  <Image
-                    src={imageSrc}
-                    alt={title}
-                    fill
-                    className='object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]'
-                    sizes='(max-width: 1024px) 380px, 420px'
-                  />
-                  <button
-                    type='button'
-                    aria-label={t.playPreview}
-                    className='absolute left-1/2 top-1/2 z-3 flex size-[60px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#1e2364] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 hover:bg-white'
-                  >
-                    <Play
-                      className='ml-0.5 size-[22px] fill-current'
-                      aria-hidden
+                <div className='relative flex h-[260px] w-full items-center justify-center overflow-hidden bg-[#1e2364]'>
+                  {imageSrc ? (
+                    <Image
+                      src={imageSrc}
+                      alt={title}
+                      fill
+                      className='object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]'
+                      sizes='(max-width: 1024px) 380px, 420px'
                     />
-                  </button>
+                  ) : (
+                    <Image
+                      src='/demo-assets/logo.svg'
+                      alt=''
+                      width={96}
+                      height={96}
+                      className='h-24 w-24 object-contain brightness-0 invert opacity-30'
+                    />
+                  )}
                 </div>
                 <div className='flex flex-1 flex-col gap-2.5 px-[22px] pb-3.5 pt-[22px]'>
-                  <span className='inline-flex items-center gap-1.5 text-[13px] font-bold text-[#1e2364]'>
-                    <Star
-                      className='size-[13px] fill-[#1e2364] text-[#1e2364]'
-                      aria-hidden
-                    />
-                    4.8{' '}
-                    <span className='font-semibold text-[#6b7196]'>(12)</span>
-                  </span>
                   <p className='min-w-0 wrap-break-word text-[12.5px] leading-[1.55] text-[#6b7196]'>
                     {description}
                   </p>
                 </div>
                 <div className='flex min-w-0 items-center justify-between gap-2.5 border-t-2 border-[#eef0f7] px-[22px] pb-[22px] pt-3.5'>
-                  <span className='inline-flex items-baseline gap-1.5 font-extrabold text-[#1e2364]'>
-                    <span className='text-2xl leading-none tracking-[-0.5px]'>
-                      {paymentSettings?.price ?? '—'}
+                  {price.free ? (
+                    <span className='text-xl font-extrabold text-green-600'>
+                      {t.free}
                     </span>
-                    <span className='text-[13px] font-bold text-[#6b7196]'>
-                      SAR
+                  ) : (
+                    <span className='inline-flex flex-col'>
+                      {price.label && (
+                        <span className='text-[11px] font-semibold text-[#6b7196]'>
+                          {price.label === 'fullPrice' ? t.fullPrice : t.startsFrom}
+                        </span>
+                      )}
+                      <SarAmount
+                        amount={price.amount}
+                        className='text-2xl font-extrabold tracking-[-0.5px] text-[#1e2364]'
+                      />
                     </span>
-                  </span>
-                  <EnrollButton
+                  )}
+                  <CourseEnrollCta
                     courseId={course.id}
                     courseTitle={title}
                     paymentSettings={paymentSettings}
-                    className='w-auto whitespace-nowrap rounded-full bg-[#00a8f1] px-4 py-2 text-xs font-bold text-white hover:bg-[#0098db]'
-                    label={
-                      <>
-                        {t.enrollNow}
-                        <ArrowRight
-                          className='size-3 rtl:-scale-x-100'
-                          strokeWidth={2.4}
-                          aria-hidden
-                        />
-                      </>
-                    }
                   />
                 </div>
               </div>
@@ -286,6 +287,7 @@ export async function CourseDetailsView({
           categoryName={t.relatedCourses}
           locale={locale}
           excludeCourseId={course.id}
+          culture={culture}
         />
       </section>
     </div>

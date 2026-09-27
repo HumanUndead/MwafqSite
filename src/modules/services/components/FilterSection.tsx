@@ -1,7 +1,6 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import queryString from 'query-string';
 import { useState } from 'react';
 
 import {
@@ -19,9 +18,12 @@ type FilterSectionProps = {
     packageNamePlaceholder: string;
     searchBtn: string;
   };
+  /** Overrides the search field placeholder (per catalogue tab). */
+  placeholder?: string;
 };
 
-export function FilterSection({ t }: FilterSectionProps) {
+/** Catalogue hero + search. Keeps the other URL params (tab, favorites). */
+export function FilterSection({ t, placeholder }: FilterSectionProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -30,11 +32,13 @@ export function FilterSection({ t }: FilterSectionProps) {
   );
 
   function handleSearch() {
-    const params = queryString.stringify(
-      { search: packageName, page: 1 },
-      { skipNull: true, skipEmptyString: true }
-    );
-    router.push(params ? `${pathname}?${params}` : pathname);
+    const params = new URLSearchParams(searchParams.toString());
+    const value = packageName.trim();
+    if (value) params.set('search', value);
+    else params.delete('search');
+    params.delete('page');
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname);
   }
 
   return (
@@ -49,7 +53,7 @@ export function FilterSection({ t }: FilterSectionProps) {
         label={t.packageNameLabel}
         value={packageName}
         onChange={setPackageName}
-        placeholder={t.packageNamePlaceholder}
+        placeholder={placeholder ?? t.packageNamePlaceholder}
         onKeyDown={(e) => {
           if (e.key === 'Enter') handleSearch();
         }}

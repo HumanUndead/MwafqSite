@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import { isRtl } from '@/i18n/config';
-import { getLocalizedRoute, localizePathname } from '@/i18n/routing';
+import { getLocalizedRoute } from '@/i18n/routing';
 import { getTranslations } from '@/i18n/server';
 import { ROUTES } from '@/shared/constants/routes';
 import type { HomeServicesContent } from '../home.types';
 import { ArrowIcon } from '@/shared/components/icons/home';
 import { Eyebrow } from './Eyebrow';
 import { ServicesScrollList } from './ServicesScrollList';
+import { catalogName } from '@/modules/services/catalog.shared';
+import { listCatalogServiceGroups } from '@/modules/services/server/catalogService';
 import { cn } from '@/shared/lib/cn';
 import {
   marketingLeadTextClass,
@@ -22,9 +24,25 @@ interface Props {
   content: HomeServicesContent;
 }
 
+/**
+ * Home "our services" block. Header copy comes from the CMS; the cards are
+ * the first featured B2C service groups (the same data as the catalogue).
+ */
 export async function ServicesSection({ locale, content }: Props) {
-  const services = content.items
-    .filter((item) => item.title.length > 0)
+  const groups = await listCatalogServiceGroups(
+    { pageNumber: 1, pageSize: MAX_HOME_SERVICES, isFeatured: true },
+    locale
+  )
+    .then((page) => page.data)
+    .catch(() => []);
+  const servicesHref = getLocalizedRoute(locale, ROUTES.SERVICES);
+  const services = groups
+    .map((group) => ({
+      id: group.id,
+      href: `${servicesHref}/${group.id}`,
+      title: catalogName(group.translations, locale),
+    }))
+    .filter((service) => service.title.length > 0)
     .slice(0, MAX_HOME_SERVICES);
   const rtl = isRtl(locale);
   const t = await getTranslations('services');
@@ -66,7 +84,7 @@ export async function ServicesSection({ locale, content }: Props) {
           </div>
 
           <Link
-            href={getLocalizedRoute(locale, ROUTES.SERVICES)}
+            href={`${servicesHref}?tab=groups`}
             className='group ms-auto inline-flex shrink-0 items-center gap-2 text-[15px] font-bold text-[#1e2364] transition-colors hover:text-[#00a8f1] md:ms-0'
           >
             {t.viewAll}
@@ -79,14 +97,9 @@ export async function ServicesSection({ locale, content }: Props) {
           </Link>
         </div>
 
-        <ServicesScrollList
-          services={services.map((service, index) => ({
-            id: index,
-            href: service.path ? localizePathname(service.path, locale) : '#',
-            title: service.title,
-          }))}
-          rtl={rtl}
-        />
+        {services.length > 0 && (
+          <ServicesScrollList services={services} rtl={rtl} />
+        )}
       </div>
     </section>
   );

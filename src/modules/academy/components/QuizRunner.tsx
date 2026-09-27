@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { isRtl, localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import type { Dictionary } from '@/locales/types';
@@ -22,12 +22,18 @@ import { Modal } from '@/shared/components/ui/Modal';
 import { academyLearnApi } from '../api/academyLearnApi';
 import { useQuizAttempt, useQuizDetail } from '../hooks/useQuiz';
 import { getTranslation, shuffleArray } from '../quizScoring.shared';
-import {
-  buildAttemptBeaconBlob,
-  buildAttemptFormData,
-} from '../quizSubmit.shared';
+import { buildAttemptFormData } from '../quizSubmit.shared';
 import { getVimeoEmbedUrl } from '../vimeo.shared';
-import { learnBasePath } from '../learnRoutes.shared';
+import {
+  findPrevNext,
+  generateCourseNavigationMap,
+  parseCourseNavigationMap,
+} from '../courseNavigation.shared';
+import { isActivityLockedById } from '../courseLocking.shared';
+import { transformCourseDetailToCourseData } from '../courseTransform.shared';
+import { useCourseDetail } from '../hooks/useCourseDetail';
+import { learnBasePath, lecturePath, quizPath } from '../learnRoutes.shared';
+import type { NavItem } from '../types/player.types';
 import { QuestionType } from '../types/quiz.types';
 import type {
   QuizAnswer,
@@ -91,7 +97,27 @@ export function QuizRunner({
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
 
-  const { data: quiz, isLoading, isError } = useQuizDetail(quizId, locale);
+  const { data: quiz, isLoading, isError } = useQuizDetail(
+    quizId,
+    userCourseId,
+    locale
+  );
+  const { data: courseDetail } = useCourseDetail(userCourseId, courseId, locale);
+  const courseData = courseDetail
+    ? transformCourseDetailToCourseData(courseDetail, String(courseId))
+    : null;
+  const isLocked = courseData
+    ? isActivityLockedById(courseData, 'quiz', quizId)
+    : false;
+  const navItems: NavItem[] = courseDetail
+    ? parseCourseNavigationMap(generateCourseNavigationMap(courseDetail))
+    : [];
+  const nextItem = findPrevNext(navItems, quizId, 'quiz').next;
+  const nextHref = nextItem
+    ? nextItem.type === 'quiz'
+      ? quizPath(locale, userCourseId, courseId, nextItem.id)
+      : lecturePath(locale, userCourseId, courseId, nextItem.id)
+    : learnBasePath(locale, userCourseId, courseId);
 
   const [started, setStarted] = useState(false);
   const [answers, setAnswers] = useState<Record<number, QuizAnswerState>>({});
@@ -124,15 +150,19 @@ export function QuizRunner({
     ? (quiz.timerMintues ?? quiz.timerMinutes ?? 0) * 60
     : 0;
 
+  // Countdown. At zero nothing is submitted (mobile rule): the learner is
+  // told and sent back to the course.
   useEffect(() => {
-    if (!started || timeLeft === null) return;
-    if (timeLeft <= 0) {
-      void handleSubmit({ timedOut: true });
-      return;
-    }
-    const id = setTimeout(() => setTimeLeft((value) => (value ?? 0) - 1), 1000);
+    if (!started || timeLeft === null || timeLeft <= 0) return;
+    const id = setTimeout(() => {
+      const next = timeLeft - 1;
+      setTimeLeft(next);
+      if (next <= 0) {
+        hasSubmittedRef.current = true;
+        setShowTimeUp(true);
+      }
+    }, 1000);
     return () => clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started, timeLeft]);
 
   function handleStart() {
@@ -267,27 +297,6 @@ export function QuizRunner({
     }
   }
 
-  /**
-   * Last-ditch submit when the tab is closing: a normal fetch would be killed
-   * mid-flight, so the attempt is handed to `sendBeacon` instead.
-   */
-  const submitAttemptOnUnload = useCallback(() => {
-    if (!quiz || !user || hasSubmittedRef.current) return;
-    hasSubmittedRef.current = true;
-
-    navigator.sendBeacon(
-      '/api/academy/quiz/attempt',
-      buildAttemptBeaconBlob({
-        userId: user.id,
-        quizId: quiz.id,
-        userCourseId,
-        startTime: startTime ?? new Date().toISOString(),
-        endTime: new Date().toISOString(),
-        answers: Object.values(answers),
-      })
-    );
-  }, [quiz, user, userCourseId, startTime, answers]);
-
   useEffect(() => {
     if (!started || attemptId !== null) return;
 
@@ -298,14 +307,10 @@ export function QuizRunner({
       return t.exitWarning;
     };
 
+    // Leaving mid-attempt loses the answers (mobile rule): warn, never submit.
     window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('pagehide', submitAttemptOnUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('pagehide', submitAttemptOnUnload);
-    };
-  }, [started, attemptId, submitAttemptOnUnload, t.exitWarning]);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [started, attemptId, t.exitWarning]);
 
   function resetQuiz() {
     hasSubmittedRef.current = false;
@@ -321,6 +326,16 @@ export function QuizRunner({
 
   if (isLoading) {
     return <CenteredSpinner label={t.loading} />;
+  }
+
+  if (isLocked) {
+    return (
+      <CenteredMessage
+        message={`${t.lockedTitle} — ${t.lockedMessage}`}
+        actionHref={learnBasePath(locale, userCourseId, courseId)}
+        actionLabel={t.backToCourse}
+      />
+    );
   }
 
   if (isError || !quiz) {
@@ -339,6 +354,8 @@ export function QuizRunner({
       <QuizResults
         quiz={quiz}
         attempt={attemptResult ?? null}
+        userCourseId={userCourseId}
+        nextHref={nextHref}
         onRetake={resetQuiz}
         onBackToCourse={() =>
           router.push(learnBasePath(locale, userCourseId, courseId))
@@ -665,17 +682,17 @@ export function QuizRunner({
       {/* Time-up notice */}
       <Modal
         open={showTimeUp}
-        onClose={() => setShowTimeUp(false)}
+        onClose={() => router.push(learnBasePath(locale, userCourseId, courseId))}
         title={t.timeUpTitle}
       >
         <p className='mb-6 text-gray-600'>{t.timeUp}</p>
         <Button
           variant='brand'
           className='w-full'
-          onClick={() => setShowTimeUp(false)}
+          onClick={() => router.push(learnBasePath(locale, userCourseId, courseId))}
           type='button'
         >
-          {t.close}
+          {t.timeUpConfirm}
         </Button>
       </Modal>
     </div>

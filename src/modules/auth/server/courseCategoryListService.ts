@@ -10,6 +10,7 @@ export type FetchCourseCategoryListParams = {
   pageNumber?: number;
   pageSize?: number;
   parentId?: number | null;
+  culture?: string;
 };
 
 export async function fetchCourseCategoryList(
@@ -20,6 +21,7 @@ export async function fetchCourseCategoryList(
       pageNumber: params.pageNumber,
       pageSize: params.pageSize,
       parentId: params.parentId,
+      culture: params.culture,
     },
     { skipNull: true }
   );

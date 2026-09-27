@@ -9,6 +9,8 @@ export type CourseCarouselProps = {
   isFeatured?: boolean;
   /** Omit this course id from the carousel (e.g. current course on detail page). */
   excludeCourseId?: number;
+  /** Academy content language. */
+  culture?: string;
 };
 
 export async function CourseCarousel({
@@ -17,8 +19,13 @@ export async function CourseCarousel({
   locale,
   isFeatured,
   excludeCourseId,
+  culture,
 }: CourseCarouselProps) {
-  const courses = await fetchCourseList({ categoryId, featured: isFeatured });
+  const courses = await fetchCourseList({
+    categoryId,
+    featured: isFeatured,
+    culture,
+  });
 
   const rows = !excludeCourseId
     ? courses.data

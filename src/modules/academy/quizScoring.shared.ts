@@ -1,6 +1,9 @@
 import { QuestionType } from './types/quiz.types';
 import type { AttemptResult, QuizData } from './types/quiz.types';
 
+/** Pass mark (client constant, like mobile; the API provides none). */
+export const PASS_THRESHOLD_PERCENT = 80;
+
 export function getScorePercentage(
   score: number,
   totalQuestions: number

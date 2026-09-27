@@ -77,12 +77,3 @@ export function buildAttemptFormData(params: BuildAttemptParams): FormData {
   );
   return formData;
 }
-
-/**
- * Url-encoded payload for the page-unload submit: `sendBeacon` cannot send
- * multipart, so the attempt goes out as a form-urlencoded blob instead.
- */
-export function buildAttemptBeaconBlob(params: BuildAttemptParams): Blob {
-  const body = new URLSearchParams(buildAttemptEntries(params)).toString();
-  return new Blob([body], { type: 'application/x-www-form-urlencoded' });
-}

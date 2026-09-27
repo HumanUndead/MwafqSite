@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { getAcademyCulture } from '@/modules/academy/server/academyLanguage';
 import { getQuizAttemptWithToken } from '@/modules/academy/server/quizService';
 import {
   academyOk,
@@ -19,7 +20,7 @@ export async function GET(
     const { attemptId } = await params;
     const id = Number(attemptId);
     const { searchParams } = new URL(request.url);
-    const locale = searchParams.get('locale') || 'en';
+    const locale = await getAcademyCulture(searchParams.get('locale'));
 
     if (!Number.isFinite(id)) {
       return NextResponse.json(

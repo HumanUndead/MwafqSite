@@ -1,21 +1,12 @@
-import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+import { MEDIA_FALLBACK_IMAGE, serviceIconUrl } from '@/shared/lib/media';
 
 export function serviceGroupImageFallback(): string {
-  return '/demo-assets/logo.svg';
+  return MEDIA_FALLBACK_IMAGE;
 }
 
 /** Resolves a service group icon path from the API to a full image URL. */
-export function serviceGroupImageSrc(
-  icon: string | null | undefined,
-  apiBase: string = MWAFQ_API_BASE_URL
-): string {
-  const trimmed = icon?.trim();
-  if (!trimmed) return serviceGroupImageFallback();
-  if (trimmed.startsWith('http')) return trimmed;
-
-  const path = trimmed.replace(/^\//, '');
-  const hasExtension = /\.[a-zA-Z0-9]+$/.test(path.split('/').pop() ?? '');
-  return `${apiBase}/${hasExtension ? path : `${path}.png`}`;
+export function serviceGroupImageSrc(icon: string | null | undefined): string {
+  return serviceIconUrl(icon);
 }
 
 export function lowestServiceGroupPrice(
