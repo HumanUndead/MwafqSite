@@ -10,26 +10,27 @@ interface BuildAttemptParams {
 }
 
 /**
- * Build the multipart payload for `UserQuizAttempt/Create`.
+ * Flatten an attempt into `UserQuizAttempt/Create` field/value pairs.
  *
  * Each selected answer becomes an `Answers[i]` triple of
  * `questionId`, `answerId`, `matchedWithAnswerId` (0 unless matching).
  */
-export function buildAttemptFormData({
+function buildAttemptEntries({
   userId,
   quizId,
   userCourseId,
   startTime,
   endTime,
   answers,
-}: BuildAttemptParams): FormData {
-  const formData = new FormData();
-  formData.append('Id', '0');
-  formData.append('UserId', userId);
-  formData.append('QuizId', String(quizId));
-  formData.append('StartTime', startTime);
-  formData.append('EndTime', endTime);
-  formData.append('UserCourseId', String(userCourseId));
+}: BuildAttemptParams): Array<[string, string]> {
+  const entries: Array<[string, string]> = [
+    ['Id', '0'],
+    ['UserId', userId],
+    ['QuizId', String(quizId)],
+    ['StartTime', startTime],
+    ['EndTime', endTime],
+    ['UserCourseId', String(userCourseId)],
+  ];
 
   let index = 0;
   const appendAnswer = (
@@ -37,12 +38,12 @@ export function buildAttemptFormData({
     answerId: number,
     matchedWithAnswerId: number
   ) => {
-    formData.append(`Answers[${index}].questionId`, String(questionId));
-    formData.append(`Answers[${index}].answerId`, String(answerId));
-    formData.append(
+    entries.push([`Answers[${index}].questionId`, String(questionId)]);
+    entries.push([`Answers[${index}].answerId`, String(answerId)]);
+    entries.push([
       `Answers[${index}].matchedWithAnswerId`,
-      String(matchedWithAnswerId)
-    );
+      String(matchedWithAnswerId),
+    ]);
     index += 1;
   };
 
@@ -62,8 +63,26 @@ export function buildAttemptFormData({
   });
 
   if (index === 0) {
-    formData.append('Answers', '[]');
+    entries.push(['Answers', '[]']);
   }
 
+  return entries;
+}
+
+/** Multipart payload for the normal submit. */
+export function buildAttemptFormData(params: BuildAttemptParams): FormData {
+  const formData = new FormData();
+  buildAttemptEntries(params).forEach(([key, value]) =>
+    formData.append(key, value)
+  );
   return formData;
+}
+
+/**
+ * Url-encoded payload for the page-unload submit: `sendBeacon` cannot send
+ * multipart, so the attempt goes out as a form-urlencoded blob instead.
+ */
+export function buildAttemptBeaconBlob(params: BuildAttemptParams): Blob {
+  const body = new URLSearchParams(buildAttemptEntries(params)).toString();
+  return new Blob([body], { type: 'application/x-www-form-urlencoded' });
 }

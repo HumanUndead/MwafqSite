@@ -1,11 +1,6 @@
 import 'server-only';
 
-import type { UpstreamApiResponse } from '@/shared/types/api.types';
-import type {
-  AcademyCourse,
-  AcademyCourseRow,
-  AcademyMyCoursesPage,
-} from '../types/academy.types';
+import type { AcademyCourse, AcademyCourseRow } from '../types/academy.types';
 
 function resolveImageSrc(course: AcademyCourse): string {
   const path =
@@ -14,25 +9,6 @@ function resolveImageSrc(course: AcademyCourse): string {
   if (!path) return '';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   return path.startsWith('/') ? path : `/${path}`;
-}
-
-export function parseMyCoursesPayload(payload: unknown): AcademyCourse[] {
-  const data = (payload as UpstreamApiResponse<AcademyMyCoursesPage>).value
-    ?.data;
-  return Array.isArray(data) ? data : [];
-}
-
-export function parseMyCoursesPage(
-  payload: unknown
-): AcademyMyCoursesPage | null {
-  const value = (payload as UpstreamApiResponse<AcademyMyCoursesPage>).value;
-  if (!value) {
-    return null;
-  }
-  return {
-    ...value,
-    data: parseMyCoursesPayload(payload),
-  };
 }
 
 export function mapAcademyCourseToRow(

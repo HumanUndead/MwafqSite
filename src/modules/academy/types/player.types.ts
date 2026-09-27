@@ -17,6 +17,8 @@ export interface CourseItem {
   path?: string;
   /** Lecture added after enrollment — never locks / never blocks. */
   isExtraLecture?: boolean;
+  /** Revision content — gated by `CourseData.isRevisionAvailable`. */
+  isRevision?: boolean;
 }
 
 export interface CoursePlayerLesson {
@@ -24,6 +26,7 @@ export interface CoursePlayerLesson {
   title: string;
   items: CourseItem[];
   rank: number;
+  isRevision?: boolean;
 }
 
 export type CourseSectionType = 'lesson' | 'quiz' | 'exam' | 'attachments';
@@ -45,6 +48,9 @@ export interface CourseData {
   sections: CourseSection[];
   /** 0-100. */
   currentProgress: number;
+  isRevisionAvailable?: boolean;
+  /** 0-100. */
+  revisionProgress?: number;
 }
 
 /** A node in the flattened course navigation map (prev/next). */

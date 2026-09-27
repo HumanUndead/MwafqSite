@@ -538,6 +538,7 @@ const ar = {
         'مرحبًا بعودتك إلى موفق. سجّل الدخول باستخدام رمز التحقق للمتابعة.',
       otpSent:
         'تم إرسال رمز التحقق بنجاح. أدخل الرمز المكوّن من 4 أرقام لتسجيل الدخول.',
+      or: 'أو',
     },
     ssoLogin: {
       loadingTitle: 'جارٍ تسجيل دخولك…',
@@ -629,6 +630,7 @@ const ar = {
       wrongOtpCode: 'رمز التحقق غير صحيح.',
       userAlreadyExists: 'هذا المستخدم موجود بالفعل.',
       invalidIdentityNumber: 'رقم الهوية / الإقامة غير صحيح.',
+      identityRequired: 'أدخل رقم الهوية / الإقامة.',
     },
     registerPage: {
       hero: {
@@ -758,6 +760,8 @@ const ar = {
     courseAttachments: 'مرفقات الدورة',
     files: 'ملفات',
     extraContent: 'جديد',
+    revision: 'مراجعة',
+    revisionProgress: 'تقدّم المراجعة',
     whatYouLearn: 'ماذا ستتعلّم',
     loading: 'جارٍ تحميل الدورة…',
     notFoundTitle: 'الدورة غير موجودة',
@@ -795,6 +799,7 @@ const ar = {
     loadError: 'فشل تحميل المحاضرة.',
     progressSaved: 'تم إكمال المحاضرة!',
     lecture: 'محاضرة',
+    revision: 'مراجعة',
     lectureProgress: 'تقدّم المحاضرة',
     courseInfo: 'معلومات الدورة',
     downloadResources: 'تنزيل الموارد',
@@ -859,6 +864,11 @@ const ar = {
     exitWarning: 'سيتم فقدان تقدمك.',
     cancel: 'إلغاء',
     exit: 'خروج',
+    confirmSubmit: 'هل أنت متأكد من الإرسال؟ لن تتمكن من تغيير إجاباتك.',
+    answerAllRequired: 'أجب عن جميع الأسئلة قبل الإرسال.',
+    timeUpTitle: 'انتهى الوقت',
+    timeUp: 'انتهى وقتك. تم إرسال الاختبار تلقائياً.',
+    attemptsPage: 'صفحة {{current}} من {{total}}',
   },
   profileAcademy: {
     title: 'دوراتي في أكاديمية موفق',

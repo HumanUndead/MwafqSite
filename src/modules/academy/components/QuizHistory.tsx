@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { isRtl } from '@/i18n/config';
 import { useAuthStore } from '@/modules/auth/store/authStore';
+import { Button } from '@/shared/components/ui/Button';
 import { useQuizAttempts } from '../hooks/useQuiz';
 import {
   formatDuration,
@@ -23,6 +24,8 @@ import {
 import { learnBasePath, quizPath } from '../learnRoutes.shared';
 import type { UserQuizAttempt } from '../types/quiz.types';
 import { QuizAttemptModal } from './QuizAttemptModal';
+
+const ATTEMPTS_PAGE_SIZE = 8;
 
 interface QuizHistoryProps {
   userCourseId: number;
@@ -44,6 +47,7 @@ export function QuizHistory({
   const [selectedAttemptId, setSelectedAttemptId] = useState<number | null>(
     null
   );
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading } = useQuizAttempts({
     userId: user?.id ?? '',
@@ -55,6 +59,15 @@ export function QuizHistory({
 
   const attempts: UserQuizAttempt[] = data?.attempts ?? data?.data ?? [];
   const total = data?.quizScore ?? 0;
+  const totalPages = Math.max(
+    1,
+    Math.ceil(attempts.length / ATTEMPTS_PAGE_SIZE)
+  );
+  const pageStart = (currentPage - 1) * ATTEMPTS_PAGE_SIZE;
+  const pageAttempts = attempts.slice(
+    pageStart,
+    pageStart + ATTEMPTS_PAGE_SIZE
+  );
   const BackIcon = rtl ? ChevronRight : ChevronLeft;
   const NextIcon = rtl ? ChevronLeft : ChevronRight;
 
@@ -102,7 +115,8 @@ export function QuizHistory({
         ) : (
           <div className='overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg'>
             <div className='grid grid-cols-1 gap-4 p-6 md:grid-cols-2 lg:grid-cols-3'>
-              {attempts.map((attempt, index) => {
+              {pageAttempts.map((attempt, pageIndex) => {
+                const index = pageStart + pageIndex;
                 const id = attempt.id ?? attempt.attemptId ?? null;
                 const percentage = getScorePercentage(
                   attempt.attemptScore,
@@ -181,6 +195,36 @@ export function QuizHistory({
                 );
               })}
             </div>
+
+            {totalPages > 1 && (
+              <div className='flex items-center justify-between gap-4 border-t border-gray-200 px-6 py-4'>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  type='button'
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((page) => page - 1)}
+                >
+                  <BackIcon className='size-4' />
+                  {t.previous}
+                </Button>
+                <span className='text-sm font-medium text-gray-600'>
+                  {t.attemptsPage
+                    .replace('{{current}}', String(currentPage))
+                    .replace('{{total}}', String(totalPages))}
+                </span>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  type='button'
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((page) => page + 1)}
+                >
+                  {t.next}
+                  <NextIcon className='size-4' />
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -23,6 +23,8 @@ export interface LectureDetail {
   courseName: string;
   translations: LectureTranslation[];
   isCompleted: boolean | null;
+  /** Revision content — gated by the course's `isRevisionAvailable`. */
+  isRevision?: boolean;
 }
 
 export interface LectureDetailResponse {

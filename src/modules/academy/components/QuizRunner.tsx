@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isRtl, localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import type { Dictionary } from '@/locales/types';
@@ -22,7 +22,10 @@ import { Modal } from '@/shared/components/ui/Modal';
 import { academyLearnApi } from '../api/academyLearnApi';
 import { useQuizAttempt, useQuizDetail } from '../hooks/useQuiz';
 import { getTranslation, shuffleArray } from '../quizScoring.shared';
-import { buildAttemptFormData } from '../quizSubmit.shared';
+import {
+  buildAttemptBeaconBlob,
+  buildAttemptFormData,
+} from '../quizSubmit.shared';
 import { getVimeoEmbedUrl } from '../vimeo.shared';
 import { learnBasePath } from '../learnRoutes.shared';
 import { QuestionType } from '../types/quiz.types';
@@ -99,6 +102,9 @@ export function QuizRunner({
   const [attemptId, setAttemptId] = useState<number | null>(null);
   const [submitError, setSubmitError] = useState('');
   const [showExit, setShowExit] = useState(false);
+  const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
+  const [showTimeUp, setShowTimeUp] = useState(false);
+  const hasSubmittedRef = useRef(false);
   const [matchingSelection, setMatchingSelection] = useState<{
     questionId: number | null;
     leftAnswerId: number | null;
@@ -121,7 +127,7 @@ export function QuizRunner({
   useEffect(() => {
     if (!started || timeLeft === null) return;
     if (timeLeft <= 0) {
-      void handleSubmit();
+      void handleSubmit({ timedOut: true });
       return;
     }
     const id = setTimeout(() => setTimeLeft((value) => (value ?? 0) - 1), 1000);
@@ -235,8 +241,11 @@ export function QuizRunner({
     });
   }
 
-  async function handleSubmit() {
+  async function handleSubmit({ timedOut = false } = {}) {
     if (!quiz || !user || submitting || attemptId !== null) return;
+    hasSubmittedRef.current = true;
+    setShowConfirmSubmit(false);
+    setShowTimeUp(timedOut);
     setSubmitting(true);
     setSubmitError('');
     try {
@@ -251,13 +260,56 @@ export function QuizRunner({
       const response = await academyLearnApi.submitQuizAttempt(formData);
       setAttemptId(response.data.attemptId);
     } catch (err) {
+      hasSubmittedRef.current = false;
       setSubmitError(err instanceof Error ? err.message : t.loadError);
     } finally {
       setSubmitting(false);
     }
   }
 
+  /**
+   * Last-ditch submit when the tab is closing: a normal fetch would be killed
+   * mid-flight, so the attempt is handed to `sendBeacon` instead.
+   */
+  const submitAttemptOnUnload = useCallback(() => {
+    if (!quiz || !user || hasSubmittedRef.current) return;
+    hasSubmittedRef.current = true;
+
+    navigator.sendBeacon(
+      '/api/academy/quiz/attempt',
+      buildAttemptBeaconBlob({
+        userId: user.id,
+        quizId: quiz.id,
+        userCourseId,
+        startTime: startTime ?? new Date().toISOString(),
+        endTime: new Date().toISOString(),
+        answers: Object.values(answers),
+      })
+    );
+  }, [quiz, user, userCourseId, startTime, answers]);
+
+  useEffect(() => {
+    if (!started || attemptId !== null) return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (hasSubmittedRef.current) return;
+      event.preventDefault();
+      event.returnValue = t.exitWarning;
+      return t.exitWarning;
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('pagehide', submitAttemptOnUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('pagehide', submitAttemptOnUnload);
+    };
+  }, [started, attemptId, submitAttemptOnUnload, t.exitWarning]);
+
   function resetQuiz() {
+    hasSubmittedRef.current = false;
+    setShowTimeUp(false);
     setAttemptId(null);
     setStarted(false);
     setAnswers({});
@@ -353,6 +405,7 @@ export function QuizRunner({
   const current = topQuestions[currentIndex];
   const isLast = currentIndex === topQuestions.length - 1;
   const answeredCount = leaves.filter((q) => isLeafAnswered(q, answers)).length;
+  const allAnswered = leaves.length > 0 && answeredCount === leaves.length;
   const progress = ((currentIndex + 1) / topQuestions.length) * 100;
   const lowTime = timeLeft !== null && timeLeft <= 60;
 
@@ -485,15 +538,23 @@ export function QuizRunner({
                 {t.previous}
               </Button>
               {isLast ? (
-                <Button
-                  variant='brand'
-                  className='bg-gradient-to-r from-[#00a8f1] to-[#1e2364]'
-                  onClick={handleSubmit}
-                  loading={submitting}
-                  type='button'
-                >
-                  {submitting ? t.submitting : t.submit}
-                </Button>
+                <div className='flex flex-col items-end gap-2'>
+                  <Button
+                    variant='brand'
+                    className='bg-gradient-to-r from-[#00a8f1] to-[#1e2364]'
+                    onClick={() => setShowConfirmSubmit(true)}
+                    loading={submitting}
+                    disabled={!allAnswered}
+                    type='button'
+                  >
+                    {submitting ? t.submitting : t.submit}
+                  </Button>
+                  {!allAnswered && (
+                    <p className='text-xs font-medium text-amber-600'>
+                      {t.answerAllRequired}
+                    </p>
+                  )}
+                </div>
               ) : (
                 <Button
                   variant='brand'
@@ -571,6 +632,51 @@ export function QuizRunner({
             {t.exit}
           </Button>
         </div>
+      </Modal>
+
+      {/* Submit confirmation */}
+      <Modal
+        open={showConfirmSubmit}
+        onClose={() => setShowConfirmSubmit(false)}
+        title={t.submit}
+      >
+        <p className='mb-6 text-gray-600'>{t.confirmSubmit}</p>
+        <div className='flex gap-3'>
+          <Button
+            variant='secondary'
+            className='flex-1'
+            onClick={() => setShowConfirmSubmit(false)}
+            type='button'
+          >
+            {t.cancel}
+          </Button>
+          <Button
+            variant='brand'
+            className='flex-1'
+            onClick={() => handleSubmit()}
+            loading={submitting}
+            type='button'
+          >
+            {t.submit}
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Time-up notice */}
+      <Modal
+        open={showTimeUp}
+        onClose={() => setShowTimeUp(false)}
+        title={t.timeUpTitle}
+      >
+        <p className='mb-6 text-gray-600'>{t.timeUp}</p>
+        <Button
+          variant='brand'
+          className='w-full'
+          onClick={() => setShowTimeUp(false)}
+          type='button'
+        >
+          {t.close}
+        </Button>
       </Modal>
     </div>
   );

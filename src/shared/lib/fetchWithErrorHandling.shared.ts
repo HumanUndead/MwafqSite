@@ -7,12 +7,20 @@ export type FetchWithErrorHandlingInit = RequestInit;
 export class FetchResponseError extends Error {
   readonly status: number;
   readonly statusText: string;
+  /** Upstream `error.code`, when the response carried an envelope. */
+  readonly code: string | null;
 
-  constructor(message: string, status: number, statusText: string) {
+  constructor(
+    message: string,
+    status: number,
+    statusText: string,
+    code: string | null = null
+  ) {
     super(message);
     this.name = 'FetchResponseError';
     this.status = status;
     this.statusText = statusText;
+    this.code = code;
   }
 }
 
@@ -24,6 +32,20 @@ export class FetchNotFoundError extends FetchResponseError {
     this.name = 'FetchNotFoundError';
     this.url = url;
   }
+}
+
+/**
+ * Message for a non-JSON error body. Upstream sometimes returns a plain-text
+ * stack trace, so keep the first meaningful line rather than dropping it.
+ */
+function messageFromErrorText(text: string, res: Response): string {
+  const firstLine = text.trim().split('\n')[0]?.trim();
+  if (!firstLine) {
+    return `HTTP ${res.status}: ${res.statusText}`;
+  }
+  const truncated =
+    firstLine.length > 200 ? `${firstLine.slice(0, 200)}…` : firstLine;
+  return `HTTP ${res.status}: ${truncated}`;
 }
 
 export type FetchWithErrorHandlingCoreDeps = {
@@ -68,7 +90,8 @@ function valueFromUpstream<T>(
     throw new FetchResponseError(
       body.error.message || 'Request failed',
       httpStatus,
-      httpStatusText
+      httpStatusText,
+      body.error.code || null
     );
   }
   return body.value;
@@ -113,29 +136,31 @@ export async function fetchWithErrorHandlingCore<T>(
   }
 
   if (!res.ok) {
-    let body: UpstreamApiResponse<unknown>;
+    // Read as text first: a non-JSON body (e.g. an upstream stack trace) would
+    // otherwise be consumed by a failed res.json() and lost.
+    const text = await res.text().catch(() => '');
+
+    let body: UpstreamApiResponse<unknown> | null = null;
     try {
-      body = (await res.json()) as UpstreamApiResponse<unknown>;
+      body = text ? (JSON.parse(text) as UpstreamApiResponse<unknown>) : null;
     } catch {
-      throw new FetchResponseError(
-        `HTTP ${res.status}: ${res.statusText}`,
-        res.status,
-        res.statusText
-      );
+      body = null;
     }
 
-    if (body.isFailure) {
+    if (body?.error?.message) {
       throw new FetchResponseError(
         body.error.message,
         res.status,
-        res.statusText
+        res.statusText,
+        body.error.code || null
       );
     }
 
     throw new FetchResponseError(
-      `HTTP ${res.status}: ${res.statusText}`,
+      messageFromErrorText(text, res),
       res.status,
-      res.statusText
+      res.statusText,
+      body?.error?.code || null
     );
   }
 

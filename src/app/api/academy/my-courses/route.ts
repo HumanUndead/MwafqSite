@@ -1,27 +1,10 @@
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import {
-  AcademyCoursesError,
-  fetchMyCourseRowsWithToken,
-} from '@/modules/profile-academy/server/academyCoursesService';
-import { resolveRequestBearerTokenFromCookieStore } from '@/modules/auth/server/resolveRequestBearerToken';
+import { getMyCourses } from '@/modules/profile-academy/server/academyCoursesService';
+import { FetchResponseError } from '@/shared/lib/fetchWithErrorHandling.shared';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = resolveRequestBearerTokenFromCookieStore(request, (name) =>
-      cookieStore.get(name)
-    );
-
-    if (!token) {
-      return NextResponse.json(
-        { success: false, message: 'Authentication required', data: null },
-        { status: 401 }
-      );
-    }
-
-    const courses = await fetchMyCourseRowsWithToken(token);
+    const courses = await getMyCourses();
 
     return NextResponse.json({
       success: true,
@@ -29,7 +12,7 @@ export async function GET(request: NextRequest) {
       data: courses,
     });
   } catch (error) {
-    if (error instanceof AcademyCoursesError) {
+    if (error instanceof FetchResponseError) {
       return NextResponse.json(
         {
           success: false,
