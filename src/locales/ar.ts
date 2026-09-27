@@ -584,6 +584,27 @@ const ar = {
       resendIn: 'إعادة إرسال الرمز خلال {{time}}',
       resend: 'إعادة إرسال الرمز',
     },
+    deactivateAccount: {
+      title: 'حذف حسابك',
+      description: 'تحقق من هويتك للمتابعة في حذف حساب موفق الخاص بك.',
+      identifierLabel: 'رقم الهوية / الإقامة أو البريد الإلكتروني',
+      continue: 'متابعة',
+      identityVerified: 'تم التحقق من هويتك.',
+      confirmTitle: 'هل تريد حذف الحساب؟',
+      confirmDescription:
+        'سيؤدي هذا إلى حذف حساب موفق الخاص بك. يمكنك التواصل مع الدعم لاستعادته لاحقًا.',
+      confirmAction: 'حذف حسابي',
+      cancelAction: 'إلغاء',
+      continueOnWeb: 'المتابعة على الموقع',
+      resultSuccess: {
+        title: 'تم حذف الحساب',
+        message: 'تم حذف حساب موفق الخاص بك. يمكنك الآن العودة إلى التطبيق.',
+      },
+      resultError: {
+        title: 'حدث خطأ ما',
+        message: 'تعذر إتمام عملية الحذف. يرجى العودة إلى التطبيق والمحاولة مرة أخرى.',
+      },
+    },
     fields: {
       fullName: 'الاسم الكامل',
       firstName: 'الاسم الأول',

@@ -583,6 +583,29 @@ const en = {
       resendIn: 'Resend code in {{time}}',
       resend: 'Resend code',
     },
+    deactivateAccount: {
+      title: 'Delete your account',
+      description: 'Verify your identity to continue deleting your Mwafq account.',
+      identifierLabel: 'National ID / Iqama or email',
+      continue: 'Continue',
+      identityVerified: 'Your identity has been verified.',
+      confirmTitle: 'Delete account?',
+      confirmDescription:
+        'This will delete your Mwafq account. You can contact support to restore it later.',
+      confirmAction: 'Delete my account',
+      cancelAction: 'Cancel',
+      continueOnWeb: 'Continue on the website',
+      resultSuccess: {
+        title: 'Account deleted',
+        message:
+          'Your Mwafq account has been deleted. You can now return to the app.',
+      },
+      resultError: {
+        title: 'Something went wrong',
+        message:
+          'We could not complete the deletion. Please return to the app and try again.',
+      },
+    },
     fields: {
       fullName: 'Full name',
       firstName: 'First name',
