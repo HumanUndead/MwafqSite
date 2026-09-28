@@ -31,64 +31,8 @@ import {
 } from './lecture/LectureStates';
 import { LectureSummary } from './lecture/LectureSummary';
 import { LectureStage } from './lecture/LectureStage';
+import { VimeoLecturePlayer } from './lecture/VimeoLecturePlayer';
 import { AcademyBackdrop } from './ui/AcademyGlass';
-
-declare global {
-  interface Window {
-    Vimeo?: {
-      Player: new (el: HTMLIFrameElement) => VimeoPlayer;
-    };
-  }
-}
-
-interface VimeoPlayer {
-  on: (event: string, cb: (data: { seconds: number }) => void) => void;
-  setCurrentTime: (seconds: number) => void;
-  getCurrentTime: () => Promise<number>;
-  destroy: () => void;
-}
-
-const PROGRESS_KEY = 'userVideoProgress';
-
-function videoProgressKey(userCourseId: number, lectureId: number): string {
-  return `${userCourseId}_${lectureId}`;
-}
-
-function getVideoProgress(userCourseId: number, lectureId: number): number {
-  try {
-    const key = videoProgressKey(userCourseId, lectureId);
-    const stored = localStorage.getItem(PROGRESS_KEY) || '';
-    for (const entry of stored.split(',').filter(Boolean)) {
-      const lastDash = entry.lastIndexOf('-');
-      if (lastDash === -1) continue;
-      if (entry.slice(0, lastDash) === key) {
-        return parseFloat(entry.slice(lastDash + 1)) || 0;
-      }
-    }
-    return 0;
-  } catch {
-    return 0;
-  }
-}
-
-function saveVideoProgress(
-  userCourseId: number,
-  lectureId: number,
-  seconds: number
-): void {
-  try {
-    const key = videoProgressKey(userCourseId, lectureId);
-    const stored = localStorage.getItem(PROGRESS_KEY) || '';
-    const entries = stored.split(',').filter((entry) => {
-      const lastDash = entry.lastIndexOf('-');
-      return lastDash === -1 || entry.slice(0, lastDash) !== key;
-    });
-    entries.push(`${key}-${Math.floor(seconds)}`);
-    localStorage.setItem(PROGRESS_KEY, entries.join(','));
-  } catch {
-    // ignore
-  }
-}
 
 function pickTranslation(
   translations: LectureTranslation[],
@@ -136,9 +80,6 @@ export function LecturePlayer({
   const [videoUnobservable, setVideoUnobservable] = useState(false);
   const [pendingQuizId, setPendingQuizId] = useState<number | null>(null);
 
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const playerRef = useRef<VimeoPlayer | null>(null);
-  const currentUrlRef = useRef<string | null>(null);
   const markingRef = useRef(false);
 
   // Build nav items from the (cached) course detail.
@@ -203,74 +144,6 @@ export function LecturePlayer({
     t.loadError,
   ]);
 
-  const handleVideoEndRef = useRef(handleVideoEnd);
-  useEffect(() => {
-    handleVideoEndRef.current = handleVideoEnd;
-  });
-
-  // Vimeo player lifecycle.
-  useEffect(() => {
-    const videoUrl = translation?.videoUrl;
-    if (!iframeRef.current || !videoUrl) return;
-    if (currentUrlRef.current === videoUrl && playerRef.current) return;
-
-    if (playerRef.current) {
-      try {
-        playerRef.current.destroy();
-      } catch {
-        // ignore
-      }
-      playerRef.current = null;
-    }
-    currentUrlRef.current = videoUrl;
-
-    function init() {
-      if (!window.Vimeo || !iframeRef.current || playerRef.current) return;
-      const player = new window.Vimeo.Player(iframeRef.current);
-      playerRef.current = player;
-
-      const saved = getVideoProgress(userCourseId, lectureId);
-      if (saved > 0) player.setCurrentTime(saved);
-
-      player.on('timeupdate', (data) => {
-        saveVideoProgress(userCourseId, lectureId, data.seconds);
-      });
-
-      player.on('ended', () => {
-        void handleVideoEndRef.current();
-      });
-    }
-
-    if (!window.Vimeo) {
-      const script = document.createElement('script');
-      script.src = 'https://player.vimeo.com/api/player.js';
-      script.async = true;
-      script.onload = init;
-      script.onerror = () => setVideoUnobservable(true);
-      document.body.appendChild(script);
-    } else {
-      init();
-    }
-
-    return () => {
-      if (playerRef.current) {
-        playerRef.current
-          .getCurrentTime()
-          .then((seconds) =>
-            saveVideoProgress(userCourseId, lectureId, seconds)
-          )
-          .catch(() => {});
-        try {
-          playerRef.current.destroy();
-        } catch {
-          // ignore
-        }
-        playerRef.current = null;
-        currentUrlRef.current = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [translation?.videoUrl, lectureId]);
 
   const courseData = courseDetail
     ? transformCourseDetailToCourseData(courseDetail, String(courseId))
@@ -355,14 +228,21 @@ export function LecturePlayer({
             <LectureStage
               backHref={backHref}
               courseName={courseName}
-              embedUrl={
-                translation?.videoUrl
-                  ? getVimeoEmbedUrl(translation.videoUrl)
-                  : null
+              video={
+                translation?.videoUrl ? (
+                  <VimeoLecturePlayer
+                    key={`vimeo-${lectureId}`}
+                    embedUrl={getVimeoEmbedUrl(translation.videoUrl)}
+                    title={lectureTitle}
+                    userCourseId={userCourseId}
+                    lectureId={lectureId}
+                    allowSeek={isCompleted}
+                    onEnded={() => void handleVideoEnd()}
+                    onUnavailable={() => setVideoUnobservable(true)}
+                    labels={t.player}
+                  />
+                ) : null
               }
-              iframeRef={iframeRef}
-              iframeKey={`vimeo-${lectureId}`}
-              videoTitle={lectureTitle}
               labels={t}
             />
 

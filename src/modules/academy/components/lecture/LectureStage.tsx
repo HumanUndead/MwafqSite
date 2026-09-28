@@ -2,30 +2,24 @@
 
 import { BookOpen, ChevronLeft, Play } from 'lucide-react';
 import Link from 'next/link';
-import type { Ref } from 'react';
+import type { ReactNode } from 'react';
 import type { Dictionary } from '@/locales/types';
 import { AcademyStage } from '../ui/AcademyGlass';
 
 /**
- * The page's single dark stage: back link, course name and the video frame
- * (or the no-video placeholder). The iframe ref is owned by the player.
+ * The page's single dark stage: back link, course name and the video
+ * (`video`, the custom player) or the no-video placeholder.
  */
 export function LectureStage({
   backHref,
   courseName,
-  embedUrl,
-  iframeRef,
-  iframeKey,
-  videoTitle,
+  video,
   labels: t,
 }: {
   backHref: string;
   courseName: string;
-  /** Vimeo embed URL, or null when the lecture has no video. */
-  embedUrl: string | null;
-  iframeRef: Ref<HTMLIFrameElement>;
-  iframeKey: string;
-  videoTitle: string;
+  /** The player, or null when the lecture has no video. */
+  video: ReactNode | null;
   labels: Dictionary['academyLecture'];
 }) {
   return (
@@ -50,18 +44,8 @@ export function LectureStage({
       </div>
 
       <div className='overflow-hidden rounded-[20px] bg-black ring-1 ring-white/10 sm:rounded-[24px]'>
-        {embedUrl ? (
-          <div className='relative aspect-video'>
-            <iframe
-              ref={iframeRef}
-              key={iframeKey}
-              src={embedUrl}
-              allow='autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share'
-              referrerPolicy='strict-origin-when-cross-origin'
-              className='absolute inset-0 size-full'
-              title={videoTitle}
-            />
-          </div>
+        {video ? (
+          video
         ) : (
           <div className='flex aspect-video items-center justify-center bg-[#141848]'>
             <div className='space-y-4 px-6 text-center'>
