@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { AlertTriangle, ChevronLeft, Clock, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
@@ -269,6 +270,8 @@ export function QuizRunner({
     });
   }
 
+  const queryClient = useQueryClient();
+
   async function handleSubmit({ timedOut = false } = {}) {
     if (!quiz || !user || submitting || attemptId !== null) return;
     hasSubmittedRef.current = true;
@@ -287,6 +290,19 @@ export function QuizRunner({
       });
       const response = await academyLearnApi.submitQuizAttempt(formData);
       setAttemptId(response.data.attemptId);
+      // The attempt changes completion / locking: refresh everything that
+      // shows it (course overview + curriculum, this quiz, its history,
+      // lecture sidebars) and the server-rendered "My courses" list.
+      void queryClient.invalidateQueries({ queryKey: ['academy-course'] });
+      // Not refetched now: the open quiz would re-run its setup under the
+      // results. Marked stale, so the next visit loads fresh data.
+      void queryClient.invalidateQueries({
+        queryKey: ['academy-quiz'],
+        refetchType: 'none',
+      });
+      void queryClient.invalidateQueries({ queryKey: ['academy-quiz-attempts'] });
+      void queryClient.invalidateQueries({ queryKey: ['academy-lecture'] });
+      router.refresh();
     } catch (err) {
       hasSubmittedRef.current = false;
       setSubmitError(err instanceof Error ? err.message : t.loadError);

@@ -1,4 +1,4 @@
-import { Award, CheckCircle2, Clock, FileText, Play } from 'lucide-react';
+import { Award, CheckCircle2, Clock, FileText, Play, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import type { Dictionary } from '@/locales/types';
 import { buttonVariants } from '@/shared/components/ui/Button';
@@ -18,6 +18,7 @@ export function OverviewSidebar({
   sectionsCount,
   totalItems,
   totalLectures,
+  courseCompleted = false,
 }: {
   t: PlayerT;
   lastLecture: EnrolledLastLecture | null;
@@ -27,6 +28,7 @@ export function OverviewSidebar({
   sectionsCount: number;
   totalItems: number;
   totalLectures: number;
+  courseCompleted?: boolean;
 }) {
   return (
     <div className='space-y-5'>
@@ -64,11 +66,18 @@ export function OverviewSidebar({
             href={lastLectureHref}
             className={cn(
               buttonVariants({ variant: 'brand', size: 'md', shape: 'pill' }),
-              'mt-4 w-full bg-[#00a8f1] hover:bg-[#0090d1] focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 motion-safe:active:scale-[0.98]'
+              courseCompleted
+                ? 'mt-4 w-full border border-[#e5e7f0] bg-white text-[#1e2364] hover:bg-[#f3f4f8]'
+                : 'mt-4 w-full bg-[#00a8f1] hover:bg-[#0090d1]',
+              'focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 motion-safe:active:scale-[0.98]'
             )}
           >
-            <Play aria-hidden className='size-4 rtl:rotate-180' />
-            {t.continueLearning}
+            {courseCompleted ? (
+              <RotateCcw aria-hidden className='size-4' />
+            ) : (
+              <Play aria-hidden className='size-4 rtl:rotate-180' />
+            )}
+            {courseCompleted ? t.reviewCourse : t.continueLearning}
           </Link>
         </GlassPanel>
       )}

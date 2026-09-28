@@ -34,6 +34,11 @@ export function CoursePlayerOverview({
   } = useCourseDetail(userCourseId, courseId, locale);
 
   const myCoursesHref = getLocalizedRoute(locale, ROUTES.ACADEMY_COURSES);
+  // GetCourseByUserId has no course-level flag: 100% progress means done.
+  const courseCompleted = Boolean(
+    courseDetail &&
+      (courseDetail.isCompleted || courseDetail.courseProgressPercentage >= 100)
+  );
 
   if (isLoading) {
     return <OverviewSkeleton t={t} />;
@@ -119,6 +124,7 @@ export function CoursePlayerOverview({
             : null
         }
         hasLastLecture={!!courseDetail.lastLecture}
+        courseCompleted={courseCompleted}
       />
 
       <div className='mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8 lg:pt-10'>
@@ -165,6 +171,7 @@ export function CoursePlayerOverview({
               sectionsCount={courseData.sections.length}
               totalItems={totalItems}
               totalLectures={courseDetail.totalLectures}
+              courseCompleted={courseCompleted}
             />
           </aside>
         </div>

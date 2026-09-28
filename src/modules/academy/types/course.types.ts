@@ -76,6 +76,8 @@ export interface EnrolledCourseDetail {
   /** Comma-separated attachment paths. */
   fullAttachmentsPath: string;
   courseProgressPercentage: number;
+  /** Course-level flag, if the backend sends one (it currently doesn't). */
+  isCompleted?: boolean;
   totalLectures: number;
   totalHours: number;
   userCourseVersion: number;

@@ -1,6 +1,8 @@
 import {
+  CheckCircle2,
   ChevronRight,
   Clock,
+  RotateCcw,
   FileQuestion,
   Layers,
   ListChecks,
@@ -41,6 +43,8 @@ export interface OverviewHeroProps {
   myCoursesHref: string;
   resumeHref: string | null;
   hasLastLecture: boolean;
+  /** The course is finished: completed state instead of "continue". */
+  courseCompleted?: boolean;
   /** The item the resume button opens, shown as "Up next". */
   upNext?: { title: string; type: 'lecture' | 'quiz'; minutes: number } | null;
 }
@@ -64,7 +68,9 @@ export function OverviewHero({
   resumeHref,
   hasLastLecture,
   upNext,
+  courseCompleted = false,
 }: OverviewHeroProps) {
+  const shownProgress = courseCompleted ? 100 : progress;
   // No real cover: the fallback is the Mwafq logo, which must not be
   // stretched as a photo (nor blurred into the stage background).
   const hasCover = Boolean(image) && image !== MEDIA_FALLBACK_IMAGE;
@@ -140,7 +146,7 @@ export function OverviewHero({
               </ul>
             )}
 
-            {upNext && resumeHref && (
+            {!courseCompleted && upNext && resumeHref && (
               <Link
                 href={resumeHref}
                 className='group flex max-w-xl items-center gap-4 rounded-[20px] border border-white/15 bg-white/[0.08] p-3 pe-4 backdrop-blur-xl transition-colors hover:border-[#00a8f1]/50 hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] motion-reduce:transition-none'
@@ -207,7 +213,7 @@ export function OverviewHero({
             <div className='space-y-5 p-5 sm:p-6'>
               <div className='flex items-center gap-4'>
                 <ProgressRing
-                  value={progress}
+                  value={shownProgress}
                   size={88}
                   stroke={7}
                   label={t.yourProgress}
@@ -219,7 +225,14 @@ export function OverviewHero({
                   <p className='text-[14px] text-white/70'>
                     {completedCount} {t.of} {trackedCount} {t.completed}
                   </p>
-                  <p className='text-[12px] text-white/55'>{t.keepGoing}</p>
+                  {courseCompleted ? (
+                    <p className='inline-flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[12px] font-bold text-emerald-300 ring-1 ring-emerald-400/30'>
+                      <CheckCircle2 aria-hidden className='size-3.5' />
+                      {t.courseCompleted}
+                    </p>
+                  ) : (
+                    <p className='text-[12px] text-white/55'>{t.keepGoing}</p>
+                  )}
                 </div>
               </div>
 
@@ -242,9 +255,38 @@ export function OverviewHero({
                 </div>
               )}
 
-              <CourseProgressBar value={progress} tone='dark' />
+              <CourseProgressBar value={shownProgress} tone='dark' />
 
-              {resumeHref && (
+              {courseCompleted && (
+                <div className='flex items-start gap-3 rounded-2xl bg-emerald-400/10 p-3 ring-1 ring-emerald-400/25'>
+                  <span className='inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white'>
+                    <CheckCircle2 aria-hidden className='size-5' />
+                  </span>
+                  <div className='min-w-0'>
+                    <p className='text-[15px] font-bold text-white'>
+                      {t.courseCompleted}
+                    </p>
+                    <p className='mt-0.5 text-[13px] text-white/70'>
+                      {t.courseCompletedHint}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {courseCompleted && resumeHref && (
+                <Link
+                  href={resumeHref}
+                  className={cn(
+                    buttonVariants({ variant: 'brandGhost', size: 'lg', shape: 'pill' }),
+                    'w-full border border-white/20 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#141848]'
+                  )}
+                >
+                  <RotateCcw aria-hidden className='size-5' />
+                  {t.reviewCourse}
+                </Link>
+              )}
+
+              {!courseCompleted && resumeHref && (
                 <Link
                   href={resumeHref}
                   className={cn(
