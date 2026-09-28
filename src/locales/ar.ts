@@ -794,6 +794,7 @@ const ar = {
   academyPlayer: {
     breadcrumbHome: 'دوراتي',
     currentCourse: 'الدورة الحالية',
+    upNext: 'التالي',
     yourProgress: 'تقدّمك',
     keepGoing: 'استمر، أنت تبلي بلاءً حسناً!',
     continueLearning: 'متابعة التعلّم',
@@ -982,6 +983,11 @@ const ar = {
     previousCourses: 'الدورات السابقة',
     nextCourses: 'الدورات التالية',
     keepGoing: 'متابعة التعلّم',
+    all: 'الكل',
+    coursesCount: 'عدد الدورات: {{count}}',
+    subtitle: 'تابع من حيث توقفت، وتابع تقدّمك في كل دوراتك من مكان واحد.',
+    filterLabel: 'تصفية الدورات',
+    emptyFilter: 'لا توجد دورات هنا بعد.',
   },
   profileLayout: {
     signOut: 'تسجيل الخروج',

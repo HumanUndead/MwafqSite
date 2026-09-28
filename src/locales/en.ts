@@ -795,6 +795,7 @@ const en = {
   academyPlayer: {
     breadcrumbHome: 'My Courses',
     currentCourse: 'Current course',
+    upNext: 'Up next',
     yourProgress: 'Your progress',
     keepGoing: 'Keep going, you are doing great!',
     continueLearning: 'Continue learning',
@@ -994,6 +995,11 @@ const en = {
     previousCourses: 'Previous courses',
     nextCourses: 'Next courses',
     keepGoing: 'Keep Going',
+    all: 'All',
+    coursesCount: '{{count}} courses',
+    subtitle: 'Pick up where you left off and track every course in one place.',
+    filterLabel: 'Filter courses',
+    emptyFilter: 'No courses here yet.',
   },
   profileLayout: {
     signOut: 'Sign out',

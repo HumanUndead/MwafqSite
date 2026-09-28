@@ -35,7 +35,7 @@ export function ContinueLearningCard({
     <GlassPanel
       as='article'
       className={cn(
-        'group grid gap-5 p-3 sm:p-4 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-6',
+        'group grid gap-5 border border-[#e5e7f0] bg-white p-3 sm:p-4 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-6',
         profileGlassClass
       )}
     >
@@ -45,7 +45,7 @@ export function ContinueLearningCard({
         aria-hidden
         className='block overflow-hidden rounded-[18px]'
       >
-        <EnrolledCourseMedia image={course.image} logoClassName='h-20 w-20' />
+        <EnrolledCourseMedia image={course.image} seed={course.courseId} title={course.title} size='lg' />
       </Link>
 
       <div className='flex min-w-0 flex-col gap-4 px-1 pb-1 md:py-2 md:pe-3'>

@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
 import Image from 'next/image';
 import { cn } from '@/shared/lib/cn';
+import { MEDIA_FALLBACK_IMAGE } from '@/shared/lib/media';
 
 /**
  * Academy design primitives: a mist page with a soft sky/indigo glow, frosted
@@ -76,7 +77,8 @@ export function AcademyStage({
         className
       )}
     >
-      {image ? (
+      {/* The fallback logo is not a cover photo: never blur it in. */}
+      {image && image !== MEDIA_FALLBACK_IMAGE ? (
         <Image
           src={image}
           alt=''

@@ -45,7 +45,7 @@ export function AcademyCourseCard({ course, locale }: AcademyCourseCardProps) {
   return (
     <Link
       href={courseDetailPath(locale, course.id)}
-      className='group relative flex h-full min-h-full flex-col overflow-hidden rounded-[20px] border border-white/70 bg-white/75 shadow-[0_8px_28px_-14px_rgba(30,35,100,0.22)] backdrop-blur-xl transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white hover:shadow-[0_28px_56px_-20px_rgba(30,35,100,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f4f8] motion-safe:hover:-translate-y-1.5'
+      className='group relative flex h-full min-h-full flex-col overflow-hidden rounded-[20px] border border-[#e5e7f0] bg-white/75 backdrop-blur-xl transition-[transform,border-color,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#00a8f1]/40 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f4f8] motion-safe:hover:-translate-y-1.5'
     >
       <div className='relative flex aspect-video items-center justify-center overflow-hidden rounded-t-[20px] bg-[#1e2364]'>
         {errored ? (

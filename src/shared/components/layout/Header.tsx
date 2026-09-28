@@ -25,6 +25,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import { useActiveSection } from '@/shared/hooks/useActiveSection';
 import { scrollToSectionIdWithRetries } from '@/shared/lib/scrollToSection';
 import { useDeveloperMode } from '@/shared/hooks/useDeveloperMode';
+import { useFeatureToggle } from '@/shared/hooks/useFeatureToggles';
 import { getLocalizedRoute } from '@/i18n/routing';
 import { DEV_MODE_PARAM, DEV_MODE_VALUE } from '@/shared/lib/devMode';
 import Link from 'next/link';
@@ -61,6 +62,16 @@ export function Header({ locale, content }: HeaderProps) {
   // video without needing to scroll.
   const pathWithoutLocale = currentPath.replace(/^\/[^/]+/, '') || '/';
   const isVideoHeroPage = pathWithoutLocale === ROUTES.ABOUT;
+
+  // Signed-in users with the academy enabled get a direct link to their
+  // courses (otherwise only reachable from the profile).
+  const academyEnabled = useFeatureToggle('academy');
+  const showAcademyLink = Boolean(content.userMenu) && academyEnabled;
+  const academyHref = getLocalizedRoute(locale, ROUTES.ACADEMY_COURSES);
+  const academyActive =
+    pathWithoutLocale === ROUTES.ACADEMY_COURSES ||
+    pathWithoutLocale.startsWith(`${ROUTES.ACADEMY_COURSES}/`);
+  const academyLabel = locale === 'ar' ? 'الأكاديمية' : 'Academy';
 
   // Resolve each nav link into its scroll-spy token (null = links off this page).
   // Hash links keep their hash; a plain same-page link gets the ROOT_ANCHOR
@@ -199,6 +210,28 @@ export function Header({ locale, content }: HeaderProps) {
               </CmsLink>
             );
           })}
+          {showAcademyLink && (
+            <Link
+              href={academyHref}
+              aria-current={academyActive ? 'page' : undefined}
+              className='group relative inline-block whitespace-nowrap px-3.5 py-2.5 min-[1920px]:px-4 min-[1920px]:py-3 min-[2560px]:px-5'
+            >
+              <span
+                className={cn(
+                  'inline-block origin-center font-bold transition-colors duration-200 ease-out',
+                  marketingHeaderNavLinkClass,
+                  academyActive
+                    ? 'text-[#00a8f1]'
+                    : 'text-[#1e2364]/80 group-hover:text-[#00a8f1]'
+                )}
+              >
+                {academyLabel}
+              </span>
+              {academyActive && (
+                <span className='absolute bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#00a8f1]' />
+              )}
+            </Link>
+          )}
         </nav>
 
         <div className='flex flex-nowrap items-center gap-2'>
@@ -315,6 +348,21 @@ export function Header({ locale, content }: HeaderProps) {
                     </CmsLink>
                   );
                 })}
+                {showAcademyLink && (
+                  <Link
+                    href={academyHref}
+                    aria-current={academyActive ? 'page' : undefined}
+                    className={cn(
+                      'flex items-center rounded-xl px-4 py-3 text-[17px] font-bold transition-colors duration-200',
+                      academyActive
+                        ? 'bg-[#00a8f1]/10 text-[#00a8f1]'
+                        : 'text-[#1e2364]/80 hover:bg-[#1e2364]/6 hover:text-[#1e2364]'
+                    )}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {academyLabel}
+                  </Link>
+                )}
               </nav>
 
               {developerMode && !content.userMenu && (

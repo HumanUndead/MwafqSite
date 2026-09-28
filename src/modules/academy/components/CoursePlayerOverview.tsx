@@ -109,6 +109,15 @@ export function CoursePlayerOverview({
         revisionProgress={courseData.revisionProgress}
         myCoursesHref={myCoursesHref}
         resumeHref={resumeHref}
+        upNext={
+          resumeItem && resumeItem.type !== 'attachment'
+            ? {
+                title: resumeItem.title,
+                type: resumeItem.type === 'quiz' ? 'quiz' : 'lecture',
+                minutes: Number(resumeItem.duration) || 0,
+              }
+            : null
+        }
         hasLastLecture={!!courseDetail.lastLecture}
       />
 
@@ -116,18 +125,18 @@ export function CoursePlayerOverview({
         {courseDetail.isReviewActive && courseDetail.reviewText && (
           <GlassPanel
             role='note'
-            className='mb-8 flex items-start gap-3 border-[#00a8f1]/25 bg-[#00a8f1]/[0.07] p-4 sm:p-5'
+            className='mb-8 flex items-center gap-3 rounded-[18px] border-[#00a8f1]/25 bg-[#00a8f1]/[0.07] px-4 py-3'
           >
-            <span className='flex size-9 shrink-0 items-center justify-center rounded-full bg-[#00a8f1]/15 text-[#0090d1]'>
+            <span className='flex size-8 shrink-0 items-center justify-center rounded-full bg-[#00a8f1]/15 text-[#0090d1]'>
               <Star aria-hidden className='size-4' />
             </span>
-            <div className='min-w-0 flex-1'>
+            <div className='flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5'>
               <h2 className='text-[14px] font-bold text-[#1e2364]'>
                 {t.reviewNotice}
               </h2>
               {/* Dashboard rich text (e.g. `<p>…</p>`), not plain text. */}
               <div
-                className='prose prose-sm mt-1 max-w-none text-[14px] text-[#1e2364]/80'
+                className='min-w-0 text-[14px] text-[#1e2364]/80 [&_p]:m-0'
                 dangerouslySetInnerHTML={{
                   __html: safeHtml(courseDetail.reviewText),
                 }}

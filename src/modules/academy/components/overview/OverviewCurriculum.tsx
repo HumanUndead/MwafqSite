@@ -160,7 +160,7 @@ export function OverviewCurriculum({
                       </div>
                     </AccordionPrimitive.Trigger>
                   </AccordionPrimitive.Header>
-                  <AccordionContent className='p-0'>
+                  <AccordionContent className='p-0 [&_a]:no-underline [&_a]:hover:text-inherit [&_p]:mb-0'>
                     <ul className='divide-y divide-[#e5e7f0]/80 border-t border-[#e5e7f0] bg-[#f3f4f8]/50'>
                       {lesson.items
                         .slice()

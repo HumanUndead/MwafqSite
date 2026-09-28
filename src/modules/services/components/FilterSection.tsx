@@ -1,13 +1,15 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
-  PageFilterSearchButton,
   PageFilterSearchField,
   PageFilterSection,
 } from '@/shared/components/filter';
+
+/** Wait this long after the last keystroke before searching. */
+const SEARCH_DEBOUNCE_MS = 500;
 
 type FilterSectionProps = {
   t: {
@@ -22,7 +24,10 @@ type FilterSectionProps = {
   placeholder?: string;
 };
 
-/** Catalogue hero + search. Keeps the other URL params (tab, favorites). */
+/**
+ * Catalogue hero + search. Searches automatically once typing pauses (Enter
+ * searches straight away). Keeps the other URL params (tab, favorites).
+ */
 export function FilterSection({ t, placeholder }: FilterSectionProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -30,15 +35,35 @@ export function FilterSection({ t, placeholder }: FilterSectionProps) {
   const [packageName, setPackageName] = useState(
     searchParams.get('search') ?? ''
   );
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function handleSearch() {
+  useEffect(
+    () => () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    },
+    []
+  );
+
+  function runSearch(raw: string) {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    const value = raw.trim();
+    if (value === (searchParams.get('search') ?? '')) return;
+
     const params = new URLSearchParams(searchParams.toString());
-    const value = packageName.trim();
     if (value) params.set('search', value);
     else params.delete('search');
     params.delete('page');
     const query = params.toString();
-    router.push(query ? `${pathname}?${query}` : pathname);
+    // replace: typing shouldn't add a history entry per pause.
+    router.replace(query ? `${pathname}?${query}` : pathname, {
+      scroll: false,
+    });
+  }
+
+  function handleChange(value: string) {
+    setPackageName(value);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => runSearch(value), SEARCH_DEBOUNCE_MS);
   }
 
   return (
@@ -46,24 +71,18 @@ export function FilterSection({ t, placeholder }: FilterSectionProps) {
       titleLead={t.titleLead}
       titleAccent={t.titleAccent}
       subtitle={t.subtitle}
-      gridClassName='grid-cols-[1fr_auto] max-[640px]:grid-cols-1 max-[640px]:gap-3.5'
+      gridClassName='grid-cols-1'
     >
       <PageFilterSearchField
         id='services-package-name'
         label={t.packageNameLabel}
         value={packageName}
-        onChange={setPackageName}
+        onChange={handleChange}
         placeholder={placeholder ?? t.packageNamePlaceholder}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') handleSearch();
+          if (e.key === 'Enter') runSearch(packageName);
         }}
         className='min-w-0'
-      />
-
-      <PageFilterSearchButton
-        onClick={handleSearch}
-        label={t.searchBtn}
-        className='max-[640px]:w-full'
       />
     </PageFilterSection>
   );
