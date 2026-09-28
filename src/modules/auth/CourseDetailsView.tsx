@@ -1,23 +1,32 @@
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import {
   BookOpen,
   ChevronLeft,
+  ChevronRight,
   ClipboardCheck,
+  Clock,
   Trophy,
   Video,
 } from 'lucide-react';
 
 import type { Locale } from '@/i18n/config';
 import { getAcademyTranslations } from '@/i18n/academyDictionary';
-import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { SarAmount } from '@/shared/components/ui/SarAmount';
 import { courseDisplayPrice } from '@/shared/lib/coursePlan.shared';
 import { interpolate } from '@/shared/lib/interpolate';
 import { ImageSize, imageUrl } from '@/shared/lib/media';
 import { CourseCarousel } from './CourseCarousel';
 import { CourseEnrollCta } from '@/modules/academy/components/CourseEnrollCta';
+import {
+  AcademyBackdrop,
+  AcademySectionTitle,
+  AcademyStage,
+  GlassPanel,
+  StatChip,
+} from '@/modules/academy/components/ui/AcademyGlass';
 import type { CoursePaymentSettings } from '@/modules/academy/types/payment.types';
 import type {
   CourseLesson,
@@ -39,19 +48,37 @@ const CourseContentAccordion = dynamic(
   {
     loading: () => (
       <div
-        className='h-48 animate-pulse rounded-xl border border-[#e5e7f0] bg-[#eef0f7]'
+        className='h-48 animate-pulse rounded-[20px] border border-white/70 bg-white/60 motion-reduce:animate-none'
         aria-hidden
       />
     ),
   }
 );
 
-const easeClass = 'duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]';
-
 function courseImageSrc(course: CourseListItem): string | null {
   return course.fullImagePath
     ? imageUrl(course.fullImagePath, ImageSize.card)
     : null;
+}
+
+/**
+ * Frosted surface whose blur lives on a background layer, not on an ancestor
+ * of its content. `backdrop-filter` makes an element the containing block for
+ * `position: fixed` descendants, which would trap the enrol modal (not
+ * portalled) and the mobile sticky bar inside the card.
+ */
+function PurchaseSurface({ children }: { children: ReactNode }) {
+  return (
+    <div className='relative isolate overflow-hidden rounded-[24px] border border-white/70 shadow-[0_24px_60px_-24px_rgba(30,35,100,0.35)]'>
+      <div
+        aria-hidden
+        // Opaque: the card overlaps the navy hero, and a translucent glass
+        // turned the part over the hero into a grey band.
+        className='absolute inset-0 -z-10 bg-white'
+      />
+      {children}
+    </div>
+  );
 }
 
 export type CourseDetailsViewProps = {
@@ -110,178 +137,263 @@ export async function CourseDetailsView({
 
   const imageSrc = courseImageSrc(course);
 
+  const includes = [
+    {
+      key: 'hours',
+      icon: Video,
+      text: interpolate(t.hoursTotal, { count: lecturesDurationInHours }),
+    },
+    {
+      key: 'lectures',
+      icon: BookOpen,
+      text: interpolate(t.lecturesCount, { count: lectureCount }),
+    },
+    ...(quizCount > 0
+      ? [
+          {
+            key: 'quizzes',
+            icon: ClipboardCheck,
+            text: interpolate(t.quizzesCount, { count: quizCount }),
+          },
+        ]
+      : []),
+    ...(examCount > 0
+      ? [
+          {
+            key: 'exams',
+            icon: Trophy,
+            text: interpolate(t.examsCount, { count: examCount }),
+          },
+        ]
+      : []),
+  ];
+
+  const priceBlock = price.free ? (
+    <span className='text-[28px] font-bold leading-none text-emerald-600 max-lg:text-xl'>
+      {t.free}
+    </span>
+  ) : (
+    <span className='inline-flex flex-col gap-1'>
+      {price.label && (
+        <span className='text-xs font-semibold text-[#6b7196]'>
+          {price.label === 'fullPrice' ? t.fullPrice : t.startsFrom}
+        </span>
+      )}
+      <SarAmount
+        amount={price.amount}
+        className='text-xl font-bold leading-none text-[#1e2364] lg:text-[28px]'
+      />
+    </span>
+  );
+
   return (
-    <div className='mx-auto w-full max-w-full overflow-x-clip bg-[#eeeeef] text-[#1e2364]'>
-      <div className='pb-3'>
-        <div className='mx-auto w-full max-w-[1320px] min-w-0 px-4 md:px-7'>
-          <ScrollReveal variant='y' revealAfterLoadMs={200}>
-            <nav
-              aria-label='Breadcrumb'
-              className='flex items-center gap-2.5 text-sm font-bold text-[#1e2364]'
-            >
-              <Link
-                href={coursesBase}
-                className='group inline-flex items-center gap-2 text-[14.5px] font-bold text-[#1e2364] transition-colors hover:text-[#00a8f1]'
-              >
-                <ChevronLeft className='size-4 shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-x-1 rtl:rotate-180 rtl:group-hover:translate-x-1' />
-                {t.breadcrumb}
-              </Link>
+    <AcademyBackdrop className='min-h-0 w-full max-w-full overflow-x-clip text-[#1e2364]'>
+      {/* Hero stage: inset panel under the transparent floating header. */}
+      <div className='px-2 sm:px-3'>
+        <AcademyStage
+          image={imageSrc}
+          className='rounded-[28px] sm:rounded-[36px] lg:min-h-[440px]'
+          innerClassName='pb-14 pt-8 sm:pt-10 lg:pb-16 lg:pt-12'
+        >
+          <div className='min-w-0 lg:pe-[420px]'>
+            <nav aria-label='Breadcrumb'>
+              <ol className='flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold'>
+                <li>
+                  <Link
+                    href={coursesBase}
+                    className='group inline-flex items-center gap-1.5 rounded-full text-[#7fd4f9] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#141848] motion-reduce:transition-none'
+                  >
+                    <ChevronLeft
+                      className='size-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5 rtl:rotate-180 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none'
+                      aria-hidden
+                    />
+                    {t.breadcrumb}
+                  </Link>
+                </li>
+                {course.categoryName ? (
+                  <li className='inline-flex min-w-0 items-center gap-2 text-white/60'>
+                    <ChevronRight
+                      className='size-3.5 shrink-0 rtl:rotate-180'
+                      aria-hidden
+                    />
+                    <span className='min-w-0 wrap-break-word'>
+                      {course.categoryName}
+                    </span>
+                  </li>
+                ) : null}
+              </ol>
             </nav>
-          </ScrollReveal>
-        </div>
+
+            <h1 className='mt-4 wrap-break-word text-[28px] font-bold leading-[1.2] text-white sm:text-4xl sm:leading-[1.15]'>
+              {title}
+            </h1>
+            {description ? (
+              <p className='mt-4 max-w-2xl wrap-break-word text-base leading-relaxed text-white/75'>
+                {description}
+              </p>
+            ) : null}
+
+            <ul className='mt-6 flex flex-wrap gap-2'>
+              <li>
+                <StatChip
+                  tone='dark'
+                  icon={<Clock className='size-4 text-[#7fd4f9]' aria-hidden />}
+                >
+                  {interpolate(t.hoursTotal, { count: lecturesDurationInHours })}
+                </StatChip>
+              </li>
+              <li>
+                <StatChip
+                  tone='dark'
+                  icon={<BookOpen className='size-4 text-[#7fd4f9]' aria-hidden />}
+                >
+                  {interpolate(t.lecturesCount, { count: lectureCount })}
+                </StatChip>
+              </li>
+              {quizCount > 0 ? (
+                <li>
+                  <StatChip
+                    tone='dark'
+                    icon={
+                      <ClipboardCheck
+                        className='size-4 text-[#7fd4f9]'
+                        aria-hidden
+                      />
+                    }
+                  >
+                    {interpolate(t.quizzesCount, { count: quizCount })}
+                  </StatChip>
+                </li>
+              ) : null}
+              {examCount > 0 ? (
+                <li>
+                  <StatChip
+                    tone='dark'
+                    icon={<Trophy className='size-4 text-amber-300' aria-hidden />}
+                  >
+                    {interpolate(t.examsCount, { count: examCount })}
+                  </StatChip>
+                </li>
+              ) : null}
+            </ul>
+          </div>
+        </AcademyStage>
       </div>
 
-      <section className='overflow-x-clip pb-12 pt-3 md:pb-[50px]'>
-        <div className='mx-auto w-full max-w-[1320px] min-w-0 px-4 md:px-7'>
-          <div className='mx-auto grid w-full min-w-0 max-w-[1100px] grid-cols-1 items-start gap-9 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)]'>
-            <ScrollReveal
-              variant='y'
-              revealAfterLoadMs={200}
-              className='min-w-0'
-            >
-              <div className='relative flex min-w-0 flex-col py-1.5'>
-                <h1 className='mb-2.5 wrap-break-word text-[clamp(22px,2.6vw,32px)] font-extrabold leading-[1.08] tracking-[-1px] text-[#1e2364]'>
-                  {title}
-                </h1>
-                <p className='mb-10 min-w-0 max-w-full wrap-break-word text-[14.5px] leading-[1.55] text-[#6b7196] lg:max-w-[560px]'>
-                  {description}
-                </p>
-
-                <div className='mb-10'>
-                  <h2 className='mb-2 text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                    {t.whatYouWillLearn}
-                  </h2>
-                  <p className='min-w-0 wrap-break-word text-sm leading-relaxed whitespace-pre-line text-[#6b7196]'>
-                    {whatLearn}
-                  </p>
-                </div>
-
-                {tags.length > 0 ? (
-                  <div className='mb-9 flex flex-wrap gap-2.5'>
-                    {tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className='inline-flex items-center rounded-full border-[1.5px] border-[#e5e7f0] bg-white px-[22px] py-[7px] text-[13px] font-bold text-[#1e2364]'
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-
-                <div className='mb-9'>
-                  <div className='mb-3 inline-block text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-                    {t.courseIncludes}
-                  </div>
-                  <ul className='flex flex-col gap-2.5'>
-                    <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                      <Video className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
-                      {interpolate(t.hoursTotal, { count: lecturesDurationInHours })}
-                    </li>
-                    <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                      <BookOpen className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
-                      {interpolate(t.lecturesCount, { count: lectureCount })}
-                    </li>
-                    {quizCount > 0 && (
-                    <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                        <ClipboardCheck className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
-                        {interpolate(t.quizzesCount, { count: quizCount })}
-                      </li>
-                    )}
-                    {examCount > 0 && (
-                    <li className='flex items-center gap-3.5 text-sm leading-[1.55] text-[#4a4f78]'>
-                        <Trophy className='size-[18px] shrink-0 text-[#1e2364]' strokeWidth={2} aria-hidden />
-                        {interpolate(t.examsCount, { count: examCount })}
-                      </li>
-                    )}
-                  </ul>
-                </div>
-
-                <CourseContentAccordion
-                  lessons={lessons}
-                  courseQuizzes={courseQuizzes}
-                  labels={{
-                    quiz: t.quiz,
-                    finalExam: t.finalExam,
-                    quizzesAndExams: t.quizzesAndExams,
-                    minutes: t.minutes,
-                    title: t.courseContent.title,
-                    meta: t.courseContent.sectionsMeta
-                      .replace('{{sections}}', String(lessons.length))
-                      .replace('{{lectures}}', String(lectureCount))
-                      .replace(
-                        '{{duration}}',
-                        formatCourseDuration(lecturesDuration)
-                      ),
-                  }}
-                />
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal
-              variant='y'
-              revealAfterLoadMs={200}
-              transitionDelay={0.12}
-              className='min-w-0 w-full max-w-[380px] lg:max-w-full lg:mx-0 mx-auto'
-            >
-              <div
-                className={`group flex min-w-0 flex-col overflow-hidden rounded-[20px] border-2 border-[#e5e7f0] bg-white transition-all ${easeClass} hover:border-[#00a8f1] hover:bg-[#fbfcff]`}
-              >
-                <div className='relative flex h-[260px] w-full items-center justify-center overflow-hidden bg-[#1e2364]'>
+      <div className='mx-auto max-w-7xl px-4 pb-14 sm:px-6 lg:px-8 lg:pb-20'>
+        <div className='grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-10'>
+          {/* Purchase card: under the hero on mobile, sticky and overlapping
+              the hero on lg. z-30 keeps the (non-portalled) enrol modal above
+              the page body. */}
+          <aside
+            aria-label={title}
+            className='relative z-30 -mt-8 min-w-0 lg:col-start-2 lg:row-start-1 lg:-mt-[300px]'
+          >
+            <div className='mx-auto w-full max-w-xl lg:sticky lg:top-[110px] lg:max-w-none'>
+              <PurchaseSurface>
+                <div className='relative aspect-video w-full overflow-hidden bg-[#1e2364]'>
                   {imageSrc ? (
                     <Image
                       src={imageSrc}
                       alt={title}
                       fill
-                      className='object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]'
-                      sizes='(max-width: 1024px) 380px, 420px'
+                      className='object-cover'
+                      sizes='(max-width: 1024px) 100vw, 380px'
                     />
                   ) : (
-                    <Image
-                      src='/demo-assets/logo.svg'
-                      alt=''
-                      width={96}
-                      height={96}
-                      className='h-24 w-24 object-contain brightness-0 invert opacity-30'
-                    />
-                  )}
-                </div>
-                <div className='flex flex-1 flex-col gap-2.5 px-[22px] pb-3.5 pt-[22px]'>
-                  <p className='min-w-0 wrap-break-word text-[12.5px] leading-[1.55] text-[#6b7196]'>
-                    {description}
-                  </p>
-                </div>
-                <div className='flex min-w-0 items-center justify-between gap-2.5 border-t-2 border-[#eef0f7] px-[22px] pb-[22px] pt-3.5'>
-                  {price.free ? (
-                    <span className='text-xl font-extrabold text-green-600'>
-                      {t.free}
-                    </span>
-                  ) : (
-                    <span className='inline-flex flex-col'>
-                      {price.label && (
-                        <span className='text-[11px] font-semibold text-[#6b7196]'>
-                          {price.label === 'fullPrice' ? t.fullPrice : t.startsFrom}
-                        </span>
-                      )}
-                      <SarAmount
-                        amount={price.amount}
-                        className='text-2xl font-extrabold tracking-[-0.5px] text-[#1e2364]'
+                    <div className='flex size-full items-center justify-center'>
+                      <Image
+                        src='/demo-assets/logo.svg'
+                        alt=''
+                        width={96}
+                        height={96}
+                        className='h-20 w-20 object-contain opacity-30 brightness-0 invert'
                       />
-                    </span>
+                    </div>
                   )}
-                  <CourseEnrollCta
-                    courseId={course.id}
-                    courseTitle={title}
-                    paymentSettings={paymentSettings}
-                  />
                 </div>
-              </div>
-            </ScrollReveal>
+
+                <div className='p-5 sm:p-6'>
+                  {/* On mobile this row becomes the fixed bottom bar (single
+                      CTA instance, so the enrol dialog / ?pay= deep link is
+                      never duplicated); on lg it sits inside the card. */}
+                  <div className='fixed inset-x-0 bottom-0 z-40 flex items-center gap-4 border-t border-[#e5e7f0] bg-white/95 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-12px_32px_-16px_rgba(30,35,100,0.35)] sm:px-6 lg:static lg:z-auto lg:flex-col lg:items-stretch lg:gap-4 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none'>
+                    <div className='min-w-0 shrink-0'>{priceBlock}</div>
+                    <div className='min-w-0 flex-1'>
+                      <CourseEnrollCta
+                        courseId={course.id}
+                        courseTitle={title}
+                        paymentSettings={paymentSettings}
+                      />
+                    </div>
+                  </div>
+
+                  <div className='lg:mt-6 lg:border-t lg:border-[#e5e7f0] lg:pt-5'>
+                    <h2 className='text-base font-bold text-[#1e2364]'>
+                      {t.courseIncludes}
+                    </h2>
+                    <ul className='mt-3 flex flex-col gap-2.5'>
+                      {includes.map(({ key, icon: Icon, text }) => (
+                        <li
+                          key={key}
+                          className='flex items-center gap-3 text-sm text-[#4a4f78]'
+                        >
+                          <Icon
+                            className='size-[18px] shrink-0 text-[#1e2364]'
+                            strokeWidth={2}
+                            aria-hidden
+                          />
+                          {text}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </PurchaseSurface>
+            </div>
+          </aside>
+
+          <div className='flex min-w-0 flex-col gap-8 lg:col-start-1 lg:row-start-1 lg:pt-10'>
+            <GlassPanel as='section' className='p-5 sm:p-7'>
+              <AcademySectionTitle>{t.whatYouWillLearn}</AcademySectionTitle>
+              <p className='wrap-break-word text-base leading-relaxed whitespace-pre-line text-[#4a4f78]'>
+                {whatLearn}
+              </p>
+              {tags.length > 0 ? (
+                <ul className='mt-6 flex flex-wrap gap-2 border-t border-[#e5e7f0] pt-5'>
+                  {tags.map((tag) => (
+                    <li key={tag}>
+                      <StatChip>{tag}</StatChip>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </GlassPanel>
+
+            <CourseContentAccordion
+              lessons={lessons}
+              courseQuizzes={courseQuizzes}
+              labels={{
+                quiz: t.quiz,
+                finalExam: t.finalExam,
+                quizzesAndExams: t.quizzesAndExams,
+                minutes: t.minutes,
+                lectures: t.lecturesCount,
+                title: t.courseContent.title,
+                meta: t.courseContent.sectionsMeta
+                  .replace('{{sections}}', String(lessons.length))
+                  .replace('{{lectures}}', String(lectureCount))
+                  .replace(
+                    '{{duration}}',
+                    formatCourseDuration(lecturesDuration)
+                  ),
+              }}
+            />
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className='overflow-x-clip border-t-2 border-[#e5e7f0] pb-16 pt-2 md:pb-24 md:pt-4'>
+      <section className='overflow-x-clip border-t border-[#e5e7f0] pb-16 pt-2 md:pb-24 md:pt-4'>
         <CourseCarousel
           categoryId={course.categoryId}
           categoryName={t.relatedCourses}
@@ -290,6 +402,9 @@ export async function CourseDetailsView({
           culture={culture}
         />
       </section>
-    </div>
+
+      {/* Room for the fixed mobile purchase bar. */}
+      <div aria-hidden className='h-24 lg:hidden' />
+    </AcademyBackdrop>
   );
 }

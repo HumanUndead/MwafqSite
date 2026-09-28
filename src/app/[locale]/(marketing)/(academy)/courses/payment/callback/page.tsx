@@ -4,7 +4,10 @@ import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 
 export default function PaymentCallbackPage() {
   return (
-    <MarketingStickyHeaderOffset variant='detail'>
+    // Inset navy stage sits just below the transparent floating header.
+    <MarketingStickyHeaderOffset
+      variant='academy'
+    >
       <Suspense fallback={null}>
         <PaymentCallbackView />
       </Suspense>

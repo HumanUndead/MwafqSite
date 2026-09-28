@@ -1,29 +1,19 @@
 'use client';
 
-import {
-  Brain,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Shuffle,
-  Target,
-  X,
-  XCircle,
-} from 'lucide-react';
-import Link from 'next/link';
+import { AlertTriangle, ChevronLeft, Clock, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { isRtl, localeToLangId } from '@/i18n/config';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
-import type { Dictionary } from '@/locales/types';
 import { useAuthStore } from '@/modules/auth/store/authStore';
 import { Button } from '@/shared/components/ui/Button';
 import { Modal } from '@/shared/components/ui/Modal';
+import { cn } from '@/shared/lib/cn';
+import { interpolate } from '@/shared/lib/interpolate';
 import { academyLearnApi } from '../api/academyLearnApi';
 import { useQuizAttempt, useQuizDetail } from '../hooks/useQuiz';
-import { getTranslation, shuffleArray } from '../quizScoring.shared';
+import { PASS_THRESHOLD_PERCENT, shuffleArray } from '../quizScoring.shared';
 import { buildAttemptFormData } from '../quizSubmit.shared';
-import { getVimeoEmbedUrl } from '../vimeo.shared';
 import {
   findPrevNext,
   generateCourseNavigationMap,
@@ -41,6 +31,14 @@ import type {
   QuizQuestion,
 } from '../types/quiz.types';
 import { QuizResults } from './QuizResults';
+import { AcademyBackdrop } from './ui/AcademyGlass';
+import { QuestionCard } from './quiz/QuestionCard';
+import { QuestionNavigator } from './quiz/QuestionNavigator';
+import { QuizActionBar } from './quiz/QuizActionBar';
+import { QuizIntro } from './quiz/QuizIntro';
+import { QuizStageHeader } from './quiz/QuizStageHeader';
+import { QuizLoading, QuizMessage } from './quiz/QuizStatus';
+import { QuizTimer } from './quiz/QuizTimer';
 
 interface QuizRunnerProps {
   userCourseId: number;
@@ -91,8 +89,8 @@ export function QuizRunner({
   quizId,
 }: QuizRunnerProps) {
   const t = useTranslations('academyQuiz');
+  const tProfile = useTranslations('profileAcademy');
   const locale = useLocale();
-  const rtl = isRtl(locale);
   const langId = localeToLangId[locale];
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
@@ -325,12 +323,12 @@ export function QuizRunner({
   }
 
   if (isLoading) {
-    return <CenteredSpinner label={t.loading} />;
+    return <QuizLoading label={t.loading} />;
   }
 
   if (isLocked) {
     return (
-      <CenteredMessage
+      <QuizMessage
         message={`${t.lockedTitle} — ${t.lockedMessage}`}
         actionHref={learnBasePath(locale, userCourseId, courseId)}
         actionLabel={t.backToCourse}
@@ -340,7 +338,7 @@ export function QuizRunner({
 
   if (isError || !quiz) {
     return (
-      <CenteredMessage
+      <QuizMessage
         message={t.loadError}
         actionHref={learnBasePath(locale, userCourseId, courseId)}
         actionLabel={t.backToCourse}
@@ -365,56 +363,32 @@ export function QuizRunner({
   }
 
   const quizTitle = quiz.title || t.start;
-  const BackIcon = rtl ? ChevronRight : ChevronLeft;
-  const NextIcon = rtl ? ChevronLeft : ChevronRight;
+  const courseName = courseData?.title ?? null;
+  const courseImage = courseData?.image || null;
 
   // Start screen
   if (!started) {
     return (
-      <div className='flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-white px-4'>
-        <div className='w-full max-w-xl rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-2xl sm:p-12'>
-          <div className='mx-auto mb-6 flex size-20 items-center justify-center rounded-full bg-gradient-to-br from-[#00a8f1] to-[#1e2364] shadow-lg'>
-            <Brain className='size-10 text-white' />
-          </div>
-          <h1 className='mb-2 text-3xl font-bold text-gray-900'>{quizTitle}</h1>
-          {quiz.description && (
-            <div
-              className='mb-6 text-gray-600'
-              dangerouslySetInnerHTML={{ __html: quiz.description }}
-            />
-          )}
-          <div className='mb-8 flex items-center justify-center gap-6 text-sm text-gray-600'>
-            <span className='inline-flex items-center gap-1.5'>
-              <Target className='size-4 text-[#00a8f1]' />
-              {leaves.length} {t.question}
-            </span>
-            {timerSeconds > 0 && (
-              <span className='inline-flex items-center gap-1.5'>
-                <Clock className='size-4 text-[#00a8f1]' />
-                {Math.round(timerSeconds / 60)} {t.timeLeft}
-              </span>
-            )}
-          </div>
-          {leaves.length === 0 ? (
-            <p className='text-gray-500'>{t.noQuestions}</p>
-          ) : (
-            <Button
-              variant='brand'
-              className='w-full bg-gradient-to-r from-[#00a8f1] to-[#1e2364] py-4 text-base'
-              onClick={handleStart}
-              type='button'
-            >
-              {t.start}
-            </Button>
-          )}
-          <Link
-            href={learnBasePath(locale, userCourseId, courseId)}
-            className='mt-4 inline-block text-sm font-medium text-gray-500 hover:text-[#00a8f1]'
-          >
-            {t.backToCourse}
-          </Link>
-        </div>
-      </div>
+      <AcademyBackdrop>
+        <QuizIntro
+          labels={t}
+          title={quizTitle}
+          courseName={courseName}
+          image={courseImage}
+          description={quiz.description}
+          questionCount={leaves.length}
+          minutesLabel={
+            timerSeconds > 0
+              ? interpolate(tProfile.minutes, {
+                  count: Math.round(timerSeconds / 60),
+                })
+              : null
+          }
+          passThreshold={PASS_THRESHOLD_PERCENT}
+          backHref={learnBasePath(locale, userCourseId, courseId)}
+          onStart={handleStart}
+        />
+      </AcademyBackdrop>
     );
   }
 
@@ -427,212 +401,102 @@ export function QuizRunner({
   const lowTime = timeLeft !== null && timeLeft <= 60;
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
-      {/* Sticky header */}
-      <div className='sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm'>
-        <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-between gap-4'>
-            <div className='flex min-w-0 flex-1 items-center gap-4'>
-              <button
-                type='button'
-                onClick={() => setShowExit(true)}
-                className='rounded-lg p-2 text-gray-700 transition-colors hover:bg-gray-100'
-                aria-label={t.exitQuiz}
-              >
-                <BackIcon className='size-5' />
-              </button>
-              <div className='min-w-0 flex-1'>
-                <h1 className='truncate text-lg font-bold text-gray-900 sm:text-xl'>
-                  {quizTitle}
-                </h1>
-                {quiz.description && (
-                  <div
-                    className='truncate text-sm text-gray-600'
-                    dangerouslySetInnerHTML={{ __html: quiz.description }}
-                  />
-                )}
-              </div>
-            </div>
-            {timeLeft !== null && timeLeft > 0 && (
-              <div
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 ${
-                  lowTime ? 'bg-red-100' : 'bg-[#00a8f1]/10'
-                }`}
-              >
-                <Clock
-                  className={`size-5 ${lowTime ? 'text-red-600' : 'text-[#00a8f1]'}`}
-                />
-                <span
-                  className={`font-bold ${lowTime ? 'text-red-600' : 'text-[#00a8f1]'}`}
-                >
-                  {Math.floor(timeLeft / 60)}:
-                  {(timeLeft % 60).toString().padStart(2, '0')}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className='mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12'>
-        {/* Progress */}
-        <div className='mb-8'>
-          <div className='mb-2 flex items-center justify-between text-sm font-medium text-gray-700'>
-            <span>
-              {t.questionOf
-                .replace('{{current}}', String(currentIndex + 1))
-                .replace('{{total}}', String(topQuestions.length))}
-            </span>
-            <span>
-              {t.answeredOf
-                .replace('{{answered}}', String(answeredCount))
-                .replace('{{total}}', String(leaves.length))}
-            </span>
-          </div>
-          <div className='h-3 overflow-hidden rounded-full bg-gray-200'>
-            <div
-              className='h-full rounded-full bg-gradient-to-r from-[#00a8f1] to-[#1e2364] transition-all duration-300'
-              style={{ width: `${progress}%` }}
+    <AcademyBackdrop className='pb-40 sm:pb-16'>
+      <QuizStageHeader
+        courseName={courseName}
+        image={courseImage}
+        title={quizTitle}
+        description={quiz.description}
+        leading={
+          <button
+            type='button'
+            onClick={() => setShowExit(true)}
+            className='flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/15 transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] motion-reduce:transition-none'
+            aria-label={t.exitQuiz}
+          >
+            <ChevronLeft className='size-5 rtl:rotate-180' aria-hidden />
+          </button>
+        }
+        trailing={
+          timeLeft !== null && timeLeft > 0 ? (
+            <QuizTimer
+              seconds={timeLeft}
+              low={lowTime}
+              label={t.timeLeft}
+              className='hidden sm:inline-flex'
             />
-          </div>
+          ) : null
+        }
+      >
+        <div className='mt-6 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
+          <p className='text-base font-bold text-white'>
+            {t.questionOf
+              .replace('{{current}}', String(currentIndex + 1))
+              .replace('{{total}}', String(topQuestions.length))}
+          </p>
+          <p className='text-sm font-semibold text-white/70'>
+            {t.answeredOf
+              .replace('{{answered}}', String(answeredCount))
+              .replace('{{total}}', String(leaves.length))}
+          </p>
         </div>
+        <QuestionNavigator
+          count={topQuestions.length}
+          currentIndex={currentIndex}
+          isAnswered={(idx) => isQuestionAnswered(topQuestions[idx], answers)}
+          onSelect={setCurrentIndex}
+          heading={t.questionsNav}
+          questionLabel={t.question}
+        />
+      </QuizStageHeader>
 
-        <div className='grid gap-6 lg:grid-cols-4'>
-          {/* Main */}
-          <div className='lg:col-span-3'>
-            <div className='overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl'>
-              <div className='border-b border-gray-200 bg-gradient-to-br from-[#00a8f1]/5 to-[#1e2364]/5 p-6 sm:p-8'>
-                <div className='flex items-start gap-4'>
-                  <div className='flex size-12 shrink-0 items-center justify-center rounded-full bg-[#00a8f1]'>
-                    <Brain className='size-6 text-white' />
-                  </div>
-                  <div className='flex-1'>
-                    <h2 className='mb-2 text-2xl font-bold leading-tight text-gray-900 sm:text-3xl'>
-                      {getTranslation(current.translations, langId)?.text ||
-                        `${t.question} ${currentIndex + 1}`}
-                    </h2>
-                    {getTranslation(current.translations, langId)
-                      ?.description && (
-                      <p className='text-sm text-gray-600'>
-                        {
-                          getTranslation(current.translations, langId)
-                            ?.description
-                        }
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className='space-y-4 p-6 sm:p-8'>
-                <QuestionBody
-                  question={current}
-                  answers={answers}
-                  langId={langId}
-                  labels={t}
-                  shuffledRights={shuffledRights}
-                  matchingSelection={matchingSelection}
-                  onSingle={setSingle}
-                  onToggle={toggleMultiple}
-                  onMatchingClick={matchingClick}
-                  onRemoveMatch={removeMatch}
-                />
-              </div>
-            </div>
-
-            {submitError && (
-              <p className='mt-3 text-sm text-red-600'>{submitError}</p>
-            )}
-
-            <div className='mt-6 flex items-center justify-between gap-3'>
-              <Button
-                variant='outline'
-                onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
-                disabled={currentIndex === 0}
-                type='button'
-              >
-                <BackIcon className='size-4' />
-                {t.previous}
-              </Button>
-              {isLast ? (
-                <div className='flex flex-col items-end gap-2'>
-                  <Button
-                    variant='brand'
-                    className='bg-gradient-to-r from-[#00a8f1] to-[#1e2364]'
-                    onClick={() => setShowConfirmSubmit(true)}
-                    loading={submitting}
-                    disabled={!allAnswered}
-                    type='button'
-                  >
-                    {submitting ? t.submitting : t.submit}
-                  </Button>
-                  {!allAnswered && (
-                    <p className='text-xs font-medium text-amber-600'>
-                      {t.answerAllRequired}
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <Button
-                  variant='brand'
-                  onClick={() =>
-                    setCurrentIndex((i) =>
-                      Math.min(topQuestions.length - 1, i + 1)
-                    )
-                  }
-                  type='button'
-                >
-                  {t.next}
-                  <NextIcon className='size-4' />
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {/* Navigator */}
-          <div className='lg:col-span-1'>
-            <div className='sticky top-24 rounded-2xl border border-gray-200 bg-white p-5 shadow-lg'>
-              <h3 className='mb-4 text-sm font-bold text-gray-900'>
-                {t.questionsNav}
-              </h3>
-              <div className='grid grid-cols-5 gap-2 lg:grid-cols-4'>
-                {topQuestions.map((q, idx) => {
-                  const answered = isQuestionAnswered(q, answers);
-                  const active = idx === currentIndex;
-                  return (
-                    <button
-                      key={q.id}
-                      type='button'
-                      onClick={() => setCurrentIndex(idx)}
-                      className={`flex aspect-square items-center justify-center rounded-lg text-sm font-bold transition-all ${
-                        active
-                          ? 'bg-[#1e2364] text-white ring-2 ring-[#00a8f1]'
-                          : answered
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                      }`}
-                    >
-                      {idx + 1}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className='relative mx-auto -mt-10 max-w-3xl px-4 sm:-mt-12 sm:px-6'>
+        <QuestionCard
+          question={current}
+          index={currentIndex}
+          progress={progress}
+          answers={answers}
+          langId={langId}
+          labels={t}
+          shuffledRights={shuffledRights}
+          matchingSelection={matchingSelection}
+          onSingle={setSingle}
+          onToggle={toggleMultiple}
+          onMatchingClick={matchingClick}
+          onRemoveMatch={removeMatch}
+        />
+        <QuizActionBar
+          labels={t}
+          isFirst={currentIndex === 0}
+          isLast={isLast}
+          allAnswered={allAnswered}
+          submitting={submitting}
+          submitError={submitError}
+          timeLeft={timeLeft}
+          lowTime={lowTime}
+          onPrevious={() => setCurrentIndex((i) => Math.max(0, i - 1))}
+          onNext={() =>
+            setCurrentIndex((i) => Math.min(topQuestions.length - 1, i + 1))
+          }
+          onSubmit={() => setShowConfirmSubmit(true)}
+        />
       </div>
 
       {/* Exit modal */}
       <Modal
         open={showExit}
         onClose={() => setShowExit(false)}
-        title={t.exitQuiz}
+        className={quizModalClass}
       >
-        <p className='mb-6 text-gray-600'>{t.exitWarning}</p>
+        <ModalHeader tone='amber' title={t.exitQuiz}>
+          <AlertTriangle className='size-6' aria-hidden />
+        </ModalHeader>
+        <p className='mb-6 text-[#6b7196]'>{t.exitWarning}</p>
         <div className='flex gap-3'>
           <Button
-            variant='secondary'
-            className='flex-1'
+            variant='outline'
+            shape='pill'
+            className='flex-1 border-[#e5e7f0] text-[#1e2364]'
             onClick={() => setShowExit(false)}
             type='button'
           >
@@ -640,6 +504,7 @@ export function QuizRunner({
           </Button>
           <Button
             variant='danger'
+            shape='pill'
             className='flex-1'
             onClick={() =>
               router.push(learnBasePath(locale, userCourseId, courseId))
@@ -655,13 +520,17 @@ export function QuizRunner({
       <Modal
         open={showConfirmSubmit}
         onClose={() => setShowConfirmSubmit(false)}
-        title={t.submit}
+        className={quizModalClass}
       >
-        <p className='mb-6 text-gray-600'>{t.confirmSubmit}</p>
+        <ModalHeader tone='sky' title={t.submit}>
+          <Send className='size-6 rtl:-scale-x-100' aria-hidden />
+        </ModalHeader>
+        <p className='mb-6 text-[#6b7196]'>{t.confirmSubmit}</p>
         <div className='flex gap-3'>
           <Button
-            variant='secondary'
-            className='flex-1'
+            variant='outline'
+            shape='pill'
+            className='flex-1 border-[#e5e7f0] text-[#1e2364]'
             onClick={() => setShowConfirmSubmit(false)}
             type='button'
           >
@@ -669,7 +538,8 @@ export function QuizRunner({
           </Button>
           <Button
             variant='brand'
-            className='flex-1'
+            shape='pill'
+            className='flex-1 bg-[#00a8f1] hover:bg-[#0090d1] focus:ring-[#00a8f1]'
             onClick={() => handleSubmit()}
             loading={submitting}
             type='button'
@@ -683,11 +553,15 @@ export function QuizRunner({
       <Modal
         open={showTimeUp}
         onClose={() => router.push(learnBasePath(locale, userCourseId, courseId))}
-        title={t.timeUpTitle}
+        className={quizModalClass}
       >
-        <p className='mb-6 text-gray-600'>{t.timeUp}</p>
+        <ModalHeader tone='amber' title={t.timeUpTitle}>
+          <Clock className='size-6' aria-hidden />
+        </ModalHeader>
+        <p className='mb-6 text-[#6b7196]'>{t.timeUp}</p>
         <Button
           variant='brand'
+          shape='pill'
           className='w-full'
           onClick={() => router.push(learnBasePath(locale, userCourseId, courseId))}
           type='button'
@@ -695,419 +569,36 @@ export function QuizRunner({
           {t.timeUpConfirm}
         </Button>
       </Modal>
-    </div>
+    </AcademyBackdrop>
   );
 }
 
-type QuizLabels = Dictionary['academyQuiz'];
+const quizModalClass =
+  'rounded-[24px] border border-white/70 bg-white/90 p-6 shadow-[0_24px_64px_-24px_rgba(20,24,72,0.45)] backdrop-blur-xl sm:p-8';
 
-function QuestionBody({
-  question,
-  answers,
-  langId,
-  labels,
-  shuffledRights,
-  matchingSelection,
-  onSingle,
-  onToggle,
-  onMatchingClick,
-  onRemoveMatch,
+function ModalHeader({
+  tone,
+  title,
+  children,
 }: {
-  question: QuizQuestion;
-  answers: Record<number, QuizAnswerState>;
-  langId: number;
-  labels: QuizLabels;
-  shuffledRights: Record<number, QuizAnswer[]>;
-  matchingSelection: { questionId: number | null; leftAnswerId: number | null };
-  onSingle: (questionId: number, answerId: number) => void;
-  onToggle: (questionId: number, answerId: number) => void;
-  onMatchingClick: (
-    questionId: number,
-    answerId: number,
-    side: 'left' | 'right'
-  ) => void;
-  onRemoveMatch: (questionId: number, leftId: number) => void;
+  tone: 'amber' | 'sky';
+  title: string;
+  children: ReactNode;
 }) {
-  if (question.type === QuestionType.Video) {
-    return (
-      <div className='space-y-6'>
-        {question.videoUrl && (
-          <div className='overflow-hidden rounded-xl bg-black shadow-lg'>
-            <div className='relative h-0 pb-[56.25%]'>
-              <iframe
-                src={getVimeoEmbedUrl(question.videoUrl)}
-                allow='autoplay; fullscreen; picture-in-picture'
-                className='absolute inset-0 size-full'
-                title='Quiz video'
-              />
-            </div>
-          </div>
+  return (
+    <div className='mb-3 flex items-center gap-3'>
+      <span
+        aria-hidden
+        className={cn(
+          'flex size-11 shrink-0 items-center justify-center rounded-2xl',
+          tone === 'amber'
+            ? 'bg-amber-50 text-amber-500 ring-1 ring-amber-200'
+            : 'bg-[#00a8f1]/10 text-[#00a8f1] ring-1 ring-[#00a8f1]/20'
         )}
-        <div className='border-t-2 border-gray-200 pt-6'>
-          <h3 className='mb-4 flex items-center gap-2 text-lg font-bold text-gray-800'>
-            <Target className='size-5 text-[#00a8f1]' />
-            {labels.answerVideoQuestions}
-          </h3>
-        </div>
-        {(question.relatedQuizQuestions ?? []).map((sub, idx) => (
-          <div key={sub.id} className='rounded-xl border border-gray-200 p-5'>
-            <p className='mb-3 font-semibold text-gray-900'>
-              {idx + 1}. {getTranslation(sub.translations, langId)?.text ?? ''}
-            </p>
-            <ChoiceOptions
-              question={sub}
-              answers={answers}
-              langId={langId}
-              labels={labels}
-              shuffledRights={shuffledRights}
-              matchingSelection={matchingSelection}
-              onSingle={onSingle}
-              onToggle={onToggle}
-              onMatchingClick={onMatchingClick}
-              onRemoveMatch={onRemoveMatch}
-            />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  return (
-    <ChoiceOptions
-      question={question}
-      answers={answers}
-      langId={langId}
-      labels={labels}
-      shuffledRights={shuffledRights}
-      matchingSelection={matchingSelection}
-      onSingle={onSingle}
-      onToggle={onToggle}
-      onMatchingClick={onMatchingClick}
-      onRemoveMatch={onRemoveMatch}
-    />
-  );
-}
-
-function ChoiceOptions({
-  question,
-  answers,
-  langId,
-  labels,
-  shuffledRights,
-  matchingSelection,
-  onSingle,
-  onToggle,
-  onMatchingClick,
-  onRemoveMatch,
-}: {
-  question: QuizQuestion;
-  answers: Record<number, QuizAnswerState>;
-  langId: number;
-  labels: QuizLabels;
-  shuffledRights: Record<number, QuizAnswer[]>;
-  matchingSelection: { questionId: number | null; leftAnswerId: number | null };
-  onSingle: (questionId: number, answerId: number) => void;
-  onToggle: (questionId: number, answerId: number) => void;
-  onMatchingClick: (
-    questionId: number,
-    answerId: number,
-    side: 'left' | 'right'
-  ) => void;
-  onRemoveMatch: (questionId: number, leftId: number) => void;
-}) {
-  const state = answers[question.id];
-
-  // Matching
-  if (question.type === QuestionType.Matching) {
-    const lefts = question.quizQuestionAnswers
-      .filter((a) => a.order % 2 === 1)
-      .sort((a, b) => a.order - b.order);
-    const rights =
-      shuffledRights[question.id] ??
-      question.quizQuestionAnswers
-        .filter((a) => a.order % 2 === 0)
-        .sort((a, b) => a.order - b.order);
-    const matched = state?.matchedAnswers ?? {};
-    const selectingLeft =
-      matchingSelection.questionId === question.id &&
-      matchingSelection.leftAnswerId !== null;
-
-    return (
-      <div>
-        <div className='mb-6 rounded-xl border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50 p-4'>
-          <p className='mb-2 flex items-center gap-2 font-semibold text-purple-900'>
-            <Shuffle className='size-5' />
-            {labels.howToMatch}
-          </p>
-          <ol className='ms-6 list-decimal space-y-1 text-sm text-purple-800'>
-            <li>{labels.clickLeftItem}</li>
-            <li>{labels.clickRightItem}</li>
-            <li>{labels.removeMatchInstruction}</li>
-          </ol>
-        </div>
-        <div className='grid gap-8 md:grid-cols-2'>
-          {/* Left */}
-          <div className='space-y-3'>
-            <div className='mb-2 flex items-center justify-between'>
-              <h4 className='flex items-center gap-2 text-lg font-bold text-gray-900'>
-                <span className='flex size-8 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white'>
-                  A
-                </span>
-                {labels.leftItems}
-              </h4>
-              <span className='text-sm text-gray-500'>
-                {Object.keys(matched).length}/{lefts.length} {labels.matched}
-              </span>
-            </div>
-            {lefts.map((left, idx) => {
-              const isSel =
-                matchingSelection.questionId === question.id &&
-                matchingSelection.leftAnswerId === left.id;
-              const rightId = matched[left.id];
-              const matchedRight = rightId
-                ? rights.find((r) => r.id === rightId)
-                : null;
-              return (
-                <button
-                  key={left.id}
-                  type='button'
-                  onClick={() => onMatchingClick(question.id, left.id, 'left')}
-                  className={`w-full rounded-xl border-2 p-4 text-start transition-all ${
-                    isSel
-                      ? 'border-blue-500 bg-blue-100 shadow-lg ring-4 ring-blue-200'
-                      : matchedRight
-                        ? 'border-green-400 bg-green-50'
-                        : 'border-gray-300 bg-white hover:border-blue-400 hover:bg-blue-50'
-                  }`}
-                >
-                  <div className='flex items-center gap-3'>
-                    <span
-                      className={`flex size-10 shrink-0 items-center justify-center rounded-full font-bold ${
-                        isSel
-                          ? 'bg-blue-500 text-white'
-                          : matchedRight
-                            ? 'bg-green-500 text-white'
-                            : 'bg-gray-200 text-gray-700'
-                      }`}
-                    >
-                      {isSel ? '→' : matchedRight ? '✓' : idx + 1}
-                    </span>
-                    <div className='min-w-0 flex-1'>
-                      <p className='font-semibold text-gray-900'>
-                        {getTranslation(left.translations, langId)?.text ?? ''}
-                      </p>
-                      {matchedRight && (
-                        <p className='mt-1 text-sm text-green-700'>
-                          {labels.matchedWith}{' '}
-                          <span className='italic'>
-                            {getTranslation(matchedRight.translations, langId)
-                              ?.text ?? ''}
-                          </span>
-                        </p>
-                      )}
-                    </div>
-                    {matchedRight && (
-                      <span
-                        role='button'
-                        tabIndex={0}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onRemoveMatch(question.id, left.id);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.stopPropagation();
-                            onRemoveMatch(question.id, left.id);
-                          }
-                        }}
-                        className='rounded-lg p-2 hover:bg-red-100'
-                        title={labels.removeMatch}
-                      >
-                        <XCircle className='size-5 text-red-500' />
-                      </span>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          {/* Right */}
-          <div className='space-y-3'>
-            <div className='mb-2 flex items-center justify-between'>
-              <h4 className='flex items-center gap-2 text-lg font-bold text-gray-900'>
-                <span className='flex size-8 items-center justify-center rounded-full bg-purple-500 text-sm font-bold text-white'>
-                  B
-                </span>
-                {labels.rightItems}
-              </h4>
-              {selectingLeft && (
-                <span className='animate-pulse text-sm font-medium text-blue-600'>
-                  {labels.selectMatch}
-                </span>
-              )}
-            </div>
-            {rights.map((right, idx) => {
-              const isMatched = Object.values(matched).includes(right.id);
-              const clickable = selectingLeft && !isMatched;
-              return (
-                <button
-                  key={right.id}
-                  type='button'
-                  disabled={!clickable}
-                  onClick={() =>
-                    onMatchingClick(question.id, right.id, 'right')
-                  }
-                  className={`w-full rounded-xl border-2 p-4 text-start transition-all ${
-                    isMatched
-                      ? 'cursor-not-allowed border-gray-300 bg-gray-100 opacity-60'
-                      : clickable
-                        ? 'border-purple-300 bg-white hover:border-purple-400 hover:bg-purple-50 hover:shadow-lg'
-                        : 'border-gray-300 bg-gray-50'
-                  }`}
-                >
-                  <div className='flex items-center gap-3'>
-                    <span
-                      className={`flex size-10 shrink-0 items-center justify-center rounded-full font-bold ${
-                        isMatched
-                          ? 'bg-gray-400 text-white'
-                          : clickable
-                            ? 'bg-purple-500 text-white'
-                            : 'bg-gray-300 text-gray-600'
-                      }`}
-                    >
-                      {isMatched ? '✓' : String.fromCharCode(65 + idx)}
-                    </span>
-                    <p
-                      className={`font-semibold ${
-                        isMatched
-                          ? 'text-gray-500 line-through'
-                          : 'text-gray-900'
-                      }`}
-                    >
-                      {getTranslation(right.translations, langId)?.text ?? ''}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const isMultiple = question.type === QuestionType.MultipleChoice;
-  const sorted = [...question.quizQuestionAnswers].sort(
-    (a, b) => a.order - b.order
-  );
-
-  return (
-    <>
-      {isMultiple && (
-        <div className='mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3'>
-          <p className='text-sm font-medium text-blue-800'>
-            📌 {labels.selectAllThatApply}
-          </p>
-        </div>
-      )}
-      {sorted.map((answer) => {
-        const text = answerLabel(answer, langId, labels);
-        const active = isMultiple
-          ? (state?.selectedAnswerIds ?? []).includes(answer.id)
-          : state?.selectedAnswerId === answer.id;
-        return (
-          <button
-            key={answer.id}
-            type='button'
-            onClick={() =>
-              isMultiple
-                ? onToggle(question.id, answer.id)
-                : onSingle(question.id, answer.id)
-            }
-            className={`w-full rounded-xl border-2 p-5 text-start transition-all hover:scale-[1.01] ${
-              active
-                ? 'border-[#00a8f1] bg-[#00a8f1]/10'
-                : 'border-gray-300 bg-white hover:border-[#00a8f1] hover:bg-gray-50'
-            }`}
-          >
-            <div className='flex items-center gap-4'>
-              <span
-                className={`flex size-10 shrink-0 items-center justify-center font-bold ${
-                  isMultiple ? 'rounded-md border-2' : 'rounded-full'
-                } ${
-                  active
-                    ? 'border-[#00a8f1] bg-[#00a8f1] text-white'
-                    : isMultiple
-                      ? 'border-gray-300 bg-white text-gray-700'
-                      : 'bg-gray-200 text-gray-700'
-                }`}
-              >
-                {isMultiple
-                  ? active
-                    ? '✓'
-                    : ''
-                  : String.fromCharCode(65 + answer.order - 1)}
-              </span>
-              <span
-                className={`text-lg font-medium ${active ? 'text-gray-900' : 'text-gray-700'}`}
-              >
-                {text}
-              </span>
-            </div>
-          </button>
-        );
-      })}
-    </>
-  );
-}
-
-function answerLabel(
-  answer: QuizAnswer,
-  langId: number,
-  labels: QuizLabels
-): string {
-  const text =
-    getTranslation(answer.translations, langId)?.text ?? `${answer.order}`;
-  const normalized = text.trim().toLowerCase();
-  if (normalized === 'true') return labels.trueLabel;
-  if (normalized === 'false') return labels.falseLabel;
-  return text;
-}
-
-function CenteredSpinner({ label }: { label: string }) {
-  return (
-    <div className='flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-white'>
-      <div className='space-y-4 text-center'>
-        <div className='mx-auto size-16 animate-spin rounded-full border-b-4 border-t-4 border-[#00a8f1]' />
-        <p className='text-lg font-medium text-gray-600'>{label}</p>
-      </div>
-    </div>
-  );
-}
-
-function CenteredMessage({
-  message,
-  actionHref,
-  actionLabel,
-}: {
-  message: string;
-  actionHref: string;
-  actionLabel: string;
-}) {
-  return (
-    <div className='flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-white px-4'>
-      <div className='w-full max-w-md space-y-6 rounded-2xl border border-red-200 bg-white p-8 text-center shadow-lg'>
-        <div className='mx-auto flex size-20 items-center justify-center rounded-full bg-red-100'>
-          <X className='size-10 text-red-600' />
-        </div>
-        <p className='text-lg text-gray-600'>{message}</p>
-        <Link
-          href={actionHref}
-          className='inline-block rounded-lg bg-[#00a8f1] px-6 py-3 font-medium text-white hover:opacity-90'
-        >
-          {actionLabel}
-        </Link>
-      </div>
+      >
+        {children}
+      </span>
+      <h2 className='text-xl font-bold text-[#1e2364]'>{title}</h2>
     </div>
   );
 }

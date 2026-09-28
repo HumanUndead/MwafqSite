@@ -18,7 +18,7 @@ export default async function QuizHistoryPage({
   const { lessonId } = await searchParams;
 
   return (
-    <MarketingStickyHeaderOffset variant='detail'>
+    <MarketingStickyHeaderOffset variant='academy'>
       <QuizHistory
         userCourseId={Number(userCourseId)}
         courseId={Number(courseId)}

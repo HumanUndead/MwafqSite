@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { cookies, headers } from 'next/headers';
 import localFont from 'next/font/local';
 import { ToastContainer } from '@/shared/components/feedback/Toast';
@@ -72,7 +73,10 @@ export default async function RootLayout({
       )}
     >
       <body className='min-h-full bg-[#f3f4f8] text-[#1e2364]'>
-        {children}
+        {/* Base UI primitives render their own `dir` from this provider. */}
+        <DirectionProvider direction={isRtl(locale) ? 'rtl' : 'ltr'}>
+          {children}
+        </DirectionProvider>
         <ToastContainer />
         <ChunkErrorReloader />
       </body>

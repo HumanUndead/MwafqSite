@@ -1,6 +1,12 @@
 'use client';
 
+import { ClipboardCheck } from 'lucide-react';
+
 import { Accordion } from '@/components/ui/accordion';
+import {
+  AcademySectionTitle,
+  GlassPanel,
+} from '@/modules/academy/components/ui/AcademyGlass';
 import type { CourseLesson, CourseViewQuiz } from '@/modules/auth/course.types';
 
 import { CourseLessonAccordionItem } from './CourseLessonAccordionItem';
@@ -13,6 +19,8 @@ export type CourseContentAccordionLabels = {
   finalExam: string;
   quizzesAndExams: string;
   minutes: string;
+  /** Optional `{{count}} lectures` template shown in each section header. */
+  lectures?: string;
 };
 
 type CourseContentAccordionProps = {
@@ -31,34 +39,44 @@ export function CourseContentAccordion({
     lessons.length > 0 ? [`lesson-${lessons[0]!.id}`] : undefined;
 
   return (
-    <div>
-      <div className='mb-3 inline-block text-[19px] font-extrabold tracking-[-0.3px] text-[#1e2364]'>
-        {labels.title}
-      </div>
-      <p className='mb-3.5 text-[13px] text-[#6b7196]'>{labels.meta}</p>
+    <section aria-labelledby='course-content-title'>
+      <AcademySectionTitle className='mb-1'>
+        <span id='course-content-title'>{labels.title}</span>
+      </AcademySectionTitle>
+      <p className='mb-4 text-sm text-[#6b7196]'>{labels.meta}</p>
 
-      <Accordion
-        multiple
-        defaultValue={defaultOpen}
-        className='overflow-hidden rounded-xl border border-[#e5e7f0] bg-white'
-      >
-        {lessons.map((lesson) => (
-          <CourseLessonAccordionItem key={lesson.id} lesson={lesson} labels={labels} />
-        ))}
-      </Accordion>
+      {lessons.length > 0 ? (
+        <GlassPanel className='overflow-hidden rounded-[20px]'>
+          <Accordion multiple defaultValue={defaultOpen}>
+            {lessons.map((lesson) => (
+              <CourseLessonAccordionItem
+                key={lesson.id}
+                lesson={lesson}
+                labels={labels}
+              />
+            ))}
+          </Accordion>
+        </GlassPanel>
+      ) : null}
 
       {courseQuizzes.length > 0 && (
-        <div className='mt-4 overflow-hidden rounded-xl border border-[#e5e7f0] bg-white'>
-          <p className='bg-[#eef0f7] px-[18px] py-3.5 text-[14.5px] font-bold text-[#1e2364]'>
+        <GlassPanel className='mt-4 overflow-hidden rounded-[20px]'>
+          <p className='flex items-center gap-3 border-b border-[#e5e7f0] bg-white/40 px-4 py-4 text-base font-bold text-[#1e2364] sm:px-5'>
+            <span
+              aria-hidden
+              className='flex size-7 shrink-0 items-center justify-center rounded-full bg-amber-50 ring-1 ring-amber-200'
+            >
+              <ClipboardCheck className='size-4 text-amber-600' />
+            </span>
             {labels.quizzesAndExams}
           </p>
-          <ul className='py-1 pb-2.5'>
+          <ul className='bg-white/60 py-1.5 pb-2.5'>
             {courseQuizzes.map((quiz) => (
               <CourseQuizRow key={quiz.id} quiz={quiz} labels={labels} />
             ))}
           </ul>
-        </div>
+        </GlassPanel>
       )}
-    </div>
+    </section>
   );
 }

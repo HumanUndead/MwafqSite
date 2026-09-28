@@ -50,6 +50,8 @@ export interface CheckoutCourse {
   id: number;
   categoryName: string | null;
   fullImagePath: string | null;
+  /** Audience flags: B2C = 1, B2B = 2, OSH = 4. */
+  target?: number;
   paymentSettings: (CoursePricing & { id?: number }) | null;
   translations: CheckoutCourseTranslation[];
 }

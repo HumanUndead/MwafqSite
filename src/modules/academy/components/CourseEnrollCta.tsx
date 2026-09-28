@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight } from 'lucide-react';
+import { CheckCircle2, PlayCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
@@ -20,8 +20,9 @@ interface CourseEnrollCtaProps {
   paymentSettings?: CoursePaymentSettings | null;
 }
 
+/** Full-width sky primary action used on the course landing purchase card. */
 const ctaClass =
-  'w-auto whitespace-nowrap rounded-full bg-[#00a8f1] px-4 py-2 text-xs font-bold text-white hover:bg-[#0098db]';
+  'h-12 w-full whitespace-nowrap rounded-full bg-[#00a8f1] px-6 text-[15px] font-bold text-white shadow-[0_10px_24px_-12px_rgba(0,168,241,0.8)] hover:bg-[#0090d1] focus:ring-0 focus:ring-offset-0 focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2';
 
 /**
  * Owned → Continue learning; pending payment → Continue payment (resume);
@@ -44,10 +45,19 @@ export function CourseEnrollCta({ courseId, courseTitle, paymentSettings }: Cour
 
   if (owned && !owned.awaitingPayment) {
     return (
-      <Link href={learnBasePath(locale, owned.enrollmentId, courseId)} className={cn(buttonVariants({ variant: 'brand' }), ctaClass)}>
-        {t.continueLearning}
-        <ArrowRight className='size-3 rtl:-scale-x-100' strokeWidth={2.4} aria-hidden />
-      </Link>
+      <div className='flex w-full flex-col gap-2'>
+        <p className='hidden items-center gap-1.5 text-sm font-semibold text-emerald-700 lg:flex'>
+          <CheckCircle2 className='size-4 shrink-0' aria-hidden />
+          {t.owned}
+        </p>
+        <Link
+          href={learnBasePath(locale, owned.enrollmentId, courseId)}
+          className={cn(buttonVariants({ variant: 'brand' }), ctaClass)}
+        >
+          <PlayCircle className='size-[18px] shrink-0' strokeWidth={2.2} aria-hidden />
+          {t.continueLearning}
+        </Link>
+      </div>
     );
   }
 
@@ -60,14 +70,7 @@ export function CourseEnrollCta({ courseId, courseTitle, paymentSettings }: Cour
       className={ctaClass}
       resume={owned ? { userCourseId: owned.enrollmentId, amountOwed: owned.amountOwed } : undefined}
       defaultOpen={!!owned && payParam === owned.enrollmentId}
-      label={
-        owned ? undefined : (
-          <>
-            {t.enrollNow}
-            <ArrowRight className='size-3 rtl:-scale-x-100' strokeWidth={2.4} aria-hidden />
-          </>
-        )
-      }
+      label={owned ? undefined : t.enrollNow}
     />
   );
 }

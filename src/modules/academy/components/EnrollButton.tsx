@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Lock } from 'lucide-react';
+import { Check, Lock, ShieldCheck } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
@@ -22,6 +22,9 @@ import {
   resolveSelectedService,
 } from '../selectedService.shared';
 import type { CoursePaymentSettings } from '../types/payment.types';
+
+const modalCtaClass =
+  'h-12 w-full bg-[#00a8f1] text-[15px] font-bold text-white hover:bg-[#0090d1] focus:ring-0 focus:ring-offset-0 focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2';
 
 interface EnrollButtonProps {
   courseId: number;
@@ -140,22 +143,25 @@ export function EnrollButton({
         onClose={() => setOpen(false)}
         title={resume ? t.reviewPayment : t.title}
       >
-        <div className='space-y-5'>
+        <div className='space-y-5 text-[#1e2364]'>
+          {courseTitle ? (
+            <p className='text-base font-semibold leading-snug wrap-break-word'>{courseTitle}</p>
+          ) : null}
           {resume ? (
-            <div className='flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3'>
-              <span className='text-sm text-gray-600'>{t.stillToPay}</span>
-              <SarAmount amount={resume.amountOwed} className='font-semibold text-[#1e2364]' />
+            <div className='flex items-center justify-between gap-3 rounded-2xl bg-amber-50 px-4 py-3.5 ring-1 ring-amber-200'>
+              <span className='text-sm font-semibold text-amber-800'>{t.stillToPay}</span>
+              <SarAmount amount={resume.amountOwed} className='text-base font-bold text-[#1e2364]' />
             </div>
           ) : (
             <>
-              <div className='flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3'>
-                <span className='text-sm text-gray-600'>{t.coursePrice}</span>
-                <SarAmount amount={price} className='font-semibold text-[#1e2364]' />
+              <div className='flex items-center justify-between gap-3 rounded-2xl bg-[#f3f4f8] px-4 py-3.5 ring-1 ring-[#e5e7f0]'>
+                <span className='text-sm text-[#6b7196]'>{t.coursePrice}</span>
+                <SarAmount amount={price} className='text-base font-bold text-[#1e2364]' />
               </div>
 
               {isSplit && (
-                <div className='space-y-3'>
-                  <p className='text-sm font-medium text-gray-700'>{t.addons}</p>
+                <div className='space-y-2.5'>
+                  <p className='text-sm font-semibold text-[#1e2364]'>{t.addons}</p>
                   <AddonToggle
                     label={t.addonSadad}
                     price={sadadPrice}
@@ -172,16 +178,16 @@ export function EnrollButton({
               )}
 
               {isBulk && (sadadPrice > 0 || certPrice > 0) && (
-                <ul className='space-y-1 text-sm text-gray-600'>
+                <ul className='space-y-2 rounded-2xl bg-[#f3f4f8] px-4 py-3 text-sm text-[#4a4f78] ring-1 ring-[#e5e7f0]'>
                   {sadadPrice > 0 && (
                     <li className='flex items-center gap-2'>
-                      <Check className='size-4 text-green-500' aria-hidden />
+                      <Check className='size-4 shrink-0 text-emerald-600' aria-hidden />
                       {t.addonSadad}
                     </li>
                   )}
                   {certPrice > 0 && (
                     <li className='flex items-center gap-2'>
-                      <Check className='size-4 text-green-500' aria-hidden />
+                      <Check className='size-4 shrink-0 text-emerald-600' aria-hidden />
                       {t.addonArkan}
                     </li>
                   )}
@@ -190,19 +196,22 @@ export function EnrollButton({
             </>
           )}
 
-          <div className='flex items-center justify-between border-t border-gray-200 pt-4'>
-            <span className='text-base font-semibold text-gray-900'>{t.total}</span>
-            <SarAmount amount={total} className='text-xl font-bold text-[#00a8f1]' />
+          <div className='flex items-center justify-between gap-3 border-t border-[#e5e7f0] pt-4'>
+            <span className='text-base font-semibold text-[#1e2364]'>{t.total}</span>
+            <SarAmount amount={total} className='text-[28px] font-bold leading-none text-[#1e2364]' />
           </div>
 
           {!payable && (
-            <p className='text-sm font-semibold text-[#6b7196]'>{t.priceUnavailable}</p>
+            <p className='rounded-xl bg-[#f3f4f8] px-3 py-2 text-sm font-semibold text-[#6b7196]'>
+              {t.priceUnavailable}
+            </p>
           )}
 
           {isAuthenticated ? (
             <Button
               variant='brand'
-              className='w-full'
+              shape='pill'
+              className={modalCtaClass}
               onClick={handleProceed}
               disabled={!payable}
               type='button'
@@ -210,18 +219,27 @@ export function EnrollButton({
               {t.proceed}
             </Button>
           ) : (
-            <div className='space-y-2'>
-              <p className='flex items-center justify-center gap-2 text-sm text-gray-500'>
-                <Lock className='size-4' aria-hidden />
+            <div className='space-y-2.5'>
+              <p className='flex items-center justify-center gap-2 text-sm text-[#6b7196]'>
+                <Lock className='size-4 shrink-0' aria-hidden />
                 {t.loginToPay}
               </p>
-              <Button variant='brand' className='w-full' onClick={goToLogin} type='button'>
+              <Button
+                variant='brand'
+                shape='pill'
+                className={modalCtaClass}
+                onClick={goToLogin}
+                type='button'
+              >
                 {t.loginCta}
               </Button>
             </div>
           )}
 
-          <p className='text-center text-xs text-gray-400'>{t.securePayment}</p>
+          <p className='flex items-center justify-center gap-1.5 text-center text-xs text-[#6b7196]'>
+            <ShieldCheck className='size-3.5 shrink-0 text-emerald-600' aria-hidden />
+            {t.securePayment}
+          </p>
         </div>
       </Modal>
 
@@ -254,23 +272,28 @@ function AddonToggle({
   return (
     <Button
       type='button'
-      variant={selected ? 'brand' : 'outline'}
+      variant='outline'
       onClick={onToggle}
       aria-pressed={selected}
-      className='w-full justify-between rounded-xl px-4 py-3'
+      className={cn(
+        'w-full justify-between rounded-2xl px-4 py-3 text-[#1e2364] focus:ring-0 focus:ring-offset-0 focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2',
+        selected
+          ? 'border-[#00a8f1] bg-[#00a8f1]/10 hover:bg-[#00a8f1]/15'
+          : 'border-[#e5e7f0] bg-white hover:bg-[#f3f4f8]'
+      )}
     >
-      <span className='flex items-center gap-2'>
+      <span className='flex items-center gap-2.5 text-start'>
         <span
           className={cn(
-            'flex size-5 items-center justify-center rounded-md border',
-            selected ? 'border-white bg-white/20' : 'border-gray-300'
+            'flex size-5 shrink-0 items-center justify-center rounded-md border',
+            selected ? 'border-[#00a8f1] bg-[#00a8f1] text-white' : 'border-[#c9cde0] bg-white'
           )}
         >
           {selected && <Check className='size-3.5' aria-hidden />}
         </span>
         {label}
       </span>
-      <span className='inline-flex items-center gap-1 font-semibold'>
+      <span className='inline-flex shrink-0 items-center gap-1 font-bold'>
         + <SarAmount amount={price} />
       </span>
     </Button>

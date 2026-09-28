@@ -3,32 +3,33 @@
 import {
   ArrowRight,
   CheckCircle2,
+  Clock,
+  Hash,
+  Loader2,
   RotateCcw,
-  Trophy,
   XCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { useAuthStore } from '@/modules/auth/store/authStore';
-import { buttonVariants } from '@/shared/components/ui/Button';
+import { Button, buttonVariants } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/cn';
 import { interpolate } from '@/shared/lib/interpolate';
 import { useQuizAttempts } from '../hooks/useQuiz';
-import { MatchingAttemptReview } from './MatchingAttemptReview';
-import type { Dictionary } from '@/locales/types';
 import { localeToLangId } from '@/i18n/config';
-import { Button } from '@/shared/components/ui/Button';
 import {
   PASS_THRESHOLD_PERCENT,
+  formatDuration,
   getScorePercentage,
-  getTranslation,
 } from '../quizScoring.shared';
-import { QuestionType } from '../types/quiz.types';
-import type {
-  QuizAttemptDetail,
-  QuizData,
-  QuizQuestion,
-} from '../types/quiz.types';
+import type { QuizAttemptDetail, QuizData } from '../types/quiz.types';
+import {
+  AcademyBackdrop,
+  AcademyStage,
+  ProgressRing,
+  StatChip,
+} from './ui/AcademyGlass';
+import { QuizReviewList } from './results/QuizReviewList';
 
 interface QuizResultsProps {
   quiz: QuizData;
@@ -39,6 +40,18 @@ interface QuizResultsProps {
   onRetake: () => void;
   onBackToCourse: () => void;
 }
+
+/** Stage-friendly button overrides (focus ring must read on navy). */
+const stageFocus =
+  'focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#141848]';
+const stagePrimary = cn(
+  'bg-[#00a8f1] text-white hover:bg-[#0090d1] focus:ring-0 focus:ring-offset-0',
+  stageFocus
+);
+const stageSecondary = cn(
+  'border border-white/30 bg-white/5 text-white hover:bg-white/15 hover:text-white focus:ring-0 focus:ring-offset-0',
+  stageFocus
+);
 
 export function QuizResults({
   quiz,
@@ -71,207 +84,153 @@ export function QuizResults({
       getScorePercentage(entry.attemptScore, history.data?.quizScore || total) >=
       PASS_THRESHOLD_PERCENT
   );
+  const wrong = attempt ? Math.max(0, total - attempt.attemptScore) : 0;
+  const attemptNumber = history.data
+    ? (history.data.totalRecords ?? earlierAttempts.length + 1)
+    : null;
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
-      {/* Header */}
-      <div className='border-b border-gray-200 bg-white shadow-sm'>
-        <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
-          <h1 className='text-lg font-bold text-gray-900 sm:text-xl'>
-            {quiz.title || t.resultsTitle}
-          </h1>
-        </div>
-      </div>
+    <AcademyBackdrop>
+      <AcademyStage innerClassName='max-w-4xl'>
+        <p className='text-sm font-semibold text-white/70'>
+          {quiz.title || t.resultsTitle}
+        </p>
 
-      <div className='mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12'>
-        <div className='overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl'>
-          {/* Score */}
-          <div className='bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 px-6 py-12 text-center sm:px-12 sm:py-16'>
-            {!attempt ? (
-              <div>
-                <div className='mx-auto mb-4 size-16 animate-spin rounded-full border-b-4 border-t-4 border-[#00a8f1]' />
-                <p className='text-gray-600'>{t.loadingResults}</p>
-              </div>
-            ) : (
-              <ScoreSummary attempt={attempt} labels={t} />
-            )}
+        {!attempt ? (
+          <div className='flex flex-col items-center gap-4 py-12 text-center' role='status'>
+            <Loader2 className='size-10 text-[#00a8f1] motion-safe:animate-spin' aria-hidden />
+            <p className='text-base text-white/80'>{t.loadingResults}</p>
           </div>
-
-          {/* Outcome (mobile: pass mark 80%) */}
-          {attempt && (
-            <div
-              className={cn(
-                'border-t px-6 py-5 text-center',
-                passed ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
-              )}
-              role='status'
-            >
-              <p className={cn('text-lg font-bold', passed ? 'text-green-700' : 'text-red-700')}>
-                {passed ? t.passedTitle : t.failedTitle}
-              </p>
-              <p className='mt-1 text-sm text-gray-700'>
-                {passed
-                  ? interpolate(t.passedBody, { percentage })
-                  : interpolate(t.failedBody, {
-                      percentage,
-                      threshold: PASS_THRESHOLD_PERCENT,
-                    })}
-              </p>
+        ) : (
+          <div className='mt-6 flex flex-col items-center gap-8 text-center sm:flex-row sm:items-center sm:gap-10 sm:text-start'>
+            <div className='flex flex-col items-center gap-2'>
+              <ProgressRing
+                value={percentage}
+                size={152}
+                stroke={12}
+                label={`${t.yourScore}: ${percentage}%`}
+              />
+              <span className='text-sm text-white/70'>{t.yourScore}</span>
             </div>
-          )}
 
-          {/* Actions */}
-          <div className='flex flex-col gap-3 border-t border-gray-200 p-6 sm:flex-row sm:justify-center'>
-            {attempt && passed ? (
-              <Link href={nextHref} className={buttonVariants({ variant: 'brand' })}>
-                {t.continueNext}
-                <ArrowRight className='size-4 rtl:-scale-x-100' />
-              </Link>
-            ) : (
-              <Button variant='brand' onClick={onRetake} type='button'>
-                <RotateCcw className='size-4' />
-                {t.retake}
-              </Button>
-            )}
-            {attempt && !passed && passedBefore && (
-              <Link href={nextHref} className={buttonVariants({ variant: 'outline' })}>
-                {t.continueAnyway}
-              </Link>
-            )}
-            <Button variant='outline' onClick={onBackToCourse} type='button'>
-              {t.backToCourse}
-            </Button>
-          </div>
-        </div>
+            <div className='min-w-0 flex-1'>
+              <p className='text-sm text-white/70'>{t.quizCompleted}</p>
+              <div role='status' className='mt-1'>
+                <h1 className='flex items-center justify-center gap-2 text-[28px] font-bold leading-tight sm:justify-start sm:text-4xl'>
+                  {passed ? (
+                    <CheckCircle2 className='size-8 shrink-0 text-emerald-400' aria-hidden />
+                  ) : (
+                    <XCircle className='size-8 shrink-0 text-red-400' aria-hidden />
+                  )}
+                  {passed ? t.passedTitle : t.failedTitle}
+                </h1>
+                <p className='mt-2 max-w-xl text-base leading-relaxed text-white/80'>
+                  {passed
+                    ? interpolate(t.passedBody, { percentage })
+                    : interpolate(t.failedBody, {
+                        percentage,
+                        threshold: PASS_THRESHOLD_PERCENT,
+                      })}
+                </p>
+              </div>
 
-        {/* Review */}
-        {attempt && (
-          <div className='mt-8 space-y-4'>
-            <h2 className='text-xl font-bold text-[#1e2364]'>
-              {t.reviewAnswers}
-            </h2>
-            {flattenQuestions(attempt.qustions).map((question, index) => {
-              const questionText =
-                getTranslation(question.translations, langId)?.text ?? '';
-              const userAnswers = attempt.answers.filter(
-                (a) => a.questionId === question.id
-              );
-              const userAnswerIds = userAnswers.map((a) => a.answerId);
+              <p className='mt-4 text-white/70'>
+                <span className='text-sm'>{t.score} </span>
+                <span className='text-xl font-bold text-white' dir='ltr'>
+                  {attempt.attemptScore}/{total}
+                </span>
+              </p>
 
-              if (question.type === QuestionType.Matching) {
-                return (
-                  <div key={question.id} className='rounded-2xl border border-gray-200 bg-white p-5 shadow-sm'>
-                    <p className='mb-3 font-semibold text-gray-900'>
-                      {index + 1}. {questionText}
-                    </p>
-                    <MatchingAttemptReview question={question} answers={attempt.answers} langId={langId} />
-                  </div>
-                );
-              }
-
-              return (
-                <div
-                  key={question.id}
-                  className='rounded-2xl border border-gray-200 bg-white p-5 shadow-sm'
-                >
-                  <p className='mb-3 font-semibold text-gray-900'>
-                    {index + 1}. {questionText}
-                  </p>
-                  <ul className='space-y-2'>
-                    {question.quizQuestionAnswers.map((answer) => {
-                      const answerText =
-                        getTranslation(answer.translations, langId)?.text ?? '';
-                      const chosen = userAnswerIds.includes(answer.id);
-                      return (
-                        <li
-                          key={answer.id}
-                          className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
-                            answer.isCorrect
-                              ? 'border-green-300 bg-green-50 text-green-800'
-                              : chosen
-                                ? 'border-red-300 bg-red-50 text-red-800'
-                                : 'border-gray-200 text-gray-700'
-                          }`}
-                        >
-                          {answer.isCorrect ? (
-                            <CheckCircle2 className='size-4 shrink-0 text-green-600' />
-                          ) : chosen ? (
-                            <XCircle className='size-4 shrink-0 text-red-600' />
-                          ) : (
-                            <span className='size-4 shrink-0' />
-                          )}
-                          <span>{answerText}</span>
-                          {chosen && (
-                            <span className='ms-auto text-xs font-medium opacity-70'>
-                              {answer.isCorrect ? t.correct : t.incorrect}
-                            </span>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              );
-            })}
+              <ul className='mt-4 flex flex-wrap justify-center gap-2 sm:justify-start'>
+                <li>
+                  <StatChip
+                    tone='dark'
+                    icon={<CheckCircle2 className='size-4 text-emerald-400' aria-hidden />}
+                  >
+                    {t.correctAnswers}: {attempt.attemptScore}
+                  </StatChip>
+                </li>
+                <li>
+                  <StatChip
+                    tone='dark'
+                    icon={<XCircle className='size-4 text-red-400' aria-hidden />}
+                  >
+                    {t.wrongAnswers}: {wrong}
+                  </StatChip>
+                </li>
+                <li>
+                  <StatChip
+                    tone='dark'
+                    icon={<Clock className='size-4 text-[#00a8f1]' aria-hidden />}
+                  >
+                    {t.duration}:{' '}
+                    <span dir='ltr'>{formatDuration(attempt.startTime, attempt.endTime)}</span>
+                  </StatChip>
+                </li>
+                {attemptNumber !== null && (
+                  <li>
+                    <StatChip
+                      tone='dark'
+                      icon={<Hash className='size-4 text-[#00a8f1]' aria-hidden />}
+                    >
+                      {t.attempt} {attemptNumber}
+                    </StatChip>
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
         )}
-      </div>
-    </div>
-  );
-}
 
-function ScoreSummary({
-  attempt,
-  labels,
-}: {
-  attempt: QuizAttemptDetail;
-  labels: Dictionary['academyQuiz'];
-}) {
-  const total = attempt.quizScore || attempt.qustions.length || 0;
-  const percentage = getScorePercentage(attempt.attemptScore, total);
-  const wrong = Math.max(0, total - attempt.attemptScore);
-
-  return (
-    <div>
-      <div className='mx-auto mb-6 flex size-32 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 shadow-2xl sm:size-40'>
-        <Trophy className='size-16 text-white sm:size-20' />
-      </div>
-      <h2 className='mb-3 text-3xl font-bold text-gray-900 sm:text-4xl'>
-        {labels.quizCompleted}
-      </h2>
-      <div className='mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-6xl font-bold text-transparent sm:text-7xl'>
-        {attempt.attemptScore}/{total}
-      </div>
-      <p className='mb-2 text-lg text-gray-700 sm:text-xl'>
-        {labels.yourScore}: {percentage}%
-      </p>
-
-      <div className='mx-auto mt-8 grid max-w-md grid-cols-2 gap-6'>
-        <div className='rounded-xl bg-green-100 p-4'>
-          <CheckCircle2 className='mx-auto mb-2 size-6 text-green-600' />
-          <p className='text-2xl font-bold text-green-700'>
-            {attempt.attemptScore}
-          </p>
-          <p className='text-xs font-medium text-green-600'>
-            {labels.correctAnswers}
-          </p>
+        {/* Actions */}
+        <div className='mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:flex-wrap sm:items-center'>
+          {attempt && passed ? (
+            <Link
+              href={nextHref}
+              className={cn(buttonVariants({ variant: 'brand', size: 'lg', shape: 'pill' }), stagePrimary)}
+            >
+              {t.continueNext}
+              <ArrowRight className='size-4 rtl:rotate-180' aria-hidden />
+            </Link>
+          ) : (
+            <Button
+              variant='brand'
+              size='lg'
+              shape='pill'
+              onClick={onRetake}
+              type='button'
+              className={stagePrimary}
+            >
+              <RotateCcw className='size-4' aria-hidden />
+              {t.retake}
+            </Button>
+          )}
+          {attempt && !passed && passedBefore && (
+            <Link
+              href={nextHref}
+              className={cn(buttonVariants({ variant: 'outline', size: 'lg', shape: 'pill' }), stageSecondary)}
+            >
+              {t.continueAnyway}
+            </Link>
+          )}
+          <Button
+            variant='outline'
+            size='lg'
+            shape='pill'
+            onClick={onBackToCourse}
+            type='button'
+            className={cn(stageSecondary, 'sm:ms-auto border-transparent bg-transparent')}
+          >
+            {t.backToCourse}
+          </Button>
         </div>
-        <div className='rounded-xl bg-red-100 p-4'>
-          <XCircle className='mx-auto mb-2 size-6 text-red-600' />
-          <p className='text-2xl font-bold text-red-700'>{wrong}</p>
-          <p className='text-xs font-medium text-red-600'>
-            {labels.wrongAnswers}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
+      </AcademyStage>
 
-function flattenQuestions(questions: QuizQuestion[]): QuizQuestion[] {
-  return questions.flatMap((question) =>
-    question.type === QuestionType.Video
-      ? (question.relatedQuizQuestions ?? [])
-      : [question]
+      {attempt && (
+        <div className='mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14'>
+          <QuizReviewList attempt={attempt} langId={langId} />
+        </div>
+      )}
+    </AcademyBackdrop>
   );
 }

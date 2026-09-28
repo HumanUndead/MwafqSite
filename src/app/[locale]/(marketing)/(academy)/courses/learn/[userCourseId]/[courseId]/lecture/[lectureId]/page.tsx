@@ -13,7 +13,7 @@ export default async function LecturePage({ params }: PageProps) {
   const { userCourseId, courseId, lectureId } = await params;
 
   return (
-    <MarketingStickyHeaderOffset variant='detail'>
+    <MarketingStickyHeaderOffset variant='academy'>
       <LecturePlayer
         key={lectureId}
         userCourseId={Number(userCourseId)}

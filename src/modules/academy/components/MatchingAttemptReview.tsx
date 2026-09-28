@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { ArrowLeftRight, CheckCircle2, XCircle } from 'lucide-react';
 import { useTranslations } from '@/i18n/DictionaryProvider';
 import { cn } from '@/shared/lib/cn';
 import { interpolate } from '@/shared/lib/interpolate';
@@ -34,27 +34,31 @@ export function MatchingAttemptReview({ question, answers, langId }: MatchingAtt
           <li
             key={left.id}
             className={cn(
-              'rounded-lg border px-3 py-2 text-sm',
-              correct ? 'border-green-300 bg-green-50 text-green-800' : 'border-red-300 bg-red-50 text-red-800'
+              'rounded-xl px-3 py-2.5 text-sm ring-1',
+              correct
+                ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
+                : 'bg-red-50 text-red-700 ring-red-200'
             )}
           >
-            <p className='mb-1 text-xs font-medium opacity-70'>
+            <p className='mb-1.5 flex items-center gap-1.5 text-xs font-semibold'>
+              {correct ? (
+                <CheckCircle2 className='size-4 shrink-0 text-emerald-600' aria-label={t.correct} />
+              ) : (
+                <XCircle className='size-4 shrink-0 text-red-600' aria-label={t.incorrect} />
+              )}
               {interpolate(t.matchedPair, { count: index + 1 })}
             </p>
-            <p className='flex flex-wrap items-center gap-2'>
-              {correct ? (
-                <CheckCircle2 className='size-4 shrink-0 text-green-600' aria-hidden />
-              ) : (
-                <XCircle className='size-4 shrink-0 text-red-600' aria-hidden />
-              )}
-              <span>{getTranslation(left.translations, langId)?.text ?? ''}</span>
-              <span aria-hidden>↔</span>
-              <span>{right ? (getTranslation(right.translations, langId)?.text ?? '') : ''}</span>
+            <p className='flex flex-wrap items-center gap-2 font-semibold'>
+              <span className='min-w-0 break-words'>{getTranslation(left.translations, langId)?.text ?? ''}</span>
+              <ArrowLeftRight className='size-4 shrink-0 opacity-60' aria-hidden />
+              <span className='min-w-0 break-words'>
+                {right ? (getTranslation(right.translations, langId)?.text ?? '') : ''}
+              </span>
             </p>
           </li>
         );
       })}
-      {mine.length === 0 && <li className='text-sm text-gray-500'>{t.noAnswer}</li>}
+      {mine.length === 0 && <li className='text-sm text-[#6b7196]'>{t.noAnswer}</li>}
     </ul>
   );
 }

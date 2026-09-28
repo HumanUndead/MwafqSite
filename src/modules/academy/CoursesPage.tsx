@@ -5,6 +5,7 @@ import { fetchCourseCategoryList } from '@/modules/auth/server/courseCategoryLis
 import { MarketingStickyHeaderOffset } from '@/shared/components/marketing';
 import { getTranslationName } from '@/shared/lib/getTranslationName';
 import { CoursesView } from './components/CoursesView';
+import { AcademyBackdrop } from './components/ui/AcademyGlass';
 import { getAcademyLanguage } from './server/academyLanguage';
 
 type CoursesPageProps = {
@@ -38,10 +39,16 @@ export async function CoursesPage({ locale }: CoursesPageProps) {
   ];
 
   return (
-    <MarketingStickyHeaderOffset variant='filter'>
-      <CoursesView categories={categories.data} locale={locale}>
-        {carousels}
-      </CoursesView>
-    </MarketingStickyHeaderOffset>
+    <AcademyBackdrop>
+      {/* The floating header is transparent with navy text at the top of the
+          page, so the navy stage starts just below it as an inset panel. */}
+      <MarketingStickyHeaderOffset
+        variant='academy'
+      >
+        <CoursesView categories={categories.data} locale={locale}>
+          {carousels}
+        </CoursesView>
+      </MarketingStickyHeaderOffset>
+    </AcademyBackdrop>
   );
 }

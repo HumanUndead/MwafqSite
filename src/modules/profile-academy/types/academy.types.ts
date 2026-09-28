@@ -66,6 +66,8 @@ export interface AcademyCourseRow {
   id: string;
   title: string;
   description: string;
+  /** Cover image URL, or null when the course has none. */
+  image: string | null;
   progress: number;
   transitionDelay: number;
   /** User-course id. */

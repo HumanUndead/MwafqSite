@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import type { Locale } from '@/i18n/config';
 import { getAcademyDictionary } from '@/i18n/academyDictionary';
 import { DictionaryProvider } from '@/i18n/DictionaryProvider';
@@ -20,9 +21,11 @@ export async function AcademyScope({
   return (
     <DictionaryProvider dict={dict} locale={locale}>
       <AcademyLanguageProvider language={language}>
-        <div dir={academyDir(language)} lang={language}>
-          {children}
-        </div>
+        <DirectionProvider direction={academyDir(language)}>
+          <div dir={academyDir(language)} lang={language}>
+            {children}
+          </div>
+        </DirectionProvider>
       </AcademyLanguageProvider>
     </DictionaryProvider>
   );

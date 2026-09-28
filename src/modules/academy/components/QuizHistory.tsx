@@ -2,30 +2,41 @@
 
 import {
   Award,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Clock,
   FileText,
   Loader2,
+  XCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
-import { isRtl } from '@/i18n/config';
 import { useAuthStore } from '@/modules/auth/store/authStore';
-import { Button } from '@/shared/components/ui/Button';
+import { Button, buttonVariants } from '@/shared/components/ui/Button';
+import { cn } from '@/shared/lib/cn';
 import { useQuizAttempts } from '../hooks/useQuiz';
 import {
+  PASS_THRESHOLD_PERCENT,
   formatDuration,
   formatQuizDate,
-  getScoreBadgeColor,
   getScorePercentage,
 } from '../quizScoring.shared';
 import { learnBasePath, quizPath } from '../learnRoutes.shared';
 import type { UserQuizAttempt } from '../types/quiz.types';
 import { QuizAttemptModal } from './QuizAttemptModal';
+import {
+  AcademyBackdrop,
+  AcademyStage,
+  GlassPanel,
+  ProgressRing,
+} from './ui/AcademyGlass';
 
 const ATTEMPTS_PAGE_SIZE = 8;
+
+const focusRing =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f4f8]';
 
 interface QuizHistoryProps {
   userCourseId: number;
@@ -42,7 +53,6 @@ export function QuizHistory({
 }: QuizHistoryProps) {
   const t = useTranslations('academyQuiz');
   const locale = useLocale();
-  const rtl = isRtl(locale);
   const user = useAuthStore((state) => state.user);
   const [selectedAttemptId, setSelectedAttemptId] = useState<number | null>(
     null
@@ -69,53 +79,87 @@ export function QuizHistory({
   );
   const pageStart = (currentPage - 1) * ATTEMPTS_PAGE_SIZE;
   const pageAttempts = attempts;
-  const BackIcon = rtl ? ChevronRight : ChevronLeft;
-  const NextIcon = rtl ? ChevronLeft : ChevronRight;
+  // Best score is only meaningful when every attempt is on this one page.
+  const bestPercentage =
+    attempts.length > 0 && totalPages === 1
+      ? Math.max(
+          ...attempts.map((attempt) =>
+            getScorePercentage(
+              attempt.attemptScore,
+              attempt.quizScore || fallbackTotal
+            )
+          )
+        )
+      : null;
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
-      {/* Header */}
-      <div className='border-b border-gray-200 bg-white shadow-sm'>
-        <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center gap-4'>
-            <Link
-              href={learnBasePath(locale, userCourseId, courseId)}
-              className='rounded-lg p-2 text-gray-700 transition-colors hover:bg-gray-100'
-              aria-label={t.backToCourse}
-            >
-              <BackIcon className='size-5' />
-            </Link>
-            <h1 className='text-lg font-bold text-gray-900 sm:text-xl'>
-              {t.historyTitle}
-            </h1>
+    <AcademyBackdrop>
+      <AcademyStage innerClassName='py-8 lg:py-10'>
+        <div className='flex flex-wrap items-center gap-4 sm:gap-6'>
+          <Link
+            href={learnBasePath(locale, userCourseId, courseId)}
+            className='flex size-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-xl transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#141848]'
+            aria-label={t.backToCourse}
+          >
+            <ChevronLeft className='size-5 rtl:rotate-180' aria-hidden />
+          </Link>
+          <div className='min-w-0 flex-1'>
+            {data?.quizName ? (
+              <>
+                <p className='text-sm text-white/70'>{t.historyTitle}</p>
+                <h1 className='mt-1 text-xl font-bold leading-tight sm:text-[28px]'>
+                  {data.quizName}
+                </h1>
+              </>
+            ) : (
+              <h1 className='text-xl font-bold leading-tight sm:text-[28px]'>
+                {t.historyTitle}
+              </h1>
+            )}
           </div>
+          {bestPercentage !== null && (
+            <div className='flex items-center gap-3'>
+              <ProgressRing
+                value={bestPercentage}
+                size={72}
+                stroke={6}
+                label={`${t.score}: ${bestPercentage}%`}
+              />
+              <span className='text-sm text-white/70'>{t.score}</span>
+            </div>
+          )}
         </div>
-      </div>
+      </AcademyStage>
 
-      <div className='mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12'>
+      <div className='mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12'>
         {isLoading ? (
-          <div className='flex items-center justify-center py-20'>
-            <Loader2 className='size-10 animate-spin text-[#00a8f1]' />
+          <div className='flex items-center justify-center py-20' role='status'>
+            <Loader2 className='size-10 text-[#00a8f1] motion-safe:animate-spin' aria-hidden />
+            <span className='sr-only'>{t.loading}</span>
           </div>
         ) : attempts.length === 0 ? (
-          <div className='mx-auto max-w-md rounded-2xl border border-gray-200 bg-white p-10 text-center shadow-lg'>
-            <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-gray-100'>
-              <FileText className='size-8 text-gray-400' />
+          <GlassPanel className='mx-auto max-w-md p-10 text-center'>
+            <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-[#1e2364]/[0.06]'>
+              <FileText className='size-8 text-[#6b7196]' aria-hidden />
             </div>
-            <h2 className='mb-2 text-xl font-bold text-gray-900'>
+            <h2 className='mb-4 text-xl font-bold text-[#1e2364]'>
               {t.noAttempts}
             </h2>
             <Link
               href={quizPath(locale, userCourseId, courseId, quizId)}
-              className='mt-2 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#00a8f1] to-[#1e2364] px-6 py-3 font-semibold text-white transition-all hover:opacity-90'
+              className={cn(
+                buttonVariants({ variant: 'brand', size: 'lg', shape: 'pill' }),
+                'bg-[#00a8f1] hover:bg-[#0090d1] focus:ring-0 focus:ring-offset-0',
+                focusRing
+              )}
             >
               {t.start}
-              <NextIcon className='size-5' />
+              <ChevronRight className='size-5 rtl:rotate-180' aria-hidden />
             </Link>
-          </div>
+          </GlassPanel>
         ) : (
-          <div className='overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg'>
-            <div className='grid grid-cols-1 gap-4 p-6 md:grid-cols-2 lg:grid-cols-3'>
+          <>
+            <ol className='space-y-3'>
               {pageAttempts.map((attempt, pageIndex) => {
                 const index = pageStart + pageIndex;
                 const id = attempt.id ?? attempt.attemptId ?? null;
@@ -126,110 +170,138 @@ export function QuizHistory({
                 );
                 // Newest first: number attempts chronologically.
                 const attemptNumber = Math.max(1, totalRecords - index);
-                const badge = getScoreBadgeColor(percentage);
+                const passed = percentage >= PASS_THRESHOLD_PERCENT;
 
-                return (
-                  <div
-                    key={id ?? index}
-                    role={id !== null ? 'button' : undefined}
-                    tabIndex={id !== null ? 0 : undefined}
-                    onClick={() => id !== null && setSelectedAttemptId(id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && id !== null) {
-                        setSelectedAttemptId(id);
-                      }
-                    }}
-                    className='group cursor-pointer rounded-xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-5 transition-all duration-300 hover:border-[#00a8f1]/30 hover:shadow-lg'
-                  >
-                    <div className='mb-4 flex items-start justify-between'>
-                      <div className='flex-1'>
-                        <div className='mb-1 text-sm text-gray-600'>
+                const content = (
+                  <>
+                    <ProgressRing
+                      value={percentage}
+                      size={60}
+                      stroke={5}
+                      tone='light'
+                      label={`${t.score}: ${percentage}%`}
+                    />
+                    <div className='min-w-0 flex-1'>
+                      <div className='flex flex-wrap items-center gap-2'>
+                        <span className='text-base font-bold text-[#1e2364]'>
                           {t.attempt} #{attemptNumber}
-                        </div>
-                        <div className='text-xs text-gray-500'>
-                          {formatQuizDate(attempt.startTime, locale)}
-                        </div>
+                        </span>
+                        <span
+                          className={cn(
+                            'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1',
+                            passed
+                              ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                              : 'bg-red-50 text-red-700 ring-red-200'
+                          )}
+                        >
+                          {passed ? (
+                            <CheckCircle2 className='size-3.5' aria-hidden />
+                          ) : (
+                            <XCircle className='size-3.5' aria-hidden />
+                          )}
+                          {passed ? t.passed : t.failed}
+                        </span>
                       </div>
-                      <div
-                        className={`rounded-full px-3 py-1 text-sm font-bold ${badge}`}
-                      >
-                        {percentage}%
-                      </div>
-                    </div>
-
-                    <div className='mb-4 space-y-3'>
-                      <div className='flex items-center gap-2 text-gray-700'>
-                        <Award className='size-4 text-[#00a8f1]' />
-                        <span className='text-sm'>
+                      <p className='mt-1 text-sm text-[#6b7196]'>
+                        <span className='sr-only'>{t.date}: </span>
+                        {formatQuizDate(attempt.startTime, locale)}
+                      </p>
+                      <div className='mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-[#6b7196]'>
+                        <span className='inline-flex items-center gap-1.5'>
+                          <Award className='size-4 text-[#00a8f1]' aria-hidden />
                           {t.score}:{' '}
-                          <span className='font-bold'>
+                          <span className='font-semibold text-[#1e2364]' dir='ltr'>
                             {attempt.attemptScore}
                             {total > 0 ? `/${total}` : ''}
                           </span>
                         </span>
-                      </div>
-                      <div className='flex items-center gap-2 text-gray-700'>
-                        <Clock className='size-4 text-[#00a8f1]' />
-                        <span className='text-sm'>
+                        <span className='inline-flex items-center gap-1.5'>
+                          <Clock className='size-4 text-[#00a8f1]' aria-hidden />
                           {t.duration}:{' '}
-                          <span className='font-bold'>
+                          <span className='font-semibold text-[#1e2364]' dir='ltr'>
                             {formatDuration(attempt.startTime, attempt.endTime)}
                           </span>
                         </span>
                       </div>
                     </div>
-
-                    <div className='mb-4 h-2 w-full overflow-hidden rounded-full bg-gray-200'>
-                      <div
-                        className={`h-full transition-all duration-300 ${
-                          percentage >= 80
-                            ? 'bg-green-500'
-                            : percentage >= 60
-                              ? 'bg-yellow-500'
-                              : 'bg-red-500'
-                        }`}
-                        style={{ width: `${percentage}%` }}
+                    {id !== null && (
+                      <span className='hidden shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-sm font-semibold text-[#00a8f1] transition-colors group-hover:bg-[#00a8f1]/10 sm:inline-flex'>
+                        {t.viewDetails}
+                        <ChevronRight className='size-4 rtl:rotate-180' aria-hidden />
+                      </span>
+                    )}
+                    {id !== null && (
+                      <ChevronRight
+                        className='size-5 shrink-0 text-[#00a8f1] sm:hidden rtl:rotate-180'
+                        aria-hidden
                       />
-                    </div>
+                    )}
+                  </>
+                );
 
-                    <div className='w-full rounded-lg border border-[#00a8f1] py-2 text-center text-sm font-medium text-[#00a8f1] transition-colors group-hover:bg-[#00a8f1] group-hover:text-white'>
-                      {t.viewDetails}
-                    </div>
-                  </div>
+                return (
+                  <li key={id ?? index}>
+                    {id !== null ? (
+                      <GlassPanel
+                        as='button'
+                        type='button'
+                        onClick={() => setSelectedAttemptId(id)}
+                        aria-label={`${t.viewDetails}: ${t.attempt} #${attemptNumber}`}
+                        className={cn(
+                          'group flex w-full items-center gap-4 rounded-2xl p-4 text-start transition-colors hover:border-[#00a8f1]/40 hover:bg-white/90 sm:p-5',
+                          focusRing
+                        )}
+                      >
+                        {content}
+                      </GlassPanel>
+                    ) : (
+                      <GlassPanel className='flex items-center gap-4 rounded-2xl p-4 sm:p-5'>
+                        {content}
+                      </GlassPanel>
+                    )}
+                  </li>
                 );
               })}
-            </div>
+            </ol>
 
             {totalPages > 1 && (
-              <div className='flex items-center justify-between gap-4 border-t border-gray-200 px-6 py-4'>
+              <GlassPanel
+                as='nav'
+                aria-label={t.historyTitle}
+                className='mt-6 flex items-center justify-between gap-3 rounded-full px-3 py-2'
+              >
                 <Button
-                  variant='outline'
+                  variant='ghost'
                   size='sm'
+                  shape='pill'
                   type='button'
+                  className={cn('text-[#1e2364] focus:ring-0 focus:ring-offset-0', focusRing)}
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((page) => page - 1)}
                 >
-                  <BackIcon className='size-4' />
+                  <ChevronLeft className='size-4 rtl:rotate-180' aria-hidden />
                   {t.previous}
                 </Button>
-                <span className='text-sm font-medium text-gray-600'>
+                <span className='text-sm font-semibold text-[#6b7196]' aria-live='polite'>
                   {t.attemptsPage
                     .replace('{{current}}', String(currentPage))
                     .replace('{{total}}', String(totalPages))}
                 </span>
                 <Button
-                  variant='outline'
+                  variant='ghost'
                   size='sm'
+                  shape='pill'
                   type='button'
+                  className={cn('text-[#1e2364] focus:ring-0 focus:ring-offset-0', focusRing)}
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((page) => page + 1)}
                 >
                   {t.next}
-                  <NextIcon className='size-4' />
+                  <ChevronRight className='size-4 rtl:rotate-180' aria-hidden />
                 </Button>
-              </div>
+              </GlassPanel>
             )}
-          </div>
+          </>
         )}
       </div>
 
@@ -237,6 +309,6 @@ export function QuizHistory({
         attemptId={selectedAttemptId}
         onClose={() => setSelectedAttemptId(null)}
       />
-    </div>
+    </AcademyBackdrop>
   );
 }

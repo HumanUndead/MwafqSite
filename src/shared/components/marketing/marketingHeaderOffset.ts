@@ -15,6 +15,8 @@ export const marketingHeaderOffsetVariants = {
   home: 'pt-[104px] max-[560px]:pt-20',
   /** Detail pages with breadcrumb (course, service group, profile). */
   detail: 'pt-[120px] sm:pt-[140px] md:pt-[180px]',
+  /** Academy pages: the inset navy stage starts just below the header. */
+  academy: 'bg-[#f3f4f8] pt-24 sm:pt-[112px] min-[1920px]:pt-[124px]',
   /** Booking / buy flow. */
   detailRoomy: 'pt-[140px] md:pt-[180px]',
 } as const;

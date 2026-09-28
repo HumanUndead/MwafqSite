@@ -13,7 +13,7 @@ export default async function QuizPage({ params }: PageProps) {
   const { userCourseId, courseId, quizId } = await params;
 
   return (
-    <MarketingStickyHeaderOffset variant='detail'>
+    <MarketingStickyHeaderOffset variant='academy'>
       <QuizRunner
         userCourseId={Number(userCourseId)}
         courseId={Number(courseId)}

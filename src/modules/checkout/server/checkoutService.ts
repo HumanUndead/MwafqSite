@@ -59,6 +59,16 @@ export async function getCheckoutSlots(
   return value?.slotTimesGroupedByDay ?? [];
 }
 
+const COURSE_TARGET_B2B = 2;
+
+/**
+ * B2B-only courses can't be bought by a client: CreateClientOrder rejects
+ * them with `Courses.B2B.NotAllowed`, so they are never offered.
+ */
+function isClientPurchasable(course: CheckoutCourse): boolean {
+  return !course.target || (course.target & ~COURSE_TARGET_B2B) !== 0;
+}
+
 export async function getServiceGroupCourses(
   token: string,
   serviceGroupId: number,
@@ -73,6 +83,6 @@ export async function getServiceGroupCourses(
     query: { serviceGroupId, culture: locale },
     fallbackMessage: 'Failed to load courses',
   });
-  if (Array.isArray(value)) return value;
-  return value?.data ?? [];
+  const courses = Array.isArray(value) ? value : (value?.data ?? []);
+  return courses.filter(isClientPurchasable);
 }

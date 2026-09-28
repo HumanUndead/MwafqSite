@@ -1,27 +1,12 @@
 'use client';
 
-import {
-  BookOpen,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Download,
-  FileText,
-  Lock,
-  Play,
-  X,
-} from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { isRtl, localeToLangId } from '@/i18n/config';
+import { localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { Button } from '@/shared/components/ui/Button';
 import { Modal } from '@/shared/components/ui/Modal';
 import { toast } from '@/shared/components/feedback/Toast';
-import { attachmentUrl } from '@/shared/lib/media';
-import { safeHtml } from '@/shared/lib/safeHtml';
 import { isActivityLockedById } from '../courseLocking.shared';
 import { transformCourseDetailToCourseData } from '../courseTransform.shared';
 import { useCourseDetail } from '../hooks/useCourseDetail';
@@ -38,6 +23,15 @@ import { getVimeoEmbedUrl } from '../vimeo.shared';
 import { learnBasePath, lecturePath, quizPath } from '../learnRoutes.shared';
 import type { LectureTranslation } from '../types/lecture.types';
 import type { NavItem } from '../types/player.types';
+import { LectureCurriculum } from './lecture/LectureCurriculum';
+import { LectureDetails } from './lecture/LectureDetails';
+import {
+  LecturePlayerSkeleton,
+  LectureStateCard,
+} from './lecture/LectureStates';
+import { LectureSummary } from './lecture/LectureSummary';
+import { LectureStage } from './lecture/LectureStage';
+import { AcademyBackdrop } from './ui/AcademyGlass';
 
 declare global {
   interface Window {
@@ -119,7 +113,6 @@ export function LecturePlayer({
 }: LecturePlayerProps) {
   const t = useTranslations('academyLecture');
   const locale = useLocale();
-  const rtl = isRtl(locale);
   const router = useRouter();
   const langId = localeToLangId[locale];
 
@@ -279,12 +272,11 @@ export function LecturePlayer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [translation?.videoUrl, lectureId]);
 
-  const isLocked = courseDetail
-    ? isActivityLockedById(
-        transformCourseDetailToCourseData(courseDetail, String(courseId)),
-        'lecture',
-        lectureId
-      )
+  const courseData = courseDetail
+    ? transformCourseDetailToCourseData(courseDetail, String(courseId))
+    : null;
+  const isLocked = courseData
+    ? isActivityLockedById(courseData, 'lecture', lectureId)
     : false;
 
   // Mobile completes a lecture on video end; without an observable video the
@@ -317,311 +309,98 @@ export function LecturePlayer({
         path,
       })) ?? [];
 
+  const backHref = learnBasePath(locale, userCourseId, courseId);
+
   if (isLoading) {
-    return (
-      <div className='flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-white'>
-        <div className='space-y-4 text-center'>
-          <div className='mx-auto size-16 animate-spin rounded-full border-b-4 border-t-4 border-[#00a8f1]' />
-          <p className='text-lg font-medium text-gray-600'>{t.loading}</p>
-        </div>
-      </div>
-    );
+    return <LecturePlayerSkeleton label={t.loading} />;
   }
 
   if (isError || !lecture) {
     return (
-      <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
-        <div className='mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8'>
-          <div className='space-y-6 rounded-2xl border border-red-200 bg-white p-8 text-center shadow-lg'>
-            <div className='mx-auto flex size-20 items-center justify-center rounded-full bg-red-100'>
-              <X className='size-10 text-red-600' />
-            </div>
-            <p className='text-lg text-gray-600'>{t.loadError}</p>
-            <Link
-              href={learnBasePath(locale, userCourseId, courseId)}
-              className='inline-block rounded-lg bg-[#00a8f1] px-6 py-3 font-medium text-white transition-all hover:opacity-90'
-            >
-              {t.backToCourse}
-            </Link>
-          </div>
-        </div>
-      </div>
+      <LectureStateCard
+        tone='error'
+        message={t.loadError}
+        backHref={backHref}
+        backLabel={t.backToCourse}
+      />
     );
   }
-
-  const BackIcon = rtl ? ChevronRight : ChevronLeft;
-  const NextIcon = rtl ? ChevronLeft : ChevronRight;
 
   if (isLocked) {
     return (
-      <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
-        <div className='mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8'>
-          <div className='space-y-4 rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-lg'>
-            <div className='mx-auto flex size-16 items-center justify-center rounded-full bg-gray-100'>
-              <Lock className='size-8 text-gray-500' aria-hidden />
-            </div>
-            <h1 className='text-xl font-bold text-gray-900'>{t.lockedTitle}</h1>
-            <p className='text-gray-600'>{t.lockedMessage}</p>
-            <Link
-              href={learnBasePath(locale, userCourseId, courseId)}
-              className='inline-block rounded-lg bg-[#00a8f1] px-6 py-3 font-medium text-white transition-all hover:opacity-90'
-            >
-              {t.backToCourse}
-            </Link>
-          </div>
-        </div>
-      </div>
+      <LectureStateCard
+        tone='locked'
+        title={t.lockedTitle}
+        message={t.lockedMessage}
+        backHref={backHref}
+        backLabel={t.backToCourse}
+      />
     );
   }
 
+  const itemHref = (item: NavItem) =>
+    item.type === 'quiz'
+      ? quizPath(locale, userCourseId, courseId, item.id)
+      : lecturePath(locale, userCourseId, courseId, item.id);
+
+  const lectureTitle = translation?.name || t.lecture;
+  const courseName = lecture.courseName || translation?.name || t.lecture;
+
   return (
-    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
-      {/* Sticky header */}
-      <div className='sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm'>
-        <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-between gap-4'>
-            <div className='flex min-w-0 flex-1 items-center gap-4'>
-              <Link
-                href={learnBasePath(locale, userCourseId, courseId)}
-                className='rounded-lg p-2 text-gray-700 transition-colors hover:bg-gray-100'
-                aria-label={t.backToCourse}
-              >
-                <BackIcon className='size-5' />
-              </Link>
-              <h1 className='min-w-0 flex-1 truncate text-lg font-bold text-gray-900 sm:text-xl'>
-                {lecture.lessonName && translation?.name ? (
-                  <span>
-                    <b className='text-[#1e2364]'>{lecture.lessonName}</b> -{' '}
-                    {translation.name}
-                  </span>
-                ) : (
-                  translation?.name || t.lecture
-                )}
-              </h1>
-              {lecture.isRevision && (
-                <span className='shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold uppercase text-amber-700'>
-                  {t.revision}
-                </span>
-              )}
-            </div>
-            {isCompleted && (
-              <span className='flex items-center gap-2 rounded-lg bg-green-100 px-4 py-2 text-green-700'>
-                <CheckCircle2 className='size-4' />
-                <span className='hidden font-medium md:inline'>
-                  {t.completed}
-                </span>
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
+    <AcademyBackdrop>
+      <div className='mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8'>
+        <div className='grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]'>
+          <div className='min-w-0 space-y-6'>
+            {/* Stage: course context + video */}
+            <LectureStage
+              backHref={backHref}
+              courseName={courseName}
+              embedUrl={
+                translation?.videoUrl
+                  ? getVimeoEmbedUrl(translation.videoUrl)
+                  : null
+              }
+              iframeRef={iframeRef}
+              iframeKey={`vimeo-${lectureId}`}
+              videoTitle={lectureTitle}
+              labels={t}
+            />
 
-      <div className='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8'>
-        <div className='grid gap-6 lg:grid-cols-3'>
-          <div className='space-y-6 lg:col-span-2'>
-            {/* Video */}
-            {translation?.videoUrl ? (
-              <div className='overflow-hidden rounded-2xl shadow-2xl'>
-                <div className='relative h-0 pb-[56.25%]'>
-                  <iframe
-                    ref={iframeRef}
-                    key={`vimeo-${lectureId}`}
-                    src={getVimeoEmbedUrl(translation.videoUrl)}
-                    allow='autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share'
-                    referrerPolicy='strict-origin-when-cross-origin'
-                    className='absolute inset-0 size-full'
-                    title={translation?.name || t.lecture}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className='overflow-hidden rounded-2xl shadow-2xl'>
-                <div className='flex aspect-video items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800'>
-                  <div className='space-y-4 text-center'>
-                    <div className='mx-auto flex size-20 items-center justify-center rounded-full bg-[#00a8f1]/90 shadow-2xl'>
-                      <Play className='ms-1 size-10 text-white' />
-                    </div>
-                    <p className='text-sm text-white/80'>{t.noVideo}</p>
-                  </div>
-                </div>
-              </div>
-            )}
+            <LectureSummary
+              lessonName={lecture.lessonName && translation?.name ? lecture.lessonName : null}
+              title={lectureTitle}
+              minutes={translation?.videoLengthInMinutes || 0}
+              isRevision={Boolean(lecture.isRevision)}
+              isCompleted={isCompleted}
+              canMarkManually={canMarkManually}
+              marking={progressMutation.isPending}
+              onMarkComplete={() => void handleManualComplete()}
+              prev={prev}
+              next={next}
+              prevHref={prev ? itemHref(prev) : null}
+              nextHref={next ? itemHref(next) : null}
+              labels={t}
+            />
 
-            {/* Tabs */}
-            <div className='overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg'>
-              <div className='flex border-b border-gray-200'>
-                <TabButton
-                  active={activeTab === 'overview'}
-                  onClick={() => setActiveTab('overview')}
-                  icon={<BookOpen className='size-5' />}
-                  label={t.overview}
-                />
-                <TabButton
-                  active={activeTab === 'resources'}
-                  onClick={() => setActiveTab('resources')}
-                  icon={<Download className='size-5' />}
-                  label={t.resources}
-                />
-              </div>
-
-              <div className='p-6'>
-                {activeTab === 'overview' ? (
-                  <div className='space-y-4'>
-                    <h2 className='text-2xl font-bold text-gray-900'>
-                      {translation?.name || t.lecture}
-                    </h2>
-                    <div className='flex items-center gap-2 text-sm text-gray-600'>
-                      <Clock className='size-4' />
-                      <span>
-                        {translation?.videoLengthInMinutes || 0} {t.minutes}
-                      </span>
-                    </div>
-                    <div
-                      className='prose prose-sm max-w-none leading-relaxed text-gray-700'
-                      dangerouslySetInnerHTML={{
-                        __html: safeHtml(translation?.description) || t.noDescription,
-                      }}
-                    />
-                    {translation?.textContent && (
-                      <div
-                        className='prose prose-sm max-w-none border-t border-gray-200 pt-4 leading-relaxed text-gray-700'
-                        dangerouslySetInnerHTML={{
-                          __html: safeHtml(translation.textContent),
-                        }}
-                      />
-                    )}
-                  </div>
-                ) : (
-                  <div className='space-y-4'>
-                    <h3 className='text-xl font-bold text-gray-900'>
-                      {t.downloadResources}
-                    </h3>
-                    {resources.length > 0 ? (
-                      resources.map((resource) => (
-                        <div
-                          key={resource.id}
-                          className='group flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 transition-colors hover:bg-gray-100'
-                        >
-                          <div className='flex min-w-0 items-center gap-3'>
-                            <div className='flex size-12 shrink-0 items-center justify-center rounded-lg bg-[#00a8f1]/10'>
-                              <FileText className='size-6 text-[#00a8f1]' />
-                            </div>
-                            <p className='truncate font-medium text-gray-900'>
-                              {resource.name}
-                            </p>
-                          </div>
-                          <a
-                            href={attachmentUrl(resource.path)}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#00a8f1] px-4 py-2 text-sm font-medium text-white opacity-0 transition-all hover:opacity-90 group-hover:opacity-100'
-                          >
-                            <Download className='size-4' />
-                            {t.download}
-                          </a>
-                        </div>
-                      ))
-                    ) : (
-                      <p className='py-8 text-center text-gray-600'>
-                        {t.noResources}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+            <LectureDetails
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              description={translation?.description}
+              textContent={translation?.textContent}
+              resources={resources}
+              labels={t}
+            />
           </div>
 
-          {/* Sidebar */}
-          <div className='space-y-6'>
-            <div className='sticky top-24 space-y-4 rounded-2xl border border-[#00a8f1] bg-white p-6 shadow-lg'>
-              <h3 className='text-lg font-bold text-gray-900'>
-                {t.lectureProgress}
-              </h3>
-
-              {canMarkManually && (
-                <Button
-                  variant='brand'
-                  className='w-full'
-                  type='button'
-                  loading={progressMutation.isPending}
-                  onClick={() => void handleManualComplete()}
-                >
-                  {t.markComplete}
-                </Button>
-              )}
-
-              {isCompleted && (
-                <div className='flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 py-3 font-bold text-white'>
-                  <CheckCircle2 className='size-5' />
-                  {t.completed}
-                </div>
-              )}
-
-              <div className='flex gap-2'>
-                {prev && (
-                  <Link
-                    href={
-                      prev.type === 'quiz'
-                        ? quizPath(locale, userCourseId, courseId, prev.id)
-                        : lecturePath(locale, userCourseId, courseId, prev.id)
-                    }
-                    className='flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 py-3 text-sm font-medium text-gray-900 transition-all hover:bg-gray-200'
-                  >
-                    <BackIcon className='size-4' />
-                    <span className='hidden sm:inline'>
-                      {prev.type === 'quiz' ? t.previousQuiz : t.previous}
-                    </span>
-                  </Link>
-                )}
-                {next &&
-                  (isCompleted ? (
-                    <Link
-                      href={
-                        next.type === 'quiz'
-                          ? quizPath(locale, userCourseId, courseId, next.id)
-                          : lecturePath(locale, userCourseId, courseId, next.id)
-                      }
-                      className='flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00a8f1] to-[#1e2364] py-3 text-sm font-medium text-white transition-all hover:opacity-90'
-                    >
-                      <span className='hidden sm:inline'>
-                        {next.type === 'quiz' ? t.goToQuiz : t.next}
-                      </span>
-                      <NextIcon className='size-4' />
-                    </Link>
-                  ) : (
-                    <span
-                      className='flex flex-1 cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-gray-300 py-3 text-sm font-medium text-gray-500'
-                      title={t.completeToUnlock}
-                    >
-                      <span className='hidden sm:inline'>
-                        {next.type === 'quiz' ? t.goToQuiz : t.next}
-                      </span>
-                      <NextIcon className='size-4' />
-                    </span>
-                  ))}
-              </div>
-
-              <Link
-                href={learnBasePath(locale, userCourseId, courseId)}
-                className='block w-full rounded-xl border-2 border-gray-300 py-3 text-center text-sm font-medium text-gray-900 transition-all hover:border-[#00a8f1] hover:text-[#00a8f1]'
-              >
-                {t.backToCourse}
-              </Link>
-            </div>
-
-            <div className='rounded-2xl border border-gray-200 bg-white p-6 shadow-lg'>
-              <h3 className='mb-4 text-lg font-bold text-gray-900'>
-                {t.courseInfo}
-              </h3>
-              <div className='flex items-start gap-3'>
-                <BookOpen className='mt-0.5 size-5 shrink-0 text-[#00a8f1]' />
-                <p className='font-medium text-gray-900'>
-                  {lecture.courseName || translation?.name || t.lecture}
-                </p>
-              </div>
-            </div>
-          </div>
+          <LectureCurriculum
+            courseData={courseData}
+            courseName={courseName}
+            currentLectureId={lectureId}
+            currentCompleted={isCompleted}
+            locale={locale}
+            userCourseId={userCourseId}
+            courseId={courseId}
+          />
         </div>
       </div>
 
@@ -631,10 +410,11 @@ export function LecturePlayer({
         onClose={() => setPendingQuizId(null)}
         title={t.quizWarningTitle}
       >
-        <p className='mb-6 text-gray-600'>{t.quizWarningMessage}</p>
+        <p className='mb-6 text-[#6b7196]'>{t.quizWarningMessage}</p>
         <div className='flex gap-3'>
           <Button
             variant='secondary'
+            shape='pill'
             className='flex-1'
             onClick={() => setPendingQuizId(null)}
             type='button'
@@ -643,6 +423,7 @@ export function LecturePlayer({
           </Button>
           <Button
             variant='brand'
+            shape='pill'
             className='flex-1'
             onClick={() => {
               if (pendingQuizId !== null) {
@@ -657,33 +438,6 @@ export function LecturePlayer({
           </Button>
         </div>
       </Modal>
-    </div>
-  );
-}
-
-function TabButton({
-  active,
-  onClick,
-  icon,
-  label,
-}: {
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-}) {
-  return (
-    <button
-      type='button'
-      onClick={onClick}
-      className={`flex flex-1 items-center justify-center gap-2 px-4 py-4 text-sm font-medium transition ${
-        active
-          ? 'border-b-2 border-[#00a8f1] bg-[#00a8f1]/5 text-[#00a8f1]'
-          : 'text-gray-600 hover:bg-gray-50'
-      }`}
-    >
-      {icon}
-      <span className='hidden sm:inline'>{label}</span>
-    </button>
+    </AcademyBackdrop>
   );
 }

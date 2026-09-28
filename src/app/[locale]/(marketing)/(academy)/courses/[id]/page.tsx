@@ -73,7 +73,11 @@ export default async function CourseDetailsPage({ params }: PageProps) {
   const lecturesDuration = totalLecturesDurationMinutes(lessons);
 
   return (
-    <MarketingStickyHeaderOffset variant='detail'>
+    // The floating header is transparent with navy text at the top, so the
+    // navy stage starts just below it as an inset panel (matches /courses).
+    <MarketingStickyHeaderOffset
+      variant='academy'
+    >
       <JsonLd
         data={{
           '@context': 'https://schema.org',
