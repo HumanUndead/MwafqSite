@@ -34,7 +34,7 @@ export const useFavoritesStore = create<FavoritesState>()(
     {
       name: 'favorites-store',
       version: 1,
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => window.localStorage),
     }
   )
 );

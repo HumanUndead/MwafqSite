@@ -59,7 +59,7 @@ export const useBasketStore = create<BasketState>()(
     {
       name: 'basket-store',
       version: 1,
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => window.localStorage),
     }
   )
 );
