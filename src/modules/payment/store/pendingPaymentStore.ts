@@ -42,7 +42,7 @@ export const usePendingPaymentStore = create<PendingPaymentState>()(
     }),
     {
       name: 'pending-payment-store',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => window.localStorage),
     }
   )
 );
