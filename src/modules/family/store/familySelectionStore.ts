@@ -19,7 +19,7 @@ export const useFamilySelectionStore = create<FamilySelectionState>()(
     }),
     {
       name: 'family-selection-store',
-      storage: createJSONStorage(() => window.localStorage),
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
