@@ -99,7 +99,7 @@ export const useCheckoutDraftStore = create<CheckoutDraftState>()(
     {
       name: 'checkout-draft-store',
       version: 1,
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => window.localStorage),
     }
   )
 );
