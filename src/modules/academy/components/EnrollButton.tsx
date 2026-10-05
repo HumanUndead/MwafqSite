@@ -96,30 +96,24 @@ export function EnrollButton({
     if (!payable) return;
     const description = courseTitle || `Course Payment - ${courseId}`;
     setOpen(false);
-    void checkout.start(
-      resume
-        ? {
-            clientOrderId: String(resume.userCourseId),
-            targetType: PaymentTarget.UserCourse,
-            description,
-          }
-        : {
-            order: {
-              courses: [
-                {
-                  courseId,
-                  selectedService: resolveSelectedService(
-                    sellingPlan ?? CoursePaymentMode.CourseOnly,
-                    includeSadad,
-                    includeArkan
-                  ),
-                },
-              ],
-            },
-            targetType: PaymentTarget.UserCourse,
-            description,
-          }
-    );
+    // Payment TargetId must be a ClientOrder GUID, never a userCourseId, so a
+    // resume also goes through CreateClientOrder.
+    void checkout.start({
+      order: {
+        courses: [
+          {
+            courseId,
+            selectedService: resolveSelectedService(
+              sellingPlan ?? CoursePaymentMode.CourseOnly,
+              includeSadad,
+              includeArkan
+            ),
+          },
+        ],
+      },
+      targetType: PaymentTarget.UserCourse,
+      description,
+    });
   }
 
   const price = paymentSettings?.price ?? 0;

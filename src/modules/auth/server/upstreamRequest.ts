@@ -4,6 +4,7 @@ import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { authCookieName } from './authService';
 import { cookies } from 'next/headers';
+import { MWAFQ_UPSTREAM_ORIGIN } from '@/shared/constants/config';
 interface UpstreamTextRequestOptions {
   method: 'GET' | 'POST';
   url: URL;
@@ -13,6 +14,8 @@ interface UpstreamTextRequestOptions {
    * flows that must not depend on (or leak into) the site-wide auth cookie.
    */
   authorization?: string | null;
+  /** Send no `Authorization` at all (login / OTP). Ignores the cookie. */
+  anonymous?: boolean;
   /** JSON-serialized and sent as the request body when set (e.g. `Login`). */
   body?: unknown;
 }
@@ -21,11 +24,14 @@ export async function performUpstreamTextRequest({
   method,
   url,
   authorization,
+  anonymous = false,
   body,
 }: UpstreamTextRequestOptions): Promise<{ status: number; body: string }> {
   let bearer = authorization?.trim() || null;
 
-  if (!bearer) {
+  if (anonymous) {
+    bearer = null;
+  } else if (!bearer) {
     const cookieStore = await cookies();
     const cookieToken = cookieStore.get(authCookieName)?.value;
     bearer = cookieToken ? `Bearer ${cookieToken}` : null;
@@ -37,9 +43,25 @@ export async function performUpstreamTextRequest({
   const serializedBody = body !== undefined ? JSON.stringify(body) : null;
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'User-Agent': 'mwafq-nextjs-staging/1.0',
-    Authorization: bearer ?? '',
+    Accept: 'application/json',
+    Origin: MWAFQ_UPSTREAM_ORIGIN,
+    // An empty or stale Authorization makes the backend answer Forbidden.
+    ...(bearer ? { Authorization: bearer } : {}),
   };
+
+  // TEMP debug: print the exact upstream call as curl. Remove before pushing.
+  console.log(
+    '[upstream curl]\n' +
+      [
+        `curl -X ${method} '${url.toString()}'`,
+        ...Object.entries(headers).map(([k, v]) =>
+          k === 'Authorization'
+            ? `  -H '${k}: ${v.slice(0, 15)}…(masked)'`
+            : `  -H '${k}: ${v}'`
+        ),
+        ...(serializedBody ? [`  -d '${serializedBody}'`] : []),
+      ].join(' \\\n')
+  );
 
   return new Promise((resolve, reject) => {
     const req = requestImpl(

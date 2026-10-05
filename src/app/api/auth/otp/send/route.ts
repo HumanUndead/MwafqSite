@@ -37,12 +37,12 @@ export async function POST(request: NextRequest) {
         method: 'POST',
         url: endpoint,
         authorization: null,
+        anonymous: true,
         body: { userName: userName.trim() },
       });
 
       const responseText = upstreamResponse.body;
       const payload = parseJsonSafe(responseText);
-
 
       const upstreamCode = extractUpstreamCode(payload);
 

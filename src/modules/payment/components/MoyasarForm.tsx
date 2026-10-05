@@ -18,7 +18,7 @@ interface MoyasarConfig {
   supported_networks: string[];
   methods: string[];
   language?: string;
-  on_completed?: (payment: MoyasarPayment) => Promise<void> | void;
+  on_completed?: (payment: MoyasarPayment) => Promise<void>;
 }
 
 interface MoyasarSdk {
@@ -120,7 +120,8 @@ export function MoyasarForm({
           supported_networks: ['mada', 'visa', 'mastercard', 'amex'],
           methods: ['creditcard'],
           language,
-          on_completed: (payment) => {
+          // Moyasar 2.x rejects non-async callbacks.
+          on_completed: async (payment) => {
             onCompletedRef.current(payment.id);
           },
         });

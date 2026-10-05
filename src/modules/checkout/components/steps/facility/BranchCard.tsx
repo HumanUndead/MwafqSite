@@ -59,7 +59,7 @@ export function BranchCard({ branch, selected, userLocation, onSelect }: BranchC
               onError={() => setLogoFailed(true)}
             />
           ) : (
-            branch.name.trim().charAt(0).toUpperCase()
+            (branch.name ?? '').trim().charAt(0).toUpperCase()
           )}
         </span>
         <span className='min-w-0 flex-1'>

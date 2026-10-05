@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       url: endpoint,
       authorization: null,
+      anonymous: true,
       body: { userName: normalizedUserName },
     });
 

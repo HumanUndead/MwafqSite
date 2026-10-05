@@ -8,6 +8,10 @@ export const MWAFQ_REGISTER_URL =
 export const MWAFQ_API_BASE_URL =
   process.env.MWAFQ_API_BASE_URL ?? DEFAULT_MWAFQ_API_BASE_URL;
 
+/** `Origin` sent on server-side upstream calls; the backend rejects calls without it. */
+export const MWAFQ_UPSTREAM_ORIGIN =
+  process.env.MWAFQ_UPSTREAM_ORIGIN ?? 'https://staging.mwafq.com';
+
 /** CMS media/asset origin (images served under /content/...). No `/api` suffix. */
 export const MWAFQ_MEDIA_BASE_URL =
   process.env.MWAFQ_MEDIA_BASE_URL ?? 'https://api.mwafq.com/';
