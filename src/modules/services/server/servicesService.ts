@@ -2,6 +2,8 @@ import 'server-only';
 
 import queryString from 'query-string';
 
+import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import type { PaginatedResponse } from '@/shared/types/api.types';
 import type {
@@ -10,7 +12,6 @@ import type {
   ServiceListItem,
 } from '../types/services.types';
 
-const SERVICE_API_BASE_URL = 'https://api.mwafq.com';
 
 export async function fetchServicesList(
   query: FetchServiceListParams = {}
@@ -20,13 +21,13 @@ export async function fetchServicesList(
     { skipNull: true }
   );
   return fetchWithErrorHandling<PaginatedResponse<ServiceListItem>>(
-    `${SERVICE_API_BASE_URL}/api/Service/Service/List?${params}`
+    `${MWAFQ_API_BASE_URL}/Service/Service/List?${params}`
   );
 }
 
 export async function fetchServiceById(id: number): Promise<ServiceDetail> {
   const params = queryString.stringify({ id }, { skipNull: true });
   return fetchWithErrorHandling<ServiceDetail>(
-    `${SERVICE_API_BASE_URL}/api/Service/Service/GetById?${params}`
+    `${MWAFQ_API_BASE_URL}/Service/Service/GetById?${params}`
   );
 }

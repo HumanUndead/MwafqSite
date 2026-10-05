@@ -28,6 +28,7 @@ export async function generateMetadata({
   const langId = localeToLangId[locale];
   const service = await fetchServiceGroupById(numericId, { locale }).catch(
     (error) => {
+      console.error(`[services/${numericId}] fetch failed:`, error);
       if (error instanceof FetchResponseError) notFound();
       throw error;
     }
@@ -55,6 +56,7 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
   const locale = await GetLocale();
   const service = await fetchServiceGroupById(numericId, { locale }).catch(
     (error) => {
+      console.error(`[services/${numericId}] fetch failed:`, error);
       if (error instanceof FetchResponseError) notFound();
       throw error;
     }

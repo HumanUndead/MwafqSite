@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { authTokenCookieName } from '@/modules/auth/session.shared';
+import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
 import {
   extractUpstreamMessage,
   extractUpstreamCode,
@@ -8,9 +9,6 @@ import {
   normalizeUpstreamStatus,
 } from '@/modules/auth/server/upstreamAuthResult';
 import { forwardCompanyCreateFormData } from '@/modules/company/companyCreatePayload.shared';
-
-/** Company creation always targets production, regardless of MWAFQ_API_BASE_URL. */
-const COMPANY_CREATE_API_BASE_URL = 'https://api.mwafq.com';
 
 function toString(v: FormDataEntryValue | null): string {
   return typeof v === 'string' ? v.trim() : '';
@@ -47,7 +45,11 @@ export async function POST(request: NextRequest) {
 
     if (!crNumber || !vatNumber) {
       return NextResponse.json(
-        { success: false, message: 'CR Number and VAT Number are required.', data: null },
+        {
+          success: false,
+          message: 'CR Number and VAT Number are required.',
+          data: null,
+        },
         { status: 400 }
       );
     }
@@ -56,7 +58,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: 'All contact fields (first name, last name, email, phone) are required.',
+          message:
+            'All contact fields (first name, last name, email, phone) are required.',
           data: null,
         },
         { status: 400 }
@@ -65,10 +68,7 @@ export async function POST(request: NextRequest) {
 
     const upstreamForm = forwardCompanyCreateFormData(incomingForm);
 
-    const endpoint = new URL(
-      '/api/Company/Company/Create',
-      COMPANY_CREATE_API_BASE_URL
-    );
+    const endpoint = new URL('/api/Company/Company/Create', MWAFQ_API_BASE_URL);
 
     const upstreamHeaders: Record<string, string> = {};
     if (token) {
@@ -97,7 +97,11 @@ export async function POST(request: NextRequest) {
           code: extractUpstreamCode(payload),
           data: null,
         },
-        { status: upstreamResponse.ok ? 400 : normalizeUpstreamStatus(upstreamResponse.status) }
+        {
+          status: upstreamResponse.ok
+            ? 400
+            : normalizeUpstreamStatus(upstreamResponse.status),
+        }
       );
     }
 

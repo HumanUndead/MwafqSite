@@ -2,6 +2,8 @@ import 'server-only';
 
 import queryString from 'query-string';
 
+import { MWAFQ_API_BASE_URL } from '@/shared/constants/config';
+
 import { fetchWithErrorHandling } from '@/shared/lib/fetchWithErrorHandling';
 import type { PaginatedResponse } from '@/shared/types/api.types';
 import type {
@@ -48,8 +50,6 @@ export function serviceGroupToServiceListItem(
   };
 }
 
-/** ServiceGroup endpoints only — always served from this origin, independent of `MWAFQ_API_BASE_URL`. */
-const SERVICE_GROUP_API_BASE_URL = 'https://api.mwafq.com';
 
 export async function fetchServiceGroupsList(
   query: FetchServiceGroupListParams
@@ -61,7 +61,7 @@ export async function fetchServiceGroupsList(
   return fetchWithErrorHandling<PaginatedResponse<ServiceGroupListItem>>(
     new URL(
       `/api/Service/ServiceGroup/List?${params}`,
-      SERVICE_GROUP_API_BASE_URL
+      MWAFQ_API_BASE_URL
     ).toString()
   );
 }
@@ -78,7 +78,7 @@ export async function fetchServiceGroupById(
   return fetchWithErrorHandling<ServiceGroupDetail>(
     new URL(
       `/api/Service/ServiceGroup/GetById?${params}`,
-      SERVICE_GROUP_API_BASE_URL
+      MWAFQ_API_BASE_URL
     ).toString()
   );
 }
