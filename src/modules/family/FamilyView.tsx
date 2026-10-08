@@ -25,9 +25,8 @@ import { LinkMemberDialog } from './components/LinkMemberDialog';
 import { MemberRow } from './components/MemberRow';
 import { useFamily } from './hooks/useFamily';
 import { useFamilyAction } from './hooks/useFamilyAction';
+import { useFamilySelectionStore } from './store/familySelectionStore';
 import { RelatedUserStatus, type RelatedUser } from './types/family.types';
-
-type Tab = 'related' | 'belongTo';
 
 function bySection(list: RelatedUser[]) {
   return {
@@ -41,8 +40,10 @@ export function FamilyView() {
   const locale = useLocale();
   const { data, isLoading, isError, refetch } = useFamily();
   const action = useFamilyAction();
-  const [tab, setTab] = useState<Tab>('related');
   const [dialog, setDialog] = useState<'link' | 'create' | null>(null);
+  const setSelectedMemberId = useFamilySelectionStore(
+    (state) => state.setSelectedMemberId
+  );
 
   const pendingCount =
     (data?.relatedToUsers ?? []).filter(
@@ -52,7 +53,11 @@ export function FamilyView() {
       (item) => item.status === RelatedUserStatus.Pending
     ).length;
 
-  function renderList(list: RelatedUser[], nameOf: 'member' | 'owner', emptyLabel: string) {
+  function renderList(
+    list: RelatedUser[],
+    nameOf: 'member' | 'owner',
+    emptyLabel: string
+  ) {
     const sections = bySection(list);
     if (sections.accepted.length + sections.rejected.length === 0) {
       return <FamilyEmpty label={emptyLabel} />;
@@ -72,15 +77,43 @@ export function FamilyView() {
                     member={member}
                     nameOf={nameOf}
                     actions={
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        type='button'
-                        className='text-red-600'
-                        onClick={() => action.request('remove', member.id)}
-                      >
-                        {t.actions.remove}
-                      </Button>
+                      <>
+                        {key === 'accepted' && nameOf === 'member' && (
+                          <>
+                            <Link
+                              href={getLocalizedRoute(
+                                locale,
+                                ROUTES.MY_RESERVATIONS
+                              )}
+                              onClick={() => setSelectedMemberId(member.userId)}
+                              className={buttonVariants({
+                                variant: 'outline',
+                                size: 'sm',
+                              })}
+                            >
+                              {t.actions.viewReservations}
+                            </Link>
+                            <Link
+                              href={`${getLocalizedRoute(locale, ROUTES.ACADEMY_COURSES)}?userId=${encodeURIComponent(member.userId)}`}
+                              className={buttonVariants({
+                                variant: 'outline',
+                                size: 'sm',
+                              })}
+                            >
+                              {t.actions.viewCourses}
+                            </Link>
+                          </>
+                        )}
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          type='button'
+                          className='text-red-600'
+                          onClick={() => action.request('remove', member.id)}
+                        >
+                          {t.actions.remove}
+                        </Button>
+                      </>
                     }
                   />
                 ))}
@@ -108,7 +141,11 @@ export function FamilyView() {
           <Link2 className='size-4' aria-hidden />
           {t.actions.linkExisting}
         </Button>
-        <Button variant='outline' type='button' onClick={() => setDialog('create')}>
+        <Button
+          variant='outline'
+          type='button'
+          onClick={() => setDialog('create')}
+        >
           <UserPlus className='size-4' aria-hidden />
           {t.actions.createNew}
         </Button>
@@ -126,13 +163,17 @@ export function FamilyView() {
         </Link>
       </div>
 
-      <Tabs value={tab} onValueChange={(next) => setTab(next as Tab)}>
-        <TabsList variant='line' aria-label={t.tabsAriaLabel} className={profileTabListClass}>
-          <TabsTrigger value='related' className={cn(profileTabTriggerClass, 'flex-initial')}>
+      <Tabs defaultValue='related'>
+        <TabsList
+          variant='line'
+          aria-label={t.tabsAriaLabel}
+          className={profileTabListClass}
+        >
+          <TabsTrigger
+            value='related'
+            className={cn(profileTabTriggerClass, 'flex-initial')}
+          >
             {t.tabs.related}
-          </TabsTrigger>
-          <TabsTrigger value='belongTo' className={cn(profileTabTriggerClass, 'flex-initial')}>
-            {t.tabs.belongTo}
           </TabsTrigger>
         </TabsList>
 
@@ -144,18 +185,25 @@ export function FamilyView() {
           ) : (
             <>
               <TabsContent value='related' className='outline-none'>
-                {renderList(data?.relatedToUsers ?? [], 'member', t.empty.related)}
-              </TabsContent>
-              <TabsContent value='belongTo' className='outline-none'>
-                {renderList(data?.belongToUsers ?? [], 'owner', t.empty.belongTo)}
+                {renderList(
+                  data?.relatedToUsers ?? [],
+                  'member',
+                  t.empty.related
+                )}
               </TabsContent>
             </>
           )}
         </div>
       </Tabs>
 
-      <LinkMemberDialog open={dialog === 'link'} onClose={() => setDialog(null)} />
-      <CreateMemberDialog open={dialog === 'create'} onClose={() => setDialog(null)} />
+      <LinkMemberDialog
+        open={dialog === 'link'}
+        onClose={() => setDialog(null)}
+      />
+      <CreateMemberDialog
+        open={dialog === 'create'}
+        onClose={() => setDialog(null)}
+      />
       <FamilyActionDialog action={action} />
     </section>
   );

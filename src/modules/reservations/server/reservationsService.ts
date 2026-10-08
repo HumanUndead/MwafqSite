@@ -16,19 +16,24 @@ import type {
 /** Paid reservations of one owner (the user or a family member). */
 export async function listReservations(
   token: string,
-  query: ReservationsListQuery & { ownerId: string },
+  query: ReservationsListQuery & { ownerId: string; isSelf: boolean },
   locale: Locale
 ): Promise<PaginatedResponse<ReservationListItem>> {
   const filter = reservationListFilter(query);
   const page = await upstreamRequest<PaginatedResponse<ReservationListItem>>({
     method: 'GET',
-    path: '/api/client/client/GetMyReservations',
+    // A family member's list needs `GetUserReservations` (Accepted link only).
+    path: query.isSelf
+      ? '/api/client/client/GetMyReservations'
+      : '/api/Client/Client/GetUserReservations',
     token,
     query: {
       orderBy: 'dateChosen',
       orderDirection: filter.orderDirection,
       isPaid: true,
-      ownerId: query.ownerId,
+      ...(query.isSelf
+        ? { ownerId: query.ownerId }
+        : { userId: query.ownerId }),
       status: filter.status,
       pageNumber: query.pageNumber,
       pageSize: RESERVATIONS_PAGE_SIZE,

@@ -6,28 +6,70 @@ import type {
   CreateFamilyMemberInput,
   FamilyLookupUser,
   FamilyOverview,
+  RelatedUser,
   RelatedUserStatus,
 } from '../types/family.types';
 
 interface RawRelatedUsers {
   relatedToUsers?: FamilyOverview['relatedToUsers'] | null;
-  belongToUsers?: FamilyOverview['belongToUsers'] | null;
 }
 
+interface RawBelongTo {
+  relationId: number;
+  status: RelatedUserStatus;
+  relatedTo?: {
+    userId?: string;
+    fullName?: string;
+    firstName?: string;
+    lastName?: string;
+  } | null;
+}
+
+/** `GetMyBelongTo` row → the shared `RelatedUser` shape. */
+function toBelongToUser(row: RawBelongTo, myId: string): RelatedUser {
+  const owner = row.relatedTo ?? {};
+  const ownerName =
+    owner.fullName?.trim() ||
+    `${owner.firstName ?? ''} ${owner.lastName ?? ''}`.trim();
+  return {
+    id: row.relationId,
+    userId: myId,
+    fullName: '',
+    firstName: '',
+    lastName: '',
+    relatedTo: owner.userId ?? '',
+    image: null,
+    fullNameRelatedTo: ownerName,
+    status: row.status,
+  };
+}
+
+/**
+ * Users I manage come from `GetRelatedUsersById` (has relation id + status,
+ * which `GetMyRelatedUsers` lacks). Accounts I belong to come from `GetMyBelongTo`.
+ */
 export async function getFamily(
   token: string,
   userId: string
 ): Promise<FamilyOverview> {
-  const value = await upstreamRequest<RawRelatedUsers>({
-    method: 'GET',
-    path: '/api/Client/ClientAuthenticate/GetRelatedUsersById',
-    token,
-    query: { userId },
-    fallbackMessage: 'Failed to load family members',
-  });
+  const [related, belongTo] = await Promise.all([
+    upstreamRequest<RawRelatedUsers>({
+      method: 'GET',
+      path: '/api/Client/ClientAuthenticate/GetRelatedUsersById',
+      token,
+      query: { userId },
+      fallbackMessage: 'Failed to load family members',
+    }),
+    upstreamRequest<RawBelongTo[] | null>({
+      method: 'GET',
+      path: '/api/Client/ClientAuthenticate/GetMyBelongTo',
+      token,
+      fallbackMessage: 'Failed to load family members',
+    }),
+  ]);
   return {
-    relatedToUsers: value?.relatedToUsers ?? [],
-    belongToUsers: value?.belongToUsers ?? [],
+    relatedToUsers: related?.relatedToUsers ?? [],
+    belongToUsers: (belongTo ?? []).map((row) => toBelongToUser(row, userId)),
   };
 }
 
@@ -73,7 +115,7 @@ export function deleteRelation(
     method: 'DELETE',
     path: '/api/Client/ClientAuthenticate/DeleteRelatedUser',
     token,
-    query: { id: relationId },
+    query: { Id: relationId },
     fallbackMessage: 'Failed to remove the family member',
   });
 }

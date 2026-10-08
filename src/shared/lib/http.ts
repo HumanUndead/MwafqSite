@@ -21,6 +21,16 @@ export class ApiError extends Error {
 const REFRESH_ENDPOINT = '/api/auth/sso/refresh';
 /** Where to send the user when the session can no longer be refreshed. */
 const LOGIN_PATH = '/login';
+/** Clears the auth cookies server-side. */
+const LOGOUT_ENDPOINT = '/api/auth/logout';
+/** Persisted zustand auth store key (see `useAuthStore`). */
+const AUTH_STORAGE_KEY = 'auth-storage';
+/** A 401 here means bad credentials / OTP, not an expired session. */
+const AUTH_FLOW_PREFIXES = [
+  '/api/auth/login',
+  '/api/auth/otp',
+  REFRESH_ENDPOINT,
+];
 
 class HttpClient {
   /**
@@ -78,13 +88,39 @@ class HttpClient {
     return this.refreshPromise;
   }
 
-  private redirectToLogin() {
-    if (typeof window === 'undefined') {
+  /** True once a logout redirect started, so parallel 401s don't repeat it. */
+  private loggingOut = false;
+
+  private isAuthFlow(endpoint: string): boolean {
+    return AUTH_FLOW_PREFIXES.some((prefix) => endpoint.startsWith(prefix));
+  }
+
+  /** Session is gone: clear cookies + persisted user, then go to login. */
+  private async logoutAndRedirect() {
+    if (typeof window === 'undefined' || this.loggingOut) {
       return;
     }
-    const segments = window.location.pathname.split('/');
-    const locale = segments[1] || 'en';
-    window.location.assign(`/${locale}${LOGIN_PATH}`);
+    this.loggingOut = true;
+
+    await fetch(LOGOUT_ENDPOINT, {
+      method: 'POST',
+      credentials: 'include',
+    }).catch(() => undefined);
+    try {
+      window.localStorage.removeItem(AUTH_STORAGE_KEY);
+    } catch {
+      // Storage blocked; the reload still drops the in-memory user.
+    }
+
+    const { pathname, search } = window.location;
+    const locale = pathname.split('/')[1] || 'en';
+    const loginPath = `/${locale}${LOGIN_PATH}`;
+    if (pathname.startsWith(loginPath)) {
+      this.loggingOut = false;
+      return;
+    }
+    const redirect = encodeURIComponent(`${pathname}${search}`);
+    window.location.assign(`${loginPath}?redirect=${redirect}`);
   }
 
   private async request<T>(
@@ -105,12 +141,10 @@ class HttpClient {
     });
 
     // Access token likely expired — refresh once, then retry the request.
-    if (
-      response.status === 401 &&
-      retry &&
-      endpoint !== REFRESH_ENDPOINT &&
-      typeof window !== 'undefined'
-    ) {
+    const isSessionCall =
+      typeof window !== 'undefined' && !this.isAuthFlow(endpoint);
+
+    if (response.status === 401 && retry && isSessionCall) {
       const refreshed = await this.refreshSession();
 
       if (refreshed) {
@@ -123,8 +157,14 @@ class HttpClient {
         );
       }
 
-      // Could not refresh → session is gone. Send the user to login.
-      this.redirectToLogin();
+      // Could not refresh → session is gone. Log out and go to login.
+      await this.logoutAndRedirect();
+      throw new ApiError('Session expired', 'SESSION_EXPIRED', 401);
+    }
+
+    // Still 401 after a successful refresh → treat the session as gone.
+    if (response.status === 401 && isSessionCall) {
+      await this.logoutAndRedirect();
       throw new ApiError('Session expired', 'SESSION_EXPIRED', 401);
     }
 

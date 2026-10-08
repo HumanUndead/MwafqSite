@@ -7,10 +7,10 @@ import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
 import { Modal } from '@/shared/components/ui/Modal';
 import { Spinner } from '@/shared/components/ui/Spinner';
-import { ApiError } from '@/shared/lib/http';
 import { useFamilyMutations } from '../hooks/useFamily';
 import { useFamilyLookup } from '../hooks/useFamilyLookup';
 import { MemberAvatar } from './MemberAvatar';
+import { getFamilyErrorMessage } from '../familyError';
 
 interface LinkMemberDialogProps {
   open: boolean;
@@ -39,7 +39,7 @@ export function LinkMemberDialog({ open, onClose }: LinkMemberDialogProps) {
       toast.success(t.link.success);
       close();
     } catch (error) {
-      toast.error(error instanceof ApiError ? error.message : t.errors.generic);
+      toast.error(getFamilyErrorMessage(error, t));
     }
   }
 
@@ -77,21 +77,24 @@ export function LinkMemberDialog({ open, onClose }: LinkMemberDialogProps) {
               {t.link.searching}
             </div>
           )}
-          {lookup.searched && !lookup.isSettling && !lookup.isLoading && found && (
-            <div className='flex items-center gap-3 rounded-[14px] border-2 border-[#00a8f1] bg-[#f3f4f8] px-4 py-3'>
-              <MemberAvatar name={fullName} image={found.img} />
-              <div className='min-w-0'>
-                <p className='truncate text-sm font-bold text-[#1e2364]'>
-                  {fullName}
-                </p>
-                {(found.email || found.userName) && (
-                  <p className='truncate text-xs text-[#6b7196]'>
-                    {found.email ?? found.userName}
+          {lookup.searched &&
+            !lookup.isSettling &&
+            !lookup.isLoading &&
+            found && (
+              <div className='flex items-center gap-3 rounded-[14px] border-2 border-[#00a8f1] bg-[#f3f4f8] px-4 py-3'>
+                <MemberAvatar name={fullName} image={found.img} />
+                <div className='min-w-0'>
+                  <p className='truncate text-sm font-bold text-[#1e2364]'>
+                    {fullName}
                   </p>
-                )}
+                  {(found.email || found.userName) && (
+                    <p className='truncate text-xs text-[#6b7196]'>
+                      {found.email ?? found.userName}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           {lookup.searched &&
             !lookup.isSettling &&
             !lookup.isLoading &&

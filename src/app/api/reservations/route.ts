@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
     const token = await resolveRouteToken(request);
     if (!token) return routeUnauthorized();
     const params = request.nextUrl.searchParams;
-    const ownerId =
-      params.get('ownerId')?.trim() || (await resolveTokenUser(token)).id;
+    const selfId = (await resolveTokenUser(token)).id;
+    const ownerId = params.get('ownerId')?.trim() || selfId;
 
     const data = await listReservations(
       token,
@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
         upcoming: params.get('upcoming') !== '0',
         pageNumber: toPositiveInt(params.get('page')) ?? 1,
         ownerId,
+        isSelf: ownerId === selfId,
       },
       resolveLocale(params.get('locale'))
     );

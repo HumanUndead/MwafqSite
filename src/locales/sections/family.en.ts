@@ -11,7 +11,6 @@ const familyEn = {
   tabsAriaLabel: 'Family lists',
   tabs: {
     related: 'Related users',
-    belongTo: 'I belong to',
   },
   sections: {
     accepted: 'Accepted',
@@ -25,11 +24,12 @@ const familyEn = {
   },
   empty: {
     related: 'No related users found',
-    belongTo: 'No users you belong to',
     sent: 'No sent requests',
     received: 'No pending requests',
   },
   actions: {
+    viewReservations: 'Reservations',
+    viewCourses: 'Courses',
     add: 'Add family member',
     linkExisting: 'Link an existing account',
     createNew: 'Create related user',
@@ -89,6 +89,14 @@ const familyEn = {
     success: 'Family member created',
   },
   errors: {
+    waitingApproval: 'Waiting for approval',
+    invalidUserType: 'Both accounts must be individual clients',
+    selfLink: 'You cannot add yourself',
+    alreadyBelongs: 'This user already belongs to another account',
+    alreadyLinked: 'You already have a request or link with this user',
+    userNotFound: 'User not found',
+    alreadyAnswered: 'This request was already answered',
+    relationNotFound: 'This link no longer exists',
     required: 'This field is required',
     phone: 'Enter a valid Saudi mobile number or email',
     date: 'Enter a valid date of birth',

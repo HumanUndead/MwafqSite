@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useTranslations } from '@/i18n/DictionaryProvider';
 import { toast } from '@/shared/components/feedback/Toast';
-import { ApiError } from '@/shared/lib/http';
 import { RelatedUserStatus } from '../types/family.types';
 import { useFamilyMutations } from './useFamily';
+import { getFamilyErrorMessage } from '../familyError';
 
 export type FamilyActionKind = 'remove' | 'cancelRequest' | 'accept' | 'reject';
 
@@ -67,7 +67,7 @@ export function useFamilyAction() {
       }
       toast.success(copy[kind].done);
     } catch (error) {
-      toast.error(error instanceof ApiError ? error.message : t.errors.generic);
+      toast.error(getFamilyErrorMessage(error, t));
     } finally {
       setPending(null);
     }

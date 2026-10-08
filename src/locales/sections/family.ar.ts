@@ -11,7 +11,6 @@ const familyAr = {
   tabsAriaLabel: 'قوائم العائلة',
   tabs: {
     related: 'المرتبطون',
-    belongTo: 'أنا أنتمي إلى',
   },
   sections: {
     accepted: 'المقبولة',
@@ -25,11 +24,12 @@ const familyAr = {
   },
   empty: {
     related: 'لا يوجد لديك مستخدمون مرتبطون',
-    belongTo: 'لا يوجد مستخدمون تنتمي إليهم',
     sent: 'لا توجد طلبات مرسلة',
     received: 'لا توجد طلبات معلقة',
   },
   actions: {
+    viewReservations: 'الحجوزات',
+    viewCourses: 'الدورات',
     add: 'إضافة فرد من العائلة',
     linkExisting: 'ربط حساب حالي',
     createNew: 'إنشاء مستخدم مرتبط',
@@ -88,6 +88,14 @@ const familyAr = {
     success: 'تم إنشاء فرد العائلة',
   },
   errors: {
+    waitingApproval: 'بانتظار الموافقة',
+    invalidUserType: 'يجب أن يكون الحسابان من حسابات الأفراد',
+    selfLink: 'لا يمكنك إضافة نفسك',
+    alreadyBelongs: 'هذا المستخدم مرتبط بحساب آخر',
+    alreadyLinked: 'لديك طلب أو ارتباط سابق مع هذا المستخدم',
+    userNotFound: 'المستخدم غير موجود',
+    alreadyAnswered: 'تم الرد على هذا الطلب مسبقًا',
+    relationNotFound: 'هذا الارتباط لم يعد موجودًا',
     required: 'هذا الحقل مطلوب',
     phone: 'أدخل رقم جوال سعودي أو بريدًا إلكترونيًا صحيحًا',
     date: 'أدخل تاريخ ميلاد صحيحًا',

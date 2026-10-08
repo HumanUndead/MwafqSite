@@ -24,7 +24,10 @@ import type { AcademyCourseRow } from './types/academy.types';
 function pickResume(courses: AcademyCourseRow[]): AcademyCourseRow | null {
   return (
     [...courses].sort(
-      (a, b) => b.progress - a.progress || b.rank - a.rank || a.enrollmentId - b.enrollmentId
+      (a, b) =>
+        b.progress - a.progress ||
+        b.rank - a.rank ||
+        a.enrollmentId - b.enrollmentId
     )[0] ?? null
   );
 }
@@ -56,8 +59,12 @@ function StatTile({
         {icon}
       </span>
       <div className='min-w-0'>
-        <p className='text-2xl font-bold leading-none tabular-nums text-white'>{value}</p>
-        <p className='mt-1 truncate text-xs font-semibold text-white/70'>{label}</p>
+        <p className='text-2xl font-bold leading-none tabular-nums text-white'>
+          {value}
+        </p>
+        <p className='mt-1 truncate text-xs font-semibold text-white/70'>
+          {label}
+        </p>
       </div>
     </div>
   );
@@ -84,7 +91,9 @@ function SummaryHeader({
       />
       <div className='flex flex-wrap items-start justify-between gap-4'>
         <div className='min-w-0'>
-          <h2 className='text-[22px] font-bold leading-tight sm:text-[28px]'>{t.title}</h2>
+          <h2 className='text-[22px] font-bold leading-tight sm:text-[28px]'>
+            {t.title}
+          </h2>
           {total > 0 ? (
             <>
               <p className='mt-2 text-sm font-semibold text-[#5bc8ff]'>
@@ -131,6 +140,8 @@ function SummaryHeader({
 
 export type AcademyCoursesViewProps = {
   courses?: readonly AcademyCourseRow[];
+  /** Shown above the list (e.g. viewing a family member's courses). */
+  notice?: string;
 };
 
 /**
@@ -138,7 +149,10 @@ export type AcademyCoursesViewProps = {
  * every course filtered by status (all / in progress / awaiting payment /
  * completed). Grouping and resume rules match the mobile app.
  */
-export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
+export function AcademyCoursesView({
+  courses,
+  notice,
+}: AcademyCoursesViewProps) {
   const rows = [...(courses ?? [])];
   const t = useTranslations('profileAcademy');
   const locale = useLocale() as Locale;
@@ -166,6 +180,11 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
 
   return (
     <section className='relative flex flex-col gap-7'>
+      {notice && (
+        <p className='rounded-[16px] border-2 border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800'>
+          {notice}
+        </p>
+      )}
       <SummaryHeader
         total={rows.length}
         inProgress={studying.length}
@@ -185,7 +204,9 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
             <GraduationCap className='size-7' aria-hidden />
           </span>
           <p className='text-xl font-bold text-[#1e2364]'>{t.emptyTitle}</p>
-          <p className='max-w-md text-sm leading-6 text-[#6b7196]'>{t.emptyBody}</p>
+          <p className='max-w-md text-sm leading-6 text-[#6b7196]'>
+            {t.emptyBody}
+          </p>
           <Link
             href={`/${locale}/courses`}
             className={cn(
@@ -201,7 +222,9 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
         <>
           {resume && (
             <section className='flex flex-col gap-3'>
-              <h3 className='text-lg font-bold text-[#1e2364]'>{t.continueLearning}</h3>
+              <h3 className='text-lg font-bold text-[#1e2364]'>
+                {t.continueLearning}
+              </h3>
               <ContinueLearningCard course={resume} locale={locale} t={t} />
             </section>
           )}
@@ -234,7 +257,9 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
                     <span
                       className={cn(
                         'inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums',
-                        active ? 'bg-white/20 text-white' : 'bg-[#1e2364]/[0.06] text-[#1e2364]'
+                        active
+                          ? 'bg-white/20 text-white'
+                          : 'bg-[#1e2364]/[0.06] text-[#1e2364]'
                       )}
                     >
                       {count}
@@ -253,7 +278,11 @@ export function AcademyCoursesView({ courses }: AcademyCoursesViewProps) {
                 <ul className='grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3'>
                   {visible.map((course) => (
                     <li key={course.id} className='min-w-0'>
-                      <EnrolledCourseCard course={course} locale={locale} t={t} />
+                      <EnrolledCourseCard
+                        course={course}
+                        locale={locale}
+                        t={t}
+                      />
                     </li>
                   ))}
                 </ul>
