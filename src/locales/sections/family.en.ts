@@ -22,14 +22,28 @@ const familyEn = {
     accepted: 'Accepted',
     rejected: 'Rejected',
   },
+  list: {
+    title: 'People you book for',
+    description: 'Book appointments and follow courses for accepted members.',
+  },
   empty: {
-    related: 'No related users found',
+    related: 'No family members yet',
+    relatedDescription: 'Add a family member to book appointments for them.',
     sent: 'No sent requests',
     received: 'No pending requests',
   },
+  add: {
+    title: 'Add a family member',
+    description: 'Choose how to add them.',
+    linkDescription:
+      'They already have a Mwafq account. We send them a request to approve.',
+    createTitle: 'Create a new account',
+    createDescription:
+      "They don't have an account yet. It is linked to you straight away.",
+  },
   actions: {
-    viewReservations: 'Reservations',
-    viewCourses: 'Courses',
+    viewReservations: 'View reservations',
+    viewCourses: 'View courses',
     add: 'Add family member',
     linkExisting: 'Link an existing account',
     createNew: 'Create related user',

@@ -1,62 +1,40 @@
 'use client';
 
-import { BookOpen, ChevronLeft, Play } from 'lucide-react';
-import Link from 'next/link';
+import { VideoOff } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { Dictionary } from '@/locales/types';
-import { AcademyStage } from '../ui/AcademyGlass';
+import { EmptyState, Notice, Panel } from '@/shared/components/product';
 
 /**
- * The page's single dark stage: back link, course name and the video
- * (`video`, the custom player) or the no-video placeholder.
+ * The video area: the player in a plain black frame, or a short
+ * "no video" panel for text-only lectures.
  */
 export function LectureStage({
-  backHref,
-  courseName,
   video,
+  unavailable,
   labels: t,
 }: {
-  backHref: string;
-  courseName: string;
   /** The player, or null when the lecture has no video. */
   video: ReactNode | null;
+  /** The player API could not be driven (SDK blocked or failed). */
+  unavailable: boolean;
   labels: Dictionary['academyLecture'];
 }) {
-  return (
-    <AcademyStage
-      className='rounded-[28px] shadow-[0_24px_64px_-24px_rgba(20,24,72,0.6)] sm:rounded-[36px]'
-      innerClassName='max-w-none p-3 sm:p-5 lg:p-6'
-    >
-      <div className='mb-3 flex min-w-0 items-center gap-3 sm:mb-4'>
-        <Link
-          href={backHref}
-          className='inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold text-white ring-1 ring-white/15 transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]'
-        >
-          <ChevronLeft className='size-4 rtl:rotate-180' aria-hidden />
-          <span className='hidden sm:inline'>{t.backToCourse}</span>
-          <span className='sr-only sm:hidden'>{t.backToCourse}</span>
-        </Link>
-        <p className='flex min-w-0 items-center gap-2 text-sm font-semibold text-white/75'>
-          <BookOpen className='size-4 shrink-0 text-[#00a8f1]' aria-hidden />
-          <span className='sr-only'>{t.courseInfo}</span>
-          <span className='truncate'>{courseName}</span>
-        </p>
-      </div>
+  if (!video) {
+    return (
+      <Panel flush>
+        <EmptyState icon={<VideoOff aria-hidden />} title={t.noVideo} className='py-10' />
+      </Panel>
+    );
+  }
 
-      <div className='overflow-hidden rounded-[20px] bg-black ring-1 ring-white/10 sm:rounded-[24px]'>
-        {video ? (
-          video
-        ) : (
-          <div className='flex aspect-video items-center justify-center bg-[#141848]'>
-            <div className='space-y-4 px-6 text-center'>
-              <div className='mx-auto flex size-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 sm:size-20'>
-                <Play className='ms-1 size-8 text-[#00a8f1] sm:size-9' aria-hidden />
-              </div>
-              <p className='text-sm text-white/75'>{t.noVideo}</p>
-            </div>
-          </div>
-        )}
+  return (
+    <div className='flex flex-col gap-3'>
+      {/* The player keeps its own control bar LTR. */}
+      <div className='overflow-hidden rounded-xl bg-black'>
+        {video}
       </div>
-    </AcademyStage>
+      {unavailable ? <Notice tone='warning'>{t.videoUnavailable}</Notice> : null}
+    </div>
   );
 }

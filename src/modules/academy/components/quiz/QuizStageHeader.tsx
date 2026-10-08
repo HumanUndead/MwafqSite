@@ -1,54 +1,38 @@
 import type { ReactNode } from 'react';
-import { safeHtml } from '@/shared/lib/safeHtml';
 import { AcademyStage } from '../ui/AcademyGlass';
 
 /**
- * Compact navy stage for the quiz: course name, quiz title, an optional
- * one-line description, a leading back/exit control and a trailing slot
- * (the timer). `children` renders below (counter + navigator).
+ * Quiz page band: a back/exit control and the timer on one row, then the
+ * course name and quiz title. `children` renders below (progress).
  */
 export function QuizStageHeader({
   courseName,
-  image,
   title,
-  description,
   leading,
   trailing,
   children,
 }: {
   courseName?: string | null;
-  image?: string | null;
   title: string;
-  description?: string | null;
   leading?: ReactNode;
   trailing?: ReactNode;
   children?: ReactNode;
 }) {
   return (
-    <AcademyStage
-      image={image}
-      className='mx-2 rounded-[28px] sm:mx-3 sm:rounded-[36px]'
-      innerClassName='max-w-3xl pt-6 pb-16 sm:pt-8 sm:pb-20 lg:pt-10 lg:pb-20'
-    >
-      <div className='flex items-start gap-3 sm:gap-4'>
+    <AcademyStage innerClassName='max-w-5xl py-4 sm:py-5 lg:py-6'>
+      <div className='flex min-h-9 items-center justify-between gap-3'>
         {leading}
-        <div className='min-w-0 flex-1'>
-          {courseName ? (
-            <p className='truncate text-sm font-semibold text-white/70'>
-              {courseName}
-            </p>
-          ) : null}
-          <h1 className='mt-0.5 line-clamp-2 text-xl font-bold leading-tight text-white sm:text-[28px]'>
-            {title}
-          </h1>
-          {description ? (
-            <div
-              className='mt-1.5 line-clamp-1 text-sm text-white/70 [&_*]:inline'
-              dangerouslySetInnerHTML={{ __html: safeHtml(description) }}
-            />
-          ) : null}
-        </div>
         {trailing}
+      </div>
+      <div className='mt-3 min-w-0'>
+        {courseName ? (
+          <p className='break-words text-[13px] font-semibold text-[#6b7196]'>
+            {courseName}
+          </p>
+        ) : null}
+        <h1 className='mt-0.5 break-words text-[20px] font-bold leading-tight text-[#1e2364] sm:text-[24px]'>
+          {title}
+        </h1>
       </div>
       {children}
     </AcademyStage>

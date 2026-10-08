@@ -1,201 +1,173 @@
 'use client';
 
-import { Inbox, Link2, UserPlus } from 'lucide-react';
+import { Users } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { getLocalizedRoute } from '@/i18n/routing';
+import { AddMemberDialog } from '@/modules/family/components/AddMemberDialog';
+import { CreateMemberDialog } from '@/modules/family/components/CreateMemberDialog';
+import { FamilyActionDialog } from '@/modules/family/components/FamilyActionDialog';
 import {
-  profileTabListClass,
-  profileTabTriggerClass,
-} from '@/modules/profile/tabStyles';
-import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
-import { Button, buttonVariants } from '@/shared/components/ui/Button';
-import { ROUTES } from '@/shared/constants/routes';
-import { cn } from '@/shared/lib/cn';
-import { CreateMemberDialog } from './components/CreateMemberDialog';
-import { FamilyActionDialog } from './components/FamilyActionDialog';
-import {
-  FamilyEmpty,
   FamilyListSkeleton,
   FamilyLoadError,
-} from './components/FamilyStates';
-import { LinkMemberDialog } from './components/LinkMemberDialog';
-import { MemberRow } from './components/MemberRow';
-import { useFamily } from './hooks/useFamily';
-import { useFamilyAction } from './hooks/useFamilyAction';
-import { useFamilySelectionStore } from './store/familySelectionStore';
-import { RelatedUserStatus, type RelatedUser } from './types/family.types';
+} from '@/modules/family/components/FamilyStates';
+import { LinkMemberDialog } from '@/modules/family/components/LinkMemberDialog';
+import { MemberRow } from '@/modules/family/components/MemberRow';
+import { useFamily } from '@/modules/family/hooks/useFamily';
+import { useFamilyAction } from '@/modules/family/hooks/useFamilyAction';
+import { useFamilySelectionStore } from '@/modules/family/store/familySelectionStore';
+import {
+  RelatedUserStatus,
+  type RelatedUser,
+} from '@/modules/family/types/family.types';
+import {
+  EmptyState,
+  PageHeader,
+  Panel,
+  PanelHeader,
+  productCountClass,
+} from '@/shared/components/product';
+import { Button, buttonVariants } from '@/shared/components/ui/Button';
+import { ROUTES } from '@/shared/constants/routes';
 
-function bySection(list: RelatedUser[]) {
-  return {
-    accepted: list.filter((item) => item.status === RelatedUserStatus.Accepted),
-    rejected: list.filter((item) => item.status === RelatedUserStatus.Rejected),
-  };
-}
+type DialogKind = 'add' | 'link' | 'create' | null;
+
+const isPending = (item: RelatedUser) =>
+  item.status === RelatedUserStatus.Pending;
 
 export function FamilyView() {
   const t = useTranslations('family');
   const locale = useLocale();
   const { data, isLoading, isError, refetch } = useFamily();
   const action = useFamilyAction();
-  const [dialog, setDialog] = useState<'link' | 'create' | null>(null);
+  const [dialog, setDialog] = useState<DialogKind>(null);
   const setSelectedMemberId = useFamilySelectionStore(
     (state) => state.setSelectedMemberId
   );
 
+  const related = data?.relatedToUsers ?? [];
+  // Accepted first, then rejected; pending ones live on the requests page.
+  const members = [
+    ...related.filter((item) => item.status === RelatedUserStatus.Accepted),
+    ...related.filter((item) => item.status === RelatedUserStatus.Rejected),
+  ];
   const pendingCount =
-    (data?.relatedToUsers ?? []).filter(
-      (item) => item.status === RelatedUserStatus.Pending
-    ).length +
-    (data?.belongToUsers ?? []).filter(
-      (item) => item.status === RelatedUserStatus.Pending
-    ).length;
+    related.filter(isPending).length +
+    (data?.belongToUsers ?? []).filter(isPending).length;
 
-  function renderList(
-    list: RelatedUser[],
-    nameOf: 'member' | 'owner',
-    emptyLabel: string
-  ) {
-    const sections = bySection(list);
-    if (sections.accepted.length + sections.rejected.length === 0) {
-      return <FamilyEmpty label={emptyLabel} />;
-    }
-    return (
-      <div className='flex flex-col gap-6'>
-        {(['accepted', 'rejected'] as const).map((key) =>
-          sections[key].length > 0 ? (
-            <div key={key}>
-              <h3 className='mb-2 text-[13px] font-bold uppercase tracking-wide text-[#6b7196]'>
-                {t.sections[key]}
-              </h3>
-              <ul className='flex flex-col gap-2'>
-                {sections[key].map((member) => (
-                  <MemberRow
-                    key={member.id}
-                    member={member}
-                    nameOf={nameOf}
-                    actions={
-                      <>
-                        {key === 'accepted' && nameOf === 'member' && (
-                          <>
-                            <Link
-                              href={getLocalizedRoute(
-                                locale,
-                                ROUTES.MY_RESERVATIONS
-                              )}
-                              onClick={() => setSelectedMemberId(member.userId)}
-                              className={buttonVariants({
-                                variant: 'outline',
-                                size: 'sm',
-                              })}
-                            >
-                              {t.actions.viewReservations}
-                            </Link>
-                            <Link
-                              href={`${getLocalizedRoute(locale, ROUTES.ACADEMY_COURSES)}?userId=${encodeURIComponent(member.userId)}`}
-                              className={buttonVariants({
-                                variant: 'outline',
-                                size: 'sm',
-                              })}
-                            >
-                              {t.actions.viewCourses}
-                            </Link>
-                          </>
-                        )}
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          type='button'
-                          className='text-red-600'
-                          onClick={() => action.request('remove', member.id)}
-                        >
-                          {t.actions.remove}
-                        </Button>
-                      </>
-                    }
-                  />
-                ))}
-              </ul>
-            </div>
-          ) : null
-        )}
-      </div>
-    );
-  }
+  const reservationsHref = getLocalizedRoute(locale, ROUTES.MY_RESERVATIONS);
+  const coursesHref = getLocalizedRoute(locale, ROUTES.ACADEMY_COURSES);
+  const rowAction = buttonVariants({ variant: 'productText', size: 'compact' });
 
   return (
-    <section className='relative pt-2'>
-      <ScrollReveal className='mb-7'>
-        <h1 className='mb-2.5 text-[clamp(30px,4vw,44px)] font-extrabold leading-[1.1] tracking-[-1.4px] text-[#1e2364]'>
-          {t.title}
-        </h1>
-        <p className='max-w-150 text-base leading-relaxed text-[#6b7196]'>
-          {t.subtitle}
-        </p>
-      </ScrollReveal>
+    <div className='flex flex-col gap-6'>
+      <PageHeader
+        title={t.title}
+        description={t.subtitle}
+        actions={
+          <>
+            <Link
+              href={getLocalizedRoute(locale, ROUTES.FAMILY_REQUESTS)}
+              className={buttonVariants({
+                variant: 'productSecondary',
+                size: 'control',
+              })}
+            >
+              {t.requests.link}
+              {pendingCount > 0 ? (
+                <span className={productCountClass}>{pendingCount}</span>
+              ) : null}
+            </Link>
+            <Button
+              type='button'
+              variant='product'
+              size='control'
+              onClick={() => setDialog('add')}
+            >
+              {t.actions.add}
+            </Button>
+          </>
+        }
+      />
 
-      <div className='mb-6 flex flex-wrap items-center gap-2'>
-        <Button variant='brand' type='button' onClick={() => setDialog('link')}>
-          <Link2 className='size-4' aria-hidden />
-          {t.actions.linkExisting}
-        </Button>
-        <Button
-          variant='outline'
-          type='button'
-          onClick={() => setDialog('create')}
-        >
-          <UserPlus className='size-4' aria-hidden />
-          {t.actions.createNew}
-        </Button>
-        <Link
-          href={getLocalizedRoute(locale, ROUTES.FAMILY_REQUESTS)}
-          className={cn(buttonVariants({ variant: 'ghost' }), 'ms-auto')}
-        >
-          <Inbox className='size-4' aria-hidden />
-          {t.requests.link}
-          {pendingCount > 0 && (
-            <span className='inline-flex min-w-5 items-center justify-center rounded-full bg-[#00a8f1] px-1.5 text-[11px] font-bold text-white'>
-              {pendingCount}
-            </span>
-          )}
-        </Link>
-      </div>
+      <Panel flush aria-labelledby='family-members-title'>
+        <PanelHeader
+          id='family-members-title'
+          title={t.list.title}
+          description={t.list.description}
+          className='border-b border-[#eef0f7] px-5 py-4 sm:px-6'
+        />
+        {isLoading ? (
+          <FamilyListSkeleton />
+        ) : isError ? (
+          <FamilyLoadError onRetry={() => void refetch()} />
+        ) : members.length === 0 ? (
+          <EmptyState
+            icon={<Users aria-hidden />}
+            title={t.empty.related}
+            description={t.empty.relatedDescription}
+            action={
+              <Button
+                type='button'
+                variant='productSecondary'
+                size='control'
+                onClick={() => setDialog('add')}
+              >
+                {t.actions.add}
+              </Button>
+            }
+          />
+        ) : (
+          <ul className='divide-y divide-[#eef0f7]'>
+            {members.map((member) => {
+              const accepted = member.status === RelatedUserStatus.Accepted;
+              return (
+                <MemberRow
+                  key={member.id}
+                  member={member}
+                  showStatus={!accepted}
+                  actions={
+                    <>
+                      {accepted ? (
+                        <>
+                          <Link
+                            href={reservationsHref}
+                            onClick={() => setSelectedMemberId(member.userId)}
+                            className={rowAction}
+                          >
+                            {t.actions.viewReservations}
+                          </Link>
+                          <Link
+                            href={`${coursesHref}?userId=${encodeURIComponent(member.userId)}`}
+                            className={rowAction}
+                          >
+                            {t.actions.viewCourses}
+                          </Link>
+                        </>
+                      ) : null}
+                      <Button
+                        type='button'
+                        variant='productDanger'
+                        size='compact'
+                        onClick={() => action.request('remove', member.id)}
+                      >
+                        {t.actions.remove}
+                      </Button>
+                    </>
+                  }
+                />
+              );
+            })}
+          </ul>
+        )}
+      </Panel>
 
-      <Tabs defaultValue='related'>
-        <TabsList
-          variant='line'
-          aria-label={t.tabsAriaLabel}
-          className={profileTabListClass}
-        >
-          <TabsTrigger
-            value='related'
-            className={cn(profileTabTriggerClass, 'flex-initial')}
-          >
-            {t.tabs.related}
-          </TabsTrigger>
-        </TabsList>
-
-        <div className='mt-4'>
-          {isLoading ? (
-            <FamilyListSkeleton />
-          ) : isError ? (
-            <FamilyLoadError onRetry={() => void refetch()} />
-          ) : (
-            <>
-              <TabsContent value='related' className='outline-none'>
-                {renderList(
-                  data?.relatedToUsers ?? [],
-                  'member',
-                  t.empty.related
-                )}
-              </TabsContent>
-            </>
-          )}
-        </div>
-      </Tabs>
-
+      <AddMemberDialog
+        open={dialog === 'add'}
+        onClose={() => setDialog(null)}
+        onChoose={(mode) => setDialog(mode)}
+      />
       <LinkMemberDialog
         open={dialog === 'link'}
         onClose={() => setDialog(null)}
@@ -205,6 +177,6 @@ export function FamilyView() {
         onClose={() => setDialog(null)}
       />
       <FamilyActionDialog action={action} />
-    </section>
+    </div>
   );
 }

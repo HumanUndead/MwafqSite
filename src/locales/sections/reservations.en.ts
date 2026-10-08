@@ -17,6 +17,7 @@ const reservationsEn = {
     exams: 'No examinations found',
     upcoming: 'No upcoming appointments',
     results: 'No results found',
+    description: 'Book an appointment and it will show up here.',
   },
   loadError: "We couldn't load your reservations. Please try again.",
   retry: 'Try again',

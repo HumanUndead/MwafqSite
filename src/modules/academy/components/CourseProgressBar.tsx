@@ -6,30 +6,26 @@ interface CourseProgressBarProps {
   /** 0-100. */
   value: number;
   className?: string;
-  /** `dark` on the navy stage. */
+  /** Kept for call-site compatibility; there is one (light) style. */
   tone?: 'light' | 'dark';
+  /** Accessible name, e.g. "Your progress". */
+  label?: string;
 }
 
-export function CourseProgressBar({
-  value,
-  className,
-  tone = 'light',
-}: CourseProgressBarProps) {
-  const clamped = Math.max(0, Math.min(100, value));
+/** Thin progress track that fills from the start side. */
+export function CourseProgressBar({ value, className, label }: CourseProgressBarProps) {
+  const clamped = Math.max(0, Math.min(100, Math.round(value)));
   return (
     <div
-      className={cn(
-        'relative h-2 w-full overflow-hidden rounded-full',
-        tone === 'dark' ? 'bg-white/15' : 'bg-[#e5e7f0]',
-        className
-      )}
+      className={cn('relative h-2 w-full overflow-hidden rounded-full bg-[#e5e7f0]', className)}
       role='progressbar'
       aria-valuenow={clamped}
       aria-valuemin={0}
       aria-valuemax={100}
+      aria-label={label}
     >
       <div
-        className='absolute inset-y-0 start-0 rounded-full bg-gradient-to-r from-[#00a8f1] to-[#5bc8ff] shadow-[0_0_12px_rgba(0,168,241,0.6)] transition-[width] duration-500 ease-out'
+        className='absolute inset-y-0 start-0 rounded-full bg-[#00a8f1] transition-[width] duration-500 ease-out motion-reduce:transition-none'
         style={{ width: `${clamped}%` }}
       />
     </div>

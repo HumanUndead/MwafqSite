@@ -156,13 +156,6 @@ async function verifyUserNameOtp(userName: string, otp: string) {
 
     const responseText = upstreamResponse.body;
     const payload = parseJsonSafe(responseText);
-    // TEMP debug: log the VerifyOTP (login) response. Remove before pushing.
-    console.log(
-      '[auth/otp/verify] response',
-      upstreamResponse.status,
-      JSON.stringify(payload, null, 2)
-    );
-
     const upstreamCode = extractUpstreamCode(payload);
 
     if (upstreamResponse.status >= 400 || hasUpstreamFailure(payload)) {

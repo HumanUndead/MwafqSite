@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2, PlayCircle } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
@@ -20,9 +20,8 @@ interface CourseEnrollCtaProps {
   paymentSettings?: CoursePaymentSettings | null;
 }
 
-/** Full-width sky primary action used on the course landing purchase card. */
-const ctaClass =
-  'h-12 w-full whitespace-nowrap rounded-full bg-[#00a8f1] px-6 text-[15px] font-bold text-white shadow-[0_10px_24px_-12px_rgba(0,168,241,0.8)] hover:bg-[#0090d1] focus:ring-0 focus:ring-offset-0 focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2';
+/** The page's one primary action, full width in the purchase panel / bar. */
+const ctaClass = 'w-full whitespace-nowrap';
 
 /**
  * Owned → Continue learning; pending payment → Continue payment (resume);
@@ -46,15 +45,14 @@ export function CourseEnrollCta({ courseId, courseTitle, paymentSettings }: Cour
   if (owned && !owned.awaitingPayment) {
     return (
       <div className='flex w-full flex-col gap-2'>
-        <p className='hidden items-center gap-1.5 text-sm font-semibold text-emerald-700 lg:flex'>
+        <p className='hidden items-center gap-1.5 text-[14px] font-semibold text-green-800 lg:flex'>
           <CheckCircle2 className='size-4 shrink-0' aria-hidden />
           {t.owned}
         </p>
         <Link
           href={learnBasePath(locale, owned.enrollmentId, courseId)}
-          className={cn(buttonVariants({ variant: 'brand' }), ctaClass)}
+          className={cn(buttonVariants({ variant: 'product', size: 'control' }), ctaClass)}
         >
-          <PlayCircle className='size-[18px] shrink-0' strokeWidth={2.2} aria-hidden />
           {t.continueLearning}
         </Link>
       </div>

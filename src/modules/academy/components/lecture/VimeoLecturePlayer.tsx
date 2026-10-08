@@ -122,7 +122,7 @@ function formatTime(total: number): string {
 }
 
 const controlButton =
-  'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-white transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none';
+  'inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-lg text-white transition-colors duration-150 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none';
 
 /**
  * Lecture video with custom controls. Until the lecture is completed the
@@ -392,7 +392,7 @@ export function VimeoLecturePlayer({
       onMouseMove={revealControls}
       onFocus={revealControls}
       className={cn(
-        'group/player relative aspect-video select-none overflow-hidden bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] print:hidden',
+        'group/player relative aspect-video select-none overflow-hidden bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#00a8f1] print:hidden',
         fullscreen && 'aspect-auto size-full',
         playing && !showControls && 'cursor-none'
       )}
@@ -422,9 +422,9 @@ export function VimeoLecturePlayer({
           type='button'
           onClick={togglePlay}
           aria-label={labels.play}
-          className='absolute inset-0 m-auto inline-flex size-16 cursor-pointer items-center justify-center rounded-full bg-[#00a8f1] text-white shadow-[0_12px_32px_-8px_rgba(0,168,241,0.7)] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none motion-reduce:hover:scale-100 sm:size-20'
+          className='absolute inset-0 m-auto inline-flex size-16 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white ring-1 ring-white/30 transition-colors duration-150 hover:bg-black/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none sm:size-[72px]'
         >
-          <Play className='ms-1 size-7 sm:size-9' aria-hidden />
+          <Play className='ms-1 size-7 sm:size-8' aria-hidden />
         </button>
       )}
 
@@ -439,7 +439,7 @@ export function VimeoLecturePlayer({
           role='status'
           className='pointer-events-none absolute inset-x-0 top-4 flex justify-center px-4'
         >
-          <span className='inline-flex items-center gap-2 rounded-full bg-black/75 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/15 backdrop-blur'>
+          <span className='inline-flex items-center gap-2 rounded-lg bg-black/80 px-4 py-2 text-sm font-semibold text-white'>
             <Lock className='size-4 text-amber-400' aria-hidden />
             {labels.skipLocked}
           </span>
@@ -451,7 +451,7 @@ export function VimeoLecturePlayer({
         <div
           dir='ltr'
           className={cn(
-            'absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent px-3 pb-2 pt-10 transition-opacity duration-300 motion-reduce:transition-none sm:px-4 sm:pb-3',
+            'absolute inset-x-0 bottom-0 bg-black/70 px-3 pb-1.5 pt-2 transition-opacity duration-300 motion-reduce:transition-none sm:px-4 sm:pb-3',
             showControls ? 'opacity-100' : 'pointer-events-none opacity-0'
           )}
         >
@@ -485,7 +485,7 @@ export function VimeoLecturePlayer({
                 )}
                 <SliderPrimitive.Indicator className='rounded-full bg-[#00a8f1]' />
               </SliderPrimitive.Track>
-              <SliderPrimitive.Thumb className='block size-3.5 rounded-full bg-white shadow ring-2 ring-[#00a8f1] focus-visible:outline-none focus-visible:ring-4' />
+              <SliderPrimitive.Thumb className='block size-3.5 rounded-full bg-white ring-2 ring-[#00a8f1] focus-visible:outline-none focus-visible:ring-4' />
             </SliderPrimitive.Control>
           </SliderPrimitive.Root>
 
@@ -544,7 +544,7 @@ export function VimeoLecturePlayer({
             <span className='flex-1' />
 
             {!allowSeek && (
-              <span className='hidden items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-semibold text-white/80 ring-1 ring-white/15 sm:inline-flex'>
+              <span className='hidden items-center gap-1.5 text-xs font-semibold text-white/80 sm:inline-flex'>
                 <Lock className='size-3.5 text-amber-400' aria-hidden />
                 {labels.completeToSkip}
               </span>
@@ -585,10 +585,10 @@ export function VimeoLecturePlayer({
         <div
           role='alertdialog'
           aria-labelledby='video-shield-title'
-          className='absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-[#0b0e2e] px-6 text-center text-white'
+          className='absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-[#11143a] px-6 text-center text-white'
         >
-          <span className='inline-flex size-14 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 ring-1 ring-amber-400/30'>
-            <ShieldAlert className='size-7' aria-hidden />
+          <span className='inline-flex size-12 items-center justify-center rounded-full bg-white/10 text-amber-300'>
+            <ShieldAlert className='size-6' aria-hidden />
           </span>
           <p id='video-shield-title' className='text-base font-bold sm:text-lg'>
             {devtoolsOpen ? labels.shieldDevtoolsTitle : labels.shieldTitle}
@@ -600,7 +600,7 @@ export function VimeoLecturePlayer({
             <button
               type='button'
               onClick={() => setShield(null)}
-              className='mt-1 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#00a8f1] px-5 text-sm font-bold text-white transition-colors hover:bg-[#0090d1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none'
+              className='mt-2 inline-flex h-11 cursor-pointer items-center justify-center rounded-xl bg-white px-5 text-sm font-semibold text-[#1e2364] transition-colors duration-150 hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none'
             >
               {labels.shieldResume}
             </button>

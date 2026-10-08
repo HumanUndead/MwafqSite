@@ -3,29 +3,30 @@
 import { Heart, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import type { ComponentType } from 'react';
 import type { Locale } from '@/i18n/config';
 import { useTranslations } from '@/i18n/DictionaryProvider';
-import { getPathnameWithoutLocale } from '@/i18n/routing';
+import { getLocalizedRoute, getPathnameWithoutLocale } from '@/i18n/routing';
 import {
   GraduationCapIcon,
   PersonalInfoIcon,
   ReservationsChartIcon,
 } from '@/shared/components/icons/profile';
-import { ROUTES } from '@/shared/constants/routes';
+import { ROUTES, type Route } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
-const navBase =
-  'flex w-full min-h-[48px] items-center gap-3 rounded-[14px] px-4 py-3 text-start text-[14.5px] font-semibold no-underline transition-colors duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] max-[1100px]:px-3.5';
+type NavKey = 'personalInfo' | 'academyCourses' | 'myReservations' | 'family' | 'favorites';
 
-const navActive =
-  'bg-[#1e2364] text-white shadow-sm hover:bg-[#1e2364] hover:text-white';
-
-const navIdle = 'text-[#6b7196] hover:bg-[#f2f2f2] hover:text-[#1e2364]';
+const ITEMS: { key: NavKey; route: Route; Icon: ComponentType<{ className?: string }> }[] = [
+  { key: 'personalInfo', route: ROUTES.PERSONAL_INFO, Icon: PersonalInfoIcon },
+  { key: 'myReservations', route: ROUTES.MY_RESERVATIONS, Icon: ReservationsChartIcon },
+  { key: 'academyCourses', route: ROUTES.ACADEMY_COURSES, Icon: GraduationCapIcon },
+  { key: 'family', route: ROUTES.FAMILY, Icon: Users },
+  { key: 'favorites', route: ROUTES.FAVORITES, Icon: Heart },
+];
 
 function routeActive(pathWithoutLocale: string, segment: string): boolean {
-  return (
-    pathWithoutLocale === segment || pathWithoutLocale.startsWith(`${segment}/`)
-  );
+  return pathWithoutLocale === segment || pathWithoutLocale.startsWith(`${segment}/`);
 }
 
 export function ProfileNavLinks({ locale }: { locale: Locale }) {
@@ -33,62 +34,29 @@ export function ProfileNavLinks({ locale }: { locale: Locale }) {
   const pathWithoutLocale = getPathnameWithoutLocale(pathname);
   const t = useTranslations('profileLayout').nav;
 
-  const personalActive = routeActive(pathWithoutLocale, ROUTES.PERSONAL_INFO);
-  const academyActive = routeActive(pathWithoutLocale, ROUTES.ACADEMY_COURSES);
-  const reservationsActive = routeActive(
-    pathWithoutLocale,
-    ROUTES.MY_RESERVATIONS
-  );
-  const familyActive = routeActive(pathWithoutLocale, ROUTES.FAMILY);
-  const favoritesActive = routeActive(pathWithoutLocale, ROUTES.FAVORITES);
-
   return (
     <>
-      <Link
-        href={`/${locale}${ROUTES.PERSONAL_INFO}`}
-        className={cn(navBase, personalActive ? navActive : navIdle)}
-        aria-current={personalActive ? 'page' : undefined}
-        data-cursor
-      >
-        <PersonalInfoIcon className='size-[18px] shrink-0 text-current' />
-        {t.personalInfo}
-      </Link>
-      <Link
-        href={`/${locale}${ROUTES.ACADEMY_COURSES}`}
-        className={cn(navBase, academyActive ? navActive : navIdle)}
-        aria-current={academyActive ? 'page' : undefined}
-        data-cursor
-      >
-        <GraduationCapIcon className='size-[18px] shrink-0 text-current' />
-        {t.academyCourses}
-      </Link>
-      <Link
-        href={`/${locale}${ROUTES.MY_RESERVATIONS}`}
-        className={cn(navBase, reservationsActive ? navActive : navIdle)}
-        aria-current={reservationsActive ? 'page' : undefined}
-        data-cursor
-      >
-        <ReservationsChartIcon className='size-[18px] shrink-0 text-current' />
-        {t.myReservations}
-      </Link>
-      <Link
-        href={`/${locale}${ROUTES.FAMILY}`}
-        className={cn(navBase, familyActive ? navActive : navIdle)}
-        aria-current={familyActive ? 'page' : undefined}
-        data-cursor
-      >
-        <Users className='size-[18px] shrink-0 text-current' aria-hidden />
-        {t.family}
-      </Link>
-      <Link
-        href={`/${locale}${ROUTES.FAVORITES}`}
-        className={cn(navBase, favoritesActive ? navActive : navIdle)}
-        aria-current={favoritesActive ? 'page' : undefined}
-        data-cursor
-      >
-        <Heart className='size-[18px] shrink-0 text-current' aria-hidden />
-        {t.favorites}
-      </Link>
+      {ITEMS.map(({ key, route, Icon }) => {
+        const active = routeActive(pathWithoutLocale, route);
+        return (
+          <Link
+            key={key}
+            href={getLocalizedRoute(locale, route)}
+            aria-current={active ? 'page' : undefined}
+            className={cn(
+              'flex h-10 shrink-0 items-center gap-2.5 whitespace-nowrap rounded-xl px-3.5 text-[14px] font-semibold transition-colors duration-150',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]',
+              'lg:h-11 lg:w-full lg:px-3',
+              active
+                ? 'bg-[#1e2364] text-white'
+                : 'border border-[#e5e7f0] bg-white text-[#4a5078] hover:text-[#1e2364] lg:border-transparent lg:bg-transparent lg:hover:bg-white'
+            )}
+          >
+            <Icon className='hidden size-[18px] shrink-0 lg:block' />
+            {t[key]}
+          </Link>
+        );
+      })}
     </>
   );
 }

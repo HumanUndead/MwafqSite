@@ -1,21 +1,26 @@
 'use client';
 
-import {
-  AlertTriangle,
-  ChevronLeft,
-  Download,
-  Eye,
-  FileText,
-} from 'lucide-react';
+import { ChevronLeft, Download, FileText } from 'lucide-react';
 import Link from 'next/link';
-import type { ReactNode } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { getLocalizedRoute } from '@/i18n/routing';
-import { Button } from '@/shared/components/ui/Button';
+import { ReservationDetailsSkeleton } from '@/modules/reservations/components/ReservationDetailsSkeleton';
+import { ReservationStatusBadge } from '@/modules/reservations/components/ReservationStatusBadge';
+import { useReservationDetails } from '@/modules/reservations/hooks/useReservations';
+import { ReservationStatus } from '@/modules/reservations/reservationStatus.shared';
+import {
+  ErrorState,
+  InfoItem,
+  InfoList,
+  Notice,
+  PageHeader,
+  Panel,
+  PanelHeader,
+  StatusBadge,
+} from '@/shared/components/product';
+import { buttonVariants } from '@/shared/components/ui/Button';
 import { SarAmount } from '@/shared/components/ui/SarAmount';
-import { Spinner } from '@/shared/components/ui/Spinner';
 import { ROUTES } from '@/shared/constants/routes';
-import { cn } from '@/shared/lib/cn';
 import {
   formatDateDMY,
   formatUtcDateTime,
@@ -27,42 +32,27 @@ import {
   attachmentUrl,
   splitAttachments,
 } from '@/shared/lib/media';
-import { ReservationStatusBadge } from './components/ReservationStatusBadge';
-import { useReservationDetails } from './hooks/useReservations';
-import { ReservationStatus } from './reservationStatus.shared';
 
-function Card({ title, children, aside }: { title: string; children: ReactNode; aside?: ReactNode }) {
-  return (
-    <section className='rounded-[24px] border-2 border-[#e5e7f0] bg-white p-5'>
-      <div className='mb-4 flex items-center justify-between gap-3'>
-        <h2 className='text-[16px] font-extrabold text-[#1e2364]'>{title}</h2>
-        {aside}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function Field({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className='rounded-[16px] bg-[#f3f4f8] px-4 py-3'>
-      <p className='text-[11.5px] font-bold uppercase tracking-wide text-[#6b7196]'>{label}</p>
-      <div className='mt-1 text-sm font-bold text-[#1e2364]'>{children}</div>
-    </div>
-  );
+function timeRange(from?: string | null, to?: string | null) {
+  if (!from) return '';
+  return to ? `${from.slice(0, 5)} – ${to.slice(0, 5)}` : from.slice(0, 5);
 }
 
 export function ReservationDetailsView({ id }: { id: string }) {
   const t = useTranslations('reservations');
   const d = t.details;
   const locale = useLocale();
-  const { data, isLoading, isError, error, refetch } = useReservationDetails(id);
-  const backHref = getLocalizedRoute(locale, ROUTES.MY_RESERVATIONS);
+  const { data, isLoading, isError, error, refetch } =
+    useReservationDetails(id);
 
   const back = (
     <Link
-      href={backHref}
-      className='mb-5 inline-flex items-center gap-2 text-[14.5px] font-bold text-[#1e2364] hover:text-[#00a8f1]'
+      href={getLocalizedRoute(locale, ROUTES.MY_RESERVATIONS)}
+      className={buttonVariants({
+        variant: 'productText',
+        size: 'compact',
+        className: '-ms-3.5 w-fit',
+      })}
     >
       <ChevronLeft className='size-4 rtl:rotate-180' aria-hidden />
       {d.back}
@@ -71,30 +61,27 @@ export function ReservationDetailsView({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <section>
+      <div className='flex flex-col gap-6'>
         {back}
-        <div className='flex justify-center py-20'>
-          <Spinner size='lg' />
-        </div>
-      </section>
+        <ReservationDetailsSkeleton />
+      </div>
     );
   }
 
   if (isError || !data) {
     const notFound = (error as { status?: number } | null)?.status === 404;
     return (
-      <section>
+      <div className='flex flex-col gap-6'>
         {back}
-        <div className='flex flex-col items-center gap-3 rounded-[24px] border-2 border-dashed border-[#e5e7f0] bg-white px-6 py-14 text-center' role='alert'>
-          <p className='text-lg font-extrabold text-[#1e2364]'>{d.notFoundTitle}</p>
-          <p className='text-sm text-[#6b7196]'>{notFound ? d.notFound : d.loadError}</p>
-          {!notFound && (
-            <Button variant='outline' type='button' onClick={() => void refetch()}>
-              {t.retry}
-            </Button>
-          )}
-        </div>
-      </section>
+        <Panel>
+          <ErrorState
+            title={d.notFoundTitle}
+            description={notFound ? d.notFound : d.loadError}
+            retryLabel={notFound ? undefined : t.retry}
+            onRetry={notFound ? undefined : () => void refetch()}
+          />
+        </Panel>
+      </div>
     );
   }
 
@@ -114,126 +101,171 @@ export function ReservationDetailsView({ id }: { id: string }) {
         : null;
 
   return (
-    <section className='flex flex-col gap-5'>
-      <div>{back}</div>
-      <h1 className='text-[clamp(26px,3.4vw,38px)] font-extrabold tracking-[-1px] text-[#1e2364]'>
-        {d.title}
-      </h1>
+    <div className='flex flex-col gap-6'>
+      <div className='flex flex-col gap-3'>
+        {back}
+        <PageHeader title={d.title} />
+      </div>
 
-      <Card title={data.serviceProviderBranchName} aside={<ReservationStatusBadge status={data.status} />}>
-        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-          <Field label={d.orderId}>
-            <span className='break-all font-mono text-[12.5px]' dir='ltr'>{data.id}</span>
-          </Field>
-          <Field label={d.createdBy}>{data.createdByName}</Field>
-          <Field label={d.owner}>{data.ownerName}</Field>
-          <Field label={d.date}>
-            <span dir='ltr'>{formatDateDMY(data.dateChosen)}</span>
-          </Field>
-          {data.serviceProviderBranchPhone && (
-            <Field label={d.branchPhone}>
-              <a href={`tel:${data.serviceProviderBranchPhone}`} dir='ltr' className='hover:text-[#00a8f1]'>
+      <Panel className='flex flex-col gap-5'>
+        <PanelHeader
+          title={data.serviceProviderBranchName}
+          action={<ReservationStatusBadge status={data.status} />}
+        />
+        <InfoList>
+          <InfoItem label={d.date}>
+            <bdi dir='ltr' className='tabular-nums'>
+              {formatDateDMY(data.dateChosen)}
+            </bdi>
+          </InfoItem>
+          <InfoItem label={d.owner}>{data.ownerName}</InfoItem>
+          {data.serviceProviderBranchPhone ? (
+            <InfoItem label={d.branchPhone}>
+              <a
+                href={`tel:${data.serviceProviderBranchPhone}`}
+                dir='ltr'
+                className='rounded-sm text-[#0077ad] underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]'
+              >
                 {data.serviceProviderBranchPhone}
               </a>
-            </Field>
-          )}
-          <Field label={d.tax}>
+            </InfoItem>
+          ) : null}
+          <InfoItem label={d.createdBy}>{data.createdByName}</InfoItem>
+          <InfoItem label={d.tax}>
             <SarAmount amount={data.sellPriceTax} />
-          </Field>
-          <Field label={d.finalTotal}>
-            <SarAmount amount={data.sellPrice} className='text-[15px]' />
-          </Field>
-        </div>
-      </Card>
+          </InfoItem>
+          <InfoItem label={d.finalTotal}>
+            <SarAmount amount={data.sellPrice} />
+          </InfoItem>
+          <InfoItem label={d.orderId} wide>
+            <bdi
+              dir='ltr'
+              className='break-all font-mono text-[13px] font-normal'
+            >
+              {data.id}
+            </bdi>
+          </InfoItem>
+        </InfoList>
+      </Panel>
 
-      {reason?.text && (
-        <div className='flex gap-3 rounded-[20px] border-2 border-red-200 bg-red-50 p-4' role='note'>
-          <AlertTriangle className='size-5 shrink-0 text-red-600' aria-hidden />
-          <div>
-            <p className='text-sm font-extrabold text-red-700'>{reason.label}</p>
-            <p className='text-sm text-red-700'>{reason.text}</p>
-          </div>
-        </div>
-      )}
+      {reason?.text ? (
+        <Notice tone='warning'>
+          {reason.label}: <span className='font-normal'>{reason.text}</span>
+        </Notice>
+      ) : null}
 
-      {(services.length > 0 || groups.length > 0) && (
-        <Card
-          title={d.services}
-          aside={
-            isComplete && data.isfit !== null ? (
-              <span
-                className={cn(
-                  'rounded-full px-3 py-1 text-xs font-bold',
-                  data.isfit ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
-                )}
-              >
-                {data.isfit ? d.fitForService : d.notFitForService}
-              </span>
-            ) : undefined
-          }
-        >
-          <ul className='flex flex-col gap-2'>
+      {services.length > 0 || groups.length > 0 ? (
+        <Panel flush>
+          <PanelHeader
+            title={d.services}
+            className='px-5 pt-5 pb-3 sm:px-6'
+            action={
+              isComplete && data.isfit !== null ? (
+                <StatusBadge tone={data.isfit ? 'success' : 'danger'}>
+                  {data.isfit ? d.fitForService : d.notFitForService}
+                </StatusBadge>
+              ) : undefined
+            }
+          />
+          <ul className='divide-y divide-[#eef0f7] border-t border-[#eef0f7]'>
             {services.map((service) => (
-              <li key={service.reservationServiceId ?? service.id} className='flex items-center justify-between gap-3 rounded-[14px] bg-[#f3f4f8] px-4 py-3'>
+              <li
+                key={service.reservationServiceId ?? service.id}
+                className='flex items-start justify-between gap-4 px-5 py-4 sm:px-6'
+              >
                 <div className='min-w-0'>
-                  <p className='text-sm font-bold text-[#1e2364]'>{service.serviceName}</p>
-                  <p className='text-xs font-semibold tabular-nums text-[#6b7196]' dir='ltr'>
-                    {service.from?.slice(0, 5)} – {service.to?.slice(0, 5)}
+                  <p className='break-words text-[15px] font-bold text-[#1e2364]'>
+                    {service.serviceName}
                   </p>
+                  {service.from ? (
+                    <p className='text-[13px] font-semibold tabular-nums text-[#6b7196]'>
+                      <bdi dir='ltr'>{timeRange(service.from, service.to)}</bdi>
+                    </p>
+                  ) : null}
                 </div>
-                <SarAmount amount={service.sellPrice} className='text-sm font-bold text-[#1e2364]' />
+                <SarAmount
+                  amount={service.sellPrice}
+                  className='shrink-0 text-[15px] font-semibold text-[#1e2364]'
+                />
               </li>
             ))}
             {groups.map((group, index) => (
-              <li key={`group-${index}`} className='rounded-[14px] bg-[#f3f4f8] px-4 py-3'>
-                <div className='flex items-center justify-between gap-3'>
-                  <div>
-                    <p className='text-sm font-bold text-[#1e2364]'>{d.group}</p>
-                    <p className='text-xs font-semibold tabular-nums text-[#6b7196]' dir='ltr'>
-                      {group.from?.slice(0, 5)} – {group.to?.slice(0, 5)}
+              <li key={`group-${index}`} className='px-5 py-4 sm:px-6'>
+                <div className='flex items-start justify-between gap-4'>
+                  <div className='min-w-0'>
+                    <p className='text-[15px] font-bold text-[#1e2364]'>
+                      {d.group}
                     </p>
+                    {group.from ? (
+                      <p className='text-[13px] font-semibold tabular-nums text-[#6b7196]'>
+                        <bdi dir='ltr'>{timeRange(group.from, group.to)}</bdi>
+                      </p>
+                    ) : null}
                   </div>
-                  <SarAmount amount={group.sellPrice} className='text-sm font-bold text-[#1e2364]' />
+                  <SarAmount
+                    amount={group.sellPrice}
+                    className='shrink-0 text-[15px] font-semibold text-[#1e2364]'
+                  />
                 </div>
-                {group.services?.length > 0 && (
-                  <>
-                    <p className='mt-2 text-[11.5px] font-bold uppercase tracking-wide text-[#6b7196]'>
+                {group.services?.length > 0 ? (
+                  <div className='mt-2'>
+                    <p className='text-[13px] font-semibold text-[#6b7196]'>
                       {d.includedServices}
                     </p>
-                    <p className='text-sm text-[#1e2364]'>
-                      {group.services.map((service) => service.serviceName).join(' · ')}
+                    <p className='text-[14px] leading-6 text-[#1e2364]'>
+                      {group.services
+                        .map((service) => service.serviceName)
+                        .join(locale === 'ar' ? '، ' : ', ')}
                     </p>
-                  </>
-                )}
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>
-        </Card>
-      )}
+        </Panel>
+      ) : null}
 
-      {attachments.length > 0 && (
-        <Card title={d.attachments} aside={<span className='text-xs font-semibold text-[#6b7196]'>{interpolate(d.attachmentsCount, { count: attachments.length })}</span>}>
-          <ul className='flex flex-col gap-2'>
+      {attachments.length > 0 ? (
+        <Panel flush>
+          <PanelHeader
+            title={d.attachments}
+            description={interpolate(d.attachmentsCount, {
+              count: attachments.length,
+            })}
+            className='px-5 pt-5 pb-3 sm:px-6'
+          />
+          <ul className='divide-y divide-[#eef0f7] border-t border-[#eef0f7]'>
             {attachments.map((path) => (
-              <li key={path} className='flex flex-wrap items-center justify-between gap-3 rounded-[14px] bg-[#f3f4f8] px-4 py-3'>
-                <span className='flex min-w-0 items-center gap-2 text-sm font-semibold text-[#1e2364]'>
-                  <FileText className='size-4 shrink-0 text-[#00a8f1]' aria-hidden />
-                  <span className='truncate'>{attachmentFileName(path)}</span>
+              <li
+                key={path}
+                className='flex flex-col gap-2 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6'
+              >
+                <span className='flex min-w-0 items-center gap-2.5 text-[14px] font-semibold text-[#1e2364]'>
+                  <FileText
+                    className='size-5 shrink-0 text-[#6b7196]'
+                    aria-hidden
+                  />
+                  <bdi className='break-all'>{attachmentFileName(path)}</bdi>
                 </span>
-                <span className='flex gap-2'>
+                <span className='flex shrink-0 gap-2'>
                   <a
                     href={attachmentUrl(path)}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='inline-flex items-center gap-1 text-[13px] font-bold text-[#00a8f1] hover:text-[#0090d1]'
+                    className={buttonVariants({
+                      variant: 'productText',
+                      size: 'compact',
+                    })}
                   >
-                    <Eye className='size-4' aria-hidden />
                     {d.viewFile}
                   </a>
                   <a
                     href={attachmentUrl(path)}
                     download={attachmentFileName(path)}
-                    className='inline-flex items-center gap-1 text-[13px] font-bold text-[#1e2364] hover:text-[#00a8f1]'
+                    className={buttonVariants({
+                      variant: 'productSecondary',
+                      size: 'compact',
+                    })}
                   >
                     <Download className='size-4' aria-hidden />
                     {d.download}
@@ -242,43 +274,51 @@ export function ReservationDetailsView({ id }: { id: string }) {
               </li>
             ))}
           </ul>
-        </Card>
-      )}
+        </Panel>
+      ) : null}
 
-      <Card title={d.additionalInformation}>
+      <Panel className='flex flex-col gap-4'>
+        <PanelHeader title={d.additionalInformation} />
         {questions.length === 0 ? (
-          <p className='text-sm text-[#6b7196]'>{d.noQuestions}</p>
+          <p className='text-[14px] leading-6 text-[#6b7196]'>
+            {d.noQuestions}
+          </p>
         ) : (
-          <dl className='flex flex-col gap-3'>
+          <InfoList>
             {questions.map((item, index) => (
-              <div key={index} className='rounded-[14px] bg-[#f3f4f8] px-4 py-3'>
-                <dt className='text-sm font-bold text-[#1e2364]'>{item.question}</dt>
-                <dd className='mt-1 text-sm text-[#6b7196]'>{item.answer}</dd>
-              </div>
+              <InfoItem key={index} label={item.question} wide>
+                {item.answer}
+              </InfoItem>
             ))}
-          </dl>
+          </InfoList>
         )}
-      </Card>
+      </Panel>
 
-      {logs.length > 0 && (
-        <Card title={d.statusHistory}>
-          <ol className='relative flex flex-col gap-4 border-s-2 border-[#e5e7f0] ps-5'>
+      {logs.length > 0 ? (
+        <Panel flush>
+          <PanelHeader
+            title={d.statusHistory}
+            description={interpolate(d.timesShownIn, {
+              offset: utcOffsetLabel(),
+            })}
+            className='px-5 pt-5 pb-3 sm:px-6'
+          />
+          <ol className='divide-y divide-[#eef0f7] border-t border-[#eef0f7]'>
             {logs.map((log) => (
-              <li key={log.id} className='relative'>
-                <span className='absolute -start-[27px] top-1 size-3 rounded-full border-2 border-white bg-[#00a8f1] ring-2 ring-[#e5e7f0]' aria-hidden />
+              <li
+                key={log.id}
+                className='flex flex-col gap-1 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6'
+              >
                 <ReservationStatusBadge status={log.status} />
-                <p className='mt-1 text-xs font-semibold text-[#6b7196]'>
-                  {formatUtcDateTime(log.createdAt, locale)}
-                  {log.createdByName ? ` · ${log.createdByName}` : ''}
+                <p className='text-[13px] font-semibold text-[#6b7196]'>
+                  <bdi>{formatUtcDateTime(log.createdAt, locale)}</bdi>
+                  {log.createdByName ? <> · {log.createdByName}</> : null}
                 </p>
               </li>
             ))}
           </ol>
-          <p className='mt-4 text-xs font-medium text-[#6b7196]'>
-            {interpolate(d.timesShownIn, { offset: utcOffsetLabel() })}
-          </p>
-        </Card>
-      )}
-    </section>
+        </Panel>
+      ) : null}
+    </div>
   );
 }

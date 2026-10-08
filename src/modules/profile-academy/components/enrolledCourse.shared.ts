@@ -12,10 +12,3 @@ export function enrolledCourseHref(course: AcademyCourseRow, locale: Locale): st
   }
   return learnBasePath(locale, course.enrollmentId, course.courseId);
 }
-
-/** Sky call-to-action on top of the shared `brand` button. */
-export const skyButtonClass =
-  'bg-[#00a8f1] text-white hover:bg-[#0090d1] focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2';
-
-/** Glass surface that still reads on the plain profile background. */
-export const profileGlassClass = 'ring-1 ring-[#e5e7f0]/80';

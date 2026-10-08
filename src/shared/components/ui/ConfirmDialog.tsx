@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import { Button } from '@/shared/components/ui/Button';
 import { Modal } from '@/shared/components/ui/Modal';
 
@@ -27,21 +28,26 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const titleId = useId();
+
   return (
-    <Modal open={open} onClose={onCancel} size='sm'>
-      <div role='alertdialog' aria-modal='true' aria-labelledby='confirm-title'>
-        <h2 id='confirm-title' className='text-lg font-bold text-[#1e2364]'>
+    <Modal open={open} onClose={onCancel} size='sm' ariaLabelledBy={titleId} className='max-w-[420px] p-6'>
+      <div>
+        <h2 id={titleId} className='text-[18px] font-bold leading-7 text-[#1e2364]'>
           {title}
         </h2>
         {message && (
-          <p className='mt-2 text-sm leading-6 text-[#6b7196]'>{message}</p>
+          <p className='mt-2 text-[14px] leading-6 text-[#6b7196]'>
+            {message}
+          </p>
         )}
         <div className='mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
-          <Button variant='outline' type='button' onClick={onCancel}>
+          <Button variant='productSecondary' size='control' type='button' onClick={onCancel}>
             {cancelLabel}
           </Button>
           <Button
-            variant={destructive ? 'danger' : 'brand'}
+            variant={destructive ? 'danger' : 'product'}
+            size='control'
             type='button'
             loading={loading}
             onClick={onConfirm}

@@ -1,27 +1,13 @@
-import {
-  CheckCircle2,
-  ChevronRight,
-  Clock,
-  RotateCcw,
-  FileQuestion,
-  Layers,
-  ListChecks,
-  Play,
-} from 'lucide-react';
-import Image from 'next/image';
+import { ChevronLeft, Clock, Layers, PlayCircle } from 'lucide-react';
 import Link from 'next/link';
 import type { Dictionary } from '@/locales/types';
+import { Panel, StatusBadge } from '@/shared/components/product';
 import { buttonVariants } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/cn';
-import { MEDIA_FALLBACK_IMAGE } from '@/shared/lib/media';
+import { interpolate } from '@/shared/lib/interpolate';
 import { safeHtml } from '@/shared/lib/safeHtml';
 import { CourseProgressBar } from '../CourseProgressBar';
-import {
-  AcademyStage,
-  GlassPanel,
-  ProgressRing,
-  StatChip,
-} from '../ui/AcademyGlass';
+import { StatChip } from '../ui/AcademyGlass';
 
 type PlayerT = Dictionary['academyPlayer'];
 
@@ -29,12 +15,9 @@ export interface OverviewHeroProps {
   t: PlayerT;
   title: string;
   description: string;
-  image: string;
-  tags: string[];
   duration: string;
   totalLectures: number;
   sectionsCount: number;
-  totalItems: number;
   progress: number;
   completedCount: number;
   trackedCount: number;
@@ -49,16 +32,14 @@ export interface OverviewHeroProps {
   upNext?: { title: string; type: 'lecture' | 'quiz'; minutes: number } | null;
 }
 
+/** Page header (back link, title, facts) and the progress / resume panel. */
 export function OverviewHero({
   t,
   title,
   description,
-  image,
-  tags,
   duration,
   totalLectures,
   sectionsCount,
-  totalItems,
   progress,
   completedCount,
   trackedCount,
@@ -70,239 +51,126 @@ export function OverviewHero({
   upNext,
   courseCompleted = false,
 }: OverviewHeroProps) {
-  const shownProgress = courseCompleted ? 100 : progress;
-  // No real cover: the fallback is the Mwafq logo, which must not be
-  // stretched as a photo (nor blurred into the stage background).
-  const hasCover = Boolean(image) && image !== MEDIA_FALLBACK_IMAGE;
+  const shownProgress = Math.round(courseCompleted ? 100 : progress);
 
   return (
-    <div>
-      <AcademyStage
-        image={hasCover ? image : null}
-        className='mx-2 rounded-[28px] sm:mx-3 sm:rounded-[36px]'
-        innerClassName='py-8 lg:py-12'
-      >
-        <div className='grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-12'>
-          {/* Course identity */}
-          <div className='min-w-0 space-y-6'>
-            <nav
-              aria-label={t.breadcrumbHome}
-              className='flex flex-wrap items-center gap-1.5 text-[14px]'
-            >
-              <Link
-                href={myCoursesHref}
-                className='rounded-md text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]'
-              >
-                {t.breadcrumbHome}
-              </Link>
-              <ChevronRight
-                aria-hidden
-                className='size-4 text-white/40 rtl:rotate-180'
-              />
-              <span aria-current='page' className='font-semibold text-white'>
-                {t.currentCourse}
+    <>
+      <header className='flex flex-col gap-3'>
+        <Link
+          href={myCoursesHref}
+          className='inline-flex w-fit items-center gap-1 rounded-md text-[14px] font-semibold text-[#0077ad] transition-colors duration-150 hover:text-[#1e2364] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]'
+        >
+          <ChevronLeft aria-hidden className='size-4 shrink-0 rtl:rotate-180' />
+          {t.breadcrumbHome}
+        </Link>
+        <h1 className='wrap-break-word text-[24px] font-bold leading-tight text-[#1e2364] sm:text-[28px]'>
+          {title}
+        </h1>
+        {description && (
+          <div
+            className='max-w-[70ch] text-[15px] leading-7 text-[#4a5078] [&_a]:text-[#0077ad] [&_a]:underline [&_p]:m-0'
+            dangerouslySetInnerHTML={{ __html: safeHtml(description) }}
+          />
+        )}
+        <div className='flex flex-wrap gap-x-5 gap-y-2'>
+          {duration && (
+            <StatChip icon={<Clock aria-hidden />}>
+              <span dir='ltr'>{duration}</span>
+            </StatChip>
+          )}
+          <StatChip icon={<PlayCircle aria-hidden />}>
+            <bdi className='tabular-nums'>{totalLectures}</bdi> {t.lectures}
+          </StatChip>
+          <StatChip icon={<Layers aria-hidden />}>
+            <bdi className='tabular-nums'>{sectionsCount}</bdi> {t.sections}
+          </StatChip>
+        </div>
+      </header>
+
+      <Panel aria-labelledby='overview-progress-title'>
+        <div className='flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-8'>
+          <div className='min-w-0 flex-1'>
+            <div className='flex items-baseline justify-between gap-3'>
+              <h2 id='overview-progress-title' className='text-[17px] font-bold text-[#1e2364]'>
+                {t.yourProgress}
+              </h2>
+              <span dir='ltr' className='text-[15px] font-bold tabular-nums text-[#1e2364]'>
+                {shownProgress}%
               </span>
-            </nav>
-
-            <div className='space-y-4'>
-              <h1 className='text-[28px] font-bold leading-tight text-white sm:text-[36px]'>
-                {title}
-              </h1>
-              {description && (
-                <div
-                  className='max-w-3xl text-[16px] leading-relaxed text-white/75 [&_a]:text-[#5bc8ff] [&_a]:underline'
-                  dangerouslySetInnerHTML={{ __html: safeHtml(description) }}
-                />
-              )}
             </div>
+            <CourseProgressBar value={shownProgress} label={t.yourProgress} className='mt-3' />
+            <p className='mt-2 text-[13px] font-semibold text-[#6b7196]'>
+              {interpolate(t.progressSummary, { completed: completedCount, total: trackedCount })}
+            </p>
 
-            <div className='flex flex-wrap gap-2'>
-              {duration && (
-                <StatChip tone='dark' icon={<Clock aria-hidden className='size-4 text-[#5bc8ff]' />}>
-                  {duration}
-                </StatChip>
-              )}
-              <StatChip tone='dark' icon={<Play aria-hidden className='size-4 text-[#5bc8ff]' />}>
-                {totalLectures} {t.lectures}
-              </StatChip>
-              <StatChip tone='dark' icon={<Layers aria-hidden className='size-4 text-[#5bc8ff]' />}>
-                {sectionsCount} {t.sections}
-              </StatChip>
-              <StatChip tone='dark' icon={<ListChecks aria-hidden className='size-4 text-[#5bc8ff]' />}>
-                {totalItems} {t.itemsCount}
-              </StatChip>
-            </div>
-
-            {tags.length > 0 && (
-              <ul className='flex flex-wrap gap-2'>
-                {tags.map((tag) => (
-                  <li
-                    key={tag}
-                    className='rounded-full border border-white/15 px-3 py-1 text-[12px] font-semibold text-white/70'
-                  >
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {!courseCompleted && upNext && resumeHref && (
-              <Link
-                href={resumeHref}
-                className='group flex max-w-xl items-center gap-4 rounded-[20px] border border-white/15 bg-white/[0.08] p-3 pe-4 backdrop-blur-xl transition-colors hover:border-[#00a8f1]/50 hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] motion-reduce:transition-none'
-              >
-                <span className='inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#00a8f1] text-white shadow-[0_8px_24px_-8px_rgba(0,168,241,0.8)]'>
-                  {upNext.type === 'quiz' ? (
-                    <FileQuestion aria-hidden className='size-5' />
-                  ) : (
-                    <Play aria-hidden className='ms-0.5 size-5 rtl:rotate-180' />
-                  )}
-                </span>
-                <span className='min-w-0 flex-1'>
-                  <span className='flex items-center gap-2 text-[12px] font-semibold'>
-                    <span className='text-[#5bc8ff]'>{t.upNext}</span>
-                    <span className='rounded-full bg-white/10 px-2 py-0.5 text-white/70'>
-                      {upNext.type === 'quiz' ? t.quiz : t.lecture}
-                    </span>
+            {isRevisionAvailable && (
+              <div className='mt-4 border-t border-[#eef0f7] pt-4'>
+                <div className='flex items-baseline justify-between gap-3'>
+                  <span className='text-[14px] font-semibold text-[#1e2364]'>
+                    {t.revisionProgress}
                   </span>
-                  <span className='mt-0.5 block truncate text-[15px] font-bold text-white'>
-                    {upNext.title}
+                  <span dir='ltr' className='text-[14px] font-bold tabular-nums text-[#1e2364]'>
+                    {Math.round(revisionProgress ?? 0)}%
                   </span>
-                </span>
-                {upNext.minutes > 0 && (
-                  <span className='hidden shrink-0 items-center gap-1 text-[13px] font-semibold text-white/70 sm:inline-flex'>
-                    <Clock aria-hidden className='size-3.5' />
-                    {upNext.minutes} {t.minutes}
-                  </span>
-                )}
-                <ChevronRight
-                  aria-hidden
-                  className='size-5 shrink-0 text-white/60 transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none'
+                </div>
+                <CourseProgressBar
+                  value={revisionProgress ?? 0}
+                  label={t.revisionProgress}
+                  className='mt-2 h-1.5'
                 />
-              </Link>
+              </div>
             )}
           </div>
 
-          {/* Progress card */}
-          <GlassPanel tone='dark' className='overflow-hidden'>
-            <div className='relative hidden aspect-[16/8] w-full lg:block'>
-              {hasCover ? (
-                <>
-                  <Image
-                    src={image}
-                    alt={title}
-                    fill
-                    className='object-cover'
-                    sizes='360px'
-                  />
-                  <div className='absolute inset-0 bg-gradient-to-t from-[#141848]/80 to-transparent' />
-                </>
-              ) : (
-                <div className='flex size-full items-center justify-center bg-[#1e2364]/60'>
-                  <Image
-                    src={MEDIA_FALLBACK_IMAGE}
-                    alt=''
-                    width={96}
-                    height={96}
-                    className='h-16 w-auto object-contain opacity-40 brightness-0 invert'
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className='space-y-5 p-5 sm:p-6'>
-              <div className='flex items-center gap-4'>
-                <ProgressRing
-                  value={shownProgress}
-                  size={88}
-                  stroke={7}
-                  label={t.yourProgress}
-                />
-                <div className='min-w-0 space-y-1'>
-                  <p className='text-[16px] font-bold text-white'>
-                    {t.yourProgress}
-                  </p>
-                  <p className='text-[14px] text-white/70'>
-                    {completedCount} {t.of} {trackedCount} {t.completed}
-                  </p>
-                  {courseCompleted ? (
-                    <p className='inline-flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[12px] font-bold text-emerald-300 ring-1 ring-emerald-400/30'>
-                      <CheckCircle2 aria-hidden className='size-3.5' />
-                      {t.courseCompleted}
-                    </p>
-                  ) : (
-                    <p className='text-[12px] text-white/55'>{t.keepGoing}</p>
-                  )}
-                </div>
+          <div className='border-t border-[#eef0f7] pt-5 lg:w-[360px] lg:shrink-0 lg:border-s lg:border-t-0 lg:ps-8 lg:pt-0'>
+            {courseCompleted ? (
+              <div className='flex flex-col gap-3'>
+                <StatusBadge tone='success'>{t.courseCompleted}</StatusBadge>
+                <p className='text-[14px] leading-6 text-[#6b7196]'>{t.courseCompletedHint}</p>
+                {resumeHref && (
+                  <Link
+                    href={resumeHref}
+                    className={cn(
+                      buttonVariants({ variant: 'productSecondary', size: 'control' }),
+                      'w-full'
+                    )}
+                  >
+                    {t.reviewCourse}
+                  </Link>
+                )}
               </div>
-
-              {isRevisionAvailable && (
-                <div className='space-y-2 rounded-2xl bg-white/5 p-3 ring-1 ring-white/10'>
-                  <div className='flex items-center justify-between gap-3 text-[14px]'>
-                    <span className='font-semibold text-white/85'>
-                      {t.revisionProgress}
-                    </span>
-                    <span className='font-bold text-amber-400'>
-                      {revisionProgress ?? 0}%
-                    </span>
-                  </div>
-                  <div className='h-1.5 w-full overflow-hidden rounded-full bg-white/15'>
-                    <div
-                      className='h-full rounded-full bg-amber-500 transition-[width] duration-500 ease-out'
-                      style={{ width: `${revisionProgress ?? 0}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              <CourseProgressBar value={shownProgress} tone='dark' />
-
-              {courseCompleted && (
-                <div className='flex items-start gap-3 rounded-2xl bg-emerald-400/10 p-3 ring-1 ring-emerald-400/25'>
-                  <span className='inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white'>
-                    <CheckCircle2 aria-hidden className='size-5' />
-                  </span>
+            ) : (
+              <div className='flex flex-col gap-3'>
+                {upNext && (
                   <div className='min-w-0'>
-                    <p className='text-[15px] font-bold text-white'>
-                      {t.courseCompleted}
+                    <p className='text-[13px] font-semibold text-[#6b7196]'>{t.upNext}</p>
+                    <p className='mt-0.5 line-clamp-2 text-[15px] font-bold leading-6 text-[#1e2364]'>
+                      {upNext.title}
                     </p>
-                    <p className='mt-0.5 text-[13px] text-white/70'>
-                      {t.courseCompletedHint}
+                    <p className='text-[13px] text-[#6b7196]'>
+                      {upNext.type === 'quiz' ? t.quiz : t.lecture}
+                      {upNext.minutes > 0 && (
+                        <>
+                          {' · '}
+                          <bdi className='tabular-nums'>{upNext.minutes}</bdi> {t.minutes}
+                        </>
+                      )}
                     </p>
                   </div>
-                </div>
-              )}
-
-              {courseCompleted && resumeHref && (
-                <Link
-                  href={resumeHref}
-                  className={cn(
-                    buttonVariants({ variant: 'brandGhost', size: 'lg', shape: 'pill' }),
-                    'w-full border border-white/20 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#141848]'
-                  )}
-                >
-                  <RotateCcw aria-hidden className='size-5' />
-                  {t.reviewCourse}
-                </Link>
-              )}
-
-              {!courseCompleted && resumeHref && (
-                <Link
-                  href={resumeHref}
-                  className={cn(
-                    buttonVariants({ variant: 'brandInverse', size: 'lg', shape: 'pill' }),
-                    'w-full focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 focus-visible:ring-offset-[#141848] motion-safe:active:scale-[0.98]'
-                  )}
-                >
-                  <Play aria-hidden className='size-5 rtl:rotate-180' />
-                  {hasLastLecture ? t.continueLearning : t.startLearning}
-                </Link>
-              )}
-
-            </div>
-          </GlassPanel>
+                )}
+                {resumeHref && (
+                  <Link
+                    href={resumeHref}
+                    className={cn(buttonVariants({ variant: 'product', size: 'control' }), 'w-full')}
+                  >
+                    {hasLastLecture ? t.continueLearning : t.startLearning}
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </AcademyStage>
-    </div>
+      </Panel>
+    </>
   );
 }

@@ -12,6 +12,7 @@ const catalogEn = {
   resultsGroups: '{{count}} service groups available',
   noResults: 'No matches for your search',
   noFavorites: 'No favorites yet',
+  favoritesSubtitle: 'Services and service groups you saved on this device.',
   empty: 'Nothing here yet. New services are added regularly.',
   loadError: "We couldn't load this list. Please try again.",
   retry: 'Try again',

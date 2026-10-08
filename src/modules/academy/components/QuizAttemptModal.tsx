@@ -1,22 +1,24 @@
 'use client';
 
-import { CheckCircle2, Loader2, XCircle } from 'lucide-react';
 import { localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
+import { Skeleton, StatusBadge } from '@/shared/components/product';
+import { Button } from '@/shared/components/ui/Button';
 import { Modal } from '@/shared/components/ui/Modal';
-import { cn } from '@/shared/lib/cn';
 import { useQuizAttempt } from '../hooks/useQuiz';
-import { MatchingAttemptReview } from './MatchingAttemptReview';
-import { ProgressRing } from './ui/AcademyGlass';
-import { getScorePercentage, getTranslation } from '../quizScoring.shared';
-import { QuestionType } from '../types/quiz.types';
-import type { QuizQuestion } from '../types/quiz.types';
+import {
+  PASS_THRESHOLD_PERCENT,
+  formatQuizDate,
+  getScorePercentage,
+} from '../quizScoring.shared';
+import { AttemptReview } from './results/QuizReviewList';
 
 interface QuizAttemptModalProps {
   attemptId: number | null;
   onClose: () => void;
 }
 
+/** One past attempt: score and outcome, then the per-question review. */
 export function QuizAttemptModal({
   attemptId,
   onClose,
@@ -30,116 +32,61 @@ export function QuizAttemptModal({
   const percentage = attempt
     ? getScorePercentage(attempt.attemptScore, total)
     : 0;
-
-  const flatQuestions: QuizQuestion[] = attempt
-    ? attempt.qustions.flatMap((question) =>
-        question.type === QuestionType.Video
-          ? (question.relatedQuizQuestions ?? [])
-          : [question]
-      )
-    : [];
+  const passed = percentage >= PASS_THRESHOLD_PERCENT;
 
   return (
     <Modal
       open={attemptId !== null}
       onClose={onClose}
-      title={t.viewDetails}
+      title={t.attemptDetails}
       size='lg'
-      className='max-w-2xl rounded-[24px] border border-white/70 bg-white/90 p-5 shadow-[0_24px_64px_-24px_rgba(20,24,72,0.45)] backdrop-blur-xl sm:p-8'
+      className='flex max-h-[calc(100dvh-2rem)] max-w-2xl flex-col p-0 [&>h2]:mb-0 [&>h2]:px-5 [&>h2]:pt-5 sm:[&>h2]:px-6 sm:[&>h2]:pt-6'
     >
       {isLoading || !attempt ? (
-        <div role='status' className='flex items-center justify-center py-12'>
-          <Loader2 className='size-8 animate-spin text-[#00a8f1]' aria-hidden />
+        <div role='status' className='space-y-3 px-5 py-6 sm:px-6'>
+          <span className='sr-only'>{t.loadingResults}</span>
+          <Skeleton className='h-5 w-48' />
+          <Skeleton className='h-20 w-full rounded-xl' />
+          <Skeleton className='h-20 w-full rounded-xl' />
         </div>
       ) : (
-        <div className='-me-2 max-h-[70vh] space-y-4 overflow-y-auto pe-2'>
-          <div className='flex items-center gap-4 rounded-2xl bg-[#141848] p-4 text-white'>
-            <ProgressRing value={percentage} size={64} stroke={6} label={t.score} />
-            <div className='min-w-0'>
-              <p className='text-sm font-semibold text-white/70'>{t.score}</p>
-              <p className='text-xl font-bold' dir='ltr'>
-                {attempt.attemptScore} / {total}
-              </p>
-            </div>
+        <>
+          <div className='flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-[#eef0f7] px-5 pb-4 pt-2 sm:px-6'>
+            <span className='text-[15px] font-bold text-[#1e2364]'>
+              {t.score}:{' '}
+              <bdi dir='ltr' className='tabular-nums'>
+                {attempt.attemptScore}/{total} · {percentage}%
+              </bdi>
+            </span>
+            <StatusBadge tone={passed ? 'success' : 'danger'}>
+              {passed ? t.passed : t.notPassed}
+            </StatusBadge>
+            <span className='text-[13px] font-semibold text-[#6b7196]'>
+              <bdi>{formatQuizDate(attempt.startTime, locale)}</bdi>
+            </span>
           </div>
-
-          <ol className='space-y-3'>
-            {flatQuestions.map((question, index) => {
-              const questionText =
-                getTranslation(question.translations, langId)?.text ?? '';
-              const userAnswerIds = attempt.answers
-                .filter((a) => a.questionId === question.id)
-                .map((a) => a.answerId);
-
-              return (
-                <li
-                  key={question.id}
-                  className='rounded-2xl border border-[#e5e7f0] bg-white/80 p-4'
-                >
-                  <p className='mb-3 flex items-start gap-3 text-sm font-semibold text-[#1e2364]'>
-                    <span
-                      aria-hidden
-                      className='flex size-6 shrink-0 items-center justify-center rounded-full bg-[#f3f4f8] text-xs font-bold text-[#6b7196] ring-1 ring-[#e5e7f0]'
-                    >
-                      {index + 1}
-                    </span>
-                    <span className='min-w-0 flex-1 break-words pt-0.5'>
-                      <span className='sr-only'>{index + 1}. </span>
-                      {questionText}
-                    </span>
-                  </p>
-                  {question.type === QuestionType.Matching ? (
-                    <MatchingAttemptReview
-                      question={question}
-                      answers={attempt.answers}
-                      langId={langId}
-                    />
-                  ) : (
-                    <ul className='space-y-1.5'>
-                      {question.quizQuestionAnswers.map((answer) => {
-                        const answerText =
-                          getTranslation(answer.translations, langId)?.text ??
-                          '';
-                        const chosen = userAnswerIds.includes(answer.id);
-                        return (
-                          <li
-                            key={answer.id}
-                            className={cn(
-                              'flex items-center gap-2 rounded-xl px-3 py-2 text-sm',
-                              answer.isCorrect
-                                ? 'bg-emerald-50 font-semibold text-emerald-800 ring-1 ring-emerald-200'
-                                : chosen
-                                  ? 'bg-red-50 font-semibold text-red-700 ring-1 ring-red-200'
-                                  : 'text-[#6b7196]'
-                            )}
-                          >
-                            {answer.isCorrect ? (
-                              <CheckCircle2
-                                className='size-4 shrink-0 text-emerald-600'
-                                aria-label={t.correct}
-                              />
-                            ) : chosen ? (
-                              <XCircle
-                                className='size-4 shrink-0 text-red-600'
-                                aria-label={t.incorrect}
-                              />
-                            ) : (
-                              <span className='size-4 shrink-0' />
-                            )}
-                            <span className='min-w-0 break-words'>
-                              {answerText}
-                            </span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </div>
+          {/* Focusable so keyboard users can scroll the review. */}
+          <div
+            role='region'
+            aria-label={t.reviewAnswers}
+            tabIndex={0}
+            className='min-h-0 flex-1 overflow-y-auto overscroll-contain focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#00a8f1]'
+          >
+            <AttemptReview attempt={attempt} langId={langId} />
+          </div>
+        </>
       )}
+      <div className='flex justify-end border-t border-[#eef0f7] px-5 py-3 sm:px-6'>
+        <Button
+          type='button'
+          variant='productSecondary'
+          size='control'
+          onClick={onClose}
+          className='max-sm:w-full'
+        >
+          {t.close}
+        </Button>
+      </div>
     </Modal>
   );
 }

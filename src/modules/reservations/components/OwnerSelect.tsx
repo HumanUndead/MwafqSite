@@ -26,8 +26,11 @@ export function OwnerSelect({ value, options, onChange }: OwnerSelectProps) {
   if (options.length <= 1) return null;
 
   return (
-    <div className='flex items-center gap-2'>
-      <label htmlFor='reservations-owner' className='text-sm font-semibold text-[#6b7196]'>
+    <div className='flex min-w-0 items-center gap-2 max-sm:w-full'>
+      <label
+        htmlFor='reservations-owner'
+        className='shrink-0 text-[13px] font-semibold text-[#6b7196]'
+      >
         {t.ownerLabel}
       </label>
       <Select
@@ -38,9 +41,9 @@ export function OwnerSelect({ value, options, onChange }: OwnerSelectProps) {
       >
         <SelectTrigger
           id='reservations-owner'
-          className='h-10 min-w-44 rounded-full border-2 border-[#e5e7f0] bg-white px-4 text-sm font-bold text-[#1e2364]'
+          className='h-11 min-w-0 rounded-xl border-[#d9ddea] bg-white px-3.5 text-[14px] font-semibold text-[#1e2364] hover:border-[#1e2364]/40 focus-visible:border-[#1e2364] focus-visible:ring-2 focus-visible:ring-[#1e2364]/20 data-[size=default]:h-11 max-sm:flex-1 sm:min-w-48'
         >
-          <SelectValue />
+          <SelectValue className='text-start' />
         </SelectTrigger>
         <SelectContent alignItemWithTrigger={false} sideOffset={4}>
           {options.map((option) => (

@@ -1,75 +1,50 @@
-import { Check, CheckCircle2 } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroupItem } from '@/components/ui/radio-group';
 import { cn } from '@/shared/lib/cn';
 
+const tileClass =
+  'flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors duration-150 motion-reduce:transition-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#00a8f1] has-[:focus-visible]:ring-offset-2';
+
+const controlClass =
+  'size-5 border-2 border-[#9aa0bd] bg-white after:hidden focus-visible:border-[#1e2364] focus-visible:ring-0 data-checked:border-[#1e2364] data-checked:bg-[#1e2364] data-checked:text-white';
+
 /**
- * Full-width selectable answer. A visually hidden native radio/checkbox keeps
- * the group semantics and keyboard behaviour; the tile is its label.
+ * Full-width answer. The whole tile is the label of a real radio (inside a
+ * `RadioGroup`) or checkbox, so keyboard and screen-reader behaviour come
+ * from the primitive.
  */
-export function OptionTile({
-  type,
-  name,
-  checked,
-  onChange,
-  marker,
-  children,
-}: {
-  type: 'radio' | 'checkbox';
-  name: string;
-  checked: boolean;
-  onChange: () => void;
-  /** Letter shown in the radio marker. */
-  marker?: ReactNode;
-  children: ReactNode;
-}) {
-  const isCheckbox = type === 'checkbox';
+export function OptionTile(
+  props: { checked: boolean; children: ReactNode } & (
+    | { type: 'radio'; value: number }
+    | { type: 'checkbox'; onToggle: () => void }
+  )
+) {
+  const { checked, children } = props;
   return (
     <label
       className={cn(
-        'flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3.5 transition-colors motion-reduce:transition-none sm:gap-4 sm:px-5 sm:py-4',
-        'has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-[#00a8f1] has-[input:focus-visible]:ring-offset-2',
+        tileClass,
         checked
-          ? 'border-[#00a8f1] bg-[#00a8f1]/[0.06] ring-1 ring-[#00a8f1]'
-          : 'border-[#e5e7f0] bg-white/80 hover:border-[#00a8f1]/60 hover:bg-white'
+          ? 'border-[#1e2364] bg-[#f5f6fb] shadow-[inset_0_0_0_1px_#1e2364]'
+          : 'border-[#d9ddea] bg-white hover:border-[#1e2364]/40 hover:bg-[#f7f8fb]'
       )}
     >
-      <input
-        type={type}
-        name={name}
-        checked={checked}
-        onChange={onChange}
-        className='sr-only'
-      />
-      <span
-        aria-hidden
-        className={cn(
-          'flex size-9 shrink-0 items-center justify-center text-sm font-bold transition-colors motion-reduce:transition-none',
-          isCheckbox ? 'rounded-lg' : 'rounded-full',
-          checked
-            ? 'bg-[#00a8f1] text-white'
-            : 'bg-[#f3f4f8] text-[#6b7196] ring-1 ring-[#e5e7f0]'
-        )}
-      >
-        {isCheckbox ? (
-          checked ? (
-            <Check className='size-5' strokeWidth={3} />
-          ) : null
-        ) : (
-          marker
-        )}
-      </span>
-      <span className='min-w-0 flex-1 break-words text-base font-semibold text-[#1e2364]'>
-        {children}
-      </span>
-      {!isCheckbox && (
-        <CheckCircle2
-          aria-hidden
-          className={cn(
-            'size-5 shrink-0 text-[#00a8f1] transition-opacity motion-reduce:transition-none',
-            checked ? 'opacity-100' : 'opacity-0'
-          )}
+      {props.type === 'radio' ? (
+        <RadioGroupItem
+          value={props.value}
+          className={cn(controlClass, '[&_[data-slot=radio-group-indicator]_span]:bg-white')}
+        />
+      ) : (
+        <Checkbox
+          checked={checked}
+          onCheckedChange={props.onToggle}
+          className={cn(controlClass, 'rounded-[5px]')}
         />
       )}
+      <span className='min-w-0 flex-1 break-words text-[15px] font-semibold leading-6 text-[#1e2364]'>
+        {children}
+      </span>
     </label>
   );
 }

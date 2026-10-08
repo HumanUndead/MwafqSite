@@ -293,7 +293,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                               });
                             }}
                             className={[
-                              'absolute left-0 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
+                              'absolute left-0 top-0 flex h-24 w-24 cursor-pointer items-center justify-center rounded-[24px] border-2 bg-white',
                               'transition-[transform,border-color] duration-700 ease-in-out',
                               isActive
                                 ? 'border-[#1e2364]'
@@ -454,7 +454,7 @@ export function WhySection({ content, isRtl }: WhySectionProps) {
                               });
                             }}
                             className={[
-                              'absolute left-1/2 top-0 flex h-24 w-24 items-center justify-center rounded-[24px] border-2 bg-white',
+                              'absolute left-1/2 top-0 flex h-24 w-24 cursor-pointer items-center justify-center rounded-[24px] border-2 bg-white',
                               'transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]',
                               isActive
                                 ? 'border-[#1e2364]'

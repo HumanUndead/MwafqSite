@@ -1,18 +1,14 @@
 'use client';
 
+import { useRef, type ReactNode } from 'react';
 import { useFormik } from 'formik';
 import { z } from 'zod';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/components/ui/Button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/shared/components/ui/Input';
+import { Modal } from '@/shared/components/ui/Modal';
+import { toast } from '@/shared/components/feedback/Toast';
 import {
   Select,
   SelectContent,
@@ -56,6 +52,7 @@ type Labels = {
   submitting: string;
   submitError: string;
   cityLoadError: string;
+  saved: string;
 };
 
 type Props = {
@@ -83,6 +80,9 @@ function buildSchema(v: Labels['validation']) {
   });
 }
 
+const controlClass =
+  'h-11 rounded-xl border-[#d9ddea] bg-white px-3.5 text-[15px] text-[#1e2364] placeholder:text-[#8a8fae] focus:border-[#00a8f1] focus:ring-[#00a8f1]/30';
+
 export function EditPersonalInfoDialog({
   open,
   onOpenChange,
@@ -91,6 +91,8 @@ export function EditPersonalInfoDialog({
 }: Props) {
   const setUser = useAuthStore((s) => s.setUser);
   const locale = useLocale();
+  // Esc inside the open city list should close the list, not the dialog.
+  const cityListOpen = useRef(false);
 
   const countryId = user?.countryId ?? 0;
 
@@ -108,6 +110,7 @@ export function EditPersonalInfoDialog({
       const userResponse = await authApi.getUserByToken();
       setUser(userResponse.data);
       onOpenChange(false);
+      toast.success(labels.saved);
     },
   });
 
@@ -138,215 +141,212 @@ export function EditPersonalInfoDialog({
     },
   });
 
+  const isPending = updateMutation.isPending;
+
   const close = () => {
-    if (formik.isSubmitting || updateMutation.isPending) return;
+    if (isPending || cityListOpen.current) return;
     onOpenChange(false);
     formik.resetForm();
     updateMutation.reset();
   };
 
-  const isPending = updateMutation.isPending;
   const submitError = updateMutation.isError
     ? updateMutation.error instanceof Error
       ? updateMutation.error.message
       : labels.submitError
     : null;
 
+  const fieldError = (key: keyof FormValues) =>
+    formik.touched[key] ? formik.errors[key] : undefined;
+
+  const cityError = citiesQuery.isError
+    ? labels.cityLoadError
+    : fieldError('cityId');
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[min(92dvh,720px)] overflow-y-auto sm:max-w-[500px] max-[640px]:max-w-[calc(100%-20px)] max-[640px]:rounded-[22px]'>
-        <DialogHeader>
-          <DialogTitle className='text-[18px] font-extrabold tracking-[-0.4px] text-[#1e2364]'>
-            {labels.title}
-          </DialogTitle>
-        </DialogHeader>
-
-        <form
-          onSubmit={formik.handleSubmit}
-          noValidate
-          className='flex flex-col gap-4 pt-1'
-        >
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-            <Field
-              label={labels.fields.firstName}
-              error={
-                formik.touched.firstName ? formik.errors.firstName : undefined
-              }
-            >
-              <Input
-                id='firstName'
-                name='firstName'
-                type='text'
-                autoComplete='given-name'
-                placeholder={labels.placeholders.firstName}
-                value={formik.values.firstName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                aria-invalid={Boolean(
-                  formik.touched.firstName && formik.errors.firstName
-                )}
-                className='h-10 w-full rounded-xl border-2 border-[#e5e7f0] bg-[#f5f8ff] px-4 text-[14.5px] font-medium text-[#1e2364] placeholder:text-[#9ca3c8] focus-visible:border-[#00a8f1] aria-invalid:border-red-400'
-              />
-            </Field>
-
-            <Field
-              label={labels.fields.lastName}
-              error={
-                formik.touched.lastName ? formik.errors.lastName : undefined
-              }
-            >
-              <Input
-                id='lastName'
-                name='lastName'
-                type='text'
-                autoComplete='family-name'
-                placeholder={labels.placeholders.lastName}
-                value={formik.values.lastName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                aria-invalid={Boolean(
-                  formik.touched.lastName && formik.errors.lastName
-                )}
-                className='h-10 w-full rounded-xl border-2 border-[#e5e7f0] bg-[#f5f8ff] px-4 text-[14.5px] font-medium text-[#1e2364] placeholder:text-[#9ca3c8] focus-visible:border-[#00a8f1] aria-invalid:border-red-400'
-              />
-            </Field>
-          </div>
-
+    <Modal
+      open={open}
+      onClose={close}
+      title={labels.title}
+      className='max-h-[calc(100dvh-2rem)] max-w-[520px] overflow-y-auto p-5 sm:p-6'
+    >
+      <form
+        onSubmit={formik.handleSubmit}
+        noValidate
+        className='flex flex-col gap-4'
+      >
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
           <Field
-            label={labels.fields.email}
-            error={formik.touched.email ? formik.errors.email : undefined}
+            id='firstName'
+            label={labels.fields.firstName}
+            error={fieldError('firstName')}
           >
             <Input
-              id='email'
-              name='email'
-              type='email'
-              autoComplete='email'
-              placeholder={labels.placeholders.email}
-              value={formik.values.email}
+              id='firstName'
+              name='firstName'
+              type='text'
+              autoComplete='given-name'
+              placeholder={labels.placeholders.firstName}
+              value={formik.values.firstName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              aria-invalid={Boolean(
-                formik.touched.email && formik.errors.email
-              )}
-              className='h-10 w-full rounded-xl border-2 border-[#e5e7f0] bg-[#f5f8ff] px-4 text-[14.5px] font-medium text-[#1e2364] placeholder:text-[#9ca3c8] focus-visible:border-[#00a8f1] aria-invalid:border-red-400'
+              aria-invalid={Boolean(fieldError('firstName'))}
+              aria-describedby={fieldError('firstName') ? 'firstName-error' : undefined}
+              className={cn(controlClass, fieldError('firstName') && 'border-red-500')}
             />
           </Field>
 
           <Field
-            label={labels.fields.phone}
-            error={formik.touched.phoneNo ? formik.errors.phoneNo : undefined}
+            id='lastName'
+            label={labels.fields.lastName}
+            error={fieldError('lastName')}
           >
             <Input
-              id='phoneNo'
-              name='phoneNo'
-              type='tel'
-              autoComplete='tel'
-              placeholder={labels.placeholders.phone}
-              value={formik.values.phoneNo}
+              id='lastName'
+              name='lastName'
+              type='text'
+              autoComplete='family-name'
+              placeholder={labels.placeholders.lastName}
+              value={formik.values.lastName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              aria-invalid={Boolean(
-                formik.touched.phoneNo && formik.errors.phoneNo
-              )}
-              className='h-10 w-full rounded-xl border-2 border-[#e5e7f0] bg-[#f5f8ff] px-4 text-[14.5px] font-medium text-[#1e2364] placeholder:text-[#9ca3c8] focus-visible:border-[#00a8f1] aria-invalid:border-red-400'
+              aria-invalid={Boolean(fieldError('lastName'))}
+              aria-describedby={fieldError('lastName') ? 'lastName-error' : undefined}
+              className={cn(controlClass, fieldError('lastName') && 'border-red-500')}
             />
           </Field>
+        </div>
 
-          <Field
-            label={labels.fields.city}
-            error={
-              citiesQuery.isError
-                ? labels.cityLoadError
-                : formik.touched.cityId
-                  ? formik.errors.cityId
-                  : undefined
-            }
+        <Field id='email' label={labels.fields.email} error={fieldError('email')}>
+          <Input
+            id='email'
+            name='email'
+            type='email'
+            dir='ltr'
+            autoComplete='email'
+            placeholder={labels.placeholders.email}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            aria-invalid={Boolean(fieldError('email'))}
+            aria-describedby={fieldError('email') ? 'email-error' : undefined}
+            className={cn(controlClass, fieldError('email') && 'border-red-500')}
+          />
+        </Field>
+
+        <Field id='phoneNo' label={labels.fields.phone} error={fieldError('phoneNo')}>
+          <Input
+            id='phoneNo'
+            name='phoneNo'
+            type='tel'
+            dir='ltr'
+            autoComplete='tel'
+            placeholder={labels.placeholders.phone}
+            value={formik.values.phoneNo}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            aria-invalid={Boolean(fieldError('phoneNo'))}
+            aria-describedby={fieldError('phoneNo') ? 'phoneNo-error' : undefined}
+            className={cn(controlClass, fieldError('phoneNo') && 'border-red-500')}
+          />
+        </Field>
+
+        <Field id='cityId' label={labels.fields.city} error={cityError}>
+          <Select
+            modal={false}
+            value={formik.values.cityId > 0 ? String(formik.values.cityId) : ''}
+            onValueChange={(val) => {
+              formik.setFieldValue('cityId', Number(val));
+              formik.setFieldTouched('cityId', true);
+            }}
+            onOpenChange={(next) => {
+              // Cleared after this keypress so the dialog's Esc handler skips it.
+              if (next) cityListOpen.current = true;
+              else setTimeout(() => (cityListOpen.current = false), 0);
+            }}
+            disabled={citiesQuery.isLoading}
           >
-            <Select
-              value={
-                formik.values.cityId > 0 ? String(formik.values.cityId) : ''
-              }
-              onValueChange={(val) => {
-                formik.setFieldValue('cityId', Number(val));
-                formik.setFieldTouched('cityId', true);
-              }}
-              disabled={citiesQuery.isLoading}
+            <SelectTrigger
+              id='cityId'
+              aria-invalid={Boolean(cityError)}
+              aria-describedby={cityError ? 'cityId-error' : undefined}
+              className={cn(
+                'w-full border bg-white px-3.5 text-[15px] text-[#1e2364] data-[size=default]:h-11 rounded-xl border-[#d9ddea] focus-visible:border-[#00a8f1] focus-visible:ring-[#00a8f1]/30',
+                cityError && 'border-red-500'
+              )}
             >
-              <SelectTrigger
-                className={cn(
-                  'h-10 w-full rounded-xl border-2 border-[#e5e7f0] bg-[#f5f8ff] px-4 text-[14.5px] font-medium text-[#1e2364]',
-                  formik.touched.cityId &&
-                    formik.errors.cityId &&
-                    'border-red-400'
-                )}
+              <SelectValue
+                placeholder={labels.placeholders.city}
+                className='text-start'
               >
-                <SelectValue placeholder={labels.placeholders.city}>
-                  {formik.values.cityId > 0
-                    ? getTranslationName(
-                        citiesQuery.data?.find(
-                          (c) => c.id === formik.values.cityId
-                        )?.translations ?? [],
-                        locale
-                      )
-                    : null}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false}>
-                {citiesQuery.data?.map((city) => (
-                  <SelectItem key={city.id} value={String(city.id)}>
-                    {getTranslationName(city.translations, locale)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
+                {formik.values.cityId > 0
+                  ? getTranslationName(
+                      citiesQuery.data?.find((c) => c.id === formik.values.cityId)
+                        ?.translations ?? [],
+                      locale
+                    )
+                  : null}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent alignItemWithTrigger={false}>
+              {citiesQuery.data?.map((city) => (
+                <SelectItem key={city.id} value={String(city.id)}>
+                  {getTranslationName(city.translations, locale)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
 
-          {submitError ? (
-            <p className='rounded-lg bg-red-50 px-4 py-2.5 text-[13px] font-medium text-red-600'>
-              {submitError}
-            </p>
-          ) : null}
+        {submitError ? (
+          <p
+            role='alert'
+            className='rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] font-semibold text-red-700'
+          >
+            {submitError}
+          </p>
+        ) : null}
 
-          <DialogFooter className='mt-1'>
-            <Button
-              type='button'
-              onClick={() => onOpenChange(false)}
-              disabled={isPending}
-              className='rounded-xl border-2 border-[#e5e7f0] bg-transparent px-5 py-2.5 text-[14px] font-bold text-[#6b7196] hover:border-[#00a8f1] hover:bg-transparent hover:text-[#00a8f1]'
-            >
-              {labels.cancel}
-            </Button>
-            <Button
-              type='submit'
-              loading={isPending}
-              className='rounded-xl px-5 py-2.5 text-[14px] font-bold'
-            >
-              {labels.submit}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+        <div className='mt-2 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+          <Button
+            type='button'
+            variant='productSecondary'
+            size='control'
+            onClick={close}
+            disabled={isPending}
+          >
+            {labels.cancel}
+          </Button>
+          <Button type='submit' variant='product' size='control' loading={isPending}>
+            {labels.submit}
+          </Button>
+        </div>
+      </form>
+    </Modal>
   );
 }
 
 function Field({
+  id,
   label,
   error,
   children,
 }: {
+  id: string;
   label: string;
   error?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className='flex flex-col gap-1.5'>
-      <label className='text-[13px] font-bold text-[#6b7196] max-[640px]:font-semibold max-[640px]:normal-case max-[640px]:tracking-normal md:uppercase md:tracking-widest'>
+      <label htmlFor={id} className='text-[13px] font-semibold text-[#4a5078]'>
         {label}
       </label>
       {children}
       {error ? (
-        <p className='text-[12.5px] font-medium text-red-500'>{error}</p>
+        <p id={`${id}-error`} className='text-[13px] font-semibold text-red-700'>
+          {error}
+        </p>
       ) : null}
     </div>
   );

@@ -1,33 +1,37 @@
-import { ChevronLeft, Clock, ListOrdered, Trophy } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/shared/components/ui/Button';
+import { InfoItem, InfoList, Notice, Panel } from '@/shared/components/product';
+import { Button, buttonVariants } from '@/shared/components/ui/Button';
+import { cn } from '@/shared/lib/cn';
 import { safeHtml } from '@/shared/lib/safeHtml';
-import { GlassPanel, StatChip } from '../ui/AcademyGlass';
 import { QuizStageHeader } from './QuizStageHeader';
 import type { QuizLabels } from './quizUi';
 
-/** Start screen: stage with the title, glass card with facts and Start. */
+/** Start screen: what the quiz asks of the learner, then one Start action. */
 export function QuizIntro({
   labels,
   title,
   courseName,
-  image,
   description,
   questionCount,
   minutesLabel,
   passThreshold,
+  attemptsCount,
+  historyHref,
   backHref,
   onStart,
 }: {
   labels: QuizLabels;
   title: string;
   courseName?: string | null;
-  image?: string | null;
   description?: string | null;
   questionCount: number;
   /** Formatted duration, or null when the quiz is untimed. */
   minutesLabel: string | null;
   passThreshold: number;
+  /** Past attempts, or null while unknown. */
+  attemptsCount: number | null;
+  historyHref: string;
   backHref: string;
   onStart: () => void;
 }) {
@@ -35,74 +39,95 @@ export function QuizIntro({
     <>
       <QuizStageHeader
         courseName={courseName}
-        image={image}
         title={title}
-        leading={
-          <Link
-            href={backHref}
-            aria-label={labels.backToCourse}
-            className='flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/15 transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] motion-reduce:transition-none'
-          >
-            <ChevronLeft className='size-5 rtl:rotate-180' aria-hidden />
-          </Link>
-        }
+        leading={<BackLink href={backHref} label={labels.backToCourse} />}
       />
 
-      <div className='relative mx-auto -mt-10 max-w-3xl px-4 pb-16 sm:-mt-12 sm:px-6'>
-        <GlassPanel className='p-6 sm:p-10'>
-          {description && (
+      <div className='mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8'>
+        <Panel className='max-w-3xl'>
+          {description ? (
             <div
-              className='mb-6 text-base leading-relaxed text-[#6b7196] [&_a]:text-[#00a8f1] [&_a]:underline'
+              className='mb-6 break-words text-[15px] leading-7 text-[#4a5078] [&_a]:text-[#0077ad] [&_a]:underline'
               dangerouslySetInnerHTML={{ __html: safeHtml(description) }}
             />
+          ) : null}
+
+          <InfoList>
+            <InfoItem label={labels.questionsLabel}>
+              <span className='tabular-nums'>{questionCount}</span>
+            </InfoItem>
+            <InfoItem label={labels.timeLimitLabel}>
+              {minutesLabel ?? labels.noTimeLimit}
+            </InfoItem>
+            <InfoItem label={labels.passMarkLabel}>
+              <bdi dir='ltr' className='tabular-nums'>
+                {passThreshold}%
+              </bdi>
+            </InfoItem>
+            <InfoItem label={labels.attemptsLabel}>
+              <span className='flex flex-wrap items-baseline gap-x-3'>
+                <span className='tabular-nums'>{attemptsCount ?? '—'}</span>
+                {attemptsCount ? (
+                  <Link
+                    href={historyHref}
+                    className='rounded-sm text-[14px] font-semibold text-[#0077ad] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]'
+                  >
+                    {labels.viewAttempts}
+                  </Link>
+                ) : null}
+              </span>
+            </InfoItem>
+          </InfoList>
+
+          {questionCount === 0 ? (
+            <Notice tone='warning' className='mt-6'>
+              {labels.noQuestions}
+            </Notice>
+          ) : (
+            <div className='mt-6 space-y-2 border-t border-[#eef0f7] pt-5 text-[14px] leading-6 text-[#4a5078]'>
+              <p>{labels.introHint}</p>
+              {minutesLabel ? <p>{labels.introTimedHint}</p> : null}
+            </div>
           )}
 
-          <div className='flex flex-wrap gap-2'>
-            <StatChip
-              icon={<ListOrdered className='size-4 text-[#00a8f1]' aria-hidden />}
-            >
-              {questionCount} {labels.question}
-            </StatChip>
-            {minutesLabel && (
-              <StatChip
-                icon={<Clock className='size-4 text-[#00a8f1]' aria-hidden />}
-              >
-                {minutesLabel}
-              </StatChip>
-            )}
-            <StatChip
-              icon={<Trophy className='size-4 text-emerald-600' aria-hidden />}
-            >
-              <span dir='ltr'>{passThreshold}%</span>
-            </StatChip>
-          </div>
-
-          <div className='mt-8 flex flex-col-reverse items-stretch gap-3 border-t border-[#e5e7f0] pt-6 sm:flex-row sm:items-center sm:justify-between'>
+          <div className='mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end'>
             <Link
               href={backHref}
-              className='rounded-full px-2 py-2 text-center text-sm font-semibold text-[#6b7196] transition-colors hover:text-[#00a8f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] motion-reduce:transition-none'
+              className={cn(
+                buttonVariants({ variant: 'productSecondary', size: 'control' })
+              )}
             >
               {labels.backToCourse}
             </Link>
-            {questionCount === 0 ? (
-              <p className='text-sm font-semibold text-[#6b7196]'>
-                {labels.noQuestions}
-              </p>
-            ) : (
+            {questionCount > 0 ? (
               <Button
-                variant='brand'
-                shape='pill'
-                size='lg'
-                className='bg-[#00a8f1] px-10 hover:bg-[#0090d1] focus:ring-[#00a8f1]'
-                onClick={onStart}
                 type='button'
+                variant='product'
+                size='control'
+                className='sm:min-w-40'
+                onClick={onStart}
               >
                 {labels.start}
               </Button>
-            )}
+            ) : null}
           </div>
-        </GlassPanel>
+        </Panel>
       </div>
     </>
+  );
+}
+
+function BackLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        buttonVariants({ variant: 'productText', size: 'compact' }),
+        '-ms-3.5'
+      )}
+    >
+      <ChevronLeft className='size-4 rtl:rotate-180' aria-hidden />
+      {label}
+    </Link>
   );
 }

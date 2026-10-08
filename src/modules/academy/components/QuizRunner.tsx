@@ -1,18 +1,23 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { AlertTriangle, ChevronLeft, Clock, Send } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { useAuthStore } from '@/modules/auth/store/authStore';
+import { CourseProgressBar } from '@/modules/academy/components/CourseProgressBar';
 import { Button } from '@/shared/components/ui/Button';
+import { ConfirmDialog } from '@/shared/components/ui/ConfirmDialog';
 import { Modal } from '@/shared/components/ui/Modal';
-import { cn } from '@/shared/lib/cn';
 import { interpolate } from '@/shared/lib/interpolate';
 import { academyLearnApi } from '../api/academyLearnApi';
-import { useQuizAttempt, useQuizDetail } from '../hooks/useQuiz';
+import {
+  useQuizAttempt,
+  useQuizAttempts,
+  useQuizDetail,
+} from '../hooks/useQuiz';
 import { PASS_THRESHOLD_PERCENT, shuffleArray } from '../quizScoring.shared';
 import { buildAttemptFormData } from '../quizSubmit.shared';
 import {
@@ -23,7 +28,12 @@ import {
 import { isActivityLockedById } from '../courseLocking.shared';
 import { transformCourseDetailToCourseData } from '../courseTransform.shared';
 import { useCourseDetail } from '../hooks/useCourseDetail';
-import { learnBasePath, lecturePath, quizPath } from '../learnRoutes.shared';
+import {
+  learnBasePath,
+  lecturePath,
+  quizHistoryPath,
+  quizPath,
+} from '../learnRoutes.shared';
 import type { NavItem } from '../types/player.types';
 import { QuestionType } from '../types/quiz.types';
 import type {
@@ -39,7 +49,7 @@ import { QuizActionBar } from './quiz/QuizActionBar';
 import { QuizIntro } from './quiz/QuizIntro';
 import { QuizStageHeader } from './quiz/QuizStageHeader';
 import { QuizLoading, QuizMessage } from './quiz/QuizStatus';
-import { QuizTimer } from './quiz/QuizTimer';
+import { QuizTimeAnnouncer, QuizTimer } from './quiz/QuizTimer';
 
 interface QuizRunnerProps {
   userCourseId: number;
@@ -96,7 +106,7 @@ export function QuizRunner({
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
 
-  const { data: quiz, isLoading, isError } = useQuizDetail(
+  const { data: quiz, isLoading, isError, refetch } = useQuizDetail(
     quizId,
     userCourseId,
     locale
@@ -139,6 +149,19 @@ export function QuizRunner({
   >({});
 
   const { data: attemptResult } = useQuizAttempt(attemptId, locale);
+  // Past attempts for the start screen (same query as the history page).
+  const pastAttempts = useQuizAttempts({
+    userId: user?.id ?? '',
+    quizId,
+    userCourseId,
+    locale,
+  });
+  const attemptsCount = pastAttempts.data
+    ? (pastAttempts.data.totalRecords ??
+      pastAttempts.data.attemptsCount ??
+      (pastAttempts.data.data ?? pastAttempts.data.attempts ?? []).length)
+    : null;
+  const questionHeadingRef = useRef<HTMLHeadingElement>(null);
 
   const leaves = useMemo(
     () => (quiz ? leafQuestions(quiz.questions) : []),
@@ -190,6 +213,10 @@ export function QuizRunner({
     setStartTime(new Date().toISOString());
     setTimeLeft(timerSeconds > 0 ? timerSeconds : null);
     setStarted(true);
+    // The Start button is gone; put focus on the first question.
+    requestAnimationFrame(() =>
+      questionHeadingRef.current?.focus({ preventScroll: true })
+    );
   }
 
   function setSingle(questionId: number, answerId: number) {
@@ -230,7 +257,15 @@ export function QuizRunner({
     side: 'left' | 'right'
   ) {
     if (side === 'left') {
-      setMatchingSelection({ questionId, leftAnswerId: answerId });
+      // Tapping the chosen item again cancels the choice.
+      const same =
+        matchingSelection.questionId === questionId &&
+        matchingSelection.leftAnswerId === answerId;
+      setMatchingSelection(
+        same
+          ? { questionId: null, leftAnswerId: null }
+          : { questionId, leftAnswerId: answerId }
+      );
       return;
     }
     if (
@@ -338,15 +373,39 @@ export function QuizRunner({
     setMatchingSelection({ questionId: null, leftAnswerId: null });
   }
 
+  // Move to a question: bring it into view and focus its text, so keyboard
+  // and screen-reader users land on the new question.
+  function goTo(index: number) {
+    setCurrentIndex(index);
+    requestAnimationFrame(() => {
+      const heading = questionHeadingRef.current;
+      if (!heading) return;
+      if (heading.getBoundingClientRect().top < 96) {
+        const reduce = window.matchMedia(
+          '(prefers-reduced-motion: reduce)'
+        ).matches;
+        heading.scrollIntoView({
+          block: 'center',
+          behavior: reduce ? 'auto' : 'smooth',
+        });
+      }
+      heading.focus({ preventScroll: true });
+    });
+  }
+
   if (isLoading) {
     return <QuizLoading label={t.loading} />;
   }
 
+  const backHref = learnBasePath(locale, userCourseId, courseId);
+
   if (isLocked) {
     return (
       <QuizMessage
-        message={`${t.lockedTitle} — ${t.lockedMessage}`}
-        actionHref={learnBasePath(locale, userCourseId, courseId)}
+        kind='locked'
+        title={t.lockedTitle}
+        description={t.lockedMessage}
+        actionHref={backHref}
         actionLabel={t.backToCourse}
       />
     );
@@ -355,8 +414,11 @@ export function QuizRunner({
   if (isError || !quiz) {
     return (
       <QuizMessage
-        message={t.loadError}
-        actionHref={learnBasePath(locale, userCourseId, courseId)}
+        kind='error'
+        title={t.loadError}
+        retryLabel={t.retry}
+        onRetry={() => void refetch()}
+        actionHref={backHref}
         actionLabel={t.backToCourse}
       />
     );
@@ -371,16 +433,13 @@ export function QuizRunner({
         userCourseId={userCourseId}
         nextHref={nextHref}
         onRetake={resetQuiz}
-        onBackToCourse={() =>
-          router.push(learnBasePath(locale, userCourseId, courseId))
-        }
+        onBackToCourse={() => router.push(backHref)}
       />
     );
   }
 
   const quizTitle = quiz.title || t.start;
   const courseName = courseData?.title ?? null;
-  const courseImage = courseData?.image || null;
 
   // Start screen
   if (!started) {
@@ -390,7 +449,6 @@ export function QuizRunner({
           labels={t}
           title={quizTitle}
           courseName={courseName}
-          image={courseImage}
           description={quiz.description}
           questionCount={leaves.length}
           minutesLabel={
@@ -401,7 +459,15 @@ export function QuizRunner({
               : null
           }
           passThreshold={PASS_THRESHOLD_PERCENT}
-          backHref={learnBasePath(locale, userCourseId, courseId)}
+          attemptsCount={attemptsCount}
+          historyHref={quizHistoryPath(
+            locale,
+            userCourseId,
+            courseId,
+            quizId,
+            quiz.lessonId !== null ? String(quiz.lessonId) : null
+          )}
+          backHref={backHref}
           onStart={handleStart}
         />
       </AcademyBackdrop>
@@ -412,26 +478,27 @@ export function QuizRunner({
   const current = topQuestions[currentIndex];
   const isLast = currentIndex === topQuestions.length - 1;
   const answeredCount = leaves.filter((q) => isLeafAnswered(q, answers)).length;
-  const allAnswered = leaves.length > 0 && answeredCount === leaves.length;
-  const progress = ((currentIndex + 1) / topQuestions.length) * 100;
+  const unansweredCount = leaves.length - answeredCount;
+  const answeredPercent =
+    leaves.length > 0 ? (answeredCount / leaves.length) * 100 : 0;
   const lowTime = timeLeft !== null && timeLeft <= 60;
 
   return (
-    <AcademyBackdrop className='pb-40 sm:pb-16'>
+    <AcademyBackdrop className='pb-28 sm:pb-16'>
       <QuizStageHeader
         courseName={courseName}
-        image={courseImage}
         title={quizTitle}
-        description={quiz.description}
         leading={
-          <button
+          <Button
             type='button'
+            variant='productText'
+            size='compact'
             onClick={() => setShowExit(true)}
-            className='flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/15 transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] motion-reduce:transition-none'
-            aria-label={t.exitQuiz}
+            className='-ms-3.5'
           >
-            <ChevronLeft className='size-5 rtl:rotate-180' aria-hidden />
-          </button>
+            <ChevronLeft className='size-4 rtl:rotate-180' aria-hidden />
+            {t.exit}
+          </Button>
         }
         trailing={
           timeLeft !== null && timeLeft > 0 ? (
@@ -439,182 +506,118 @@ export function QuizRunner({
               seconds={timeLeft}
               low={lowTime}
               label={t.timeLeft}
-              className='hidden sm:inline-flex'
+              className='max-sm:hidden'
             />
           ) : null
         }
       >
-        <div className='mt-6 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
-          <p className='text-base font-bold text-white'>
-            {t.questionOf
-              .replace('{{current}}', String(currentIndex + 1))
-              .replace('{{total}}', String(topQuestions.length))}
+        <div className='mt-4'>
+          <p className='mb-2 text-[13px] font-semibold tabular-nums text-[#6b7196]'>
+            {interpolate(t.answeredOf, {
+              answered: answeredCount,
+              total: leaves.length,
+            })}
           </p>
-          <p className='text-sm font-semibold text-white/70'>
-            {t.answeredOf
-              .replace('{{answered}}', String(answeredCount))
-              .replace('{{total}}', String(leaves.length))}
-          </p>
+          <CourseProgressBar value={answeredPercent} />
         </div>
+      </QuizStageHeader>
+      <QuizTimeAnnouncer
+        seconds={timeLeft}
+        totalSeconds={timerSeconds}
+        labels={t}
+      />
+
+      <div className='mx-auto grid max-w-5xl gap-4 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start lg:gap-6'>
         <QuestionNavigator
           count={topQuestions.length}
           currentIndex={currentIndex}
           isAnswered={(idx) => isQuestionAnswered(topQuestions[idx], answers)}
-          onSelect={setCurrentIndex}
-          heading={t.questionsNav}
-          questionLabel={t.question}
+          onSelect={goTo}
+          labels={t}
+          className='lg:sticky lg:top-32 lg:order-2'
         />
-      </QuizStageHeader>
 
-      <div className='relative mx-auto -mt-10 max-w-3xl px-4 sm:-mt-12 sm:px-6'>
-        <QuestionCard
-          question={current}
-          index={currentIndex}
-          progress={progress}
-          answers={answers}
-          langId={langId}
-          labels={t}
-          shuffledRights={shuffledRights}
-          matchingSelection={matchingSelection}
-          onSingle={setSingle}
-          onToggle={toggleMultiple}
-          onMatchingClick={matchingClick}
-          onRemoveMatch={removeMatch}
-        />
-        <QuizActionBar
-          labels={t}
-          isFirst={currentIndex === 0}
-          isLast={isLast}
-          allAnswered={allAnswered}
-          submitting={submitting}
-          submitError={submitError}
-          timeLeft={timeLeft}
-          lowTime={lowTime}
-          onPrevious={() => setCurrentIndex((i) => Math.max(0, i - 1))}
-          onNext={() =>
-            setCurrentIndex((i) => Math.min(topQuestions.length - 1, i + 1))
-          }
-          onSubmit={() => setShowConfirmSubmit(true)}
-        />
+        <div className='min-w-0 lg:order-1'>
+          <QuestionCard
+            question={current}
+            index={currentIndex}
+            total={topQuestions.length}
+            headingRef={questionHeadingRef}
+            answers={answers}
+            langId={langId}
+            labels={t}
+            shuffledRights={shuffledRights}
+            matchingSelection={matchingSelection}
+            onSingle={setSingle}
+            onToggle={toggleMultiple}
+            onMatchingClick={matchingClick}
+            onRemoveMatch={removeMatch}
+          />
+          <QuizActionBar
+            labels={t}
+            isFirst={currentIndex === 0}
+            isLast={isLast}
+            unansweredCount={unansweredCount}
+            submitting={submitting}
+            submitError={submitError}
+            timeLeft={timeLeft}
+            lowTime={lowTime}
+            onPrevious={() => goTo(Math.max(0, currentIndex - 1))}
+            onNext={() =>
+              goTo(Math.min(topQuestions.length - 1, currentIndex + 1))
+            }
+            onSubmit={() => setShowConfirmSubmit(true)}
+          />
+        </div>
       </div>
 
-      {/* Exit modal */}
-      <Modal
+      <ConfirmDialog
         open={showExit}
-        onClose={() => setShowExit(false)}
-        className={quizModalClass}
-      >
-        <ModalHeader tone='amber' title={t.exitQuiz}>
-          <AlertTriangle className='size-6' aria-hidden />
-        </ModalHeader>
-        <p className='mb-6 text-[#6b7196]'>{t.exitWarning}</p>
-        <div className='flex gap-3'>
-          <Button
-            variant='outline'
-            shape='pill'
-            className='flex-1 border-[#e5e7f0] text-[#1e2364]'
-            onClick={() => setShowExit(false)}
-            type='button'
-          >
-            {t.cancel}
-          </Button>
-          <Button
-            variant='danger'
-            shape='pill'
-            className='flex-1'
-            onClick={() =>
-              router.push(learnBasePath(locale, userCourseId, courseId))
-            }
-            type='button'
-          >
-            {t.exit}
-          </Button>
-        </div>
-      </Modal>
+        title={t.exitQuiz}
+        message={t.exitWarning}
+        confirmLabel={t.exit}
+        cancelLabel={t.keepAnswering}
+        destructive
+        onConfirm={() => router.push(backHref)}
+        onCancel={() => setShowExit(false)}
+      />
 
-      {/* Submit confirmation */}
-      <Modal
+      <ConfirmDialog
         open={showConfirmSubmit}
-        onClose={() => setShowConfirmSubmit(false)}
-        className={quizModalClass}
-      >
-        <ModalHeader tone='sky' title={t.submit}>
-          <Send className='size-6 rtl:-scale-x-100' aria-hidden />
-        </ModalHeader>
-        <p className='mb-6 text-[#6b7196]'>{t.confirmSubmit}</p>
-        <div className='flex gap-3'>
-          <Button
-            variant='outline'
-            shape='pill'
-            className='flex-1 border-[#e5e7f0] text-[#1e2364]'
-            onClick={() => setShowConfirmSubmit(false)}
-            type='button'
-          >
-            {t.cancel}
-          </Button>
-          <Button
-            variant='brand'
-            shape='pill'
-            className='flex-1 bg-[#00a8f1] hover:bg-[#0090d1] focus:ring-[#00a8f1]'
-            onClick={() => handleSubmit()}
-            loading={submitting}
-            type='button'
-          >
-            {t.submit}
-          </Button>
-        </div>
-      </Modal>
+        title={t.submitTitle}
+        message={
+          unansweredCount > 0
+            ? interpolate(t.confirmSubmitUnanswered, {
+                count: unansweredCount,
+                total: leaves.length,
+              })
+            : t.confirmSubmit
+        }
+        confirmLabel={t.submitAnswers}
+        cancelLabel={t.keepAnswering}
+        loading={submitting}
+        onConfirm={() => handleSubmit()}
+        onCancel={() => setShowConfirmSubmit(false)}
+      />
 
-      {/* Time-up notice */}
+      {/* Time-up notice: nothing was submitted; the only way on is back. */}
       <Modal
         open={showTimeUp}
-        onClose={() => router.push(learnBasePath(locale, userCourseId, courseId))}
-        className={quizModalClass}
+        onClose={() => router.push(backHref)}
+        title={t.timeUpTitle}
+        size='sm'
       >
-        <ModalHeader tone='amber' title={t.timeUpTitle}>
-          <Clock className='size-6' aria-hidden />
-        </ModalHeader>
-        <p className='mb-6 text-[#6b7196]'>{t.timeUp}</p>
+        <p className='text-[15px] leading-6 text-[#4a5078]'>{t.timeUp}</p>
         <Button
-          variant='brand'
-          shape='pill'
-          className='w-full'
-          onClick={() => router.push(learnBasePath(locale, userCourseId, courseId))}
           type='button'
+          variant='product'
+          size='control'
+          className='mt-6 w-full'
+          onClick={() => router.push(backHref)}
         >
           {t.timeUpConfirm}
         </Button>
       </Modal>
     </AcademyBackdrop>
-  );
-}
-
-const quizModalClass =
-  'rounded-[24px] border border-white/70 bg-white/90 p-6 shadow-[0_24px_64px_-24px_rgba(20,24,72,0.45)] backdrop-blur-xl sm:p-8';
-
-function ModalHeader({
-  tone,
-  title,
-  children,
-}: {
-  tone: 'amber' | 'sky';
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className='mb-3 flex items-center gap-3'>
-      <span
-        aria-hidden
-        className={cn(
-          'flex size-11 shrink-0 items-center justify-center rounded-2xl',
-          tone === 'amber'
-            ? 'bg-amber-50 text-amber-500 ring-1 ring-amber-200'
-            : 'bg-[#00a8f1]/10 text-[#00a8f1] ring-1 ring-[#00a8f1]/20'
-        )}
-      >
-        {children}
-      </span>
-      <h2 className='text-xl font-bold text-[#1e2364]'>{title}</h2>
-    </div>
   );
 }

@@ -1,10 +1,11 @@
-import { ListChecks, Target } from 'lucide-react';
+import type { Ref } from 'react';
+import { RadioGroup } from '@/components/ui/radio-group';
+import { Panel } from '@/shared/components/product';
+import { interpolate } from '@/shared/lib/interpolate';
 import { getTranslation } from '../../quizScoring.shared';
 import { QuestionType } from '../../types/quiz.types';
 import type { QuizQuestion } from '../../types/quiz.types';
 import { getVimeoEmbedUrl } from '../../vimeo.shared';
-import { CourseProgressBar } from '../CourseProgressBar';
-import { GlassPanel } from '../ui/AcademyGlass';
 import { MatchingQuestion } from './MatchingQuestion';
 import { OptionTile } from './OptionTile';
 import {
@@ -13,42 +14,49 @@ import {
   type QuestionInteraction,
 } from './quizUi';
 
-/** The focused glass card: progress, question text and its answers. */
+/** The one question in focus: position, text and its answers. */
 export function QuestionCard({
   question,
   index,
-  progress,
+  total,
+  headingRef,
   ...interaction
 }: {
   question: QuizQuestion;
   index: number;
-  /** 0–100, position in the quiz. */
-  progress: number;
+  total: number;
+  /** Receives focus when the learner moves to another question. */
+  headingRef?: Ref<HTMLHeadingElement>;
 } & QuestionInteraction) {
   const { labels, langId } = interaction;
   const translation = getTranslation(question.translations, langId);
+  const position = interpolate(labels.questionOf, {
+    current: index + 1,
+    total,
+  });
 
   return (
-    <GlassPanel as='article' className='p-5 sm:p-8'>
-      <CourseProgressBar value={progress} className='mb-6' />
-      <p className='mb-2 text-sm font-semibold text-[#00a8f1]'>
-        {labels.question} {index + 1}
+    <Panel aria-labelledby={questionTitleId(question.id)} className='sm:p-7'>
+      <p className='text-[13px] font-semibold tabular-nums text-[#6b7196]'>
+        {position}
       </p>
       <h2
+        ref={headingRef}
+        tabIndex={-1}
         id={questionTitleId(question.id)}
-        className='break-words text-xl font-bold leading-snug text-[#1e2364] sm:text-[28px] sm:leading-tight'
+        className='mt-1.5 break-words text-[19px] font-bold leading-8 text-[#1e2364] outline-none sm:text-[22px]'
       >
         {translation?.text || `${labels.question} ${index + 1}`}
       </h2>
-      {translation?.description && (
-        <p className='mt-2 text-sm text-[#6b7196] sm:text-base'>
+      {translation?.description ? (
+        <p className='mt-2 break-words text-[15px] leading-6 text-[#4a5078]'>
           {translation.description}
         </p>
-      )}
-      <div className='mt-6 sm:mt-8'>
+      ) : null}
+      <div className='mt-6'>
         <QuestionBody question={question} {...interaction} />
       </div>
-    </GlassPanel>
+    </Panel>
   );
 }
 
@@ -58,52 +66,42 @@ function QuestionBody({
 }: { question: QuizQuestion } & QuestionInteraction) {
   const { labels, langId } = interaction;
 
-  if (question.type === QuestionType.Video) {
-    return (
-      <div className='space-y-6'>
-        {question.videoUrl && (
-          <div className='overflow-hidden rounded-2xl bg-[#141848] shadow-[0_8px_32px_-12px_rgba(30,35,100,0.35)]'>
-            <div className='relative aspect-video'>
-              <iframe
-                src={getVimeoEmbedUrl(question.videoUrl)}
-                allow='autoplay; fullscreen; picture-in-picture'
-                className='absolute inset-0 size-full'
-                title='Quiz video'
-              />
-            </div>
-          </div>
-        )}
-        <h3 className='flex items-center gap-2 border-t border-[#e5e7f0] pt-6 text-base font-bold text-[#1e2364] sm:text-xl'>
-          <Target className='size-5 text-[#00a8f1]' aria-hidden />
-          {labels.answerVideoQuestions}
-        </h3>
-        {(question.relatedQuizQuestions ?? []).map((sub, idx) => (
-          <section
-            key={sub.id}
-            className='rounded-2xl border border-[#e5e7f0] bg-white/60 p-4 sm:p-5'
-          >
-            <p
-              id={questionTitleId(sub.id)}
-              className='mb-4 flex items-start gap-3 font-semibold text-[#1e2364]'
-            >
-              <span
-                aria-hidden
-                className='flex size-7 shrink-0 items-center justify-center rounded-full bg-[#1e2364] text-xs font-bold text-white'
-              >
-                {idx + 1}
-              </span>
-              <span className='min-w-0 flex-1 break-words pt-0.5'>
-                {getTranslation(sub.translations, langId)?.text ?? ''}
-              </span>
-            </p>
-            <ChoiceOptions question={sub} {...interaction} />
-          </section>
-        ))}
-      </div>
-    );
+  if (question.type !== QuestionType.Video) {
+    return <ChoiceOptions question={question} {...interaction} />;
   }
 
-  return <ChoiceOptions question={question} {...interaction} />;
+  const subs = question.relatedQuizQuestions ?? [];
+  return (
+    <div>
+      {question.videoUrl ? (
+        <div className='relative aspect-video overflow-hidden rounded-xl bg-[#141848]'>
+          <iframe
+            src={getVimeoEmbedUrl(question.videoUrl)}
+            allow='autoplay; fullscreen; picture-in-picture'
+            className='absolute inset-0 size-full'
+            title={getTranslation(question.translations, langId)?.text || labels.question}
+          />
+        </div>
+      ) : null}
+      <h3 className='mt-6 text-[15px] font-bold text-[#1e2364]'>
+        {labels.answerVideoQuestions}
+      </h3>
+      <ol className='mt-2 divide-y divide-[#eef0f7]'>
+        {subs.map((sub, idx) => (
+          <li key={sub.id} className='py-5 last:pb-0'>
+            <p
+              id={questionTitleId(sub.id)}
+              className='mb-4 break-words text-[16px] font-semibold leading-7 text-[#1e2364]'
+            >
+              <span className='tabular-nums text-[#6b7196]'>{idx + 1}. </span>
+              {getTranslation(sub.translations, langId)?.text ?? ''}
+            </p>
+            <ChoiceOptions question={sub} {...interaction} />
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
 }
 
 function ChoiceOptions({
@@ -134,42 +132,52 @@ function ChoiceOptions({
   }
 
   const state = answers[question.id];
-  const isMultiple = question.type === QuestionType.MultipleChoice;
   const sorted = [...question.quizQuestionAnswers].sort(
     (a, b) => a.order - b.order
   );
 
-  return (
-    <fieldset aria-labelledby={questionTitleId(question.id)}>
-      {isMultiple && (
-        <p className='mb-4 inline-flex items-center gap-2 rounded-full bg-[#00a8f1]/10 px-3 py-1 text-sm font-semibold text-[#1e2364]'>
-          <ListChecks className='size-4 text-[#00a8f1]' aria-hidden />
+  if (question.type === QuestionType.MultipleChoice) {
+    const selected = state?.selectedAnswerIds ?? [];
+    return (
+      <div role='group' aria-labelledby={questionTitleId(question.id)}>
+        <p className='mb-3 text-[13px] font-semibold text-[#4a5078]'>
           {labels.selectAllThatApply}
         </p>
-      )}
-      <div className='space-y-3'>
-        {sorted.map((answer) => {
-          const active = isMultiple
-            ? (state?.selectedAnswerIds ?? []).includes(answer.id)
-            : state?.selectedAnswerId === answer.id;
-          return (
+        <div className='space-y-2.5'>
+          {sorted.map((answer) => (
             <OptionTile
               key={answer.id}
-              type={isMultiple ? 'checkbox' : 'radio'}
-              name={`quiz-question-${question.id}`}
-              checked={active}
-              onChange={() =>
-                isMultiple
-                  ? onToggle(question.id, answer.id)
-                  : onSingle(question.id, answer.id)
-              }
-              marker={String.fromCharCode(65 + answer.order - 1)}
+              type='checkbox'
+              checked={selected.includes(answer.id)}
+              onToggle={() => onToggle(question.id, answer.id)}
             >
               {answerLabel(answer, langId, labels)}
             </OptionTile>
-          );
-        })}
+          ))}
+        </div>
       </div>
-    </fieldset>
+    );
+  }
+
+  return (
+    <RadioGroup
+      aria-labelledby={questionTitleId(question.id)}
+      value={state?.selectedAnswerId ?? null}
+      onValueChange={(value) => {
+        if (typeof value === 'number') onSingle(question.id, value);
+      }}
+      className='gap-2.5'
+    >
+      {sorted.map((answer) => (
+        <OptionTile
+          key={answer.id}
+          type='radio'
+          value={answer.id}
+          checked={state?.selectedAnswerId === answer.id}
+        >
+          {answerLabel(answer, langId, labels)}
+        </OptionTile>
+      ))}
+    </RadioGroup>
   );
 }

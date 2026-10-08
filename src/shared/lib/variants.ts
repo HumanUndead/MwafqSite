@@ -23,16 +23,29 @@ export const buttonVariants = cva(
           'border-2 border-white bg-transparent text-white hover:bg-white hover:text-[#1e2364]',
         brandInverse:
           'border-2 border-white bg-white text-[#1e2364] hover:bg-[#00a8f1] hover:border-[#00a8f1] hover:text-white',
+        // Product UI (profile, academy, auth). See docs/product-ui.md.
+        product:
+          'bg-[#1e2364] text-white hover:bg-[#2a3178] focus-visible:ring-2 focus-visible:ring-[#1e2364] focus-visible:ring-offset-2',
+        productSecondary:
+          'border border-[#d9ddea] bg-white text-[#1e2364] hover:border-[#1e2364]/40 hover:bg-[#f7f8fb] focus-visible:ring-2 focus-visible:ring-[#1e2364] focus-visible:ring-offset-2',
+        productText:
+          'text-[#0077ad] hover:bg-[#e6f6fe] focus-visible:ring-2 focus-visible:ring-[#00a8f1]',
+        productDanger:
+          'text-red-700 hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-red-500',
+      },
+      // Before `size` so product sizes can override the radius.
+      shape: {
+        default: 'rounded-lg',
+        pill: 'rounded-full',
       },
       size: {
         sm: 'px-3 py-1.5 text-sm',
         md: 'px-4 py-2 text-sm',
         lg: 'px-6 py-3 text-base',
         hero: 'px-[30px] py-4 text-[15px]',
-      },
-      shape: {
-        default: 'rounded-lg',
-        pill: 'rounded-full',
+        // Product sizes: 44px meets touch targets, 36px for dense rows.
+        control: 'h-11 rounded-xl px-5 text-[14px]',
+        compact: 'h-9 rounded-[10px] px-3.5 text-[13px]',
       },
     },
     defaultVariants: {

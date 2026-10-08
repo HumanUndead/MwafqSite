@@ -5,6 +5,7 @@ import { request as httpsRequest } from 'node:https';
 import { authCookieName } from './authService';
 import { cookies } from 'next/headers';
 import { MWAFQ_UPSTREAM_ORIGIN } from '@/shared/constants/config';
+import { logApiCall, shouldLogApiUrl } from '@/shared/lib/apiDebugLog.shared';
 interface UpstreamTextRequestOptions {
   method: 'GET' | 'POST';
   url: URL;
@@ -49,19 +50,21 @@ export async function performUpstreamTextRequest({
     ...(bearer ? { Authorization: bearer } : {}),
   };
 
-  // TEMP debug: print the exact upstream call as curl. Remove before pushing.
-  console.log(
-    '[upstream curl]\n' +
-      [
-        `curl -X ${method} '${url.toString()}'`,
-        ...Object.entries(headers).map(([k, v]) =>
-          k === 'Authorization'
-            ? `  -H '${k}: ${v.slice(0, 15)}…(masked)'`
-            : `  -H '${k}: ${v}'`
-        ),
-        ...(serializedBody ? [`  -d '${serializedBody}'`] : []),
-      ].join(' \\\n')
-  );
+  // node:https bypasses the fetch logger, so log here (see apiDebugLog.shared).
+  const started = Date.now();
+  const log = (result: { status?: number; body?: string; error?: unknown }) => {
+    if (!shouldLogApiUrl(url)) return;
+    logApiCall({
+      method,
+      url: url.toString(),
+      headers,
+      body: serializedBody ? { kind: 'text', value: serializedBody } : undefined,
+      status: result.status,
+      durationMs: Date.now() - started,
+      responseText: result.body,
+      error: result.error,
+    });
+  };
 
   return new Promise((resolve, reject) => {
     const req = requestImpl(
@@ -80,14 +83,16 @@ export async function performUpstreamTextRequest({
         });
 
         res.on('end', () => {
-          resolve({
-            status,
-            body: Buffer.concat(chunks).toString('utf8'),
-          });
+          const text = Buffer.concat(chunks).toString('utf8');
+          log({ status, body: text });
+          resolve({ status, body: text });
         });
       }
     );
-    req.on('error', reject);
+    req.on('error', (error) => {
+      log({ error: error.message });
+      reject(error);
+    });
 
     if (serializedBody) {
       req.end(serializedBody);

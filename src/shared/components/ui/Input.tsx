@@ -13,6 +13,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   ref
 ) {
   const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
+  const messageId = inputId ? `${inputId}-message` : undefined;
+  const message = error || hint;
 
   return (
     <div className='flex flex-col gap-1'>
@@ -24,14 +26,24 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <input
         ref={ref}
         id={inputId}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={message ? messageId : undefined}
         className={cn(
           inputVariants({ state: error ? 'error' : 'default' }),
           className
         )}
         {...props}
       />
-      {error && <p className='text-xs text-red-600'>{error}</p>}
-      {hint && !error && <p className='text-xs text-gray-500'>{hint}</p>}
+      {error && (
+        <p id={messageId} className='text-xs text-red-600'>
+          {error}
+        </p>
+      )}
+      {hint && !error && (
+        <p id={messageId} className='text-xs text-gray-500'>
+          {hint}
+        </p>
+      )}
     </div>
   );
 });

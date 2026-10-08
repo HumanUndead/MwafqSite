@@ -1,41 +1,96 @@
-import { X } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import Link from 'next/link';
-import { AcademyBackdrop, GlassPanel } from '../ui/AcademyGlass';
+import {
+  EmptyState,
+  ErrorState,
+  Panel,
+  Skeleton,
+} from '@/shared/components/product';
+import { buttonVariants } from '@/shared/components/ui/Button';
+import { AcademyBackdrop, AcademyStage } from '../ui/AcademyGlass';
 
+/** Layout-matched placeholder: header band, then the question panel. */
 export function QuizLoading({ label }: { label: string }) {
   return (
-    <AcademyBackdrop className='flex items-center justify-center px-4'>
-      <div role='status' className='space-y-4 text-center'>
-        <div className='mx-auto size-12 animate-spin rounded-full border-4 border-[#00a8f1]/20 border-t-[#00a8f1]' />
-        <p className='text-base font-semibold text-[#6b7196]'>{label}</p>
+    <AcademyBackdrop>
+      <div role='status'>
+        <span className='sr-only'>{label}</span>
+        <AcademyStage innerClassName='max-w-5xl py-4 sm:py-5 lg:py-6'>
+          <Skeleton className='h-9 w-32' />
+          <Skeleton className='mt-4 h-4 w-40' />
+          <Skeleton className='mt-2 h-7 w-2/3' />
+        </AcademyStage>
+        <div className='mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8'>
+          <Panel className='max-w-3xl space-y-4'>
+            <Skeleton className='h-4 w-28' />
+            <Skeleton className='h-7 w-4/5' />
+            <div className='space-y-2.5 pt-2'>
+              {[0, 1, 2, 3].map((i) => (
+                <Skeleton key={i} className='h-14 w-full rounded-xl' />
+              ))}
+            </div>
+          </Panel>
+        </div>
       </div>
     </AcademyBackdrop>
   );
 }
 
+/** Full-page state when the quiz can't be taken (locked or failed to load). */
 export function QuizMessage({
-  message,
+  kind,
+  title,
+  description,
   actionHref,
   actionLabel,
+  retryLabel,
+  onRetry,
 }: {
-  message: string;
+  kind: 'locked' | 'error';
+  title: string;
+  description?: string;
   actionHref: string;
   actionLabel: string;
+  retryLabel?: string;
+  onRetry?: () => void;
 }) {
+  const backLink = (
+    <Link
+      href={actionHref}
+      className={buttonVariants({
+        variant: kind === 'locked' ? 'product' : 'productText',
+        size: kind === 'locked' ? 'control' : 'compact',
+      })}
+    >
+      {actionLabel}
+    </Link>
+  );
+
   return (
-    <AcademyBackdrop className='flex items-center justify-center px-4 py-16'>
-      <GlassPanel className='w-full max-w-md space-y-6 p-8 text-center'>
-        <div className='mx-auto flex size-16 items-center justify-center rounded-full bg-red-50 ring-1 ring-red-100'>
-          <X className='size-8 text-red-600' aria-hidden />
-        </div>
-        <p className='text-base text-[#1e2364]'>{message}</p>
-        <Link
-          href={actionHref}
-          className='inline-flex items-center justify-center rounded-full bg-[#00a8f1] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0090d1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2 motion-reduce:transition-none'
-        >
-          {actionLabel}
-        </Link>
-      </GlassPanel>
+    <AcademyBackdrop>
+      <div className='mx-auto max-w-xl px-4 py-10 sm:py-16'>
+        <Panel>
+          {kind === 'locked' ? (
+            <EmptyState
+              icon={<Lock aria-hidden />}
+              title={title}
+              description={description}
+              action={backLink}
+            />
+          ) : (
+            <>
+              <ErrorState
+                title={title}
+                description={description}
+                retryLabel={retryLabel}
+                onRetry={onRetry}
+                className='pb-4'
+              />
+              <div className='flex justify-center pb-6'>{backLink}</div>
+            </>
+          )}
+        </Panel>
+      </div>
     </AcademyBackdrop>
   );
 }

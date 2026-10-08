@@ -1,110 +1,96 @@
-import { BookOpen, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import type { Dictionary } from '@/locales/types';
-import { buttonVariants } from '@/shared/components/ui/Button';
-import { cn } from '@/shared/lib/cn';
-import { AcademyBackdrop, AcademyStage, GlassPanel } from '../ui/AcademyGlass';
+import { ErrorState, Panel, Skeleton } from '@/shared/components/product';
 
 type PlayerT = Dictionary['academyPlayer'];
 
-const lightBlock = 'rounded-xl bg-[#e5e7f0] motion-safe:animate-pulse';
-const darkBlock = 'rounded-xl bg-white/10 motion-safe:animate-pulse';
+export const overviewContainerClass =
+  'mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-16 pt-2 sm:px-6 lg:px-8 lg:pb-20';
 
-/** Skeleton mirroring the overview layout: stage + curriculum + sidebar. */
+/** Skeleton mirroring the overview: header, progress panel, curriculum + side panel. */
 export function OverviewSkeleton({ t }: { t: PlayerT }) {
   return (
-    <AcademyBackdrop>
-      <div role='status' aria-live='polite' aria-busy='true'>
-        <span className='sr-only'>{t.loading}</span>
-        <div>
-          <AcademyStage
-            className='mx-2 rounded-[28px] sm:mx-3 sm:rounded-[36px]'
-            innerClassName='py-8 lg:py-12'
-          >
-            <div className='grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12'>
-              <div className='space-y-5'>
-                <div className={cn(darkBlock, 'h-4 w-40')} />
-                <div className={cn(darkBlock, 'h-10 w-4/5')} />
-                <div className='space-y-2'>
-                  <div className={cn(darkBlock, 'h-4 w-full max-w-2xl')} />
-                  <div className={cn(darkBlock, 'h-4 w-3/4 max-w-xl')} />
-                </div>
-                <div className='flex flex-wrap gap-2'>
-                  {[0, 1, 2, 3].map((i) => (
-                    <div key={i} className={cn(darkBlock, 'h-7 w-24 rounded-full')} />
-                  ))}
-                </div>
-              </div>
-              <GlassPanel tone='dark' className='space-y-5 p-6'>
-                <div className='flex items-center gap-4'>
-                  <div className={cn(darkBlock, 'size-[88px] rounded-full')} />
-                  <div className='flex-1 space-y-2'>
-                    <div className={cn(darkBlock, 'h-4 w-24')} />
-                    <div className={cn(darkBlock, 'h-3 w-32')} />
-                  </div>
-                </div>
-                <div className={cn(darkBlock, 'h-2 w-full rounded-full')} />
-                <div className={cn(darkBlock, 'h-12 w-full rounded-full')} />
-              </GlassPanel>
-            </div>
-          </AcademyStage>
-        </div>
-
-        <div className='mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:px-8'>
-          <div className='space-y-4'>
-            <div className={cn(lightBlock, 'h-7 w-48')} />
-            <GlassPanel className='divide-y divide-[#e5e7f0] overflow-hidden'>
-              {[0, 1, 2, 3, 4].map((i) => (
-                <div key={i} className='flex items-center gap-4 px-5 py-4'>
-                  <div className={cn(lightBlock, 'size-10')} />
-                  <div className='flex-1 space-y-2'>
-                    <div className={cn(lightBlock, 'h-4 w-2/3')} />
-                    <div className={cn(lightBlock, 'h-3 w-1/3')} />
-                  </div>
-                </div>
-              ))}
-            </GlassPanel>
-          </div>
-          <div className='space-y-5'>
-            <GlassPanel className='space-y-3 p-5'>
-              <div className={cn(lightBlock, 'h-3 w-20')} />
-              <div className={cn(lightBlock, 'h-5 w-3/4')} />
-              <div className={cn(lightBlock, 'h-10 w-full rounded-full')} />
-            </GlassPanel>
-            <GlassPanel className='space-y-3 p-5'>
-              <div className={cn(lightBlock, 'h-5 w-1/2')} />
-              <div className={cn(lightBlock, 'h-3 w-full')} />
-              <div className={cn(lightBlock, 'h-3 w-5/6')} />
-            </GlassPanel>
-          </div>
+    <div role='status' aria-live='polite' aria-busy='true' className={overviewContainerClass}>
+      <span className='sr-only'>{t.loading}</span>
+      <div className='flex flex-col gap-3'>
+        <Skeleton className='h-4 w-24' />
+        <Skeleton className='h-8 w-3/4 max-w-xl' />
+        <Skeleton className='h-4 w-full max-w-2xl' />
+        <div className='flex gap-5'>
+          <Skeleton className='h-4 w-20' />
+          <Skeleton className='h-4 w-24' />
+          <Skeleton className='h-4 w-20' />
         </div>
       </div>
-    </AcademyBackdrop>
+
+      <Panel>
+        <div className='flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-8'>
+          <div className='flex-1 space-y-3'>
+            <Skeleton className='h-5 w-32' />
+            <Skeleton className='h-2 w-full rounded-full' />
+            <Skeleton className='h-3.5 w-28' />
+          </div>
+          <div className='space-y-3 lg:w-[360px]'>
+            <Skeleton className='h-4 w-2/3' />
+            <Skeleton className='h-11 w-full rounded-xl' />
+          </div>
+        </div>
+      </Panel>
+
+      <div className='grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start'>
+        <Panel flush className='overflow-hidden'>
+          <div className='space-y-2 px-5 py-4 sm:px-6'>
+            <Skeleton className='h-5 w-40' />
+            <Skeleton className='h-3.5 w-28' />
+          </div>
+          <div className='divide-y divide-[#eef0f7] border-t border-[#eef0f7]'>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div key={i} className='space-y-2 px-5 py-4 sm:px-6'>
+                <Skeleton className='h-4 w-2/3' />
+                <Skeleton className='h-3.5 w-1/3' />
+              </div>
+            ))}
+          </div>
+        </Panel>
+        <Panel className='space-y-3'>
+          <Skeleton className='h-5 w-1/2' />
+          <Skeleton className='h-3.5 w-full' />
+          <Skeleton className='h-3.5 w-5/6' />
+          <Skeleton className='h-3.5 w-4/6' />
+        </Panel>
+      </div>
+    </div>
   );
 }
 
-export function OverviewNotFound({ t, backHref }: { t: PlayerT; backHref: string }) {
+/** Load failure: retry, or go back to the course list. */
+export function OverviewNotFound({
+  t,
+  backHref,
+  onRetry,
+}: {
+  t: PlayerT;
+  backHref: string;
+  onRetry?: () => void;
+}) {
   return (
-    <AcademyBackdrop>
-      <div className='mx-auto flex max-w-7xl justify-center px-4 py-16 sm:px-6 lg:px-8'>
-        <GlassPanel className='w-full max-w-lg p-8 text-center sm:p-10'>
-          <div className='mx-auto flex size-16 items-center justify-center rounded-2xl bg-red-50 text-red-600 ring-1 ring-red-100'>
-            <BookOpen aria-hidden className='size-8' />
-          </div>
-          <h1 className='mt-5 text-[28px] font-bold text-[#1e2364]'>{t.notFoundTitle}</h1>
-          <p className='mt-2 text-[16px] text-[#6b7196]'>{t.notFoundMessage}</p>
-          <Link
-            href={backHref}
-            className={cn(
-              buttonVariants({ variant: 'brand', size: 'lg', shape: 'pill' }),
-              'mt-7 focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2'
-            )}
-          >
-            <ChevronLeft aria-hidden className='size-4 rtl:rotate-180' />
-            {t.backToMyCourses}
-          </Link>
-        </GlassPanel>
-      </div>
-    </AcademyBackdrop>
+    <div className={overviewContainerClass}>
+      <Link
+        href={backHref}
+        className='inline-flex w-fit items-center gap-1 rounded-md text-[14px] font-semibold text-[#0077ad] transition-colors duration-150 hover:text-[#1e2364] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]'
+      >
+        <ChevronLeft aria-hidden className='size-4 shrink-0 rtl:rotate-180' />
+        {t.backToMyCourses}
+      </Link>
+      <Panel>
+        <ErrorState
+          title={t.notFoundTitle}
+          description={t.notFoundMessage}
+          retryLabel={t.retry}
+          onRetry={onRetry}
+        />
+      </Panel>
+    </div>
   );
 }

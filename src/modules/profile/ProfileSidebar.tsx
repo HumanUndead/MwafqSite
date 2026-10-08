@@ -1,68 +1,46 @@
 import type { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 import { getCurrentUser } from '@/modules/auth/server/authSession';
-import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
 import { getUserDisplayName } from '@/shared/lib/user';
-import { cn } from '@/shared/lib/cn';
 import { ProfileAvatar } from './components/ProfileAvatar';
-import { profileSidebarPlaceholder } from './constants';
 import { ProfileLogoutButton } from './ProfileLogoutButton';
 import { ProfileNavLinks } from './ProfileNavLinks';
 
+/**
+ * Account navigation. Desktop: sticky side column with the account name.
+ * Below `lg`: one horizontally scrolling row, so content starts right away.
+ */
 export async function ProfileSidebar({ locale }: { locale: Locale }) {
   const { profileLayout } = await getDictionary(locale);
   const user = await getCurrentUser();
-  const displayName =
-    (user ? getUserDisplayName(user) : '') ||
-    profileSidebarPlaceholder.displayName;
-  const avatarSrc = user?.img || profileSidebarPlaceholder.avatarSrc;
+  const displayName = user ? getUserDisplayName(user) : '';
   const imageAlt = profileLayout.avatarAlt.replace('{{name}}', displayName);
 
   return (
-    <ScrollReveal
-      variant='y'
-      revealAfterLoadMs={200}
-      className={cn(
-        'sticky top-[110px] col-span-3 self-start rounded-[28px] border-2 border-[#e5e7f0] bg-white shadow-sm',
-        'min-[1101px]:flex min-[1101px]:flex-col min-[1101px]:gap-1 min-[1101px]:p-[14px]',
-        'max-[1100px]:static max-[1100px]:top-auto max-[1100px]:col-span-12 max-[1100px]:overflow-hidden',
-        'max-[640px]:rounded-[22px]'
-      )}
-    >
-      <div
-        className={cn(
-          'flex items-center gap-3.5 border-[#e5e7f0]',
-          'min-[1101px]:mb-2 min-[1101px]:flex-col min-[1101px]:items-center min-[1101px]:gap-3 min-[1101px]:border-b min-[1101px]:px-3 min-[1101px]:pb-[18px] min-[1101px]:pt-4 min-[1101px]:text-center',
-          'max-[1100px]:border-b max-[1100px]:px-5 max-[1100px]:py-4'
-        )}
-      >
-        <ProfileAvatar
-          src={avatarSrc}
-          alt={imageAlt}
-          name={displayName}
-          className='h-[140px] w-[140px] text-[48px] max-[1100px]:h-14 max-[1100px]:w-14 max-[1100px]:text-base'
-        />
-        <div className='wrap-break-word text-xl font-extrabold leading-tight tracking-[-0.4px] text-[#00a8f1] max-[1100px]:text-[17px]'>
-          {displayName}
+    <aside className='min-w-0 lg:sticky lg:top-[110px] lg:self-start'>
+      {displayName ? (
+        <div className='mb-4 hidden items-center gap-3 px-1 lg:flex'>
+          <ProfileAvatar
+            src={user?.img || ''}
+            alt={imageAlt}
+            name={displayName}
+            className='size-11 text-[15px]'
+          />
+          <p className='min-w-0 break-words text-[15px] font-bold leading-5 text-[#1e2364]'>
+            {displayName}
+          </p>
         </div>
-      </div>
+      ) : null}
 
       <nav
         aria-label={profileLayout.navAriaLabel}
-        className={cn(
-          'flex flex-col gap-0.5',
-          'min-[1101px]:contents',
-          'max-[1100px]:px-3 max-[1100px]:py-2.5'
-        )}
+        className='-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:flex-col lg:gap-0.5 lg:overflow-visible lg:p-0 [&::-webkit-scrollbar]:hidden'
       >
         <ProfileNavLinks locale={locale} />
+        <div className='hidden lg:mt-2 lg:block lg:border-t lg:border-[#e5e7f0] lg:pt-2'>
+          <ProfileLogoutButton label={profileLayout.signOut} />
+        </div>
       </nav>
-
-      <div className='mx-[6px] my-2 h-px bg-[#e5e7f0] max-[1100px]:hidden' />
-
-      <div className='max-[1100px]:border-t max-[1100px]:border-[#e5e7f0] max-[1100px]:px-3 max-[1100px]:py-2.5'>
-        <ProfileLogoutButton label={profileLayout.signOut} />
-      </div>
-    </ScrollReveal>
+    </aside>
   );
 }

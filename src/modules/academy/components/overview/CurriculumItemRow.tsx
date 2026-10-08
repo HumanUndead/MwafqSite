@@ -1,16 +1,9 @@
-import {
-  CheckCircle2,
-  Clock,
-  Download,
-  FileQuestion,
-  History,
-  Lock,
-  Paperclip,
-  Play,
-} from 'lucide-react';
+import { FileQuestion, Lock, Paperclip, PlayCircle, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/locales/types';
+import { StatusBadge } from '@/shared/components/product';
+import { buttonVariants } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/cn';
 import { attachmentUrl } from '@/shared/lib/media';
 import { lecturePath, quizHistoryPath, quizPath } from '../../learnRoutes.shared';
@@ -28,13 +21,33 @@ export function labelsFrom(t: Dictionary['academyPlayer']) {
     revision: t.revision,
     lecture: t.lecture,
     quiz: t.quiz,
+    exam: t.finalExam,
     attachment: t.attachment,
+    upNext: t.upNext,
   };
 }
 
-export const historyLinkClass =
-  'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[12px] font-semibold text-[#1e2364] ring-1 ring-[#e5e7f0] transition-colors hover:text-[#00a8f1] hover:ring-[#00a8f1]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]';
+function typeLabel(item: CourseItem, labels: PlayerLabels) {
+  if (item.type === 'lecture') return labels.lecture;
+  if (item.type === 'quiz') return item.isExam ? labels.exam : labels.quiz;
+  return labels.attachment;
+}
 
+function TypeIcon({ item, locked }: { item: CourseItem; locked: boolean }) {
+  const className = 'mt-0.5 size-5 shrink-0';
+  if (locked) return <Lock aria-hidden className={cn(className, 'text-[#9aa0bd]')} />;
+  if (item.type === 'lecture') return <PlayCircle aria-hidden className={cn(className, 'text-[#6b7196]')} />;
+  if (item.type === 'quiz') {
+    const Icon = item.isExam ? Trophy : FileQuestion;
+    return <Icon aria-hidden className={cn(className, 'text-[#6b7196]')} />;
+  }
+  return <Paperclip aria-hidden className={cn(className, 'text-[#6b7196]')} />;
+}
+
+/**
+ * One curriculum row. State reads as text on the end side: locked, completed,
+ * or "up next" for the item the resume button opens.
+ */
 export function CurriculumItemRow({
   item,
   locked,
@@ -52,72 +65,31 @@ export function CurriculumItemRow({
   courseId: number;
   labels: PlayerLabels;
 }) {
-  const typeLabel =
-    item.type === 'lecture'
-      ? labels.lecture
-      : item.type === 'quiz'
-        ? labels.quiz
-        : labels.attachment;
-
-  const TypeIcon =
-    item.type === 'lecture' ? Play : item.type === 'quiz' ? FileQuestion : Paperclip;
-
-  const icon = locked ? (
-    <span className='flex size-9 shrink-0 items-center justify-center rounded-full bg-amber-50 text-amber-500 ring-1 ring-amber-200'>
-      <Lock aria-hidden className='size-4' />
-    </span>
-  ) : item.isCompleted ? (
-    <span className='flex size-9 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200'>
-      <CheckCircle2 aria-hidden className='size-5' />
-    </span>
-  ) : (
-    <span
-      className={cn(
-        'flex size-9 shrink-0 items-center justify-center rounded-full ring-1 transition-colors',
-        current
-          ? 'bg-[#00a8f1] text-white ring-[#00a8f1]'
-          : 'bg-white text-[#6b7196] ring-[#e5e7f0] group-hover/item:text-[#00a8f1]'
-      )}
-    >
-      <TypeIcon aria-hidden className={cn('size-4', item.type === 'lecture' && 'rtl:rotate-180')} />
-    </span>
-  );
+  const minutes = Number(item.duration) || 0;
 
   const inner = (
-    <div className='flex min-w-0 flex-1 items-center gap-3'>
-      {icon}
+    <div className='flex min-w-0 flex-1 items-start gap-3'>
+      <TypeIcon item={item} locked={locked} />
       <div className='min-w-0 flex-1'>
         <p
           className={cn(
-            'line-clamp-2 text-[14px] font-semibold transition-colors',
-            locked
-              ? 'text-[#6b7196]'
-              : current
-                ? 'text-[#0090d1]'
-                : 'text-[#1e2364] group-hover/item:text-[#00a8f1]'
+            'wrap-break-word text-[14px] font-semibold leading-6',
+            locked ? 'text-[#6b7196]' : 'text-[#1e2364] group-hover/item:underline group-hover/item:underline-offset-4'
           )}
         >
           {item.title}
         </p>
-        <div className='mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-[#6b7196]'>
-          <span>{typeLabel}</span>
-          {item.duration && item.type !== 'attachment' && (
-            <span className='inline-flex items-center gap-1'>
-              <Clock aria-hidden className='size-3.5' />
-              {item.duration} {labels.minutes}
-            </span>
+        <p className='text-[13px] text-[#6b7196]'>
+          {typeLabel(item, labels)}
+          {item.type !== 'attachment' && minutes > 0 && (
+            <>
+              {' · '}
+              <bdi className='tabular-nums'>{minutes}</bdi> {labels.minutes}
+            </>
           )}
-          {item.isExtraLecture && (
-            <span className='rounded-full bg-[#00a8f1]/10 px-2 py-0.5 font-semibold text-[#0090d1]'>
-              {labels.extraContent}
-            </span>
-          )}
-          {item.isRevision && (
-            <span className='rounded-full bg-amber-50 px-2 py-0.5 font-semibold text-amber-700 ring-1 ring-amber-200'>
-              {labels.revision}
-            </span>
-          )}
-        </div>
+          {item.isExtraLecture && <> · {labels.extraContent}</>}
+          {item.isRevision && <> · {labels.revision}</>}
+        </p>
       </div>
     </div>
   );
@@ -132,17 +104,27 @@ export function CurriculumItemRow({
           : '#';
 
   const linkClass =
-    'group/item flex min-w-0 flex-1 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1]';
+    'group/item flex min-w-0 flex-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2';
+
+  const status = locked ? (
+    <StatusBadge>{labels.locked}</StatusBadge>
+  ) : item.isCompleted ? (
+    <StatusBadge tone='success'>{labels.completedBadge}</StatusBadge>
+  ) : current ? (
+    <StatusBadge tone='info'>{labels.upNext}</StatusBadge>
+  ) : null;
+
+  const showHistory = !locked && item.type === 'quiz';
 
   return (
     <li
       className={cn(
-        'relative flex flex-col gap-3 px-4 py-3 transition-colors sm:flex-row sm:items-center sm:px-5',
-        locked ? 'bg-[#f3f4f8]/60' : current ? 'bg-[#00a8f1]/[0.07]' : 'hover:bg-white/80'
+        'relative flex flex-col gap-2 px-5 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-6',
+        current && !locked && 'bg-[#f0faff]'
       )}
     >
       {current && !locked && (
-        <span aria-hidden className='absolute inset-y-2 start-0 w-1 rounded-e-full bg-[#00a8f1]' />
+        <span aria-hidden className='absolute inset-y-0 start-0 w-[3px] bg-[#00a8f1]' />
       )}
       {locked ? (
         inner
@@ -156,30 +138,19 @@ export function CurriculumItemRow({
         </Link>
       )}
 
-      <div className='flex shrink-0 items-center gap-2 ps-12 sm:ps-0'>
-        {!locked && item.type === 'quiz' && (
-          <Link
-            href={quizHistoryPath(locale, userCourseId, courseId, item.id, item.lessonId)}
-            className={historyLinkClass}
-          >
-            <History aria-hidden className='size-3.5' />
-            {labels.history}
-          </Link>
-        )}
-        {locked ? (
-          <span className='inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[12px] font-semibold text-amber-700 ring-1 ring-amber-200'>
-            <Lock aria-hidden className='size-3' />
-            {labels.locked}
-          </span>
-        ) : item.isCompleted ? (
-          <span className='inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-700 ring-1 ring-emerald-200'>
-            <CheckCircle2 aria-hidden className='size-3.5' />
-            {labels.completedBadge}
-          </span>
-        ) : item.type === 'attachment' ? (
-          <Download aria-hidden className='size-4 text-[#00a8f1]' />
-        ) : null}
-      </div>
+      {status || showHistory ? (
+        <div className='flex shrink-0 items-center gap-2 ps-8 sm:ps-0'>
+          {status}
+          {showHistory && (
+            <Link
+              href={quizHistoryPath(locale, userCourseId, courseId, item.id, item.lessonId)}
+              className={buttonVariants({ variant: 'productText', size: 'compact' })}
+            >
+              {labels.history}
+            </Link>
+          )}
+        </div>
+      ) : null}
     </li>
   );
 }

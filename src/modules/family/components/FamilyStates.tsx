@@ -1,37 +1,35 @@
 'use client';
 
 import { useTranslations } from '@/i18n/DictionaryProvider';
-import { Button } from '@/shared/components/ui/Button';
+import { ErrorState, Skeleton } from '@/shared/components/product';
 
-export function FamilyListSkeleton() {
+/** Row placeholders for a flush Panel list. Mirrors `MemberRow`. */
+export function FamilyListSkeleton({ rows = 3 }: { rows?: number }) {
   return (
-    <ul className='flex flex-col gap-2' aria-hidden>
-      {[0, 1, 2].map((key) => (
-        <li key={key} className='h-[68px] animate-pulse rounded-[16px] bg-[#e5e7f0]' />
+    <ul aria-hidden className='divide-y divide-[#eef0f7]'>
+      {Array.from({ length: rows }, (_, index) => (
+        <li
+          key={index}
+          className='flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6'
+        >
+          <div className='flex flex-1 items-center gap-3'>
+            <Skeleton className='size-11 rounded-full' />
+            <Skeleton className='h-5 w-40' />
+          </div>
+          <div className='flex gap-2'>
+            <Skeleton className='h-9 flex-1 rounded-[10px] sm:w-24 sm:flex-none' />
+            <Skeleton className='h-9 flex-1 rounded-[10px] sm:w-24 sm:flex-none' />
+          </div>
+        </li>
       ))}
     </ul>
   );
 }
 
+/** Load failure inside a Panel. */
 export function FamilyLoadError({ onRetry }: { onRetry: () => void }) {
   const t = useTranslations('family');
   return (
-    <div
-      className='flex flex-col items-center gap-3 rounded-[20px] border-2 border-dashed border-red-200 bg-white px-6 py-10 text-center'
-      role='alert'
-    >
-      <p className='text-sm font-semibold text-red-600'>{t.loadError}</p>
-      <Button variant='outline' type='button' onClick={onRetry}>
-        {t.retry}
-      </Button>
-    </div>
-  );
-}
-
-export function FamilyEmpty({ label }: { label: string }) {
-  return (
-    <p className='rounded-[16px] border-2 border-dashed border-[#e5e7f0] bg-white px-4 py-6 text-center text-sm font-semibold text-[#6b7196]'>
-      {label}
-    </p>
+    <ErrorState title={t.loadError} retryLabel={t.retry} onRetry={onRetry} />
   );
 }

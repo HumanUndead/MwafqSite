@@ -1,34 +1,28 @@
 'use client';
 
-import {
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  Hash,
-  Loader2,
-  RotateCcw,
-  XCircle,
-} from 'lucide-react';
+import { CheckCircle2, RotateCcw, XCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { localeToLangId } from '@/i18n/config';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { useAuthStore } from '@/modules/auth/store/authStore';
+import {
+  InfoItem,
+  InfoList,
+  Panel,
+  Skeleton,
+} from '@/shared/components/product';
 import { Button, buttonVariants } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/cn';
 import { interpolate } from '@/shared/lib/interpolate';
 import { useQuizAttempts } from '../hooks/useQuiz';
-import { localeToLangId } from '@/i18n/config';
 import {
   PASS_THRESHOLD_PERCENT,
   formatDuration,
   getScorePercentage,
 } from '../quizScoring.shared';
 import type { QuizAttemptDetail, QuizData } from '../types/quiz.types';
-import {
-  AcademyBackdrop,
-  AcademyStage,
-  ProgressRing,
-  StatChip,
-} from './ui/AcademyGlass';
+import { AcademyBackdrop } from './ui/AcademyGlass';
 import { QuizReviewList } from './results/QuizReviewList';
 
 interface QuizResultsProps {
@@ -41,18 +35,7 @@ interface QuizResultsProps {
   onBackToCourse: () => void;
 }
 
-/** Stage-friendly button overrides (focus ring must read on navy). */
-const stageFocus =
-  'focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#141848]';
-const stagePrimary = cn(
-  'bg-[#00a8f1] text-white hover:bg-[#0090d1] focus:ring-0 focus:ring-offset-0',
-  stageFocus
-);
-const stageSecondary = cn(
-  'border border-white/30 bg-white/5 text-white hover:bg-white/15 hover:text-white focus:ring-0 focus:ring-offset-0',
-  stageFocus
-);
-
+/** Pass/fail, score against the pass mark, the next step, then the review. */
 export function QuizResults({
   quiz,
   attempt,
@@ -73,6 +56,11 @@ export function QuizResults({
     enabled: attempt !== null,
   });
 
+  // The runner may be scrolled down; the result starts at the top.
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const total = attempt ? attempt.quizScore || attempt.qustions.length || 0 : 0;
   const percentage = attempt ? getScorePercentage(attempt.attemptScore, total) : 0;
   const passed = percentage >= PASS_THRESHOLD_PERCENT;
@@ -84,47 +72,34 @@ export function QuizResults({
       getScorePercentage(entry.attemptScore, history.data?.quizScore || total) >=
       PASS_THRESHOLD_PERCENT
   );
-  const wrong = attempt ? Math.max(0, total - attempt.attemptScore) : 0;
   const attemptNumber = history.data
     ? (history.data.totalRecords ?? earlierAttempts.length + 1)
     : null;
 
   return (
     <AcademyBackdrop>
-      <AcademyStage innerClassName='max-w-4xl'>
-        <p className='text-sm font-semibold text-white/70'>
-          {quiz.title || t.resultsTitle}
-        </p>
+      <div className='mx-auto flex max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6 sm:py-10'>
+        <Panel className='sm:p-7'>
+          <p className='break-words text-[13px] font-semibold text-[#6b7196]'>
+            {quiz.title || t.resultsTitle}
+          </p>
 
-        {!attempt ? (
-          <div className='flex flex-col items-center gap-4 py-12 text-center' role='status'>
-            <Loader2 className='size-10 text-[#00a8f1] motion-safe:animate-spin' aria-hidden />
-            <p className='text-base text-white/80'>{t.loadingResults}</p>
-          </div>
-        ) : (
-          <div className='mt-6 flex flex-col items-center gap-8 text-center sm:flex-row sm:items-center sm:gap-10 sm:text-start'>
-            <div className='flex flex-col items-center gap-2'>
-              <ProgressRing
-                value={percentage}
-                size={152}
-                stroke={12}
-                label={`${t.yourScore}: ${percentage}%`}
-              />
-              <span className='text-sm text-white/70'>{t.yourScore}</span>
-            </div>
-
-            <div className='min-w-0 flex-1'>
-              <p className='text-sm text-white/70'>{t.quizCompleted}</p>
-              <div role='status' className='mt-1'>
-                <h1 className='flex items-center justify-center gap-2 text-[28px] font-bold leading-tight sm:justify-start sm:text-4xl'>
+          <div role='status' aria-live='polite'>
+            {!attempt ? (
+              <ResultSkeleton label={t.loadingResults} />
+            ) : (
+              <>
+                <h1
+                  className='mt-2 flex items-center gap-2.5 text-[24px] font-bold leading-tight text-[#1e2364] sm:text-[28px]'
+                >
                   {passed ? (
-                    <CheckCircle2 className='size-8 shrink-0 text-emerald-400' aria-hidden />
+                    <CheckCircle2 className='size-7 shrink-0 text-green-700' aria-hidden />
                   ) : (
-                    <XCircle className='size-8 shrink-0 text-red-400' aria-hidden />
+                    <XCircle className='size-7 shrink-0 text-red-600' aria-hidden />
                   )}
                   {passed ? t.passedTitle : t.failedTitle}
                 </h1>
-                <p className='mt-2 max-w-xl text-base leading-relaxed text-white/80'>
+                <p className='mt-2 max-w-[60ch] text-[15px] leading-6 text-[#4a5078]'>
                   {passed
                     ? interpolate(t.passedBody, { percentage })
                     : interpolate(t.failedBody, {
@@ -132,105 +107,113 @@ export function QuizResults({
                         threshold: PASS_THRESHOLD_PERCENT,
                       })}
                 </p>
-              </div>
-
-              <p className='mt-4 text-white/70'>
-                <span className='text-sm'>{t.score} </span>
-                <span className='text-xl font-bold text-white' dir='ltr'>
-                  {attempt.attemptScore}/{total}
-                </span>
-              </p>
-
-              <ul className='mt-4 flex flex-wrap justify-center gap-2 sm:justify-start'>
-                <li>
-                  <StatChip
-                    tone='dark'
-                    icon={<CheckCircle2 className='size-4 text-emerald-400' aria-hidden />}
-                  >
-                    {t.correctAnswers}: {attempt.attemptScore}
-                  </StatChip>
-                </li>
-                <li>
-                  <StatChip
-                    tone='dark'
-                    icon={<XCircle className='size-4 text-red-400' aria-hidden />}
-                  >
-                    {t.wrongAnswers}: {wrong}
-                  </StatChip>
-                </li>
-                <li>
-                  <StatChip
-                    tone='dark'
-                    icon={<Clock className='size-4 text-[#00a8f1]' aria-hidden />}
-                  >
-                    {t.duration}:{' '}
-                    <span dir='ltr'>{formatDuration(attempt.startTime, attempt.endTime)}</span>
-                  </StatChip>
-                </li>
-                {attemptNumber !== null && (
-                  <li>
-                    <StatChip
-                      tone='dark'
-                      icon={<Hash className='size-4 text-[#00a8f1]' aria-hidden />}
-                    >
-                      {t.attempt} {attemptNumber}
-                    </StatChip>
-                  </li>
-                )}
-              </ul>
-            </div>
+              </>
+            )}
           </div>
-        )}
 
-        {/* Actions */}
-        <div className='mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:flex-wrap sm:items-center'>
-          {attempt && passed ? (
-            <Link
-              href={nextHref}
-              className={cn(buttonVariants({ variant: 'brand', size: 'lg', shape: 'pill' }), stagePrimary)}
-            >
-              {t.continueNext}
-              <ArrowRight className='size-4 rtl:rotate-180' aria-hidden />
-            </Link>
-          ) : (
+          {attempt ? (
+            <>
+              <ScoreBar percentage={percentage} passed={passed} />
+              <InfoList className='mt-6 border-t border-[#eef0f7] pt-5'>
+                <InfoItem label={t.score}>
+                  <bdi dir='ltr' className='tabular-nums'>
+                    {attempt.attemptScore}/{total} · {percentage}%
+                  </bdi>
+                </InfoItem>
+                <InfoItem label={t.passMarkLabel}>
+                  <bdi dir='ltr' className='tabular-nums'>
+                    {PASS_THRESHOLD_PERCENT}%
+                  </bdi>
+                </InfoItem>
+                <InfoItem label={t.duration}>
+                  <bdi dir='ltr' className='tabular-nums'>
+                    {formatDuration(attempt.startTime, attempt.endTime)}
+                  </bdi>
+                </InfoItem>
+                {attemptNumber !== null ? (
+                  <InfoItem label={t.attempt}>
+                    <span className='tabular-nums'>{attemptNumber}</span>
+                  </InfoItem>
+                ) : null}
+              </InfoList>
+            </>
+          ) : null}
+
+          <div className='mt-6 flex flex-col gap-3 border-t border-[#eef0f7] pt-5 sm:flex-row sm:flex-wrap sm:items-center'>
+            {attempt && passed ? (
+              <Link
+                href={nextHref}
+                className={buttonVariants({ variant: 'product', size: 'control' })}
+              >
+                {t.continueNext}
+              </Link>
+            ) : (
+              <Button
+                type='button'
+                variant='product'
+                size='control'
+                onClick={onRetake}
+              >
+                <RotateCcw className='size-4' aria-hidden />
+                {t.retake}
+              </Button>
+            )}
+            {attempt && !passed && passedBefore ? (
+              <Link
+                href={nextHref}
+                className={buttonVariants({
+                  variant: 'productSecondary',
+                  size: 'control',
+                })}
+              >
+                {t.continueAnyway}
+              </Link>
+            ) : null}
             <Button
-              variant='brand'
-              size='lg'
-              shape='pill'
-              onClick={onRetake}
               type='button'
-              className={stagePrimary}
+              variant='productText'
+              size='control'
+              onClick={onBackToCourse}
+              className='sm:ms-auto'
             >
-              <RotateCcw className='size-4' aria-hidden />
-              {t.retake}
+              {t.backToCourse}
             </Button>
-          )}
-          {attempt && !passed && passedBefore && (
-            <Link
-              href={nextHref}
-              className={cn(buttonVariants({ variant: 'outline', size: 'lg', shape: 'pill' }), stageSecondary)}
-            >
-              {t.continueAnyway}
-            </Link>
-          )}
-          <Button
-            variant='outline'
-            size='lg'
-            shape='pill'
-            onClick={onBackToCourse}
-            type='button'
-            className={cn(stageSecondary, 'sm:ms-auto border-transparent bg-transparent')}
-          >
-            {t.backToCourse}
-          </Button>
-        </div>
-      </AcademyStage>
+          </div>
+        </Panel>
 
-      {attempt && (
-        <div className='mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14'>
-          <QuizReviewList attempt={attempt} langId={langId} />
-        </div>
-      )}
+        {attempt ? <QuizReviewList attempt={attempt} langId={langId} /> : null}
+      </div>
     </AcademyBackdrop>
+  );
+}
+
+/** Score fill with a tick at the pass mark. Numbers are in the list below. */
+function ScoreBar({ percentage, passed }: { percentage: number; passed: boolean }) {
+  const clamped = Math.max(0, Math.min(100, percentage));
+  return (
+    <div aria-hidden className='relative mt-5 h-2.5 rounded-full bg-[#eef0f7]'>
+      <div
+        className={cn(
+          'absolute inset-y-0 start-0 rounded-full',
+          passed ? 'bg-green-600' : 'bg-[#1e2364]'
+        )}
+        style={{ width: `${clamped}%` }}
+      />
+      <div
+        className='absolute -top-1 h-[18px] w-0.5 rounded-full bg-[#4a5078]'
+        style={{ insetInlineStart: `${PASS_THRESHOLD_PERCENT}%` }}
+      />
+    </div>
+  );
+}
+
+function ResultSkeleton({ label }: { label: string }) {
+  return (
+    <div className='mt-2'>
+      <span className='sr-only'>{label}</span>
+      <Skeleton className='h-8 w-56' />
+      <Skeleton className='mt-3 h-4 w-full max-w-md' />
+      <Skeleton className='mt-6 h-2.5 w-full rounded-full' />
+    </div>
   );
 }

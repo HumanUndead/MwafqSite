@@ -25,14 +25,19 @@ import type { LectureTranslation } from '../types/lecture.types';
 import type { NavItem } from '../types/player.types';
 import { LectureCurriculum } from './lecture/LectureCurriculum';
 import { LectureDetails } from './lecture/LectureDetails';
+import { getLecturePosition } from './lecture/lecturePosition';
 import {
   LecturePlayerSkeleton,
+  LectureShell,
   LectureStateCard,
+  lectureAsideClass,
+  lectureGridClass,
+  lectureMainClass,
 } from './lecture/LectureStates';
 import { LectureSummary } from './lecture/LectureSummary';
 import { LectureStage } from './lecture/LectureStage';
+import { LectureTopBar } from './lecture/LectureTopBar';
 import { VimeoLecturePlayer } from './lecture/VimeoLecturePlayer';
-import { AcademyBackdrop } from './ui/AcademyGlass';
 
 function pickTranslation(
   translations: LectureTranslation[],
@@ -64,6 +69,7 @@ export function LecturePlayer({
     data: lecture,
     isLoading,
     isError,
+    refetch,
   } = useLectureDetail(lectureId, userCourseId, locale);
   const { data: courseDetail } = useCourseDetail(
     userCourseId,
@@ -192,9 +198,11 @@ export function LecturePlayer({
     return (
       <LectureStateCard
         tone='error'
-        message={t.loadError}
+        title={t.loadError}
         backHref={backHref}
         backLabel={t.backToCourse}
+        retryLabel={t.retry}
+        onRetry={() => void refetch()}
       />
     );
   }
@@ -219,67 +227,79 @@ export function LecturePlayer({
   const lectureTitle = translation?.name || t.lecture;
   const courseName = lecture.courseName || translation?.name || t.lecture;
 
+  const position = getLecturePosition(courseData, lectureId);
+  const lessonName = lecture.lessonName || position?.lessonTitle || null;
+
   return (
-    <AcademyBackdrop>
-      <div className='mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8'>
-        <div className='grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]'>
-          <div className='min-w-0 space-y-6'>
-            {/* Stage: course context + video */}
-            <LectureStage
-              backHref={backHref}
-              courseName={courseName}
-              video={
-                translation?.videoUrl ? (
-                  <VimeoLecturePlayer
-                    key={`vimeo-${lectureId}`}
-                    embedUrl={getVimeoEmbedUrl(translation.videoUrl)}
-                    title={lectureTitle}
-                    userCourseId={userCourseId}
-                    lectureId={lectureId}
-                    allowSeek={isCompleted}
-                    onEnded={() => void handleVideoEnd()}
-                    onUnavailable={() => setVideoUnobservable(true)}
-                    labels={t.player}
-                  />
-                ) : null
-              }
-              labels={t}
-            />
+    <LectureShell>
+      <LectureTopBar
+        backHref={backHref}
+        backLabel={t.backToCourse}
+        courseName={courseName}
+      />
 
-            <LectureSummary
-              lessonName={lecture.lessonName && translation?.name ? lecture.lessonName : null}
-              title={lectureTitle}
-              minutes={translation?.videoLengthInMinutes || 0}
-              isRevision={Boolean(lecture.isRevision)}
-              isCompleted={isCompleted}
-              canMarkManually={canMarkManually}
-              marking={progressMutation.isPending}
-              onMarkComplete={() => void handleManualComplete()}
-              prev={prev}
-              next={next}
-              prevHref={prev ? itemHref(prev) : null}
-              nextHref={next ? itemHref(next) : null}
-              labels={t}
-            />
+      {/* Mobile order: video, lecture, curriculum, details. */}
+      <div className={lectureGridClass}>
+        <div className={lectureMainClass}>
+          <LectureStage
+            video={
+              translation?.videoUrl ? (
+                <VimeoLecturePlayer
+                  key={`vimeo-${lectureId}`}
+                  embedUrl={getVimeoEmbedUrl(translation.videoUrl)}
+                  title={lectureTitle}
+                  userCourseId={userCourseId}
+                  lectureId={lectureId}
+                  allowSeek={isCompleted}
+                  onEnded={() => void handleVideoEnd()}
+                  onUnavailable={() => setVideoUnobservable(true)}
+                  labels={t.player}
+                />
+              ) : null
+            }
+            unavailable={videoUnobservable}
+            labels={t}
+          />
+        </div>
 
-            <LectureDetails
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              description={translation?.description}
-              textContent={translation?.textContent}
-              resources={resources}
-              labels={t}
-            />
-          </div>
+        <div className={lectureMainClass}>
+          <LectureSummary
+            lessonName={lessonName}
+            position={position}
+            title={lectureTitle}
+            minutes={translation?.videoLengthInMinutes || 0}
+            isRevision={Boolean(lecture.isRevision)}
+            isCompleted={isCompleted}
+            canMarkManually={canMarkManually}
+            marking={progressMutation.isPending}
+            onMarkComplete={() => void handleManualComplete()}
+            prev={prev}
+            next={next}
+            prevHref={prev ? itemHref(prev) : null}
+            nextHref={next ? itemHref(next) : null}
+            labels={t}
+          />
+        </div>
 
-          <LectureCurriculum
-            courseData={courseData}
-            courseName={courseName}
-            currentLectureId={lectureId}
-            currentCompleted={isCompleted}
-            locale={locale}
-            userCourseId={userCourseId}
-            courseId={courseId}
+        <LectureCurriculum
+          className={lectureAsideClass}
+          courseData={courseData}
+          courseName={courseName}
+          currentLectureId={lectureId}
+          currentCompleted={isCompleted}
+          locale={locale}
+          userCourseId={userCourseId}
+          courseId={courseId}
+        />
+
+        <div className={lectureMainClass}>
+          <LectureDetails
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            description={translation?.description}
+            textContent={translation?.textContent}
+            resources={resources}
+            labels={t}
           />
         </div>
       </div>
@@ -290,11 +310,13 @@ export function LecturePlayer({
         onClose={() => setPendingQuizId(null)}
         title={t.quizWarningTitle}
       >
-        <p className='mb-6 text-[#6b7196]'>{t.quizWarningMessage}</p>
+        <p className='mb-6 text-[15px] leading-6 text-[#6b7196]'>
+          {t.quizWarningMessage}
+        </p>
         <div className='flex gap-3'>
           <Button
-            variant='secondary'
-            shape='pill'
+            variant='productSecondary'
+            size='control'
             className='flex-1'
             onClick={() => setPendingQuizId(null)}
             type='button'
@@ -302,8 +324,8 @@ export function LecturePlayer({
             {t.stayHere}
           </Button>
           <Button
-            variant='brand'
-            shape='pill'
+            variant='product'
+            size='control'
             className='flex-1'
             onClick={() => {
               if (pendingQuizId !== null) {
@@ -318,6 +340,6 @@ export function LecturePlayer({
           </Button>
         </div>
       </Modal>
-    </AcademyBackdrop>
+    </LectureShell>
   );
 }

@@ -23,43 +23,24 @@ const ITEMS = ACADEMY_LANGUAGES.map((value) => ({
 }));
 
 type AcademyLanguagePickerProps = {
-  /** `dark` on the navy stage, `light` (default) on the mist page. */
+  /** Kept for call-site compatibility; there is one (light) style. */
   tone?: 'light' | 'dark';
   className?: string;
 };
 
-/** Academy content language (en, ar, ur, ne, bn, hi) as a glass pill. */
-export function AcademyLanguagePicker({
-  tone = 'light',
-  className,
-}: AcademyLanguagePickerProps = {}) {
+/** Academy content language (en, ar, ur, ne, bn, hi): label + select. */
+export function AcademyLanguagePicker({ className }: AcademyLanguagePickerProps = {}) {
   const t = useTranslations('academyCourses');
   const academy = useAcademyLanguage();
   if (!academy) return null;
 
-  const dark = tone === 'dark';
-
   return (
-    <div
-      className={cn(
-        'inline-flex max-w-full items-center gap-2 rounded-full py-1 pe-1 ps-3.5 backdrop-blur-xl',
-        dark
-          ? 'bg-white/10 ring-1 ring-white/20'
-          : 'bg-white/70 shadow-[0_4px_16px_-8px_rgba(30,35,100,0.2)] ring-1 ring-white/70',
-        className
-      )}
-    >
-      <Languages
-        className={cn('size-4 shrink-0', dark ? 'text-[#00a8f1]' : 'text-[#6b7196]')}
-        aria-hidden
-      />
+    <div className={cn('inline-flex max-w-full items-center gap-2', className)}>
       <label
         htmlFor='academy-language'
-        className={cn(
-          'truncate text-sm font-semibold',
-          dark ? 'text-white/80' : 'text-[#6b7196]'
-        )}
+        className='inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[#6b7196]'
       >
+        <Languages className='size-4' aria-hidden />
         {t.language}
       </label>
       <Select
@@ -70,13 +51,7 @@ export function AcademyLanguagePicker({
       >
         <SelectTrigger
           id='academy-language'
-          className={cn(
-            'min-w-28 rounded-full border-0 px-3.5 text-sm font-bold data-[size=default]:h-9',
-            'focus-visible:ring-2 focus-visible:ring-[#00a8f1] focus-visible:ring-offset-2',
-            dark
-              ? 'bg-white/15 text-white hover:bg-white/25 focus-visible:ring-offset-[#141848] [&_svg]:text-white/70'
-              : 'bg-white text-[#1e2364] ring-1 ring-[#e5e7f0] hover:bg-[#f7f8fc] focus-visible:ring-offset-white [&_svg]:text-[#6b7196]'
-          )}
+          className='min-w-32 rounded-xl border-[#d9ddea] bg-white px-3 text-[14px] font-semibold text-[#1e2364] shadow-none transition-colors duration-150 hover:bg-[#f7f8fb] focus-visible:border-[#1e2364] focus-visible:ring-2 focus-visible:ring-[#1e2364]/20 data-[size=default]:h-9 [&_svg]:text-[#6b7196]'
         >
           <SelectValue />
         </SelectTrigger>

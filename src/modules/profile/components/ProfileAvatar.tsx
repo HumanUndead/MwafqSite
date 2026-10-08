@@ -14,30 +14,26 @@ function initialsFromName(name: string): string {
 }
 
 type ProfileAvatarProps = {
+  /** Empty when the user has no photo; initials are shown instead. */
   src: string;
   alt: string;
   name: string;
   className?: string;
 };
 
-export function ProfileAvatar({
-  src,
-  alt,
-  name,
-  className,
-}: ProfileAvatarProps) {
+export function ProfileAvatar({ src, alt, name, className }: ProfileAvatarProps) {
   const [errored, setErrored] = useState(false);
   const initials = initialsFromName(name) || '?';
 
   return (
     <div
       className={cn(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-[#e5e7f0] bg-[#eef0f7] text-[#1e2364]',
+        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#e6f6fe] font-bold text-[#1e2364]',
         className
       )}
     >
-      {errored ? (
-        <span className='font-extrabold tracking-[-0.5px]'>{initials}</span>
+      {!src || errored ? (
+        <span aria-hidden>{initials}</span>
       ) : (
         <Image
           src={src}

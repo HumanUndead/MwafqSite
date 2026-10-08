@@ -1,13 +1,14 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
-import Image from 'next/image';
 import { cn } from '@/shared/lib/cn';
-import { MEDIA_FALLBACK_IMAGE } from '@/shared/lib/media';
 
 /**
- * Academy design primitives: a mist page with a soft sky/indigo glow, frosted
- * glass panels, and one dark "stage" hero. Every academy screen composes
- * these instead of hand-rolling surfaces, so the section reads as one system.
+ * Academy surfaces, aligned with the product UI (docs/product-ui.md): a mist
+ * page, solid white panels with a 1px border, and a plain white page band.
+ * Names are historical; `tone` is kept for call-site compatibility and no
+ * longer switches to a dark style.
  */
+
+type GlassTone = 'light' | 'dark';
 
 /** Page ground: plain mist background. */
 export function AcademyBackdrop({
@@ -18,19 +19,9 @@ export function AcademyBackdrop({
   className?: string;
 }) {
   return (
-    <div className={cn('relative isolate min-h-screen bg-[#f3f4f8]', className)}>
-      {children}
-    </div>
+    <div className={cn('relative min-h-screen bg-[#f3f4f8]', className)}>{children}</div>
   );
 }
-
-type GlassTone = 'light' | 'dark';
-
-const glassTone: Record<GlassTone, string> = {
-  light:
-    'border border-white/70 bg-white/70 shadow-[0_8px_32px_-12px_rgba(30,35,100,0.18)] backdrop-blur-xl',
-  dark: 'border border-white/15 bg-white/10 text-white shadow-[0_8px_32px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl',
-};
 
 type GlassPanelProps<T extends ElementType> = {
   as?: T;
@@ -39,69 +30,41 @@ type GlassPanelProps<T extends ElementType> = {
   children?: ReactNode;
 } & Omit<ComponentPropsWithoutRef<T>, 'as' | 'className' | 'children'>;
 
-/** Frosted surface. `light` on the mist page, `dark` on the stage. */
+/** White panel. Same surface as `Panel` from `@/shared/components/product`. */
 export function GlassPanel<T extends ElementType = 'div'>({
   as,
-  tone = 'light',
+  tone,
   className,
   children,
   ...props
 }: GlassPanelProps<T>) {
+  void tone; // kept in the props so it isn't forwarded to the DOM
   const Component = as ?? 'div';
   return (
-    <Component className={cn('rounded-[24px]', glassTone[tone], className)} {...props}>
+    <Component
+      className={cn('rounded-2xl border border-[#e5e7f0] bg-white', className)}
+      {...props}
+    >
       {children}
     </Component>
   );
 }
 
-/**
- * The academy's signature hero: deep navy with an optional blurred course
- * image and a sky glow. Content sits in the standard container.
- */
+/** Top band of an academy page: white, bordered, standard container. */
 export function AcademyStage({
-  image,
   children,
   className,
   innerClassName,
 }: {
+  /** Ignored; the band no longer shows a blurred cover. */
   image?: string | null;
   children: ReactNode;
   className?: string;
   innerClassName?: string;
 }) {
   return (
-    <section
-      className={cn(
-        'relative isolate overflow-hidden bg-[#141848] text-white',
-        className
-      )}
-    >
-      {/* The fallback logo is not a cover photo: never blur it in. */}
-      {image && image !== MEDIA_FALLBACK_IMAGE ? (
-        <Image
-          src={image}
-          alt=''
-          fill
-          priority
-          sizes='100vw'
-          className='-z-20 scale-110 object-cover opacity-30 blur-2xl'
-        />
-      ) : null}
-      <div
-        aria-hidden
-        className='absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(0,168,241,0.35),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(91,99,214,0.35),transparent_60%)]'
-      />
-      <div
-        aria-hidden
-        className='absolute inset-0 -z-10 bg-gradient-to-b from-[#1e2364]/60 to-[#141848]'
-      />
-      <div
-        className={cn(
-          'mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14',
-          innerClassName
-        )}
-      >
+    <section className={cn('border-b border-[#e5e7f0] bg-white text-[#1e2364]', className)}>
+      <div className={cn('mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10', innerClassName)}>
         {children}
       </div>
     </section>
@@ -113,7 +76,6 @@ export function ProgressRing({
   value,
   size = 96,
   stroke = 8,
-  tone = 'dark',
   label,
 }: {
   value: number;
@@ -144,7 +106,7 @@ export function ProgressRing({
           r={radius}
           fill='none'
           strokeWidth={stroke}
-          className={tone === 'dark' ? 'stroke-white/15' : 'stroke-[#e5e7f0]'}
+          className='stroke-[#e5e7f0]'
         />
         <circle
           cx={size / 2}
@@ -155,26 +117,18 @@ export function ProgressRing({
           strokeLinecap='round'
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className='stroke-[#00a8f1] transition-[stroke-dashoffset] duration-700 ease-out'
+          className='stroke-[#00a8f1] transition-[stroke-dashoffset] duration-500 ease-out motion-reduce:transition-none'
         />
       </svg>
-      <span
-        className={cn(
-          'absolute text-lg font-bold',
-          tone === 'dark' ? 'text-white' : 'text-[#1e2364]'
-        )}
-      >
-        {clamped}%
-      </span>
+      <span className='absolute text-lg font-bold tabular-nums text-[#1e2364]'>{clamped}%</span>
     </div>
   );
 }
 
-/** Small icon + text fact (duration, lessons, level…). */
+/** Small icon + text fact (duration, lessons, level…). Plain text, no pill. */
 export function StatChip({
   icon,
   children,
-  tone = 'light',
   className,
 }: {
   icon?: ReactNode;
@@ -185,10 +139,7 @@ export function StatChip({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-semibold',
-        tone === 'dark'
-          ? 'bg-white/10 text-white/90 ring-1 ring-white/15'
-          : 'bg-white/80 text-[#1e2364] ring-1 ring-[#e5e7f0]',
+        'inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-[#4a5078] [&_svg]:size-4 [&_svg]:text-[#6b7196]',
         className
       )}
     >
@@ -210,7 +161,7 @@ export function AcademySectionTitle({
 }) {
   return (
     <div className={cn('mb-4 flex items-center justify-between gap-3', className)}>
-      <h2 className='text-xl font-bold text-[#1e2364] sm:text-2xl'>{children}</h2>
+      <h2 className='text-[19px] font-bold text-[#1e2364] sm:text-[20px]'>{children}</h2>
       {action}
     </div>
   );

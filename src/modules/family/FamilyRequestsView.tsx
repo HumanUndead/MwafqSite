@@ -2,21 +2,72 @@
 
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { useLocale, useTranslations } from '@/i18n/DictionaryProvider';
 import { getLocalizedRoute } from '@/i18n/routing';
-import { ScrollReveal } from '@/shared/components/motion/ScrollReveal';
-import { Button } from '@/shared/components/ui/Button';
-import { ROUTES } from '@/shared/constants/routes';
-import { FamilyActionDialog } from './components/FamilyActionDialog';
+import { FamilyActionDialog } from '@/modules/family/components/FamilyActionDialog';
 import {
-  FamilyEmpty,
   FamilyListSkeleton,
   FamilyLoadError,
-} from './components/FamilyStates';
-import { MemberRow } from './components/MemberRow';
-import { useFamily } from './hooks/useFamily';
-import { useFamilyAction } from './hooks/useFamilyAction';
-import { RelatedUserStatus } from './types/family.types';
+} from '@/modules/family/components/FamilyStates';
+import { MemberRow } from '@/modules/family/components/MemberRow';
+import { useFamily } from '@/modules/family/hooks/useFamily';
+import { useFamilyAction } from '@/modules/family/hooks/useFamilyAction';
+import {
+  RelatedUserStatus,
+  type RelatedUser,
+} from '@/modules/family/types/family.types';
+import {
+  EmptyState,
+  PageHeader,
+  Panel,
+  PanelHeader,
+  productCountClass,
+} from '@/shared/components/product';
+import { Button, buttonVariants } from '@/shared/components/ui/Button';
+import { ROUTES } from '@/shared/constants/routes';
+
+interface RequestsPanelProps {
+  id: string;
+  title: string;
+  emptyLabel: string;
+  items: RelatedUser[];
+  loading: boolean;
+  renderRow: (item: RelatedUser) => ReactNode;
+}
+
+function RequestsPanel({
+  id,
+  title,
+  emptyLabel,
+  items,
+  loading,
+  renderRow,
+}: RequestsPanelProps) {
+  return (
+    <Panel flush aria-labelledby={id}>
+      <PanelHeader
+        id={id}
+        title={
+          <>
+            {title}
+            {!loading && items.length > 0 ? (
+              <span className={productCountClass}>{items.length}</span>
+            ) : null}
+          </>
+        }
+        className='border-b border-[#eef0f7] px-5 py-4 sm:px-6'
+      />
+      {loading ? (
+        <FamilyListSkeleton rows={2} />
+      ) : items.length === 0 ? (
+        <EmptyState title={emptyLabel} className='py-8' />
+      ) : (
+        <ul className='divide-y divide-[#eef0f7]'>{items.map(renderRow)}</ul>
+      )}
+    </Panel>
+  );
+}
 
 /** Pending relation requests: sent by me (cancel) / received (accept, reject). */
 export function FamilyRequestsView() {
@@ -33,101 +84,93 @@ export function FamilyRequestsView() {
   );
 
   return (
-    <section className='relative pt-2'>
-      <Link
-        href={getLocalizedRoute(locale, ROUTES.FAMILY)}
-        className='mb-5 inline-flex items-center gap-2 text-[14.5px] font-bold text-[#1e2364] hover:text-[#00a8f1]'
-      >
-        <ChevronLeft className='size-4 rtl:rotate-180' aria-hidden />
-        {t.title}
-      </Link>
-      <ScrollReveal className='mb-7'>
-        <h1 className='mb-2.5 text-[clamp(30px,4vw,44px)] font-extrabold leading-[1.1] tracking-[-1.4px] text-[#1e2364]'>
-          {t.requests.title}
-        </h1>
-        <p className='max-w-150 text-base leading-relaxed text-[#6b7196]'>
-          {t.requests.description}
-        </p>
-      </ScrollReveal>
+    <div className='flex flex-col gap-6'>
+      <div className='flex flex-col gap-3'>
+        <Link
+          href={getLocalizedRoute(locale, ROUTES.FAMILY)}
+          className={buttonVariants({
+            variant: 'productText',
+            size: 'compact',
+            className: '-ms-3.5 w-fit',
+          })}
+        >
+          <ChevronLeft className='size-4 rtl:rotate-180' aria-hidden />
+          {t.title}
+        </Link>
+        <PageHeader
+          title={t.requests.title}
+          description={t.requests.description}
+        />
+      </div>
 
-      {isLoading ? (
-        <FamilyListSkeleton />
-      ) : isError ? (
-        <FamilyLoadError onRetry={() => void refetch()} />
+      {isError ? (
+        <Panel>
+          <FamilyLoadError onRetry={() => void refetch()} />
+        </Panel>
       ) : (
-        <div className='flex flex-col gap-8'>
-          <div>
-            <h2 className='mb-3 text-[18px] font-extrabold text-[#1e2364]'>
-              {t.requests.received}
-            </h2>
-            {received.length === 0 ? (
-              <FamilyEmpty label={t.empty.received} />
-            ) : (
-              <ul className='flex flex-col gap-2'>
-                {received.map((member) => (
-                  <MemberRow
-                    key={member.id}
-                    member={member}
-                    nameOf='owner'
-                    actions={
-                      <>
-                        <Button
-                          variant='brand'
-                          size='sm'
-                          type='button'
-                          onClick={() => action.request('accept', member.id)}
-                        >
-                          {t.actions.accept}
-                        </Button>
-                        <Button
-                          variant='outline'
-                          size='sm'
-                          type='button'
-                          className='text-red-600'
-                          onClick={() => action.request('reject', member.id)}
-                        >
-                          {t.actions.reject}
-                        </Button>
-                      </>
-                    }
-                  />
-                ))}
-              </ul>
+        <>
+          <RequestsPanel
+            id='family-received-title'
+            title={t.requests.received}
+            emptyLabel={t.empty.received}
+            items={received}
+            loading={isLoading}
+            renderRow={(member) => (
+              <MemberRow
+                key={member.id}
+                member={member}
+                nameOf='owner'
+                actions={
+                  <>
+                    <Button
+                      type='button'
+                      variant='productDanger'
+                      size='compact'
+                      onClick={() => action.request('reject', member.id)}
+                    >
+                      {t.actions.reject}
+                    </Button>
+                    <Button
+                      type='button'
+                      variant='productSecondary'
+                      size='compact'
+                      onClick={() => action.request('accept', member.id)}
+                    >
+                      {t.actions.accept}
+                    </Button>
+                  </>
+                }
+              />
             )}
-          </div>
+          />
 
-          <div>
-            <h2 className='mb-3 text-[18px] font-extrabold text-[#1e2364]'>
-              {t.requests.sent}
-            </h2>
-            {sent.length === 0 ? (
-              <FamilyEmpty label={t.empty.sent} />
-            ) : (
-              <ul className='flex flex-col gap-2'>
-                {sent.map((member) => (
-                  <MemberRow
-                    key={member.id}
-                    member={member}
-                    actions={
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        type='button'
-                        className='text-red-600'
-                        onClick={() => action.request('cancelRequest', member.id)}
-                      >
-                        {t.actions.cancelRequest}
-                      </Button>
-                    }
-                  />
-                ))}
-              </ul>
+          <RequestsPanel
+            id='family-sent-title'
+            title={t.requests.sent}
+            emptyLabel={t.empty.sent}
+            items={sent}
+            loading={isLoading}
+            renderRow={(member) => (
+              <MemberRow
+                key={member.id}
+                member={member}
+                actions={
+                  <Button
+                    type='button'
+                    variant='productDanger'
+                    size='compact'
+                    onClick={() => action.request('cancelRequest', member.id)}
+                  >
+                    {t.actions.cancelRequest}
+                  </Button>
+                }
+              />
             )}
-          </div>
-        </div>
+          />
+        </>
       )}
 
       <FamilyActionDialog action={action} />
-    </section>
+    </div>
   );
 }

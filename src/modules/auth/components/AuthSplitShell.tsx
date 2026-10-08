@@ -14,6 +14,35 @@ interface AuthSplitShellProps {
   wideForm?: boolean;
 }
 
+/** Single-task auth pages (login, forgot password): one calm, focused form. */
+function AuthCenteredShell({
+  title,
+  subtitle,
+  dir,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  dir: 'rtl' | 'ltr';
+  children: ReactNode;
+}) {
+  return (
+    <section className='bg-[#f3f4f8] px-4 pb-16 pt-[120px] sm:pb-24 sm:pt-[160px]'>
+      <div className='mx-auto w-full max-w-[440px] rounded-2xl border border-[#e5e7f0] bg-white px-5 py-7 sm:px-8 sm:py-9'>
+        <header className='mb-7'>
+          <h1 className='text-[24px] font-bold leading-tight text-[#1e2364] sm:text-[26px]'>
+            {title}
+          </h1>
+          {subtitle ? (
+            <p className='mt-2 text-[14.5px] leading-6 text-[#6b7196]'>{subtitle}</p>
+          ) : null}
+        </header>
+        <div dir={dir}>{children}</div>
+      </div>
+    </section>
+  );
+}
+
 export function AuthSplitShell({
   locale,
   title,
@@ -25,6 +54,14 @@ export function AuthSplitShell({
   wideForm = false,
 }: AuthSplitShellProps) {
   const isArabic = locale === 'ar';
+
+  if (centered) {
+    return (
+      <AuthCenteredShell title={title} subtitle={subtitle} dir={isArabic ? 'rtl' : 'ltr'}>
+        {children}
+      </AuthCenteredShell>
+    );
+  }
 
   return (
     <section className='relative overflow-hidden border-b-2 border-[#e5e7f0] bg-[#f4f4f6] px-4 pb-16 pt-[132px] md:px-7 md:pb-24 md:pt-[190px]'>

@@ -40,11 +40,7 @@ export async function CoursesPage({ locale }: CoursesPageProps) {
 
   return (
     <AcademyBackdrop>
-      {/* The floating header is transparent with navy text at the top of the
-          page, so the navy stage starts just below it as an inset panel. */}
-      <MarketingStickyHeaderOffset
-        variant='academy'
-      >
+      <MarketingStickyHeaderOffset variant='academy'>
         <CoursesView categories={categories.data} locale={locale}>
           {carousels}
         </CoursesView>
